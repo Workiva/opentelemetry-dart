@@ -1,0 +1,14 @@
+name: opentelemetry_sdk
+version: 0.0.0
+publish_to: none
+
+dependencies:
+  logging: ^0.11.4
+  opentelemetry_api: ^0.0.0
+  opentelemetry_context: ^0.0.0
+
+dependency_overrides:
+  opentelemetry_api:
+    path: ../opentelemetry_api
+  opentelemetry_context:
+    path: ../opentelemetry_context
