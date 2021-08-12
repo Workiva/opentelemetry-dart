@@ -22,7 +22,11 @@ dependencies:
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart' as otel_sdk;
 
-final Tracer tracer = otel_sdk.TracerProvider().getTracer('appName', version: '1.0.0');
+final otel_sdk.ConsoleExporter exporter = otel_sdk.ConsoleExporter();
+final otel_sdk.TracerProvider provider = otel_sdk.TracerProvider([
+  otel_sdk.SimpleSpanProcessor(exporter)
+]);
+final Tracer tracer = provider.getTracer('appName', version: '1.0.0');
 
 doWork() {
   Span parent = getSpan(Context.current);
@@ -58,5 +62,6 @@ main() async {
   });
 
   span.end();
+  exporter.forceFlush();
 }
 ```

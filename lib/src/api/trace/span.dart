@@ -22,6 +22,12 @@ abstract class Span {
   /// Get the time when the span was started.
   int get startTime;
 
+  /// The parent span id.
+  String get parentSpanId;
+
+  /// The name of the span.
+  String get name;
+
   /// Sets the status to the [Span].
   ///
   /// If used, this will override the default [Span] status. Default status code
@@ -33,7 +39,7 @@ abstract class Span {
 
   /// Retrieve the status of the [Span].
   SpanStatus get status;
-
+  
   /// Marks the end of this span's execution.
   void end();
 }

@@ -5,10 +5,14 @@ import '../../../src/api/trace/tracer.dart' as tracer_api;
 import 'id_generator.dart';
 import 'span.dart';
 import 'span_context.dart';
+import 'span_processors/span_processor.dart';
 
 /// An interface for creating [Span]s and propagating context in-process.
 class Tracer implements tracer_api.Tracer {
   final IdGenerator _idGenerator = IdGenerator();
+  final List<SpanProcessor> _processors;
+
+  Tracer(this._processors);
 
   @override
   Span startSpan(String name, {Context context}) {
@@ -32,6 +36,6 @@ class Tracer implements tracer_api.Tracer {
 
     final spanContext = SpanContext(traceId, spanId, traceState);
 
-    return Span(name, spanContext, parentSpanId);
+    return Span(name, spanContext, parentSpanId, _processors);
   }
 }
