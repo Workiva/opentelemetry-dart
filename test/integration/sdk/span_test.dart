@@ -1,5 +1,6 @@
 import 'package:opentelemetry/src/api/trace/span_status.dart';
 import 'package:mockito/mockito.dart';
+import 'package:opentelemetry/src/sdk/common/attribute.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
@@ -69,5 +70,42 @@ void main() {
     span.setStatus(StatusCode.ERROR, description: 'Something else went wrong.');
     expect(span.status.code, equals(StatusCode.OK));
     expect(span.status.description, equals('Another error happened.'));
+  });
+
+  test('span add and retrieve attributes', () {
+    final attributeList = [
+      Attribute.fromString('First', 'First Attribute'),
+      Attribute.fromBoolean('Second', false),
+      Attribute.fromDouble('Third', 3.14),
+      Attribute.fromInt('Fourth', 4),
+      Attribute.fromStringList('Fifth', ['String', 'List']),
+      Attribute.fromBooleanList('Sixth', [true, false]),
+      Attribute.fromDoubleList('Seventh', [7.1, 7.2]),
+      Attribute.fromIntList('Eighth', [8, 8]),
+    ];
+    final expectedAttributeMap = {
+      'First': 'First Attribute',
+      'Second': false,
+      'Third': 3.14,
+      'Fourth': 4,
+      'Fifth': ['String', 'List'],
+      'Sixth': [true, false],
+      'Seventh': [7.1, 7.2],
+      'Eighth': [8, 8],
+    };
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
+        [4, 5, 6], [], Tracer('bar', []));
+
+    expect(span.attributes.isEmpty, equals(true));
+
+    span.attributes.add(attributeList.removeAt(0));
+    span.attributes.addAll(attributeList);
+
+    span.end();
+
+    expectedAttributeMap.forEach((key, value) {
+      expect(span.attributes.get(key).runtimeType, equals(value.runtimeType));
+      expect(span.attributes.get(key), equals(value));
+    });
   });
 }

@@ -1,4 +1,8 @@
-export 'src/api/context/context.dart' 
+export 'src/api/common/attribute.dart'
+  show Attribute;
+export 'src/api/common/attributes.dart'
+  show Attributes;
+export 'src/api/context/context.dart'
   show
     Context;
 export 'src/api/trace/context_utils.dart' 

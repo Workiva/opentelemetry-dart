@@ -5,6 +5,8 @@ import '../../api/trace/span_context.dart';
 import '../../api/trace/span_status.dart';
 import '../../api/trace/tracer.dart';
 import 'span_processors/span_processor.dart';
+import '../../api/common/attributes.dart';
+import '../common/attributes.dart' as attributes_sdk;
 
 /// A representation of a single operation within a trace.
 class Span implements span_api.Span {
@@ -69,4 +71,7 @@ class Span implements span_api.Span {
 
   @override
   Tracer get tracer => _tracer;
+
+  @override
+  Attributes attributes = attributes_sdk.Attributes.empty();
 }

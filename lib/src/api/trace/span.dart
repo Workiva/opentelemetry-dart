@@ -1,6 +1,8 @@
 import 'package:fixnum/fixnum.dart';
-import 'span_context.dart';
 import 'span_status.dart';
+import '../common/attributes.dart';
+
+import 'span_context.dart';
 import 'tracer.dart';
 
 /// A representation of a single operation within a trace.
@@ -40,6 +42,12 @@ abstract class Span {
 
   /// Retrieve the status of the [Span].
   SpanStatus get status;
+
+  /// Set metadata to be included on this span.
+  set attributes(Attributes attributes);
+
+  /// Retrieve metadata included on this span.
+  Attributes get attributes;
 
   /// Tracer responsible for creating the [Span].
   Tracer get tracer;
