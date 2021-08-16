@@ -1,3 +1,5 @@
+import 'package:opentelemetry/src/api/trace/span_status.dart';
+
 import 'span_context.dart';
 
 /// A representation of a single operation within a trace.
@@ -19,7 +21,19 @@ abstract class Span {
 
   /// Get the time when the span was started.
   int get startTime;
-  
+
+  /// Sets the status to the [Span].
+  ///
+  /// If used, this will override the default [Span] status. Default status code
+  /// is [StatusCode.UNSET].
+  ///
+  /// Only the value of the last call will be recorded, and implementations are
+  /// free to ignore previous calls.
+  void setStatus(StatusCode status, {String description});
+
+  /// Retrieve the status of the [Span].
+  SpanStatus get status;
+
   /// Marks the end of this span's execution.
   void end();
 }
