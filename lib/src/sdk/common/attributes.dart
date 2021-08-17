@@ -15,6 +15,12 @@ class Attributes implements api.Attributes {
   bool get isEmpty => _attributes.isEmpty;
 
   @override
+  Object get(String key) => _attributes[key];
+
+  @override
+  Iterable<String> get keys => _attributes.keys;
+
+  @override
   void add(Attribute attribute) {
     _attributes[attribute.key] = attribute.value;
   }
@@ -23,7 +29,4 @@ class Attributes implements api.Attributes {
   void addAll(List<Attribute> attributes) {
     attributes.forEach(add);
   }
-
-  @override
-  Object get(String key) => _attributes[key];
 }

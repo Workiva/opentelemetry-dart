@@ -14,6 +14,9 @@ abstract class Attributes {
   /// Retrieve the value associated with the Attribute with key [key].
   Object get(String key);
 
+  /// Retrieve the keys of all Attributes in this collection.
+  Iterable<String> get keys;
+
   /// Add an Attribute [attribute].
   /// If an Attribute with the same key already exists, it will be overwritten.
   void add(Attribute attribute);
