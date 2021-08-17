@@ -15,6 +15,7 @@ class ConsoleExporter implements SpanExporter {
         'id': span.spanContext.spanId,
         'timestamp': span.startTime,
         'duration': span.endTime - span.startTime,
+        'status': span.status.code
       });
     }
   }

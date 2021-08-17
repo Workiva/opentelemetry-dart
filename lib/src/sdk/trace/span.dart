@@ -1,6 +1,6 @@
-import '../../api/trace/span_status.dart';
 import '../../api/trace/span.dart' as span_api;
 import '../../api/trace/span_context.dart';
+import '../../api/trace/span_status.dart';
 import 'span_processors/span_processor.dart';
 
 /// A representation of a single operation within a trace.

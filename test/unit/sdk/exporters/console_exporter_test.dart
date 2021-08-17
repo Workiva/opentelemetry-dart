@@ -29,7 +29,7 @@ void main() {
 
     ConsoleExporter().export([span]);
 
-    final expected = RegExp(r'^{traceId: trace123, parentId: span456, name: foo, id: span789, timestamp: \d+, duration: \d+}$');
+    final expected = RegExp(r'^{traceId: trace123, parentId: span456, name: foo, id: span789, timestamp: \d+, duration: \d+, status: StatusCode.UNSET}$');
     expect(printLogs.length, 1);
     expect(expected.hasMatch(printLogs[0]), true);
   }));

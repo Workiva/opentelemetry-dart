@@ -39,7 +39,7 @@ abstract class Span {
 
   /// Retrieve the status of the [Span].
   SpanStatus get status;
-  
+
   /// Marks the end of this span's execution.
   void end();
 }
