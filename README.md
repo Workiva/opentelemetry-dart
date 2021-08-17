@@ -62,6 +62,5 @@ main() async {
   });
 
   span.end();
-  exporter.forceFlush();
 }
 ```

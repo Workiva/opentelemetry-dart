@@ -27,6 +27,7 @@ void main() {
     ..shutdown()
     ..onEnd(span);
 
+    verify(exporter.shutdown()).called(1);
     verifyNever(exporter.export([span]));
   });
 }

@@ -3,6 +3,9 @@ version: 0.0.0
 environment:
   sdk: '>=2.7.0 <3.0.0'
 
+dependencies:
+  logging: ^1.0.1
+
 dev_dependencies:
   coverage: ^1.0.3
   mockito: ^5.0.13

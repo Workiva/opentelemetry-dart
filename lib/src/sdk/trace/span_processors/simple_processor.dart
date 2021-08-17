@@ -25,6 +25,8 @@ class SimpleSpanProcessor implements SpanProcessor {
 
   @override
   void shutdown() {
+    forceFlush();
     _isShutdown = true;
+    _exporter.shutdown();
   }
 }

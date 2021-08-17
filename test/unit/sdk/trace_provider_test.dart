@@ -1,3 +1,4 @@
+import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
 import 'package:test/test.dart';
@@ -26,5 +27,23 @@ void main() {
     final provider = TracerProvider(processors: [mockProcessor1, mockProcessor2]);
 
     expect(provider.spanProcessors, [mockProcessor1, mockProcessor2]);
+  });
+
+  test('tracerProvider force flushes all processors', () {
+    final mockProcessor1 = MockSpanProcessor();
+    final mockProcessor2 = MockSpanProcessor();
+    TracerProvider(processors: [mockProcessor1, mockProcessor2]).forceFlush();
+
+    verify(mockProcessor1.forceFlush()).called(1);
+    verify(mockProcessor2.forceFlush()).called(1);
+  });
+
+  test('tracerProvider shuts down all processors', () {
+    final mockProcessor1 = MockSpanProcessor();
+    final mockProcessor2 = MockSpanProcessor();
+    TracerProvider(processors: [mockProcessor1, mockProcessor2]).shutdown();
+
+    verify(mockProcessor1.shutdown()).called(1);
+    verify(mockProcessor2.shutdown()).called(1);
   });
 }

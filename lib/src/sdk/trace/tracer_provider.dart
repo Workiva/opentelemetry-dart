@@ -24,4 +24,18 @@ class TracerProvider implements api.TracerProvider {
     final key = '$name@$version';
     return _tracers.putIfAbsent(key, () => Tracer(_processors));
   }
+
+  @override
+  void forceFlush() {
+    for (var i = 0; i < _processors.length; i++) {
+      _processors[i].forceFlush();
+    }
+  }
+
+  @override
+  void shutdown() {
+    for (var i = 0; i < _processors.length; i++) {
+      _processors[i].shutdown();
+    }
+  }
 }
