@@ -1,3 +1,5 @@
+import 'package:opentelemetry/src/api/common/attributes.dart';
+
 import '../../../src/api/context/context.dart';
 import 'span.dart';
 
@@ -8,7 +10,7 @@ import 'span.dart';
 abstract class Tracer {
   /// Starts a new [Span] without setting it as the current span in this
   /// tracer's context.
-  Span startSpan(String name, {Context context});
+  Span startSpan(String name, {Context context, Attributes attributes});
 
   /// The Tracer's name.
   String get name;

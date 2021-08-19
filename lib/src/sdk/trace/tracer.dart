@@ -1,3 +1,6 @@
+import 'package:opentelemetry/src/api/common/attributes.dart' as attributes_api;
+import 'package:opentelemetry/src/sdk/common/attributes.dart';
+
 import '../../../src/api/context/context.dart';
 import '../../../src/api/trace/context_utils.dart';
 import '../../../src/api/trace/trace_state.dart';
@@ -19,13 +22,15 @@ class Tracer implements tracer_api.Tracer {
   String get name => _name;
 
   @override
-  Span startSpan(String name, {Context context}) {
+  Span startSpan(String name,
+      {Context context, attributes_api.Attributes attributes}) {
     context ??= Context.current;
+    attributes ??= Attributes.empty();
 
     List<int> parentSpanId;
     List<int> traceId;
     TraceState traceState;
-    
+
     final spanId = _idGenerator.generateSpanId();
 
     final parentSpanContext = getSpanContext(context);
@@ -40,6 +45,6 @@ class Tracer implements tracer_api.Tracer {
 
     final spanContext = SpanContext(traceId, spanId, traceState);
 
-    return Span(name, spanContext, parentSpanId, _processors, this);
+    return Span(name, spanContext, parentSpanId, _processors, this, attributes: attributes);
   }
 }
