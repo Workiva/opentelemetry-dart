@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('startSpan new trace', () {
-    final tracer = Tracer();
+    final tracer = Tracer([]);
 
     final span = tracer.startSpan('foo');
 
@@ -16,7 +16,7 @@ void main() {
   });
 
   test('startSpan child span', () {
-    final tracer = Tracer();
+    final tracer = Tracer([]);
 
     final parentSpan = tracer.startSpan('foo');
     final context = setSpan(Context.current, parentSpan);

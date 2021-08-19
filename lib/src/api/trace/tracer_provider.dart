@@ -8,4 +8,10 @@ abstract class TracerProvider {
   /// [name] should be the name of the tracer or instrumentation library.
   /// [version] should be the version of the tracer or instrumentation library.
   Tracer getTracer(String name, {String version});
+
+  /// Flush all registered span processors.
+  void forceFlush();
+  
+  /// Stop all registered span processors.
+  void shutdown();
 }

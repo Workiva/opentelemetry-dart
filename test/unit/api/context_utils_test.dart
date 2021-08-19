@@ -10,7 +10,7 @@ import '../mocks.dart';
 
 void main() {
   final testSpanContext = SpanContext('123', '789', TraceState());
-  final testSpan = Span('foo', testSpanContext, '456');
+  final testSpan = Span('foo', testSpanContext, '456', []);
 
   group('getSpan', () {
     test('returns Span when exists', () {

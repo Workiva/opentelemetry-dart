@@ -1,21 +1,31 @@
-import 'package:opentelemetry/src/api/trace/span.dart' as span_api;
-import 'package:opentelemetry/src/api/trace/span_context.dart';
-import 'package:opentelemetry/src/api/trace/span_status.dart';
+import '../../api/trace/span.dart' as span_api;
+import '../../api/trace/span_context.dart';
+import '../../api/trace/span_status.dart';
+import 'span_processors/span_processor.dart';
 
 /// A representation of a single operation within a trace.
 class Span implements span_api.Span {
   int _startTime;
   int _endTime;
-  final String _name;
   final String _parentSpanId;
   final SpanContext _spanContext;
   final SpanStatus _status = SpanStatus();
+  final List<SpanProcessor> _processors;
+
+  @override
+  String name;
 
   /// Construct a [Span].
-  Span(this._name, this._spanContext, this._parentSpanId) {
+  Span(
+    this.name, 
+    this._spanContext, 
+    this._parentSpanId,
+    this._processors
+  ) {
     _startTime = DateTime.now().toUtc().microsecondsSinceEpoch;
-    print(
-        '--- $_name START $_startTime ---\ntraceId: ${_spanContext.traceId}\nparent: $_parentSpanId\nspanId: ${_spanContext.spanId}');
+    for (var i = 0; i < _processors.length; i++) {
+      _processors[i].onStart();
+    }
   }
 
   @override
@@ -28,10 +38,14 @@ class Span implements span_api.Span {
   int get startTime => _startTime;
 
   @override
+  String get parentSpanId => _parentSpanId;
+
+  @override
   void end() {
-    _endTime = DateTime.now().toUtc().microsecondsSinceEpoch;
-    print(
-        '--- $_name END $_endTime ---\ntraceId: ${_spanContext.traceId}\nparent: $_parentSpanId\nspanId: ${_spanContext.spanId}');
+    _endTime ??= DateTime.now().toUtc().microsecondsSinceEpoch;
+    for (var i = 0; i < _processors.length; i++) {
+      _processors[i].onEnd(this);
+    }
   }
 
   @override
