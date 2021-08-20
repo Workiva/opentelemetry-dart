@@ -14,7 +14,10 @@ analyze:
 	@dart analyze ./lib
 	@dart analyze ./test
 
-test:
+format:
+	@find ./lib/ -name '*.dart' | xargs dart format --fix
+
+test: format analyze
 	@dart test ./test --chain-stack-traces
 
 .PHONY: init analyze test

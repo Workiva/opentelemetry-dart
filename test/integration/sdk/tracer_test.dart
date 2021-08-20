@@ -1,11 +1,13 @@
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/trace/context_utils.dart';
+import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
+import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('startSpan new trace', () {
-    final tracer = Tracer('bar', []);
+    final tracer = Tracer('bar', [], IdGenerator(), InstrumentationLibrary());
 
     final span = tracer.startSpan('foo');
 
@@ -16,7 +18,7 @@ void main() {
   });
 
   test('startSpan child span', () {
-    final tracer = Tracer('baz', []);
+    final tracer = Tracer('baz', [], IdGenerator(), InstrumentationLibrary());
 
     final parentSpan = tracer.startSpan('foo');
     final context = setSpan(Context.current, parentSpan);
