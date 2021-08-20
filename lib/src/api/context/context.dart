@@ -80,7 +80,8 @@ class Context {
   ///
   /// If [key] was already set in this context, it will be overridden. The rest
   /// of the context values will be inherited.
-  Context setValue(ContextKey key, Object value) => Context._(_zone.fork(zoneValues: {key: value}));
+  Context setValue(ContextKey key, Object value) =>
+      Context._(_zone.fork(zoneValues: {key: value}));
 }
 
 class ContextKey {

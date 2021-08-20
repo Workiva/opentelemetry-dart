@@ -11,7 +11,7 @@ abstract class TracerProvider {
 
   /// Flush all registered span processors.
   void forceFlush();
-  
+
   /// Stop all registered span processors.
   void shutdown();
 }

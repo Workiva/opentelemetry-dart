@@ -24,8 +24,8 @@ void main() {
 
   test('does not export if shutdown', () {
     processor
-    ..shutdown()
-    ..onEnd(span);
+      ..shutdown()
+      ..onEnd(span);
 
     verify(exporter.shutdown()).called(1);
     verifyNever(exporter.export([span]));

@@ -16,6 +16,7 @@ analyze:
 
 format:
 	@find ./lib/ -name '*.dart' | xargs dart format --fix
+	@find ./test/ -name '*.dart' | xargs dart format --fix
 
 test: format analyze
 	@dart test ./test --chain-stack-traces

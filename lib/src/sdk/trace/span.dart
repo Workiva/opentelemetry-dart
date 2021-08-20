@@ -23,7 +23,8 @@ class Span implements span_api.Span {
 
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
-      this._tracer, {Attributes attributes}) {
+      this._tracer,
+      {Attributes attributes}) {
     _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
     this.attributes = attributes ?? attributes_sdk.Attributes.empty();
     for (var i = 0; i < _processors.length; i++) {

@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   final generator = IdGenerator();
-  
+
   test('generateSpanId is the correct length', () {
     expect(generator.generateSpanId().length, equals(8));
   });

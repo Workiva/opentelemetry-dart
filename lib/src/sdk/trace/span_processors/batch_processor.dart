@@ -9,19 +9,20 @@ import 'span_processor.dart';
 
 class BatchSpanProcessor implements SpanProcessor {
   final _log = Logger('opentelemetry.BatchSpanProcessor');
-  
+
   final SpanExporter _exporter;
   bool _isShutdown = false;
   final List<Span> _spanBuffer = [];
-  Timer _timer; 
+  Timer _timer;
 
   int _maxExportBatchSize;
   final int _maxQueueSize = 2048;
   int _scheduledDelay;
 
-  BatchSpanProcessor(this._exporter, {int maxExportBatchSize, int scheduledDelay}) {
-    _maxExportBatchSize = maxExportBatchSize ?? 512;
-    _scheduledDelay = scheduledDelay ?? 5000;
+  BatchSpanProcessor(this._exporter,
+      {int maxExportBatchSize, int scheduledDelay}) {
+    _maxExportBatchSize = maxExportBatchSize;
+    _scheduledDelay = scheduledDelay;
   }
 
   @override
@@ -56,7 +57,8 @@ class BatchSpanProcessor implements SpanProcessor {
   void _addToBuffer(Span span) {
     if (_spanBuffer.length >= _maxQueueSize) {
       // Buffer is full, drop span.
-      _log.warning('Max queue size exceeded. Dropping ${_spanBuffer.length} spans.');
+      _log.warning(
+          'Max queue size exceeded. Dropping ${_spanBuffer.length} spans.');
       return;
     }
 

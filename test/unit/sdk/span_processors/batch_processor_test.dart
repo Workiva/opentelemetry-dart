@@ -9,14 +9,15 @@ void main() {
   BatchSpanProcessor processor;
   SpanExporter mockExporter;
   Span mockSpan1, mockSpan2, mockSpan3;
-  
+
   setUp(() {
     mockSpan1 = MockSpan();
     mockSpan2 = MockSpan();
     mockSpan3 = MockSpan();
 
     mockExporter = MockSpanExporter();
-    processor = BatchSpanProcessor(mockExporter, maxExportBatchSize: 2, scheduledDelay: 100);
+    processor = BatchSpanProcessor(mockExporter,
+        maxExportBatchSize: 2, scheduledDelay: 100);
   });
 
   tearDown(() {
@@ -26,10 +27,10 @@ void main() {
 
   test('forceFlush', () {
     processor
-    ..onEnd(mockSpan1)
-    ..onEnd(mockSpan2)
-    ..onEnd(mockSpan3)
-    ..forceFlush();
+      ..onEnd(mockSpan1)
+      ..onEnd(mockSpan2)
+      ..onEnd(mockSpan3)
+      ..forceFlush();
 
     verify(mockExporter.export([mockSpan1, mockSpan2])).called(1);
     verify(mockExporter.export([mockSpan3])).called(1);
