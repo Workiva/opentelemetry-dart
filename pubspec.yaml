@@ -5,6 +5,7 @@ environment:
 
 dependencies:
   logging: ^0.11.4
+  protobuf: ^2.0.0
 
 dev_dependencies:
   mockito: ^5.0.13

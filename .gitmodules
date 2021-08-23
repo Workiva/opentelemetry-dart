@@ -1,0 +1,3 @@
+[submodule "lib/src/sdk/trace/exporters/opentelemetry-proto"]
+	path = lib/src/sdk/trace/exporters/opentelemetry-proto
+	url = git@github.com:open-telemetry/opentelemetry-proto.git
