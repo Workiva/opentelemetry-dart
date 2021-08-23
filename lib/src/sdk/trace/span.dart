@@ -1,3 +1,5 @@
+import 'package:fixnum/fixnum.dart';
+
 import '../../api/trace/span.dart' as span_api;
 import '../../api/trace/span_context.dart';
 import '../../api/trace/span_status.dart';
@@ -5,9 +7,9 @@ import 'span_processors/span_processor.dart';
 
 /// A representation of a single operation within a trace.
 class Span implements span_api.Span {
-  int _startTime;
-  int _endTime;
-  final String _parentSpanId;
+  Int64 _startTime;
+  Int64 _endTime;
+  final List<int> _parentSpanId;
   final SpanContext _spanContext;
   final SpanStatus _status = SpanStatus();
   final List<SpanProcessor> _processors;
@@ -22,7 +24,7 @@ class Span implements span_api.Span {
     this._parentSpanId,
     this._processors
   ) {
-    _startTime = DateTime.now().toUtc().microsecondsSinceEpoch;
+    _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onStart();
     }
@@ -32,17 +34,17 @@ class Span implements span_api.Span {
   SpanContext get spanContext => _spanContext;
 
   @override
-  int get endTime => _endTime;
+  Int64 get endTime => _endTime;
 
   @override
-  int get startTime => _startTime;
+  Int64 get startTime => _startTime;
 
   @override
-  String get parentSpanId => _parentSpanId;
+  List<int> get parentSpanId => _parentSpanId;
 
   @override
   void end() {
-    _endTime ??= DateTime.now().toUtc().microsecondsSinceEpoch;
+    _endTime ??= Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onEnd(this);
     }

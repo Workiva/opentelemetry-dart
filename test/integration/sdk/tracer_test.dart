@@ -9,10 +9,10 @@ void main() {
 
     final span = tracer.startSpan('foo');
 
-    expect(span.startTime, isA<int>());
+    expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
-    expect(span.spanContext.traceId, isA<String>());
-    expect(span.spanContext.spanId, isA<String>());
+    expect(span.spanContext.traceId, isNotNull);
+    expect(span.spanContext.spanId, isNotNull);
   });
 
   test('startSpan child span', () {
@@ -23,12 +23,12 @@ void main() {
 
     final childSpan = tracer.startSpan('bar', context: context);
 
-    expect(childSpan.startTime, isA<int>());
+    expect(childSpan.startTime, isNotNull);
     expect(childSpan.endTime, isNull);
     expect(childSpan.spanContext.traceId, equals(parentSpan.spanContext.traceId));
     expect(childSpan.spanContext.traceState, equals(parentSpan.spanContext.traceState));
     expect(childSpan.spanContext.spanId, allOf([
-      isA<String>(),
+      isNotNull,
       isNot(equals(parentSpan.spanContext.spanId))
     ]));
   });

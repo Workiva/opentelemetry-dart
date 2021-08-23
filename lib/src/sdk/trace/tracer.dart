@@ -18,8 +18,8 @@ class Tracer implements tracer_api.Tracer {
   Span startSpan(String name, {Context context}) {
     context ??= Context.current;
 
-    String parentSpanId;
-    String traceId;
+    List<int> parentSpanId;
+    List<int> traceId;
     TraceState traceState;
     
     final spanId = _idGenerator.generateSpanId();

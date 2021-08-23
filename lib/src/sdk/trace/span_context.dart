@@ -3,15 +3,15 @@ import '../../../src/api/trace/trace_state.dart';
 
 /// Representation of the context of the context of an individual span.
 class SpanContext implements span_context_api.SpanContext {
-  final String _spanId;
-  final String _traceId;
+  final List<int> _spanId;
+  final List<int> _traceId;
   final TraceState _traceState;
 
   @override
-  String get spanId => _spanId;
+  List<int> get spanId => _spanId;
 
   @override
-  String get traceId => _traceId;
+  List<int> get traceId => _traceId;
 
   @override
   TraceState get traceState => _traceState;

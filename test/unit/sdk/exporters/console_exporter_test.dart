@@ -24,18 +24,18 @@ void main() {
   });
 
   test('prints', overridePrint(() {
-    final span = Span('foo', SpanContext('trace123', 'span789', TraceState()), 'span456', [])
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()), [4, 5, 6], [])
     ..end();
 
     ConsoleExporter().export([span]);
 
-    final expected = RegExp(r'^{traceId: trace123, parentId: span456, name: foo, id: span789, timestamp: \d+, duration: \d+, status: StatusCode.UNSET}$');
+    final expected = RegExp(r'{traceId: \[1, 2, 3\], parentId: \[4, 5, 6\], name: foo, id: \[7, 8, 9\], timestamp: \d+, duration: \d+, status: StatusCode.UNSET}');
     expect(printLogs.length, 1);
     expect(expected.hasMatch(printLogs[0]), true);
   }));
 
   test('does not print after shutdown', overridePrint(() {
-    final span = Span('foo', SpanContext('trace123', 'span789', TraceState()), 'span456', []);
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()), [4, 5, 6], []);
 
     ConsoleExporter()
     ..shutdown()

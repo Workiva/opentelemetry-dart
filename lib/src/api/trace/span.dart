@@ -1,3 +1,4 @@
+import 'package:fixnum/fixnum.dart';
 import 'package:opentelemetry/src/api/trace/span_status.dart';
 
 import 'span_context.dart';
@@ -17,13 +18,13 @@ abstract class Span {
   SpanContext get spanContext;
 
   /// Get the time when the span was closed, or null if still open.
-  int get endTime;
+  Int64 get endTime;
 
   /// Get the time when the span was started.
-  int get startTime;
+  Int64 get startTime;
 
   /// The parent span id.
-  String get parentSpanId;
+  List<int> get parentSpanId;
 
   /// The name of the span.
   String get name;

@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('span change name', () {
-    final span = Span('foo', SpanContext('trace123', '789', TraceState()), 'span456', []);
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()), [4, 5, 6], []);
     expect(span.name, 'foo');
 
     span.name = 'bar';
