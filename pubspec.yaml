@@ -8,11 +8,16 @@ environment:
 
 dependencies:
   fixnum: ^0.10.0
+  frugal:
+    hosted:
+      name: frugal
+      url: https://pub.workiva.org
   http: ^0.12.0
-  logging: ^0.11.0
+  logging: ^0.11.4
   protobuf: ^1.1.0
 
 dev_dependencies:
-  mockito: ^5.0.7
+  meta: 1.6.0 # https://github.com/angulardart/angular/issues/1967
+  mockito: ^4.1.4  # TODO: Fix this.  Version 5.0.7 inompatible with Frugal.
   test: ^1.16.5
   workiva_analysis_options: ^1.2.2

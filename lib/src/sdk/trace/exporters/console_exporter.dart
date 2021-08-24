@@ -9,16 +9,10 @@ class ConsoleExporter implements SpanExporter {
     for (var i = 0; i < spans.length; i++) {
       final span = spans[i];
       print({
-        'traceId': span.spanContext.traceId
-            .map((x) => x.toRadixString(16).padLeft(2, '0'))
-            .join(),
-        'parentId': span.parentSpanId
-            .map((x) => x.toRadixString(16).padLeft(2, '0'))
-            .join(),
+        'traceId': span.spanContext.traceId.toString(),
+        'parentId': span.parentSpanId?.toString(),
         'name': span.name,
-        'id': span.spanContext.spanId
-            .map((x) => x.toRadixString(16).padLeft(2, '0'))
-            .join(),
+        'id': span.spanContext.spanId.toString(),
         'timestamp': span.startTime,
         'duration': span.endTime - span.startTime,
         'status': span.status.code

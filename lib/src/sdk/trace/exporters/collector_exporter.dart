@@ -66,9 +66,9 @@ class CollectorExporter implements SpanExporter {
     }
 
     return pb.Span(
-        traceId: span.spanContext.traceId,
-        spanId: span.spanContext.spanId,
-        parentSpanId: span.parentSpanId,
+        traceId: span.spanContext.traceId.get(),
+        spanId: span.spanContext.spanId.get(),
+        parentSpanId: span.parentSpanId?.get(),
         name: span.name,
         startTimeUnixNano: span.startTime * 1000,
         endTimeUnixNano: span.endTime * 1000,

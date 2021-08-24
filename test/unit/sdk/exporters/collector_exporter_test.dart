@@ -10,6 +10,10 @@ import 'package:opentelemetry/src/sdk/instrumentation_library.dart'
     as instrumentation_sdk;
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
+import 'package:opentelemetry/src/sdk/trace/span_id.dart';
+import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
+import 'package:opentelemetry/src/api/trace/trace_flags.dart' as api;
+import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
@@ -32,13 +36,19 @@ void main() {
   test('sends spans', () {
     final tracer = Tracer(
         'bar', [], IdGenerator(), instrumentation_sdk.InstrumentationLibrary());
-    final span1 = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
-        [4, 5, 6], [], tracer)
+    final span1 = Span(
+        'foo',
+        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
+            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+        SpanId([4, 5, 6]),
+        [],
+        tracer)
       ..end();
     final span2 = Span(
         'baz',
-        SpanContext([1, 2, 3], [10, 11, 12], TraceState()),
-        [4, 5, 6],
+        SpanContext(TraceId([1, 2, 3]), SpanId([10, 11, 12]),
+            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+        SpanId([4, 5, 6]),
         [],
         tracer)
       ..end();
@@ -84,8 +94,13 @@ void main() {
   test('does not send spans when shutdown', () {
     final tracer = Tracer(
         'bar', [], IdGenerator(), instrumentation_sdk.InstrumentationLibrary());
-    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
-        [4, 5, 6], [], tracer)
+    final span = Span(
+        'foo',
+        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
+            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+        SpanId([4, 5, 6]),
+        [],
+        tracer)
       ..end();
 
     CollectorExporter(uri, httpClient: mockClient)

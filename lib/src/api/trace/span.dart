@@ -1,8 +1,9 @@
 import 'package:fixnum/fixnum.dart';
-import 'span_status.dart';
-import '../common/attributes.dart';
 
+import '../common/attributes.dart';
 import 'span_context.dart';
+import 'span_id.dart';
+import 'span_status.dart';
 import 'tracer.dart';
 
 /// A representation of a single operation within a trace.
@@ -26,10 +27,14 @@ abstract class Span {
   Int64 get startTime;
 
   /// The parent span id.
-  List<int> get parentSpanId;
+  SpanId get parentSpanId;
 
   /// The name of the span.
   String get name;
+
+  /// Whether this Span is recording information like events with the
+  /// addEvent operation, status with setStatus, etc.
+  bool get isRecording;
 
   /// Sets the status to the [Span].
   ///

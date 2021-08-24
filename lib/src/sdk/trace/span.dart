@@ -1,25 +1,40 @@
 import 'package:fixnum/fixnum.dart';
 
+import '../../api/common/attributes.dart';
 import '../../api/trace/span.dart' as span_api;
-import '../../api/trace/span_context.dart';
 import '../../api/trace/span_status.dart';
 import '../../api/trace/tracer.dart';
-import 'span_processors/span_processor.dart';
-import '../../api/common/attributes.dart';
+import '../../sdk/trace/span_context.dart';
 import '../common/attributes.dart' as attributes_sdk;
+import 'span_id.dart';
+import 'span_processors/span_processor.dart';
 
 /// A representation of a single operation within a trace.
 class Span implements span_api.Span {
-  Int64 _startTime;
-  Int64 _endTime;
-  final List<int> _parentSpanId;
   final SpanContext _spanContext;
+  final SpanId _parentSpanId;
   final SpanStatus _status = SpanStatus();
   final List<SpanProcessor> _processors;
   final Tracer _tracer;
+  bool _isRecording;
+  Int64 _startTime;
+  Int64 _endTime;
 
   @override
   String name;
+
+  set isRecording(bool isRecording) {
+    _isRecording = isRecording;
+  }
+
+  @override
+  bool get isRecording {
+    if (_endTime != null && _endTime > Int64.ZERO) {
+      return false; // An ended Span cannot be recording.
+    }
+
+    return _isRecording;
+  }
 
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
@@ -30,6 +45,7 @@ class Span implements span_api.Span {
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onStart();
     }
+    _isRecording = true;
   }
 
   @override
@@ -42,7 +58,7 @@ class Span implements span_api.Span {
   Int64 get startTime => _startTime;
 
   @override
-  List<int> get parentSpanId => _parentSpanId;
+  SpanId get parentSpanId => _parentSpanId;
 
   @override
   void end() {
@@ -50,6 +66,7 @@ class Span implements span_api.Span {
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onEnd(this);
     }
+    _isRecording = false;
   }
 
   @override

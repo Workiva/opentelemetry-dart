@@ -1,18 +1,17 @@
-import '../../api/common/attributes.dart' as attributes_api;
+import '../../../api.dart' as api;
 import '../common/attributes.dart';
 import '../instrumentation_library.dart';
-
-import '../../../src/api/context/context.dart';
-import '../../../src/api/trace/context_utils.dart';
-import '../../../src/api/trace/trace_state.dart';
-import '../../../src/api/trace/tracer.dart' as tracer_api;
 import 'id_generator.dart';
 import 'span.dart';
 import 'span_context.dart';
+import 'span_id.dart';
 import 'span_processors/span_processor.dart';
+import 'trace_flags.dart';
+import 'trace_id.dart';
+import 'trace_state.dart';
 
 /// An interface for creating [Span]s and propagating context in-process.
-class Tracer implements tracer_api.Tracer {
+class Tracer implements api.Tracer {
   final String _name;
   final List<SpanProcessor> _processors;
   final IdGenerator _idGenerator;
@@ -24,27 +23,23 @@ class Tracer implements tracer_api.Tracer {
 
   @override
   Span startSpan(String name,
-      {Context context, attributes_api.Attributes attributes}) {
-    context ??= Context.current;
+      {api.Context context, api.Attributes attributes}) {
+    context ??= api.Context.current;
     attributes ??= Attributes.empty();
 
-    List<int> parentSpanId;
-    List<int> traceId;
-    TraceState traceState;
+    final Span parent = api.getSpan(context);
 
-    final spanId = _idGenerator.generateSpanId();
-
-    final parentSpanContext = getSpanContext(context);
-
-    if (parentSpanContext == null) {
-      traceId = _idGenerator.generateTraceId();
-    } else {
-      parentSpanId = parentSpanContext.spanId;
-      traceId = parentSpanContext.traceId;
-      traceState = parentSpanContext.traceState;
-    }
-
-    final spanContext = SpanContext(traceId, spanId, traceState);
+    // If a Span is present in the context, use it as this Span's parent.
+    // If not, create a root Span, which has no parent, with a new Trace ID
+    // and default state.
+    final parentSpanId = parent?.spanContext?.spanId ?? SpanId.root();
+    final SpanContext spanContext = SpanContext(
+            parent?.spanContext?.traceId ??
+                TraceId.fromIdGenerator(_idGenerator),
+            SpanId.fromIdGenerator(_idGenerator),
+            parent?.spanContext?.traceFlags ?? TraceFlags(api.TraceFlags.NONE),
+            parent?.spanContext?.traceState) ??
+        TraceState.empty();
 
     return Span(name, spanContext, parentSpanId, _processors, this,
         attributes: attributes);
