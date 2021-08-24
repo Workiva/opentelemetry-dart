@@ -9,4 +9,7 @@ abstract class Tracer {
   /// Starts a new [Span] without setting it as the current span in this
   /// tracer's context.
   Span startSpan(String name, {Context context});
+
+  /// The Tracer's name.
+  String get name;
 }

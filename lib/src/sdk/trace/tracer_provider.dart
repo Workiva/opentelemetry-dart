@@ -22,7 +22,7 @@ class TracerProvider implements api.TracerProvider {
   @override
   Tracer getTracer(String name, {String version = ''}) {
     final key = '$name@$version';
-    return _tracers.putIfAbsent(key, () => Tracer(_processors));
+    return _tracers.putIfAbsent(key, () => Tracer(name, _processors));
   }
 
   @override

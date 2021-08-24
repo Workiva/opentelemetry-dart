@@ -4,13 +4,15 @@ import 'package:opentelemetry/src/api/trace/context_utils.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
+import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
 
 import '../mocks.dart';
 
 void main() {
   final testSpanContext = SpanContext([1, 2, 3], [7, 8, 9], TraceState());
-  final testSpan = Span('foo', testSpanContext, [4, 5, 6], []);
+  final testSpan =
+      Span('foo', testSpanContext, [4, 5, 6], [], Tracer('bar', []));
 
   group('getSpan', () {
     test('returns Span when exists', () {

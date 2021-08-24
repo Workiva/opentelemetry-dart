@@ -9,10 +9,14 @@ import 'span_processors/span_processor.dart';
 
 /// An interface for creating [Span]s and propagating context in-process.
 class Tracer implements tracer_api.Tracer {
+  final String _name;
   final IdGenerator _idGenerator = IdGenerator();
   final List<SpanProcessor> _processors;
 
-  Tracer(this._processors);
+  Tracer(this._name, this._processors);
+
+  @override
+  String get name => _name;
 
   @override
   Span startSpan(String name, {Context context}) {
@@ -36,6 +40,6 @@ class Tracer implements tracer_api.Tracer {
 
     final spanContext = SpanContext(traceId, spanId, traceState);
 
-    return Span(name, spanContext, parentSpanId, _processors);
+    return Span(name, spanContext, parentSpanId, _processors, this);
   }
 }

@@ -4,6 +4,7 @@ import 'package:opentelemetry/src/sdk/trace/exporters/console_exporter.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
+import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
 
 List<String> printLogs = [];
@@ -24,18 +25,21 @@ void main() {
   });
 
   test('prints', overridePrint(() {
-    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()), [4, 5, 6], [])
-    ..end();
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
+        [4, 5, 6], [], Tracer('bar', []))
+      ..end();
 
     ConsoleExporter().export([span]);
 
-    final expected = RegExp(r'{traceId: \[1, 2, 3\], parentId: \[4, 5, 6\], name: foo, id: \[7, 8, 9\], timestamp: \d+, duration: \d+, status: StatusCode.UNSET}');
+    final expected = RegExp(
+        r'{traceId: 010203, parentId: 040506, name: foo, id: 070809, timestamp: \d+, duration: \d+, status: StatusCode.UNSET}');
     expect(printLogs.length, 1);
     expect(expected.hasMatch(printLogs[0]), true);
   }));
 
   test('does not print after shutdown', overridePrint(() {
-    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()), [4, 5, 6], []);
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
+        [4, 5, 6], [], Tracer('bar', []));
 
     ConsoleExporter()
     ..shutdown()
