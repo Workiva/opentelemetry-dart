@@ -1,4 +1,4 @@
-import 'package:opentelemetry/src/api/common/attributes.dart';
+import '../common/attributes.dart';
 
 import '../../../src/api/context/context.dart';
 import 'span.dart';

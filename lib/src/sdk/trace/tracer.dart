@@ -1,5 +1,5 @@
-import 'package:opentelemetry/src/api/common/attributes.dart' as attributes_api;
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
+import '../../api/common/attributes.dart' as attributes_api;
+import '../common/attributes.dart';
 
 import '../../../src/api/context/context.dart';
 import '../../../src/api/trace/context_utils.dart';

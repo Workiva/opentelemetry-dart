@@ -1,4 +1,4 @@
-import 'package:opentelemetry/src/api/common/attribute.dart';
+import 'attribute.dart';
 
 /// A representation of a collection of metadata attached to a trace span.
 abstract class Attributes {

@@ -1,5 +1,5 @@
-import 'package:opentelemetry/src/api/common/attribute.dart';
-import 'package:opentelemetry/src/api/common/attributes.dart' as api;
+import '../../api/common/attribute.dart';
+import '../../api/common/attributes.dart' as api;
 
 class Attributes implements api.Attributes {
   Map<String, Object> _attributes = {};
