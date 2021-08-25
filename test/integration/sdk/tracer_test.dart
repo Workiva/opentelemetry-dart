@@ -5,30 +5,30 @@ import 'package:test/test.dart';
 
 void main() {
   test('startSpan new trace', () {
-    final tracer = Tracer([]);
+    final tracer = Tracer('bar', []);
 
     final span = tracer.startSpan('foo');
 
-    expect(span.startTime, isA<int>());
+    expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
-    expect(span.spanContext.traceId, isA<String>());
-    expect(span.spanContext.spanId, isA<String>());
+    expect(span.spanContext.traceId, isNotNull);
+    expect(span.spanContext.spanId, isNotNull);
   });
 
   test('startSpan child span', () {
-    final tracer = Tracer([]);
+    final tracer = Tracer('baz', []);
 
     final parentSpan = tracer.startSpan('foo');
     final context = setSpan(Context.current, parentSpan);
 
     final childSpan = tracer.startSpan('bar', context: context);
 
-    expect(childSpan.startTime, isA<int>());
+    expect(childSpan.startTime, isNotNull);
     expect(childSpan.endTime, isNull);
     expect(childSpan.spanContext.traceId, equals(parentSpan.spanContext.traceId));
     expect(childSpan.spanContext.traceState, equals(parentSpan.spanContext.traceState));
     expect(childSpan.spanContext.spanId, allOf([
-      isA<String>(),
+      isNotNull,
       isNot(equals(parentSpan.spanContext.spanId))
     ]));
   });

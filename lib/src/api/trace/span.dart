@@ -1,6 +1,7 @@
-import 'package:opentelemetry/src/api/trace/span_status.dart';
-
+import 'package:fixnum/fixnum.dart';
 import 'span_context.dart';
+import 'span_status.dart';
+import 'tracer.dart';
 
 /// A representation of a single operation within a trace.
 ///
@@ -17,13 +18,13 @@ abstract class Span {
   SpanContext get spanContext;
 
   /// Get the time when the span was closed, or null if still open.
-  int get endTime;
+  Int64 get endTime;
 
   /// Get the time when the span was started.
-  int get startTime;
+  Int64 get startTime;
 
   /// The parent span id.
-  String get parentSpanId;
+  List<int> get parentSpanId;
 
   /// The name of the span.
   String get name;
@@ -39,6 +40,9 @@ abstract class Span {
 
   /// Retrieve the status of the [Span].
   SpanStatus get status;
+
+  /// Tracer responsible for creating the [Span].
+  Tracer get tracer;
 
   /// Marks the end of this span's execution.
   void end();

@@ -5,10 +5,10 @@ import 'package:test/test.dart';
 void main() {
   test('spanContext getters', () {
     final traceState = TraceState();
-    final spanContext = SpanContext('trace123', 'span456', traceState);
+    final spanContext = SpanContext([1, 2, 3], [4, 5, 6], traceState);
 
-    expect(spanContext.traceId, equals('trace123'));
-    expect(spanContext.spanId, equals('span456'));
+    expect(spanContext.traceId, [1, 2, 3]);
+    expect(spanContext.spanId, [4, 5, 6]);
     expect(spanContext.traceState, same(traceState));
   });
 }

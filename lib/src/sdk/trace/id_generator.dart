@@ -6,17 +6,17 @@ import '../../../src/api/trace/id_generator.dart' as api;
 class IdGenerator implements api.IdGenerator {
   static final Random _random = Random.secure();
 
-  static String _generateId(int byteLength) {
-    final buffer = StringBuffer();
+  static List<int> _generateId(int byteLength) {
+    final buffer = [];
     for (var i = 0; i < byteLength; i++) {
-      buffer.write(_random.nextInt(256).toRadixString(16).padLeft(2, '0'));
+      buffer.add(_random.nextInt(256));
     }
-    return buffer.toString();
+    return buffer.cast<int>();
   }
   
   @override
-  String generateSpanId() => _generateId(8);
+  List<int> generateSpanId() => _generateId(8);
 
   @override
-  String generateTraceId() => _generateId(16);
+  List<int> generateTraceId() => _generateId(16);
 }

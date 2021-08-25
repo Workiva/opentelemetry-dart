@@ -1,1 +1,4 @@
 include: package:workiva_analysis_options/v1.recommended.yaml
+analyzer:
+  exclude: 
+    - src/sdk/trace/exporters/opentelemetry

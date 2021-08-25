@@ -15,13 +15,13 @@ class BatchSpanProcessor implements SpanProcessor {
   final List<Span> _spanBuffer = [];
   Timer _timer; 
 
-  int _maxExportBatchSize = 512;
+  int _maxExportBatchSize;
   final int _maxQueueSize = 2048;
-  int _scheduledDelay = 5000;
+  int _scheduledDelay;
 
   BatchSpanProcessor(this._exporter, {int maxExportBatchSize, int scheduledDelay}) {
-    _maxExportBatchSize = maxExportBatchSize;
-    _scheduledDelay = scheduledDelay;
+    _maxExportBatchSize = maxExportBatchSize ?? 512;
+    _scheduledDelay = scheduledDelay ?? 5000;
   }
 
   @override

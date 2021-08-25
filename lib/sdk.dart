@@ -1,3 +1,6 @@
+export 'src/sdk/trace/exporters/collector_exporter.dart'
+  show 
+    CollectorExporter;
 export 'src/sdk/trace/exporters/console_exporter.dart'
   show 
     ConsoleExporter;

@@ -3,6 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
+import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
 
 import '../../unit/mocks.dart';
@@ -11,14 +12,12 @@ void main() {
   test('span set and end time', () {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
-    final span = Span('foo', SpanContext('trace123', '789', TraceState()), 'span456', [
-      mockProcessor1,
-      mockProcessor2
-    ]);
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
+        [4, 5, 6], [mockProcessor1, mockProcessor2], Tracer('bar', []));
 
-    expect(span.startTime, isA<int>());
+    expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
-    expect(span.parentSpanId, 'span456');
+    expect(span.parentSpanId, [4, 5, 6]);
     expect(span.name, 'foo');
 
     verify(mockProcessor1.onStart()).called(1);
@@ -27,8 +26,8 @@ void main() {
     verifyNever(mockProcessor2.onEnd(span));
 
     span.end();
-    expect(span.startTime, isA<int>());
-    expect(span.endTime, isA<int>());
+    expect(span.startTime, isNotNull);
+    expect(span.endTime, isNotNull);
     expect(span.endTime, greaterThan(span.startTime));
 
     verify(mockProcessor1.onEnd(span)).called(1);
@@ -36,8 +35,8 @@ void main() {
   });
 
   test('span status', () {
-    final span =
-        Span('foo', SpanContext('trace123', '789', TraceState()), 'span456', []);
+    final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
+        [4, 5, 6], [], Tracer('bar', []));
 
     // Verify span status' defaults.
     expect(span.status.code, equals(StatusCode.UNSET));

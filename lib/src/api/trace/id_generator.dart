@@ -1,8 +1,8 @@
 /// Generator capable of creating OTel compliant IDs.
 abstract class IdGenerator {
   /// Generate an ID for a Span.
-  String generateSpanId();
+  List<int> generateSpanId();
 
   /// Generate an ID for a trace.
-  String generateTraceId();
+  List<int> generateTraceId();
 }

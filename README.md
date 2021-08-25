@@ -64,3 +64,7 @@ main() async {
   span.end();
 }
 ```
+
+## Development
+
+In order to generate protobuf definitions, you must have [protoc](https://github.com/protocolbuffers/protobuf/releases) installed and available in your path.
