@@ -3,6 +3,9 @@ WORKDIR /build
 
 RUN apt update && apt install -y make protobuf-compiler
 
+COPY pubspec.yaml .
+RUN pub get
+
 COPY . .
 
 RUN make init analyze test
