@@ -9,59 +9,122 @@ in an effort to be consistent with [all other languages](https://github.com/open
 
 ## Getting Started
 
-```
-// pubspec.yaml
+First, you will need to configure at least one exporter.  An exporter determines what happens to the spans you collect.
+The current options are:
 
-...
-dependencies:
-  opentelemetry: ^0.0.0
-...
-```
+| Exporter | Description |
+| -------- | ----------- |
+| [CollectorExporter](#collectorxxporter) | Sends Spans to a configured opentelemetry-collector. |
+| [ConsoleExporter](#consoleexporter) | Prints Spans to the console. |
 
+### Span Exporters
+
+#### CollectorExporter
+The CollectorExporter requires a Uri of the opentelemetry-collector instance's trace collector.
 ```
-import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart' as otel_sdk;
 
-final otel_sdk.ConsoleExporter exporter = otel_sdk.ConsoleExporter();
-final otel_sdk.TracerProvider provider = otel_sdk.TracerProvider([
-  otel_sdk.SimpleSpanProcessor(exporter)
+final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
+```
+
+#### ConsoleExporter
+The ConsoleExporter has no requirements, and has no configuration options.
+```
+import 'package:opentelemetry/sdk.dart' as otel_sdk;
+
+final exporter = otel_sdk.ConsoleExporter();
+```
+
+### Span Processors
+
+Next, you will need a at least one span processor.  A span processor is responsible for collectoring the spans you create and feeding them to the exporter.
+The current options are:
+
+| SpanProcessor | Description |
+| -------- | ----------- |
+| [BatchSpanProcessor](#batchspanprocessor) | Batches spans to be exported on a configured time interval. |
+| [SimpleSpanProcessor](#simplespanprocessor) | Executes the provided exporter immediately upon closing the span. |
+
+
+#### BatchSpanProcessor
+BatchSpanProcessors collect up to 2048 spans per interval, and executes the provided exporter on a timer.
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+| maxExportBatchSize | At most, how many spans are processed per batch. | 512 |
+| scheduledDelay | How long to collect spans before processing them. | 5000 ms |
+```
+import 'package:opentelemetry/sdk.dart' as otel_sdk;
+
+final exporter = otel_sdk.ConsoleExporter();
+final processor = otel_sdk.BatchSpanProcessor(exporter, scheduledDelay: 10000);
+```
+
+#### SimpleSpanProcessor
+A SimpleSpanProcessor has no configuration options, and executes the exporter when each span is closed.
+```
+import 'package:opentelemetry/sdk.dart' as otel_sdk;
+
+final exporter = otel_sdk.ConsoleExporter();
+final processor = otel_sdk.SimpleSpanProcessor(exporter);
+```
+
+### Tracer Provider
+A trace provider registers your span processors, and is responsible for managing any tracers.
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+| processors | A list of SpanProcessors to register. | A [SimpleSpanProcessor](#simplespanprocessor) configured with a [ConsoleExporter](#consoleexporter). |
+```
+import 'package:opentelemetry/sdk.dart' as otel_sdk;
+
+final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
+final processor = otel_sdk.BatchSpanProcesor(exporter);
+
+// Send spans to a collector every 5 seconds
+final provider = otel_sdk.TracerProvider([processor]);
+
+// Optionally, multiple processors can be registered
+final provider = otel_sdk.TracerProvider([
+  otel_sdk.BatchSpanProcesor(otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'))),
+  otel_sdk.SimpleSpanProcessor(otel_sdk.ConsoleExporter())
 ]);
-final Tracer tracer = provider.getTracer('appName', version: '1.0.0');
 
+final tracer = provider.getTracer('my-app');
+```
+
+## Collecting Spans
+To start a span, execute `startSpan` on the tracer with the name of what you are tracing.  When complete, call `end` on the span.
+```
+final span = tracer.startSpan('doingWork');
+...
+span.end();
+```
+To create children spans, you must set the parent span as "current", and execute work within `withContext`.
+```
+final checkoutSpan = tracer.startSpan('checkout');
+withContext(setSpan(Context.current, checkoutSpan), () {
+  final ringUpSpan = tracer.startSpan('ringUp');
+  ...
+  ringUpSpan.end();
+  final receiveSpan = tracer.startSpan('receiveCash');
+  ...
+  receiveSpan.end();
+  final returnSpan = tracer.startSpan('returnChange');
+  ...
+  returnSpan.end();
+});
+checkoutSpan.end();
+```
+
+To avoid needing to pass spans around as arguments to other functions, you can get the current span with `getSpan`.
+```
 doWork() {
-  Span parent = getSpan(Context.current);
+  Span parentSpan = getSpan(Context.current);
 
-  withContext(setSpan(Context.current, parent), () {
+  withContext(setSpan(Context.current, parentSpan), () {
     Span span = tracer.startSpan('doWork');
     ...
     span.end();
   });
-}
-
-doMoreWork() async {
-  Span parent = getSpan(Context.current);
-
-  await withContext(setSpan(Context.current, parent), () async {
-    Span span = tracer.startSpan('doMoreWork');
-    ...
-    span.end();
-  });
-}
-
-main() async {
-  // parent span
-  Span span = tracer.startSpan('work-setup');
-
-  // force all enclosed new spans will be a child of the parent span.
-  withContext(setSpan(Context.current, span), () {
-    doWork();
-  });
-
-  await withContext(setSpan(Context.current, span), () async {
-    await doMoreWork();
-  });
-
-  span.end();
 }
 ```
 
