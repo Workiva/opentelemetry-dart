@@ -5,6 +5,8 @@ import '../../api/trace/span_context.dart';
 import '../../api/trace/span_status.dart';
 import '../../api/trace/tracer.dart';
 import 'span_processors/span_processor.dart';
+import '../../api/common/attributes.dart';
+import '../common/attributes.dart' as attributes_sdk;
 
 /// A representation of a single operation within a trace.
 class Span implements span_api.Span {
@@ -21,8 +23,9 @@ class Span implements span_api.Span {
 
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
-      this._tracer) {
+      this._tracer, {Attributes attributes}) {
     _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
+    this.attributes = attributes ?? attributes_sdk.Attributes.empty();
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onStart();
     }
@@ -69,4 +72,7 @@ class Span implements span_api.Span {
 
   @override
   Tracer get tracer => _tracer;
+
+  @override
+  Attributes attributes;
 }
