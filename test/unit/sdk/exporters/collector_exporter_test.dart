@@ -5,6 +5,9 @@ import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/common
 import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/resource/v1/resource.pb.dart';
 import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/trace/v1/trace.pb.dart'
     as pb;
+import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
+import 'package:opentelemetry/src/sdk/instrumentation_library.dart'
+    as instrumentation_sdk;
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
@@ -27,7 +30,8 @@ void main() {
   });
 
   test('sends spans', () {
-    final tracer = Tracer('bar', []);
+    final tracer = Tracer(
+        'bar', [], IdGenerator(), instrumentation_sdk.InstrumentationLibrary());
     final span1 = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
         [4, 5, 6], [], tracer)
       ..end();
@@ -78,7 +82,8 @@ void main() {
   });
 
   test('does not send spans when shutdown', () {
-    final tracer = Tracer('bar', []);
+    final tracer = Tracer(
+        'bar', [], IdGenerator(), instrumentation_sdk.InstrumentationLibrary());
     final span = Span('foo', SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
         [4, 5, 6], [], tracer)
       ..end();
@@ -88,7 +93,6 @@ void main() {
       ..export([span]);
 
     verifyNever(mockClient.post(uri,
-        body: anything,
-        headers: {'Content-Type': 'application/x-protobuf'}));
+        body: anything, headers: {'Content-Type': 'application/x-protobuf'}));
   });
 }

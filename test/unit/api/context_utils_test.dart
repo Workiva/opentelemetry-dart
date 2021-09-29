@@ -1,6 +1,8 @@
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/trace/context_utils.dart';
+import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
+import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
@@ -11,8 +13,8 @@ import '../mocks.dart';
 
 void main() {
   final testSpanContext = SpanContext([1, 2, 3], [7, 8, 9], TraceState());
-  final testSpan =
-      Span('foo', testSpanContext, [4, 5, 6], [], Tracer('bar', []));
+  final testSpan = Span('foo', testSpanContext, [4, 5, 6], [],
+      Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));
 
   group('getSpan', () {
     test('returns Span when exists', () {

@@ -31,10 +31,7 @@ void main() {
 
     parentContext.detach(parentScope);
     // context.current is null, so .current creates a new one
-    expect(Context.current, allOf([
-      isNot(parentContext),
-      isNot(childContext)
-    ]));
+    expect(Context.current, allOf([isNot(parentContext), isNot(childContext)]));
   });
 
   test('setValue and getValue', () {

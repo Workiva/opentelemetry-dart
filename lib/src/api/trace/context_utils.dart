@@ -17,7 +17,7 @@ dynamic getSpanContext(Context context) {
 Context setSpan(Context context, Span span) => context.setValue(spanKey, span);
 
 /// Execute a function [fn] within a [context].
-/// 
+///
 /// [context] is set as the active context, and then reset after [fn] completes.
 dynamic withContext(Context context, Function fn) {
   final scope = Context.attach(context);

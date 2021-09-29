@@ -6,7 +6,7 @@ class ConsoleExporter implements SpanExporter {
   var _isShutdown = false;
 
   void _printSpans(List<Span> spans) {
-    for (var i=0; i < spans.length; i++) {
+    for (var i = 0; i < spans.length; i++) {
       final span = spans[i];
       print({
         'traceId': span.spanContext.traceId
@@ -39,5 +39,4 @@ class ConsoleExporter implements SpanExporter {
   void shutdown() {
     _isShutdown = true;
   }
-
 }
