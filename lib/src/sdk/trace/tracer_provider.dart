@@ -1,12 +1,12 @@
+import '../../api/instrumentation_library.dart'
+    as version_api;
 import '../../api/trace/tracer_provider.dart' as api;
+import '../instrumentation_library.dart';
 import 'exporters/console_exporter.dart';
+import 'id_generator.dart';
 import 'span_processors/simple_processor.dart';
 import 'span_processors/span_processor.dart';
 import 'tracer.dart';
-import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
-import 'package:opentelemetry/src/api/instrumentation_library.dart'
-    as version_api;
-import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 
 /// A registry for creating named [Tracer]s.
 class TracerProvider implements api.TracerProvider {

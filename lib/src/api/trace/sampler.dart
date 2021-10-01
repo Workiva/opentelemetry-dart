@@ -1,7 +1,7 @@
-import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/instrumentation_library.dart';
-import 'package:opentelemetry/src/api/trace/sampling_result.dart';
-import 'package:opentelemetry/src/api/trace/span.dart';
+import '../context/context.dart';
+import '../instrumentation_library.dart';
+import 'sampling_result.dart';
+import 'span.dart';
 
 /// Represents an entity which determines whether a [Span] should be sampled
 /// and sent for collection.

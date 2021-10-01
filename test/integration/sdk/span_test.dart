@@ -5,6 +5,10 @@ import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
+import 'package:opentelemetry/src/sdk/trace/span_id.dart';
+import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
+import 'package:opentelemetry/src/api/trace/trace_flags.dart' as api;
+import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
@@ -15,16 +19,18 @@ void main() {
   test('span set and end time', () {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
+    final parentSpanId = SpanId([4, 5, 6]);
     final span = Span(
         'foo',
-        SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
-        [4, 5, 6],
+        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
+            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+        parentSpanId,
         [mockProcessor1, mockProcessor2],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
-    expect(span.parentSpanId, [4, 5, 6]);
+    expect(span.parentSpanId, same(parentSpanId));
     expect(span.name, 'foo');
 
     verify(mockProcessor1.onStart()).called(1);
@@ -44,8 +50,9 @@ void main() {
   test('span status', () {
     final span = Span(
         'foo',
-        SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
-        [4, 5, 6],
+        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
+            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+        SpanId([4, 5, 6]),
         [],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));
 
@@ -105,8 +112,9 @@ void main() {
     };
     final span = Span(
         'foo',
-        SpanContext([1, 2, 3], [7, 8, 9], TraceState()),
-        [4, 5, 6],
+        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
+            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+        SpanId([4, 5, 6]),
         [],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));
 

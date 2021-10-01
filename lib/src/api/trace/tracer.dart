@@ -1,6 +1,5 @@
-import '../common/attributes.dart';
-
 import '../../../src/api/context/context.dart';
+import '../common/attributes.dart';
 import 'span.dart';
 
 /// An interface for creating [Span]s and propagating context in-process.
