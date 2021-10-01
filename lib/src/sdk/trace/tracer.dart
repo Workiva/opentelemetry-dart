@@ -27,7 +27,7 @@ class Tracer implements api.Tracer {
     context ??= api.Context.current;
     attributes ??= Attributes.empty();
 
-    final Span parent = api.getSpan(context);
+    final parent = context.getSpan();
 
     // If a Span is present in the context, use it as this Span's parent.
     // If not, create a root Span, which has no parent, with a new Trace ID

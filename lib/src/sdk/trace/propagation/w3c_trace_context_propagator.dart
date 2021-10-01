@@ -1,5 +1,4 @@
 import '../../../../api.dart' as api;
-import '../../../api/trace/context_utils.dart';
 import '../../../api/trace/nonrecording_span.dart';
 import '../span_context.dart';
 import '../span_id.dart';
@@ -52,15 +51,13 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
         ? TraceState.fromString(traceStateHeader)
         : TraceState.empty();
 
-    return setSpan(
-        context,
-        NonRecordingSpan(
-            SpanContext(traceId, parentId, traceFlags, traceState)));
+    return context.withSpan(NonRecordingSpan(
+        SpanContext(traceId, parentId, traceFlags, traceState)));
   }
 
   @override
   void inject(api.Context context, dynamic carrier, api.TextMapSetter setter) {
-    final SpanContext spanContext = api.getSpanContext(context);
+    final spanContext = context.getSpanContext();
 
     setter
       ..set(carrier, _TRACE_PARENT_HEADER_KEY,

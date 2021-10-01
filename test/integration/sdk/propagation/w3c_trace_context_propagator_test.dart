@@ -1,7 +1,6 @@
 import 'package:frugal/frugal.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/trace/context_utils.dart';
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/extractors/fcontext_extractor.dart';
@@ -32,11 +31,12 @@ void main() {
         Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = FContext();
-    final testContext = api.setSpan(Context.current, testSpan);
+    final testContext = Context.current.withSpan(testSpan);
 
     testPropagator.inject(testContext, testCarrier, FContextInjector());
-    final Span resultSpan = getSpan(
-        testPropagator.extract(testContext, testCarrier, FContextExtractor()));
+    final resultSpan = testPropagator
+        .extract(testContext, testCarrier, FContextExtractor())
+        .getSpan();
 
     expect(resultSpan.parentSpanId, isNull);
     expect(resultSpan.spanContext.isValid, isTrue);
@@ -64,11 +64,12 @@ void main() {
         Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = FContext();
-    final testContext = api.setSpan(Context.current, testSpan);
+    final testContext = Context.current.withSpan(testSpan);
 
     testPropagator.inject(testContext, testCarrier, FContextInjector());
-    final Span resultSpan = getSpan(
-        testPropagator.extract(testContext, testCarrier, FContextExtractor()));
+    final resultSpan = testPropagator
+        .extract(testContext, testCarrier, FContextExtractor())
+        .getSpan();
 
     expect(resultSpan.parentSpanId, isNull);
     expect(resultSpan.spanContext.isValid, isFalse);
@@ -101,14 +102,15 @@ void main() {
 
     // Inject and extract a test Span from a Context, as when an outbound
     // call is made and received by another service.
-    final testContext = api.setSpan(Context.current, testSpan);
+    final testContext = Context.current.withSpan(testSpan);
     testPropagator.inject(testContext, testCarrier, FContextInjector());
-    final Span parentSpan = getSpan(
-        testPropagator.extract(testContext, testCarrier, FContextExtractor()));
+    final parentSpan = testPropagator
+        .extract(testContext, testCarrier, FContextExtractor())
+        .getSpan();
 
     // Use the transmitted Span as a receiver.
     Span resultSpan;
-    withContext(setSpan(Context.current, parentSpan), () {
+    Context.current.withSpan(parentSpan).execute(() {
       resultSpan = tracer.startSpan('doWork')..end();
     });
 

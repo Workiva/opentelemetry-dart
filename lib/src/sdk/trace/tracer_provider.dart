@@ -1,5 +1,4 @@
-import '../../api/instrumentation_library.dart'
-    as version_api;
+import '../../api/instrumentation_library.dart' as version_api;
 import '../../api/trace/tracer_provider.dart' as api;
 import '../instrumentation_library.dart';
 import 'exporters/console_exporter.dart';

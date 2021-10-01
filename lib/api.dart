@@ -4,8 +4,6 @@ export 'src/api/context/context.dart' show Context;
 export 'src/api/propagation/extractors/text_map_getter.dart' show TextMapGetter;
 export 'src/api/propagation/injectors/text_map_setter.dart' show TextMapSetter;
 export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;
-export 'src/api/trace/context_utils.dart'
-    show getSpan, getSpanContext, setSpan, withContext;
 export 'src/api/trace/id_generator.dart' show IdGenerator;
 export 'src/api/trace/span.dart' show Span;
 export 'src/api/trace/span_context.dart' show SpanContext;
