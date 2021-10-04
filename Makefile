@@ -26,7 +26,8 @@ update-package-version:  ## inject package version during build
 	if [ -n "${GIT_TAG}" ]; then \
 		echo "Setting package version to \"${GIT_TAG}\"" && \
 		sed -i.bak 's/static const String version = '\''0.0.0'\''/static const String version = ${GIT_TAG}/g' lib/src/sdk/instrumentation_library.dart && \
-		rm lib/src/sdk/instrumentation_library.dart.bak; \
+		rm lib/src/sdk/instrumentation_library.dart.bak && \
+		sed -i 's/version: 0.0.0/version: ${GIT_TAG}/g' pubspec.yaml; \
 	fi;
 
 .PHONY: init analyze test
