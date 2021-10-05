@@ -1,9 +1,9 @@
-import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/trace/sampler.dart' as api;
-import 'package:opentelemetry/src/api/trace/sampling_result.dart' as result_api;
-import 'package:opentelemetry/src/api/trace/span.dart' as span_api;
-import 'package:opentelemetry/src/sdk/trace/samplers/sampling_result.dart';
-import 'package:opentelemetry/src/api/instrumentation_library.dart';
+import '../../../api/context/context.dart';
+import '../../../api/instrumentation_library.dart';
+import '../../../api/trace/sampler.dart' as api;
+import '../../../api/trace/sampling_result.dart' as result_api;
+import '../../../api/trace/span.dart' as span_api;
+import 'sampling_result.dart';
 
 class AlwaysOffSampler implements api.Sampler {
   @override
