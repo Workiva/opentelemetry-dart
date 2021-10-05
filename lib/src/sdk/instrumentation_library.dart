@@ -1,4 +1,4 @@
-import 'package:opentelemetry/src/api/instrumentation_library.dart' as api;
+import '../api/instrumentation_library.dart' as api;
 
 class InstrumentationLibrary implements api.InstrumentationLibrary {
   static const String name = 'opentelemetry-dart';
