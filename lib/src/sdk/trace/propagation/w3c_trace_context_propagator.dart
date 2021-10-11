@@ -38,13 +38,13 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
         key: (element) => element.toString(),
         value: (element) => parentHeaderMatch.namedGroup(element));
 
-    final TraceId traceId = TraceId.fromString(parentHeaderFields['traceid']) ??
-        api.TraceId.INVALID;
-    final SpanId parentId =
-        SpanId.fromString(parentHeaderFields['parentid']) ?? api.SpanId.INVALID;
-    final TraceFlags traceFlags =
+    final traceId = TraceId.fromString(parentHeaderFields['traceid']) ??
+        TraceId(api.TraceId.INVALID);
+    final parentId = SpanId.fromString(parentHeaderFields['parentid']) ??
+        SpanId(api.SpanId.INVALID);
+    final traceFlags =
         TraceFlags.fromString(parentHeaderFields['traceflags']) ??
-            api.TraceFlags.NONE;
+            TraceFlags(api.TraceFlags.SAMPLED_FLAG);
 
     final traceStateHeader = getter.get(carrier, _TRACE_STATE_HEADER_KEY);
     final traceState = (traceStateHeader != null)

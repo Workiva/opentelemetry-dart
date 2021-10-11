@@ -15,6 +15,8 @@ class ConsoleExporter implements SpanExporter {
         'id': span.spanContext.spanId.toString(),
         'timestamp': span.startTime,
         'duration': span.endTime - span.startTime,
+        'flags': span.spanContext.traceFlags.toString(),
+        'state': span.spanContext.traceState.toString(),
         'status': span.status.code
       });
     }

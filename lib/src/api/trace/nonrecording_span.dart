@@ -41,10 +41,13 @@ class NonRecordingSpan extends Span implements api.Span {
   }
 
   @override
-  Int64 get endTime => Int64.ZERO;
+  Int64 get endTime => null;
 
   @override
   String get name => 'NON_RECORDING';
+
+  @override
+  bool get isRecording => false;
 
   @override
   SpanId get parentSpanId => null;
@@ -58,7 +61,7 @@ class NonRecordingSpan extends Span implements api.Span {
   sdk_spancontext.SpanContext get spanContext => _spanContext;
 
   @override
-  Int64 get startTime => Int64.ZERO;
+  Int64 get startTime => null;
 
   @override
   SpanStatus get status => _status;

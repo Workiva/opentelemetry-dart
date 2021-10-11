@@ -32,8 +32,7 @@ void main() {
       ..onEnd(mockSpan3)
       ..forceFlush();
 
-    verify(mockExporter.export([mockSpan1, mockSpan2])).called(1);
-    verify(mockExporter.export([mockSpan3])).called(1);
+    verify(mockExporter.export([mockSpan1, mockSpan2, mockSpan3])).called(1);
   });
 
   test('shutdown shuts exporter down', () {

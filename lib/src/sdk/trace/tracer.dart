@@ -27,19 +27,32 @@ class Tracer implements api.Tracer {
     context ??= api.Context.current;
     attributes ??= Attributes.empty();
 
+    // If a valid, active Span is present in the context, use it as this Span's
+    // parent.  If the Context does not contain a parent Span, or contains a
+    // parent Span which represents an operation which has already completed,
+    // create a root Span with a new Trace ID and default state.
     final parent = context.getSpan();
+    var parentSpanId;
+    var spanContext;
 
-    // If a Span is present in the context, use it as this Span's parent.
-    // If not, create a root Span, which has no parent, with a new Trace ID
-    // and default state.
-    final parentSpanId = parent?.spanContext?.spanId ?? SpanId.root();
-    final SpanContext spanContext = SpanContext(
-            parent?.spanContext?.traceId ??
-                TraceId.fromIdGenerator(_idGenerator),
-            SpanId.fromIdGenerator(_idGenerator),
-            parent?.spanContext?.traceFlags ?? TraceFlags(api.TraceFlags.NONE),
-            parent?.spanContext?.traceState) ??
-        TraceState.empty();
+    if (parent != null && parent.endTime == null) {
+      // The Span on the Context is valid; Use it as this Span's parent.
+      parentSpanId =
+          (parent.isRecording) ? parent.spanContext.spanId : SpanId.root();
+      spanContext = SpanContext(
+          parent.spanContext.traceId,
+          SpanId.fromIdGenerator(_idGenerator),
+          parent.spanContext.traceFlags,
+          parent.spanContext.traceState);
+    } else {
+      // The Span is not valid; Use default values.
+      parentSpanId = SpanId.root();
+      spanContext = SpanContext(
+          TraceId.fromIdGenerator(_idGenerator),
+          SpanId.fromIdGenerator(_idGenerator),
+          TraceFlags(api.TraceFlags.SAMPLED_FLAG),
+          TraceState.empty());
+    }
 
     return Span(name, spanContext, parentSpanId, _processors, this,
         attributes: attributes);

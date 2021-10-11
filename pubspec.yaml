@@ -18,6 +18,6 @@ dependencies:
 
 dev_dependencies:
   meta: 1.6.0 # https://github.com/angulardart/angular/issues/1967
-  mockito: ^4.1.4  # TODO: Version 5.0.7 inompatible with Frugal.
+  mockito: ^4.1.4  # TODO: Version 5.0.7 incompatible with Frugal.
   test: ^1.16.5
   workiva_analysis_options: ^1.2.2

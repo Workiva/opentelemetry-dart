@@ -24,7 +24,8 @@ class Span implements span_api.Span {
   String name;
 
   set isRecording(bool isRecording) {
-    _isRecording = isRecording;
+    // A Span cannot be "turned back on" after "turned off" or ended.
+    _isRecording = isRecording && _isRecording;
   }
 
   @override
@@ -63,10 +64,10 @@ class Span implements span_api.Span {
   @override
   void end() {
     _endTime ??= Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
+    _isRecording = false;
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onEnd(this);
     }
-    _isRecording = false;
   }
 
   @override

@@ -114,9 +114,9 @@ void main() {
       resultSpan = tracer.startSpan('doWork')..end();
     });
 
-    // Verify that the original Span is set as the parent.
+    // Verify that data from the original Span propagates to the child.
     expect(resultSpan.parentSpanId.toString(),
-        equals(testSpan.spanContext.spanId.toString()));
+        equals('')); // Parent is wrapped in a NonRecordingSpan after extract().
     expect(resultSpan.spanContext.traceId.toString(),
         equals(testSpan.spanContext.traceId.toString()));
     expect(resultSpan.spanContext.traceState.toString(),
