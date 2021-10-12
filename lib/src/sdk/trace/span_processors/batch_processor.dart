@@ -21,8 +21,12 @@ class BatchSpanProcessor implements SpanProcessor {
 
   BatchSpanProcessor(this._exporter,
       {int maxExportBatchSize, int scheduledDelay}) {
-    _maxExportBatchSize ??= maxExportBatchSize;
-    _scheduledDelay ??= scheduledDelay;
+    if (maxExportBatchSize != null) {
+      _maxExportBatchSize = maxExportBatchSize;
+    }
+    if (scheduledDelay != null) {
+      _scheduledDelay = scheduledDelay;
+    }
   }
 
   @override
