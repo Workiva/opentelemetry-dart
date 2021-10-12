@@ -36,7 +36,7 @@ void main() {
     testPropagator.inject(testContext, testCarrier, FContextInjector());
     final resultSpan = testPropagator
         .extract(testContext, testCarrier, FContextExtractor())
-        .getSpan();
+        .span;
 
     expect(resultSpan.parentSpanId, isNull);
     expect(resultSpan.spanContext.isValid, isTrue);
@@ -69,7 +69,7 @@ void main() {
     testPropagator.inject(testContext, testCarrier, FContextInjector());
     final resultSpan = testPropagator
         .extract(testContext, testCarrier, FContextExtractor())
-        .getSpan();
+        .span;
 
     expect(resultSpan.parentSpanId, isNull);
     expect(resultSpan.spanContext.isValid, isFalse);
@@ -106,7 +106,7 @@ void main() {
     testPropagator.inject(testContext, testCarrier, FContextInjector());
     final parentSpan = testPropagator
         .extract(testContext, testCarrier, FContextExtractor())
-        .getSpan();
+        .span;
 
     // Use the transmitted Span as a receiver.
     Span resultSpan;

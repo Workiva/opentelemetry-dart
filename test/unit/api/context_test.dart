@@ -17,31 +17,31 @@ void main() {
   final testSpan = Span('foo', testSpanContext, SpanId([4, 5, 6]), [],
       Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));
 
-  group('getSpan', () {
+  group('get Span', () {
     test('returns Span when exists', () {
       final childContext = Context.current.withSpan(testSpan);
 
-      expect(childContext.getSpan(), same(testSpan));
+      expect(childContext.span, same(testSpan));
     });
 
     test('returns null when not exists', () {
       final context = Context.current;
 
-      expect(context.getSpan(), isNull);
+      expect(context.span, isNull);
     });
   });
 
-  group('getSpanContext', () {
+  group('get SpanContext', () {
     test('returns SpanContext when Span exists', () {
       final testContext = Context.current.withSpan(testSpan);
 
-      expect(testContext.getSpanContext(), same(testSpanContext));
+      expect(testContext.spanContext, same(testSpanContext));
     });
 
     test('returns null when Span not exists', () {
       final testContext = Context.current;
 
-      expect(testContext.getSpanContext(), isNull);
+      expect(testContext.spanContext, isNull);
     });
   });
 }

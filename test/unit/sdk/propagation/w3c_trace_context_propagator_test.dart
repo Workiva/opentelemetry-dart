@@ -26,7 +26,7 @@ void main() {
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
         api.Context.current, testCarrier, FContextExtractor());
-    final resultSpan = resultContext.getSpan();
+    final resultSpan = resultContext.span;
 
     expect(resultSpan.parentSpanId, isNull);
     expect(resultSpan.spanContext.isValid, isTrue);
@@ -51,7 +51,7 @@ void main() {
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
         api.Context.current, testCarrier, FContextExtractor());
-    final resultSpan = resultContext.getSpan();
+    final resultSpan = resultContext.span;
 
     expect(resultSpan.parentSpanId, isNull);
     expect(resultSpan.spanContext.isValid, isFalse);
@@ -71,7 +71,7 @@ void main() {
 
     final resultContext = testPropagator.extract(
         api.Context.current, testCarrier, FContextExtractor());
-    final resultSpan = resultContext.getSpan();
+    final resultSpan = resultContext.span;
 
     expect(resultSpan, isNull);
   });
@@ -87,7 +87,7 @@ void main() {
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
         api.Context.current, testCarrier, FContextExtractor());
-    final resultSpan = resultContext.getSpan();
+    final resultSpan = resultContext.span;
 
     // Extract should not allow a Span with malformed IDs to be attached to
     // a Context.  Thus, there should be no Span on this context.
@@ -105,7 +105,7 @@ void main() {
           'rojo=00f067aa,0ba902b7,con@go=t61rcWk=gMzE');
     final resultSpan = testPropagator
         .extract(api.Context.current, testCarrier, FContextExtractor())
-        .getSpan();
+        .span;
 
     expect(resultSpan.parentSpanId, isNull);
     expect(resultSpan.spanContext.isValid, isTrue);

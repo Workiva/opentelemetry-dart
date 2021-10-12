@@ -31,7 +31,7 @@ class Tracer implements api.Tracer {
     // parent.  If the Context does not contain a parent Span, or contains a
     // parent Span which represents an operation which has already completed,
     // create a root Span with a new Trace ID and default state.
-    final parent = context.getSpan();
+    final parent = context.span;
     var parentSpanId;
     var spanContext;
 

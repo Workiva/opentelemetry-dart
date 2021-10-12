@@ -57,7 +57,7 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
 
   @override
   void inject(api.Context context, dynamic carrier, api.TextMapSetter setter) {
-    final spanContext = context.getSpanContext();
+    final spanContext = context.spanContext;
 
     setter
       ..set(carrier, _TRACE_PARENT_HEADER_KEY,

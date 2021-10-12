@@ -30,15 +30,12 @@ import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 final ContextKey SPAN_KEY = Context.createKey('OpenTelemetry Context Key SPAN');
 
 class Context {
-  static final Context _root = Context._(Zone.root);
   final Zone _zone;
 
   Context._(this._zone);
 
   /// The active context.
   static Context get current => Context._(Zone.current);
-
-  static Context get root => _root;
 
   /// Returns a key to be used to read and/or write values to a context.
   ///
@@ -68,11 +65,11 @@ class Context {
 
   /// Get the [Span] attached to this [Context], or null if no such
   /// [Span] exists.
-  Span getSpan() => getValue(SPAN_KEY);
+  Span get span => getValue(SPAN_KEY);
 
   /// Get the [SpanContext] from this [Context], or null if no such
   /// [SpanContext] exists.
-  SpanContext getSpanContext() => getValue(SPAN_KEY)?.spanContext;
+  SpanContext get spanContext => getValue(SPAN_KEY)?.spanContext;
 }
 
 class ContextKey {

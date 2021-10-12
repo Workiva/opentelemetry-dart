@@ -12,7 +12,7 @@ class NoopTracer implements api.Tracer {
   @override
   api.Span startSpan(String name,
       {api.Context context, api.Attributes attributes}) {
-    final parentContext = context.getSpanContext();
+    final parentContext = context.spanContext;
 
     return NonRecordingSpan(
         (parentContext.isValid) ? parentContext : SpanContext.invalid());
