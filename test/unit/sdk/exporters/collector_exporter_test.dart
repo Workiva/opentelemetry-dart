@@ -39,7 +39,7 @@ void main() {
     final span1 = Span(
         'foo',
         SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         tracer)
@@ -47,7 +47,7 @@ void main() {
     final span2 = Span(
         'baz',
         SpanContext(TraceId([1, 2, 3]), SpanId([10, 11, 12]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         tracer)
@@ -97,7 +97,7 @@ void main() {
     final span = Span(
         'foo',
         SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         tracer)

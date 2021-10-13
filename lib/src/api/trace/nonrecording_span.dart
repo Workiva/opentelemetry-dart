@@ -20,7 +20,7 @@ import 'tracer.dart';
 /// [SpanContext] being injected or extracted for external calls.
 class NonRecordingSpan extends Span implements api.Span {
   final Attributes _attributes = sdk_attributes.Attributes.empty();
-  final SpanStatus _status = SpanStatus()..code = StatusCode.OK;
+  final SpanStatus _status = SpanStatus()..code = StatusCode.ok;
   final Tracer _tracer = NoopTracer();
   final SpanContext _spanContext;
 

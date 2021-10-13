@@ -10,7 +10,7 @@ void main() {
   test('valid context evaluates as valid', () {
     final spanId = SpanId([1, 2, 3]);
     final traceId = TraceId([4, 5, 6]);
-    final traceFlags = TraceFlags(api.TraceFlags.SAMPLED_FLAG);
+    final traceFlags = TraceFlags(api.TraceFlags.sampledFlag);
     final traceState = TraceState.empty();
 
     final testSpanContext =
@@ -27,7 +27,7 @@ void main() {
       () {
     final spanId = SpanId.fromString('0000000000000000');
     final traceId = TraceId([4, 5, 6]);
-    final traceFlags = TraceFlags(api.TraceFlags.SAMPLED_FLAG);
+    final traceFlags = TraceFlags(api.TraceFlags.sampledFlag);
     final traceState = TraceState.empty();
 
     final testSpanContext =
@@ -43,7 +43,7 @@ void main() {
   test('invalid parsed trace ID from header creates an invalid context', () {
     final spanId = SpanId([1, 2, 3]);
     final traceId = TraceId.fromString('00000000000000000000000000000000');
-    final traceFlags = TraceFlags(api.TraceFlags.SAMPLED_FLAG);
+    final traceFlags = TraceFlags(api.TraceFlags.sampledFlag);
     final traceState = TraceState.empty();
 
     final testSpanContext =

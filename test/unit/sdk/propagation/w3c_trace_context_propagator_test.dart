@@ -127,7 +127,7 @@ void main() {
         SpanContext(
             TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             SpanId.fromString('0000000000c0ffee'),
-            TraceFlags(api.TraceFlags.SAMPLED_FLAG),
+            TraceFlags(api.TraceFlags.sampledFlag),
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
@@ -151,7 +151,7 @@ void main() {
         SpanContext(
             TraceId.fromString('00000000000000000000000000000000'),
             SpanId.fromString('0000000000000000'),
-            TraceFlags(api.TraceFlags.INVALID),
+            TraceFlags(api.TraceFlags.invalid),
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('0000000000c0ffee'),
         [],

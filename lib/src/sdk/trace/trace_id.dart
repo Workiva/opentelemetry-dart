@@ -9,19 +9,19 @@ class TraceId implements api.TraceId {
   }
   TraceId.fromString(String id) {
     _id = [];
-    id = id.padLeft(api.TraceId.SIZE_BITS, '0');
+    id = id.padLeft(api.TraceId.sizeBits, '0');
 
     for (var i = 0; i < id.length; i += 2) {
       _id.add(int.parse('${id[i]}${id[i + 1]}', radix: 16));
     }
   }
-  factory TraceId.invalid() => TraceId(api.TraceId.INVALID);
+  factory TraceId.invalid() => TraceId(api.TraceId.invalid);
 
   @override
   List<int> get() => _id;
 
   @override
-  bool get isValid => _id.join() != api.TraceId.INVALID.join();
+  bool get isValid => _id.join() != api.TraceId.invalid.join();
 
   @override
   String toString() =>

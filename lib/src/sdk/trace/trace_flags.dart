@@ -1,17 +1,17 @@
 import '../../api/trace/trace_flags.dart' as api;
 
 class TraceFlags implements api.TraceFlags {
-  int _flags = api.TraceFlags.NONE;
+  int _flags = api.TraceFlags.none;
 
   TraceFlags(this._flags);
   TraceFlags.fromString(String traceFlags) {
-    traceFlags = traceFlags.padLeft(api.TraceFlags.SIZE, '0');
+    traceFlags = traceFlags.padLeft(api.TraceFlags.size, '0');
 
     for (var i = 0; i < traceFlags.length; i += 2) {
       _flags = int.parse('${traceFlags[i]}${traceFlags[i + 1]}', radix: 16);
     }
   }
-  factory TraceFlags.invalid() => TraceFlags(api.TraceFlags.INVALID);
+  factory TraceFlags.invalid() => TraceFlags(api.TraceFlags.invalid);
 
   @override
   String toString() {
@@ -20,15 +20,15 @@ class TraceFlags implements api.TraceFlags {
 
   set sampled(bool sampled) {
     if (sampled) {
-      _flags |= api.TraceFlags.SAMPLED_FLAG;
+      _flags |= api.TraceFlags.sampledFlag;
     } else {
-      _flags &= ~api.TraceFlags.SAMPLED_FLAG;
+      _flags &= ~api.TraceFlags.sampledFlag;
     }
   }
 
   bool get sampled =>
       isValid &&
-      ((_flags & api.TraceFlags.SAMPLED_FLAG) == api.TraceFlags.SAMPLED_FLAG);
+      ((_flags & api.TraceFlags.sampledFlag) == api.TraceFlags.sampledFlag);
 
-  bool get isValid => _flags != api.TraceFlags.INVALID;
+  bool get isValid => _flags != api.TraceFlags.invalid;
 }

@@ -60,8 +60,8 @@ class Context {
   /// set.
   Context withSpan(Span span) => setValue(SPAN_KEY, span);
 
-  /// Execute a function [fn] within this [Context].
-  dynamic execute(Function fn) => _zone.run(fn);
+  /// Execute a function [fn] within this [Context] and return its result.
+  R execute<R>(R Function() fn) => _zone.run(fn);
 
   /// Get the [Span] attached to this [Context], or null if no such
   /// [Span] exists.

@@ -115,7 +115,7 @@ withContext(setSpan(Context.current, checkoutSpan), () {
 checkoutSpan.end();
 ```
 
-To avoid needing to pass spans around as arguments to other functions, you can get the current span with `span`.
+To avoid needing to pass spans around as arguments to other functions, you can get the current span with `Context.current.span`.
 ```
 doWork() {
   Span parentSpan = Context.current.span;

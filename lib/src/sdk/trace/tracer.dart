@@ -50,7 +50,7 @@ class Tracer implements api.Tracer {
       spanContext = SpanContext(
           TraceId.fromIdGenerator(_idGenerator),
           SpanId.fromIdGenerator(_idGenerator),
-          TraceFlags(api.TraceFlags.SAMPLED_FLAG),
+          TraceFlags(api.TraceFlags.sampledFlag),
           TraceState.empty());
     }
 
