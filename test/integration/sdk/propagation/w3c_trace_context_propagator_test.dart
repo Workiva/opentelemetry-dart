@@ -1,10 +1,7 @@
-import 'package:frugal/frugal.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
-import 'package:opentelemetry/src/sdk/trace/propagation/extractors/fcontext_extractor.dart';
-import 'package:opentelemetry/src/sdk/trace/propagation/injectors/fcontext_injector.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
@@ -15,6 +12,27 @@ import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
 import 'package:test/test.dart';
+
+class TestingInjector implements api.TextMapSetter<Map> {
+  @override
+  void set(Map carrier, String key, String value) {
+    if (carrier != null) {
+      carrier[key] = value;
+    }
+  }
+}
+
+class TestingExtractor implements api.TextMapGetter<Map> {
+  @override
+  String get(Map carrier, String key) {
+    return (carrier == null) ? null : carrier[key];
+  }
+
+  @override
+  Iterable<String> keys(Map carrier) {
+    return carrier.keys;
+  }
+}
 
 void main() {
   test('inject and extract trace context', () {
@@ -30,12 +48,12 @@ void main() {
         [],
         Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
     final testPropagator = W3CTraceContextPropagator();
-    final testCarrier = FContext();
+    final testCarrier = {};
     final testContext = Context.current.withSpan(testSpan);
 
-    testPropagator.inject(testContext, testCarrier, FContextInjector());
+    testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = testPropagator
-        .extract(testContext, testCarrier, FContextExtractor())
+        .extract(testContext, testCarrier, TestingExtractor())
         .span;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
@@ -63,12 +81,12 @@ void main() {
         [],
         Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
     final testPropagator = W3CTraceContextPropagator();
-    final testCarrier = FContext();
+    final testCarrier = {};
     final testContext = Context.current.withSpan(testSpan);
 
-    testPropagator.inject(testContext, testCarrier, FContextInjector());
+    testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = testPropagator
-        .extract(testContext, testCarrier, FContextExtractor())
+        .extract(testContext, testCarrier, TestingExtractor())
         .span;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
@@ -98,14 +116,14 @@ void main() {
     final tracer =
         TracerProvider(processors: []).getTracer('appName', version: '1.0.0');
     final testPropagator = W3CTraceContextPropagator();
-    final testCarrier = FContext();
+    final testCarrier = {};
 
     // Inject and extract a test Span from a Context, as when an outbound
     // call is made and received by another service.
     final testContext = Context.current.withSpan(testSpan);
-    testPropagator.inject(testContext, testCarrier, FContextInjector());
+    testPropagator.inject(testContext, testCarrier, TestingInjector());
     final parentSpan = testPropagator
-        .extract(testContext, testCarrier, FContextExtractor())
+        .extract(testContext, testCarrier, TestingExtractor())
         .span;
 
     // Use the transmitted Span as a receiver.
