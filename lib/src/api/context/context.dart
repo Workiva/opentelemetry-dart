@@ -27,7 +27,7 @@ import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 
 /// [ContextKey] used to store spans in a [Context].
-final ContextKey SPAN_KEY = Context.createKey('OpenTelemetry Context Key SPAN');
+final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
 
 class Context {
   final Zone _zone;
@@ -58,18 +58,18 @@ class Context {
 
   /// Returns a new [Context] created from this one with the given [Span]
   /// set.
-  Context withSpan(Span span) => setValue(SPAN_KEY, span);
+  Context withSpan(Span span) => setValue(spanKey, span);
 
   /// Execute a function [fn] within this [Context] and return its result.
   R execute<R>(R Function() fn) => _zone.run(fn);
 
   /// Get the [Span] attached to this [Context], or null if no such
   /// [Span] exists.
-  Span get span => getValue(SPAN_KEY);
+  Span get span => getValue(spanKey);
 
   /// Get the [SpanContext] from this [Context], or null if no such
   /// [SpanContext] exists.
-  SpanContext get spanContext => getValue(SPAN_KEY)?.spanContext;
+  SpanContext get spanContext => getValue(spanKey)?.spanContext;
 }
 
 class ContextKey {

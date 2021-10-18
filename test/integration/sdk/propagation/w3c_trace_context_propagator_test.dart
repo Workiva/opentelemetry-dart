@@ -38,7 +38,7 @@ void main() {
         .extract(testContext, testCarrier, FContextExtractor())
         .span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
@@ -71,7 +71,7 @@ void main() {
         .extract(testContext, testCarrier, FContextExtractor())
         .span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isFalse);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
@@ -116,7 +116,7 @@ void main() {
 
     // Verify that data from the original Span propagates to the child.
     expect(resultSpan.parentSpanId.toString(),
-        equals('')); // Parent is wrapped in a NonRecordingSpan after extract().
+        testSpan.spanContext.spanId.toString());
     expect(resultSpan.spanContext.traceId.toString(),
         equals(testSpan.spanContext.traceId.toString()));
     expect(resultSpan.spanContext.traceState.toString(),

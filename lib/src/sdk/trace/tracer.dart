@@ -28,24 +28,23 @@ class Tracer implements api.Tracer {
     attributes ??= Attributes.empty();
 
     // If a valid, active Span is present in the context, use it as this Span's
-    // parent.  If the Context does not contain a parent Span, or contains a
-    // parent Span which represents an operation which has already completed,
-    // create a root Span with a new Trace ID and default state.
+    // parent.  If the Context does not contain an active parent Span, create
+    // a root Span with a new Trace ID and default state.
+    // See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#determining-the-parent-span-from-a-context
     final parent = context.span;
     var parentSpanId;
     var spanContext;
 
+    // TODO: O11Y-1027: A Sampler should update the trace flags here.
+
     if (parent != null && parent.endTime == null) {
-      // The Span on the Context is valid; Use it as this Span's parent.
-      parentSpanId =
-          (parent.isRecording) ? parent.spanContext.spanId : SpanId.root();
+      parentSpanId = parent.spanContext.spanId;
       spanContext = SpanContext(
           parent.spanContext.traceId,
           SpanId.fromIdGenerator(_idGenerator),
           parent.spanContext.traceFlags,
           parent.spanContext.traceState);
     } else {
-      // The Span is not valid; Use default values.
       parentSpanId = SpanId.root();
       spanContext = SpanContext(
           TraceId.fromIdGenerator(_idGenerator),

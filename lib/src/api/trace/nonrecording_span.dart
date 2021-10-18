@@ -25,7 +25,8 @@ class NonRecordingSpan extends Span implements api.Span {
   final SpanContext _spanContext;
 
   NonRecordingSpan(this._spanContext)
-      : super('NON_RECORDING', _spanContext, null, [], NoopTracer());
+      : super(
+            'NON_RECORDING', _spanContext, SpanId.invalid(), [], NoopTracer());
 
   @override
   Attributes get attributes => _attributes;
@@ -50,7 +51,7 @@ class NonRecordingSpan extends Span implements api.Span {
   bool get isRecording => false;
 
   @override
-  SpanId get parentSpanId => null;
+  SpanId get parentSpanId => SpanId.invalid();
 
   @override
   void setStatus(StatusCode status, {String description}) {

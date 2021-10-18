@@ -29,6 +29,7 @@ class SpanContext implements api.SpanContext {
   /// Construct a [SpanContext].
   SpanContext(this._traceId, this._spanId, this._traceFlags, this._traceState);
 
+  /// Construct an invalid [SpanContext].
   factory SpanContext.invalid() => SpanContext(TraceId.invalid(),
       SpanId.invalid(), TraceFlags.invalid(), TraceState.empty());
 }

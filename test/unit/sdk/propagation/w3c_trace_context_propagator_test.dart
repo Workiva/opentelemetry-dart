@@ -28,7 +28,7 @@ void main() {
         api.Context.current, testCarrier, FContextExtractor());
     final resultSpan = resultContext.span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
@@ -53,7 +53,7 @@ void main() {
         api.Context.current, testCarrier, FContextExtractor());
     final resultSpan = resultContext.span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isFalse);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('0000000000000000'));
@@ -107,7 +107,7 @@ void main() {
         .extract(api.Context.current, testCarrier, FContextExtractor())
         .span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
