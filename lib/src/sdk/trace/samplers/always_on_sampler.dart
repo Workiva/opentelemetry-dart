@@ -1,18 +1,19 @@
-import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/instrumentation_library.dart';
-import 'package:opentelemetry/src/api/trace/sampler.dart' as api;
-import 'package:opentelemetry/src/api/trace/sampling_result.dart' as result_api;
-import 'package:opentelemetry/src/api/trace/span.dart' as span_api;
-import 'package:opentelemetry/src/sdk/trace/samplers/sampling_result.dart';
+import '../../../api/common/attributes.dart';
+import '../../../api/context/context.dart';
+import '../../../api/trace/sampler.dart' as api;
+import '../../../api/trace/sampling_result.dart' as result_api;
+import '../../../api/trace/trace_id.dart';
+import '../trace_state.dart';
+import 'sampling_result.dart';
 
 class AlwaysOnSampler implements api.Sampler {
   @override
-  String get decision => 'AlwaysOnSampler';
+  String get description => 'AlwaysOnSampler';
 
   @override
-  result_api.SamplingResult shouldSample(
-      Context context, span_api.Span span, InstrumentationLibrary library) {
-    return SamplingResult(Decision.RECORD_AND_SAMPLE, span.attributes,
-        span.spanContext.traceState);
+  result_api.SamplingResult shouldSample(Context context, TraceId traceId,
+      String spanName, bool spanIsRemote, Attributes spanAttributes) {
+    return SamplingResult(result_api.Decision.recordAndSample, spanAttributes,
+        context.spanContext?.traceState ?? TraceState.empty());
   }
 }

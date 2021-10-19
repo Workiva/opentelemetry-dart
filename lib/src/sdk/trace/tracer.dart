@@ -1,9 +1,9 @@
-import 'package:opentelemetry/src/sdk/resource/resource.dart';
-
 import '../../../api.dart' as api;
-import '../../api/span_processors/span_processor.dart';
+import '../../api/trace/sampler.dart';
+import '../../api/trace/sampling_result.dart';
 import '../common/attributes.dart';
 import '../instrumentation_library.dart';
+import '../resource/resource.dart';
 import 'id_generator.dart';
 import 'span.dart';
 import 'span_context.dart';
@@ -14,12 +14,13 @@ import 'trace_state.dart';
 
 /// An interface for creating [Span]s and propagating context in-process.
 class Tracer implements api.Tracer {
-  final List<SpanProcessor> _processors;
+  final List<api.SpanProcessor> _processors;
   final Resource _resource;
+  final Sampler _sampler;
   final IdGenerator _idGenerator;
   final InstrumentationLibrary _instrumentationLibrary;
 
-  Tracer(this._processors, this._resource, this._idGenerator,
+  Tracer(this._processors, this._resource, this._sampler, this._idGenerator,
       this._instrumentationLibrary);
 
   @override
@@ -33,26 +34,27 @@ class Tracer implements api.Tracer {
     // a root Span with a new Trace ID and default state.
     // See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#determining-the-parent-span-from-a-context
     final parent = context.span;
-    var parentSpanId;
-    var spanContext;
-
-    // TODO: O11Y-1027: A Sampler should update the trace flags here.
+    final spanId = SpanId.fromIdGenerator(_idGenerator);
+    TraceId traceId;
+    TraceState traceState;
+    SpanId parentSpanId;
 
     if (parent != null) {
       parentSpanId = parent.spanContext.spanId;
-      spanContext = SpanContext(
-          parent.spanContext.traceId,
-          SpanId.fromIdGenerator(_idGenerator),
-          parent.spanContext.traceFlags,
-          parent.spanContext.traceState);
+      traceId = parent.spanContext.traceId;
+      traceState = parent.spanContext.traceState;
     } else {
       parentSpanId = SpanId.root();
-      spanContext = SpanContext(
-          TraceId.fromIdGenerator(_idGenerator),
-          SpanId.fromIdGenerator(_idGenerator),
-          TraceFlags(api.TraceFlags.sampledFlag),
-          TraceState.empty());
+      traceId = TraceId.fromIdGenerator(_idGenerator);
+      traceState = TraceState.empty();
     }
+
+    final samplerResult =
+        _sampler.shouldSample(context, traceId, name, false, attributes);
+    final traceFlags = (samplerResult.decision == Decision.recordAndSample)
+        ? TraceFlags(api.TraceFlags.sampledFlag)
+        : TraceFlags(api.TraceFlags.none);
+    final spanContext = SpanContext(traceId, spanId, traceFlags, traceState);
 
     return Span(name, spanContext, parentSpanId, _processors, _resource,
         _instrumentationLibrary,

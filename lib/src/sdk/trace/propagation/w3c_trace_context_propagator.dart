@@ -57,7 +57,7 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
         : TraceState.empty();
 
     return context.withSpan(NonRecordingSpan(
-        SpanContext(traceId, parentId, traceFlags, traceState)));
+        SpanContext.remote(traceId, parentId, traceFlags, traceState)));
   }
 
   @override
