@@ -37,7 +37,7 @@ class Tracer implements api.Tracer {
 
     // TODO: O11Y-1027: A Sampler should update the trace flags here.
 
-    if (parent != null && parent.endTime == null) {
+    if (parent != null) {
       parentSpanId = parent.spanContext.spanId;
       spanContext = SpanContext(
           parent.spanContext.traceId,

@@ -37,6 +37,14 @@ class Context {
   /// The active context.
   static Context get current => Context._(Zone.current);
 
+  /// The root context which all other contexts are derived from.
+  ///
+  /// It should generally not be required to use the root [Context] directly -
+  /// instead, use [Context.current] to operate on the current [Context].
+  /// Only use this context if you are certain you need to disregard the
+  /// current [Context].
+  static Context get root => Context._(Zone.root);
+
   /// Returns a key to be used to read and/or write values to a context.
   ///
   /// [name] is for debug purposes only and does not uniquely identify the key.
