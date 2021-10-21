@@ -39,7 +39,7 @@ abstract class Span {
   /// Sets the status to the [Span].
   ///
   /// If used, this will override the default [Span] status. Default status code
-  /// is [StatusCode.UNSET].
+  /// is [StatusCode.unset].
   ///
   /// Only the value of the last call will be recorded, and implementations are
   /// free to ignore previous calls.

@@ -1,18 +1,18 @@
 /// The set of canonical status codes.
 enum StatusCode {
   /// The default status.
-  UNSET,
+  unset,
 
   /// The operation contains an error.
-  ERROR,
+  error,
 
   /// The operation has been validated by an Application developers or
   /// Operator to have completed successfully.
-  OK,
+  ok,
 }
 
 /// A representation of the status of a Span.
 class SpanStatus {
-  StatusCode code = StatusCode.UNSET;
+  StatusCode code = StatusCode.unset;
   String description;
 }

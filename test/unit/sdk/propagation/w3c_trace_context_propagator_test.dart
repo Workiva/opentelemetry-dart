@@ -1,7 +1,5 @@
 import 'package:frugal/frugal.dart';
 import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/trace/context_utils.dart';
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/extractors/fcontext_extractor.dart';
@@ -27,10 +25,10 @@ void main() {
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
-        Context.current, testCarrier, FContextExtractor());
-    final Span resultSpan = getSpan(resultContext);
+        api.Context.current, testCarrier, FContextExtractor());
+    final resultSpan = resultContext.span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
@@ -52,10 +50,10 @@ void main() {
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
-        Context.current, testCarrier, FContextExtractor());
-    final Span resultSpan = getSpan(resultContext);
+        api.Context.current, testCarrier, FContextExtractor());
+    final resultSpan = resultContext.span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isFalse);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('0000000000000000'));
@@ -72,8 +70,8 @@ void main() {
     final testCarrier = FContext();
 
     final resultContext = testPropagator.extract(
-        Context.current, testCarrier, FContextExtractor());
-    final Span resultSpan = getSpan(resultContext);
+        api.Context.current, testCarrier, FContextExtractor());
+    final resultSpan = resultContext.span;
 
     expect(resultSpan, isNull);
   });
@@ -88,8 +86,8 @@ void main() {
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
-        Context.current, testCarrier, FContextExtractor());
-    final Span resultSpan = getSpan(resultContext);
+        api.Context.current, testCarrier, FContextExtractor());
+    final resultSpan = resultContext.span;
 
     // Extract should not allow a Span with malformed IDs to be attached to
     // a Context.  Thus, there should be no Span on this context.
@@ -105,10 +103,11 @@ void main() {
           '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01')
       ..set(testCarrier, 'tracestate',
           'rojo=00f067aa,0ba902b7,con@go=t61rcWk=gMzE');
-    final Span resultSpan = getSpan(testPropagator.extract(
-        Context.current, testCarrier, FContextExtractor()));
+    final resultSpan = testPropagator
+        .extract(api.Context.current, testCarrier, FContextExtractor())
+        .span;
 
-    expect(resultSpan.parentSpanId, isNull);
+    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
@@ -128,13 +127,13 @@ void main() {
         SpanContext(
             TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             SpanId.fromString('0000000000c0ffee'),
-            TraceFlags(api.TraceFlags.SAMPLED_FLAG),
+            TraceFlags(api.TraceFlags.sampledFlag),
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
         Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
     final testCarrier = FContext();
-    final testContext = api.setSpan(Context.current, testSpan);
+    final testContext = api.Context.current.withSpan(testSpan);
 
     W3CTraceContextPropagator()
         .inject(testContext, testCarrier, FContextInjector());
@@ -152,13 +151,13 @@ void main() {
         SpanContext(
             TraceId.fromString('00000000000000000000000000000000'),
             SpanId.fromString('0000000000000000'),
-            TraceFlags(api.TraceFlags.INVALID),
+            TraceFlags(api.TraceFlags.invalid),
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('0000000000c0ffee'),
         [],
         Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
     final testCarrier = FContext();
-    final testContext = api.setSpan(Context.current, testSpan);
+    final testContext = api.Context.current.withSpan(testSpan);
 
     W3CTraceContextPropagator()
         .inject(testContext, testCarrier, FContextInjector());

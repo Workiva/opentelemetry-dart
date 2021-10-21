@@ -20,12 +20,13 @@ import 'tracer.dart';
 /// [SpanContext] being injected or extracted for external calls.
 class NonRecordingSpan extends Span implements api.Span {
   final Attributes _attributes = sdk_attributes.Attributes.empty();
-  final SpanStatus _status = SpanStatus()..code = StatusCode.OK;
+  final SpanStatus _status = SpanStatus()..code = StatusCode.ok;
   final Tracer _tracer = NoopTracer();
   final SpanContext _spanContext;
 
   NonRecordingSpan(this._spanContext)
-      : super('NON_RECORDING', _spanContext, null, [], NoopTracer());
+      : super(
+            'NON_RECORDING', _spanContext, SpanId.invalid(), [], NoopTracer());
 
   @override
   Attributes get attributes => _attributes;
@@ -41,13 +42,16 @@ class NonRecordingSpan extends Span implements api.Span {
   }
 
   @override
-  Int64 get endTime => Int64.ZERO;
+  Int64 get endTime => null;
 
   @override
   String get name => 'NON_RECORDING';
 
   @override
-  SpanId get parentSpanId => null;
+  bool get isRecording => false;
+
+  @override
+  SpanId get parentSpanId => SpanId.invalid();
 
   @override
   void setStatus(StatusCode status, {String description}) {
@@ -58,7 +62,7 @@ class NonRecordingSpan extends Span implements api.Span {
   sdk_spancontext.SpanContext get spanContext => _spanContext;
 
   @override
-  Int64 get startTime => Int64.ZERO;
+  Int64 get startTime => null;
 
   @override
   SpanStatus get status => _status;

@@ -54,13 +54,13 @@ class CollectorExporter implements SpanExporter {
     pb.Status_StatusCode statusCode;
 
     switch (span.status.code) {
-      case StatusCode.UNSET:
+      case StatusCode.unset:
         statusCode = pb.Status_StatusCode.STATUS_CODE_UNSET;
         break;
-      case StatusCode.ERROR:
+      case StatusCode.error:
         statusCode = pb.Status_StatusCode.STATUS_CODE_ERROR;
         break;
-      case StatusCode.OK:
+      case StatusCode.ok:
         statusCode = pb.Status_StatusCode.STATUS_CODE_OK;
         break;
     }

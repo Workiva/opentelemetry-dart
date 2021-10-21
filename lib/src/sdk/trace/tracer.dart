@@ -27,19 +27,31 @@ class Tracer implements api.Tracer {
     context ??= api.Context.current;
     attributes ??= Attributes.empty();
 
-    final Span parent = api.getSpan(context);
+    // If a valid, active Span is present in the context, use it as this Span's
+    // parent.  If the Context does not contain an active parent Span, create
+    // a root Span with a new Trace ID and default state.
+    // See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#determining-the-parent-span-from-a-context
+    final parent = context.span;
+    var parentSpanId;
+    var spanContext;
 
-    // If a Span is present in the context, use it as this Span's parent.
-    // If not, create a root Span, which has no parent, with a new Trace ID
-    // and default state.
-    final parentSpanId = parent?.spanContext?.spanId ?? SpanId.root();
-    final SpanContext spanContext = SpanContext(
-            parent?.spanContext?.traceId ??
-                TraceId.fromIdGenerator(_idGenerator),
-            SpanId.fromIdGenerator(_idGenerator),
-            parent?.spanContext?.traceFlags ?? TraceFlags(api.TraceFlags.NONE),
-            parent?.spanContext?.traceState) ??
-        TraceState.empty();
+    // TODO: O11Y-1027: A Sampler should update the trace flags here.
+
+    if (parent != null) {
+      parentSpanId = parent.spanContext.spanId;
+      spanContext = SpanContext(
+          parent.spanContext.traceId,
+          SpanId.fromIdGenerator(_idGenerator),
+          parent.spanContext.traceFlags,
+          parent.spanContext.traceState);
+    } else {
+      parentSpanId = SpanId.root();
+      spanContext = SpanContext(
+          TraceId.fromIdGenerator(_idGenerator),
+          SpanId.fromIdGenerator(_idGenerator),
+          TraceFlags(api.TraceFlags.sampledFlag),
+          TraceState.empty());
+    }
 
     return Span(name, spanContext, parentSpanId, _processors, this,
         attributes: attributes);

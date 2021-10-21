@@ -16,25 +16,14 @@ class Span implements span_api.Span {
   final SpanStatus _status = SpanStatus();
   final List<SpanProcessor> _processors;
   final Tracer _tracer;
-  bool _isRecording;
   Int64 _startTime;
   Int64 _endTime;
 
   @override
   String name;
 
-  set isRecording(bool isRecording) {
-    _isRecording = isRecording;
-  }
-
   @override
-  bool get isRecording {
-    if (_endTime != null && _endTime > Int64.ZERO) {
-      return false; // An ended Span cannot be recording.
-    }
-
-    return _isRecording;
-  }
+  bool get isRecording => _endTime == null;
 
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
@@ -45,7 +34,6 @@ class Span implements span_api.Span {
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onStart();
     }
-    _isRecording = true;
   }
 
   @override
@@ -66,21 +54,20 @@ class Span implements span_api.Span {
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onEnd(this);
     }
-    _isRecording = false;
   }
 
   @override
   void setStatus(StatusCode status, {String description}) {
     // A status cannot be Unset after being set, and cannot be set to any other
     // status after being marked "Ok".
-    if (status == StatusCode.UNSET || _status.code == StatusCode.OK) {
+    if (status == StatusCode.unset || _status.code == StatusCode.ok) {
       return;
     }
 
     _status.code = status;
 
     // Description is ignored for statuses other than "Error".
-    if (status == StatusCode.ERROR && description != null) {
+    if (status == StatusCode.error && description != null) {
       _status.description = description;
     }
   }

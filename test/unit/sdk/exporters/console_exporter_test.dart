@@ -32,7 +32,7 @@ void main() {
     final span = Span(
         'foo',
         SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()))
@@ -41,7 +41,7 @@ void main() {
     ConsoleExporter().export([span]);
 
     final expected = RegExp(
-        r'{traceId: 010203, parentId: 040506, name: foo, id: 070809, timestamp: \d+, duration: \d+, status: StatusCode.UNSET}');
+        r'{traceId: 010203, parentId: 040506, name: foo, id: 070809, timestamp: \d+, duration: \d+, flags: 00, state: , status: StatusCode.unset}');
     expect(printLogs.length, 1);
     expect(expected.hasMatch(printLogs[0]), true);
   }));
@@ -50,7 +50,7 @@ void main() {
     final span = Span(
         'foo',
         SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));

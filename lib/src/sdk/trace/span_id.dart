@@ -9,20 +9,20 @@ class SpanId implements api.SpanId {
   }
   SpanId.fromString(String id) {
     _id = [];
-    id = id.padLeft(api.SpanId.SIZE_BITS, '0');
+    id = id.padLeft(api.SpanId.sizeBits, '0');
 
     for (var i = 0; i < id.length; i += 2) {
       _id.add(int.parse('${id[i]}${id[i + 1]}', radix: 16));
     }
   }
-  factory SpanId.invalid() => SpanId(api.SpanId.INVALID);
-  factory SpanId.root() => SpanId(api.SpanId.ROOT);
+  factory SpanId.invalid() => SpanId(api.SpanId.invalid);
+  factory SpanId.root() => SpanId(api.SpanId.root);
 
   @override
   List<int> get() => _id;
 
   @override
-  bool get isValid => _id.join() != api.SpanId.INVALID.join();
+  bool get isValid => _id.join() != api.SpanId.invalid.join();
 
   @override
   String toString() =>

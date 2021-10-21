@@ -23,7 +23,7 @@ void main() {
     final span = Span(
         'foo',
         SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         parentSpanId,
         [mockProcessor1, mockProcessor2],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));
@@ -51,41 +51,41 @@ void main() {
     final span = Span(
         'foo',
         SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));
 
     // Verify span status' defaults.
-    expect(span.status.code, equals(StatusCode.UNSET));
+    expect(span.status.code, equals(StatusCode.unset));
     expect(span.status.description, equals(null));
 
     // Verify that span status can be set to "Error".
-    span.setStatus(StatusCode.ERROR, description: 'Something s\'ploded.');
-    expect(span.status.code, equals(StatusCode.ERROR));
+    span.setStatus(StatusCode.error, description: 'Something s\'ploded.');
+    expect(span.status.code, equals(StatusCode.error));
     expect(span.status.description, equals('Something s\'ploded.'));
 
     // Verify that multiple errors update the span to the most recently set.
-    span.setStatus(StatusCode.ERROR, description: 'Another error happened.');
-    expect(span.status.code, equals(StatusCode.ERROR));
+    span.setStatus(StatusCode.error, description: 'Another error happened.');
+    expect(span.status.code, equals(StatusCode.error));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status cannot be set to "Unset" and that description
     // is ignored for statuses other than "Error".
-    span.setStatus(StatusCode.UNSET,
+    span.setStatus(StatusCode.unset,
         description: 'Oops.  Can we turn this back off?');
-    expect(span.status.code, equals(StatusCode.ERROR));
+    expect(span.status.code, equals(StatusCode.error));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status can be set to "Ok" and that description is
     // ignored for statuses other than "Error".
-    span.setStatus(StatusCode.OK, description: 'All done here.');
-    expect(span.status.code, equals(StatusCode.OK));
+    span.setStatus(StatusCode.ok, description: 'All done here.');
+    expect(span.status.code, equals(StatusCode.ok));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status cannot be changed once set to "Ok".
-    span.setStatus(StatusCode.ERROR, description: 'Something else went wrong.');
-    expect(span.status.code, equals(StatusCode.OK));
+    span.setStatus(StatusCode.error, description: 'Something else went wrong.');
+    expect(span.status.code, equals(StatusCode.ok));
     expect(span.status.description, equals('Another error happened.'));
   });
 
@@ -113,7 +113,7 @@ void main() {
     final span = Span(
         'foo',
         SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.NONE), TraceState.empty()),
+            TraceFlags(api.TraceFlags.none), TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         Tracer('bar', [], IdGenerator(), InstrumentationLibrary()));

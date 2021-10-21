@@ -10,7 +10,7 @@ void main() {
   test('spanContext getters', () {
     final spanId = SpanId([4, 5, 6]);
     final traceId = TraceId([1, 2, 3]);
-    final traceFlags = TraceFlags(api.TraceFlags.NONE);
+    final traceFlags = TraceFlags(api.TraceFlags.none);
     final traceState = TraceState.empty();
 
     final spanContext = SpanContext(traceId, spanId, traceFlags, traceState);
