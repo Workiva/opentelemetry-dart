@@ -1,3 +1,4 @@
+export 'src/sdk/common/attribute.dart' show Attribute;
 export 'src/sdk/trace/exporters/collector_exporter.dart' show CollectorExporter;
 export 'src/sdk/trace/exporters/console_exporter.dart' show ConsoleExporter;
 export 'src/sdk/trace/propagation/w3c_trace_context_propagator.dart'
