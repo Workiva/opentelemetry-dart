@@ -1,13 +1,12 @@
 import 'package:http/http.dart' as http;
 
+import '../../../api/exporters/span_exporter.dart';
 import '../../../api/trace/span.dart';
 import '../../../api/trace/span_status.dart';
-
 import 'opentelemetry/proto/collector/trace/v1/trace_service.pb.dart';
 import 'opentelemetry/proto/common/v1/common.pb.dart';
 import 'opentelemetry/proto/resource/v1/resource.pb.dart';
 import 'opentelemetry/proto/trace/v1/trace.pb.dart' as pb;
-import 'span_exporter.dart';
 
 class CollectorExporter implements SpanExporter {
   Uri uri;

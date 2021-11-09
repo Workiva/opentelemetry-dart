@@ -1,9 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
+import 'package:opentelemetry/src/api/exporters/span_exporter.dart';
+import 'package:opentelemetry/src/api/span_processors/span_processor.dart';
 import 'package:opentelemetry/src/api/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/exporters/span_exporter.dart';
-import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
 
 class MockContext extends Mock implements Context {}
 

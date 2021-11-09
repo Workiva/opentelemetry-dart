@@ -1,10 +1,10 @@
 import '../../api/instrumentation_library.dart' as version_api;
+import '../../api/span_processors/span_processor.dart';
 import '../../api/trace/tracer_provider.dart' as api;
 import '../instrumentation_library.dart';
 import 'exporters/console_exporter.dart';
 import 'id_generator.dart';
 import 'span_processors/simple_processor.dart';
-import 'span_processors/span_processor.dart';
 import 'tracer.dart';
 
 /// A registry for creating named [Tracer]s.

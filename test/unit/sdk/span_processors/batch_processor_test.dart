@@ -1,6 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/src/api/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/exporters/span_exporter.dart';
+import 'package:opentelemetry/src/api/exporters/span_exporter.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/batch_processor.dart';
 import 'package:test/test.dart';
 import '../../mocks.dart';

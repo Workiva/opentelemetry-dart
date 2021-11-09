@@ -1,4 +1,4 @@
-import '../../../api/trace/span.dart';
+import '../trace/span.dart';
 
 abstract class SpanProcessor {
   void onStart();

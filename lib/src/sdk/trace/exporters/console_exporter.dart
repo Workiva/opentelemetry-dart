@@ -1,6 +1,6 @@
 import '../../../api/trace/span.dart';
 
-import 'span_exporter.dart';
+import '../../../api/exporters/span_exporter.dart';
 
 class ConsoleExporter implements SpanExporter {
   var _isShutdown = false;

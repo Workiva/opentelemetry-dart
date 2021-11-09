@@ -1,6 +1,6 @@
+import '../../../api/exporters/span_exporter.dart';
+import '../../../api/span_processors/span_processor.dart';
 import '../../../api/trace/span.dart';
-import '../exporters/span_exporter.dart';
-import 'span_processor.dart';
 
 class SimpleSpanProcessor implements SpanProcessor {
   final SpanExporter _exporter;
