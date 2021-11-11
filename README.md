@@ -88,6 +88,9 @@ final provider = otel_sdk.TracerProvider([
   otel_sdk.SimpleSpanProcessor(otel_sdk.ConsoleExporter())
 ]);
 
+// Register the tracer provider as a global, so the MSDK middleware has access to it.
+registerGlobalTracerProvider(provider);
+
 final tracer = provider.getTracer('my-app');
 ```
 
