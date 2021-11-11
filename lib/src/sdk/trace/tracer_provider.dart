@@ -1,10 +1,8 @@
 import '../../api/instrumentation_library.dart' as version_api;
+import '../../api/span_processors/span_processor.dart';
 import '../../api/trace/tracer_provider.dart' as api;
 import '../instrumentation_library.dart';
-import 'exporters/console_exporter.dart';
 import 'id_generator.dart';
-import 'span_processors/simple_processor.dart';
-import 'span_processors/span_processor.dart';
 import 'tracer.dart';
 
 /// A registry for creating named [Tracer]s.
@@ -16,7 +14,7 @@ class TracerProvider implements api.TracerProvider {
   IdGenerator _idGenerator;
 
   TracerProvider({List<SpanProcessor> processors, IdGenerator idGenerator}) {
-    _processors = processors ?? [SimpleSpanProcessor(ConsoleExporter())];
+    _processors = processors ?? [];  // Default to a no-op TracerProvider.
     _idGenerator = idGenerator ?? IdGenerator();
     // TODO: O11Y-1027: Per spec, a Sampler defaulted to ParentBased(root=AlwaysOn) added here.
   }

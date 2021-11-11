@@ -3,9 +3,9 @@ import 'dart:math';
 
 import 'package:logging/logging.dart';
 
+import '../../../api/exporters/span_exporter.dart';
+import '../../../api/span_processors/span_processor.dart';
 import '../../../api/trace/span.dart';
-import '../exporters/span_exporter.dart';
-import 'span_processor.dart';
 
 class BatchSpanProcessor implements SpanProcessor {
   final _log = Logger('opentelemetry.BatchSpanProcessor');

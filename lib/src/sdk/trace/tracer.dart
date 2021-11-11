@@ -1,11 +1,11 @@
 import '../../../api.dart' as api;
+import '../../api/span_processors/span_processor.dart';
 import '../common/attributes.dart';
 import '../instrumentation_library.dart';
 import 'id_generator.dart';
 import 'span.dart';
 import 'span_context.dart';
 import 'span_id.dart';
-import 'span_processors/span_processor.dart';
 import 'trace_flags.dart';
 import 'trace_id.dart';
 import 'trace_state.dart';

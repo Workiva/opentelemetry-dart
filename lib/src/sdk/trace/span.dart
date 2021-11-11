@@ -1,13 +1,13 @@
 import 'package:fixnum/fixnum.dart';
 
 import '../../api/common/attributes.dart';
+import '../../api/span_processors/span_processor.dart';
 import '../../api/trace/span.dart' as span_api;
 import '../../api/trace/span_status.dart';
 import '../../api/trace/tracer.dart';
 import '../../sdk/trace/span_context.dart';
 import '../common/attributes.dart' as attributes_sdk;
 import 'span_id.dart';
-import 'span_processors/span_processor.dart';
 
 /// A representation of a single operation within a trace.
 class Span implements span_api.Span {
