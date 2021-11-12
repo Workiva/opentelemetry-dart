@@ -1,15 +1,15 @@
 import 'package:fixnum/fixnum.dart';
 
 import '../../sdk/common/attributes.dart' as sdk_attributes;
+import '../../sdk/instrumentation_library.dart' as sdk_instrumentation_library;
+import '../../sdk/resource/resource.dart' as sdk_resource;
 import '../../sdk/trace/span.dart';
 import '../../sdk/trace/span_context.dart' as sdk_spancontext;
 import '../../sdk/trace/span_id.dart';
 import '../common/attributes.dart';
-import 'noop_tracer.dart';
 import 'span.dart' as api;
 import 'span_context.dart';
 import 'span_status.dart';
-import 'tracer.dart';
 
 /// A class representing a [Span] which should not be sampled or recorded.
 ///
@@ -21,12 +21,10 @@ import 'tracer.dart';
 class NonRecordingSpan extends Span implements api.Span {
   final Attributes _attributes = sdk_attributes.Attributes.empty();
   final SpanStatus _status = SpanStatus()..code = StatusCode.ok;
-  final Tracer _tracer = NoopTracer();
   final SpanContext _spanContext;
 
   NonRecordingSpan(this._spanContext)
-      : super(
-            'NON_RECORDING', _spanContext, SpanId.invalid(), [], NoopTracer());
+      : super('NON_RECORDING', _spanContext, SpanId.invalid(), [], null, null);
 
   @override
   Attributes get attributes => _attributes;
@@ -68,5 +66,9 @@ class NonRecordingSpan extends Span implements api.Span {
   SpanStatus get status => _status;
 
   @override
-  Tracer get tracer => _tracer;
+  sdk_resource.Resource get resource => null;
+
+  @override
+  sdk_instrumentation_library.InstrumentationLibrary
+      get instrumentationLibrary => null;
 }

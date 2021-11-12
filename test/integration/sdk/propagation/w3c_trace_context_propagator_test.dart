@@ -1,7 +1,8 @@
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/api/context/context.dart';
+import 'package:opentelemetry/src/sdk/common/attributes.dart';
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
-import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
+import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
@@ -9,7 +10,6 @@ import 'package:opentelemetry/src/sdk/trace/span_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
-import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
 import 'package:test/test.dart';
 
@@ -36,7 +36,6 @@ class TestingExtractor implements api.TextMapGetter<Map> {
 
 void main() {
   test('inject and extract trace context', () {
-    final testIdGenerator = IdGenerator();
     final testSpan = Span(
         'TestSpan',
         SpanContext(
@@ -46,7 +45,8 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
-        Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
+        Resource(Attributes.empty()),
+        InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = Context.current.withSpan(testSpan);
@@ -69,7 +69,6 @@ void main() {
   });
 
   test('inject and extract invalid trace parent', () {
-    final testIdGenerator = IdGenerator();
     final testSpan = Span(
         'TestSpan',
         SpanContext(
@@ -79,7 +78,8 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('0000000000000000'),
         [],
-        Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
+        Resource(Attributes.empty()),
+        InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = Context.current.withSpan(testSpan);
@@ -102,7 +102,6 @@ void main() {
   });
 
   test('extract and inject with child span', () {
-    final testIdGenerator = IdGenerator();
     final testSpan = Span(
         'TestSpan',
         SpanContext(
@@ -112,7 +111,8 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
-        Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
+        Resource(Attributes.empty()),
+        InstrumentationLibrary('library_name', 'library_version'));
     final tracer =
         TracerProvider(processors: []).getTracer('appName', version: '1.0.0');
     final testPropagator = W3CTraceContextPropagator();

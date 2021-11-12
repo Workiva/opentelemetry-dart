@@ -1,10 +1,11 @@
 import 'package:fixnum/fixnum.dart';
+import 'package:opentelemetry/src/api/instrumentation_library.dart';
 
 import '../common/attributes.dart';
+import '../resource/resource.dart';
 import 'span_context.dart';
 import 'span_id.dart';
 import 'span_status.dart';
-import 'tracer.dart';
 
 /// A representation of a single operation within a trace.
 ///
@@ -54,8 +55,11 @@ abstract class Span {
   /// Retrieve metadata included on this span.
   Attributes get attributes;
 
-  /// Tracer responsible for creating the [Span].
-  Tracer get tracer;
+  // Retrieve the resource on this span.
+  Resource get resource;
+
+  // Retrieve the resource on this span.
+  InstrumentationLibrary get instrumentationLibrary;
 
   /// Marks the end of this span's execution.
   void end();
