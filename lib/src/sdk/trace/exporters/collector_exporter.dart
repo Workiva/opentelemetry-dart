@@ -38,7 +38,11 @@ class CollectorExporter implements SpanExporter {
         headers: {'Content-Type': 'application/x-protobuf'});
   }
 
+  /// Group and construct the protobuf equivalent of the given list of [Span]s.
+  /// Spans are grouped by a trace provider's [Resource] and a tracer's
+  /// [InstrumentationLibrary].
   Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<Span> spans) {
+    // use a map of maps to group spans by resource and instrumentation library
     final rsm = <Resource, Map<InstrumentationLibrary, List<pb_trace.Span>>>{};
     for (final span in spans) {
       final il =
@@ -51,6 +55,7 @@ class CollectorExporter implements SpanExporter {
 
     final rss = <pb_trace.ResourceSpans>[];
     for (final il in rsm.entries) {
+      // for each distinct resource, construct the protobuf equivalent
       final attrs = <pb_common.KeyValue>[];
       for (final attr in il.key.attributes.keys) {
         attrs.add(pb_common.KeyValue(
@@ -60,6 +65,7 @@ class CollectorExporter implements SpanExporter {
       final rs = pb_trace.ResourceSpans(
           resource: pb_resource.Resource(attributes: attrs),
           instrumentationLibrarySpans: []);
+      // for each distinct instrumentation library, construct the protobuf equivalent
       for (final ils in il.value.entries) {
         rs.instrumentationLibrarySpans.add(pb_trace.InstrumentationLibrarySpans(
             spans: ils.value,
