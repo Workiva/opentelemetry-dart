@@ -10,6 +10,7 @@ export 'src/api/trace/id_generator.dart' show IdGenerator;
 export 'src/api/trace/span.dart' show Span;
 export 'src/api/trace/span_context.dart' show SpanContext;
 export 'src/api/trace/span_id.dart' show SpanId;
+export 'src/api/trace/span_status.dart' show StatusCode;
 export 'src/api/trace/trace_flags.dart' show TraceFlags;
 export 'src/api/trace/trace_id.dart' show TraceId;
 export 'src/api/trace/trace_state.dart' show TraceState;
