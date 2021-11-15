@@ -91,7 +91,9 @@ final provider = otel_sdk.TracerProvider([
 // Register the tracer provider as a global, so the MSDK middleware has access to it.
 otel_sdk.registerGlobalTracerProvider(provider);
 
-final tracer = provider.getTracer('my-app');
+final tracer = provider.getTracer('instrumentation-name');
+// or
+final tracer = otel_sdk.globalTracerProvider.getTracer('instrumentation-name');
 ```
 
 ## Collecting Spans
