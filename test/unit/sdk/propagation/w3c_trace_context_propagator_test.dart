@@ -1,6 +1,7 @@
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
-import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
+import 'package:opentelemetry/src/sdk/common/attributes.dart';
+import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
@@ -8,7 +9,6 @@ import 'package:opentelemetry/src/sdk/trace/span_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
-import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
 
 class TestingInjector implements api.TextMapSetter<Map> {
@@ -139,7 +139,6 @@ void main() {
   });
 
   test('inject trace parent', () {
-    final testIdGenerator = IdGenerator();
     final testSpan = Span(
         'TestSpan',
         SpanContext(
@@ -149,7 +148,8 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
-        Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
+        Resource(Attributes.empty()),
+        InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 
@@ -163,7 +163,6 @@ void main() {
   });
 
   test('inject invalid trace parent', () {
-    final testIdGenerator = IdGenerator();
     final testSpan = Span(
         'TestSpan',
         SpanContext(
@@ -173,7 +172,8 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('0000000000c0ffee'),
         [],
-        Tracer('TestTracer', [], testIdGenerator, InstrumentationLibrary()));
+        Resource(Attributes.empty()),
+        InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 

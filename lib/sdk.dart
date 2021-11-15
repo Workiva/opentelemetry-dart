@@ -1,6 +1,8 @@
 export 'src/sdk/common/attribute.dart' show Attribute;
+export 'src/sdk/common/attributes.dart' show Attributes;
 export 'src/sdk/open_telemetry.dart'
     show registerGlobalTracerProvider, globalTracerProvider;
+export 'src/sdk/resource/resource.dart' show Resource;
 export 'src/sdk/trace/exporters/collector_exporter.dart' show CollectorExporter;
 export 'src/sdk/trace/exporters/console_exporter.dart' show ConsoleExporter;
 export 'src/sdk/trace/propagation/w3c_trace_context_propagator.dart'

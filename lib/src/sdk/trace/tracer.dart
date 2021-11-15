@@ -1,3 +1,5 @@
+import 'package:opentelemetry/src/sdk/resource/resource.dart';
+
 import '../../../api.dart' as api;
 import '../../api/span_processors/span_processor.dart';
 import '../common/attributes.dart';
@@ -12,14 +14,13 @@ import 'trace_state.dart';
 
 /// An interface for creating [Span]s and propagating context in-process.
 class Tracer implements api.Tracer {
-  final String _name;
   final List<SpanProcessor> _processors;
+  final Resource _resource;
   final IdGenerator _idGenerator;
-  final InstrumentationLibrary _libraryVersion; // ignore: unused_field
+  final InstrumentationLibrary _instrumentationLibrary;
 
-  @override
-  String get name => _name;
-  Tracer(this._name, this._processors, this._idGenerator, this._libraryVersion);
+  Tracer(this._processors, this._resource, this._idGenerator,
+      this._instrumentationLibrary);
 
   @override
   Span startSpan(String name,
@@ -53,7 +54,8 @@ class Tracer implements api.Tracer {
           TraceState.empty());
     }
 
-    return Span(name, spanContext, parentSpanId, _processors, this,
+    return Span(name, spanContext, parentSpanId, _processors, _resource,
+        _instrumentationLibrary,
         attributes: attributes);
   }
 }

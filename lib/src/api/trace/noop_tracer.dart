@@ -7,9 +7,6 @@ import 'tracer.dart' as api;
 /// operations.
 class NoopTracer implements api.Tracer {
   @override
-  String get name => 'NOOP';
-
-  @override
   api.Span startSpan(String name,
       {api.Context context, api.Attributes attributes}) {
     final parentContext = context.spanContext;

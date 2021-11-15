@@ -1,6 +1,15 @@
 import '../api/instrumentation_library.dart' as api;
 
+// Represents the instrumentation library.
 class InstrumentationLibrary implements api.InstrumentationLibrary {
-  static const String name = 'opentelemetry-dart';
-  static const String version = '0.0.0';
+  final String _name;
+  final String _version;
+
+  InstrumentationLibrary(this._name, this._version);
+
+  @override
+  String get name => _name;
+
+  @override
+  String get version => _version;
 }
