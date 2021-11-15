@@ -89,7 +89,7 @@ final provider = otel_sdk.TracerProvider([
 ]);
 
 // Register the tracer provider as a global, so the MSDK middleware has access to it.
-registerGlobalTracerProvider(provider);
+otel_sdk.registerGlobalTracerProvider(provider);
 
 final tracer = provider.getTracer('my-app');
 ```
