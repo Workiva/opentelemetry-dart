@@ -7,6 +7,7 @@ import '../../api/span_processors/span_processor.dart';
 import '../../api/trace/span.dart' as span_api;
 import '../../api/trace/span_status.dart';
 import '../../sdk/trace/span_context.dart';
+import '../../api/trace/tracer.dart';
 import '../common/attributes.dart' as attributes_sdk;
 import 'span_id.dart';
 
@@ -18,6 +19,7 @@ class Span implements span_api.Span {
   final List<SpanProcessor> _processors;
   final Resource _resource;
   final InstrumentationLibrary _instrumentationLibrary;
+  final Tracer _tracer;
   Int64 _startTime;
   Int64 _endTime;
 
@@ -29,7 +31,7 @@ class Span implements span_api.Span {
 
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
-      this._resource, this._instrumentationLibrary,
+      this._resource, this._instrumentationLibrary, this._tracer,
       {Attributes attributes}) {
     _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
     this.attributes = attributes ?? attributes_sdk.Attributes.empty();
@@ -82,6 +84,9 @@ class Span implements span_api.Span {
 
   @override
   InstrumentationLibrary get instrumentationLibrary => _instrumentationLibrary;
+
+  @override
+  Tracer get tracer => _tracer;
 
   @override
   Attributes attributes;

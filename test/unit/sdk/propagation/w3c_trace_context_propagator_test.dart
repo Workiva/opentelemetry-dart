@@ -149,7 +149,8 @@ void main() {
         SpanId.fromString('00f067aa0ba902b7'),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 
@@ -173,7 +174,8 @@ void main() {
         SpanId.fromString('0000000000c0ffee'),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 

@@ -20,7 +20,8 @@ void main() {
       SpanId([4, 5, 6]),
       [],
       Resource(Attributes.empty()),
-      InstrumentationLibrary('library_name', 'library_version'));
+      InstrumentationLibrary('library_name', 'library_version'),
+      null);
 
   group('get Span', () {
     test('returns Span when exists', () {

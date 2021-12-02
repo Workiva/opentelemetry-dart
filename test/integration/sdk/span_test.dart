@@ -27,7 +27,8 @@ void main() {
         parentSpanId,
         [mockProcessor1, mockProcessor2],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
@@ -56,7 +57,8 @@ void main() {
         SpanId([4, 5, 6]),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
 
     // Verify span status' defaults.
     expect(span.status.code, equals(StatusCode.unset));
@@ -119,7 +121,8 @@ void main() {
         SpanId([4, 5, 6]),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
 
     expect(span.attributes.isEmpty, equals(true));
 

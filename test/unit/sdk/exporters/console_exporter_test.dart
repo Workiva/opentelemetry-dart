@@ -36,7 +36,8 @@ void main() {
         SpanId([4, 5, 6]),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'))
+        InstrumentationLibrary('library_name', 'library_version'),
+        null)
       ..end();
 
     ConsoleExporter().export([span]);
@@ -55,7 +56,8 @@ void main() {
         SpanId([4, 5, 6]),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
 
     ConsoleExporter()
       ..shutdown()

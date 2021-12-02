@@ -46,7 +46,8 @@ void main() {
         SpanId.fromString('00f067aa0ba902b7'),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = Context.current.withSpan(testSpan);
@@ -79,7 +80,8 @@ void main() {
         SpanId.fromString('0000000000000000'),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = Context.current.withSpan(testSpan);
@@ -112,7 +114,8 @@ void main() {
         SpanId.fromString('00f067aa0ba902b7'),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
     final tracer =
         TracerProvider(processors: []).getTracer('appName', version: '1.0.0');
     final testPropagator = W3CTraceContextPropagator();

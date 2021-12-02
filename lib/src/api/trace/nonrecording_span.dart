@@ -6,6 +6,7 @@ import '../../sdk/resource/resource.dart' as sdk_resource;
 import '../../sdk/trace/span.dart';
 import '../../sdk/trace/span_context.dart' as sdk_spancontext;
 import '../../sdk/trace/span_id.dart';
+import '../../sdk/trace/tracer.dart' as sdk_tracer;
 import '../common/attributes.dart';
 import 'span.dart' as api;
 import 'span_context.dart';
@@ -24,7 +25,8 @@ class NonRecordingSpan extends Span implements api.Span {
   final SpanContext _spanContext;
 
   NonRecordingSpan(this._spanContext)
-      : super('NON_RECORDING', _spanContext, SpanId.invalid(), [], null, null);
+      : super('NON_RECORDING', _spanContext, SpanId.invalid(), [], null, null,
+            null);
 
   @override
   Attributes get attributes => _attributes;
@@ -71,4 +73,7 @@ class NonRecordingSpan extends Span implements api.Span {
   @override
   sdk_instrumentation_library.InstrumentationLibrary
       get instrumentationLibrary => null;
+
+  @override
+  sdk_tracer.Tracer get tracer => null;
 }

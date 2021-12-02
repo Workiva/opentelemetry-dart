@@ -19,7 +19,8 @@ void main() {
         SpanId([4, 5, 6]),
         [],
         Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        InstrumentationLibrary('library_name', 'library_version'),
+        null);
     expect(span.name, 'foo');
 
     span.name = 'bar';

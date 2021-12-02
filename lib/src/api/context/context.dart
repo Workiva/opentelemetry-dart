@@ -23,8 +23,10 @@
 /// OpenTelemetry SDKs.
 import 'dart:async';
 
-import 'package:opentelemetry/src/sdk/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_context.dart';
+import '../../sdk/common/attribute.dart';
+import '../../sdk/trace/span.dart';
+import '../../sdk/trace/span_context.dart';
+import '../trace/span_status.dart';
 
 /// [ContextKey] used to store spans in a [Context].
 final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
@@ -71,6 +73,24 @@ class Context {
 
   /// Execute a function [fn] within this [Context] and return its result.
   R execute<R>(R Function() fn) => _zone.run(fn);
+
+  /// Records a span of the given [name] about the given function and marks the
+  /// span as errored if an exception occurs.
+  R trace<R>(String name, R Function() fn) {
+    return execute(() {
+      final child = span.tracer.startSpan(name);
+      try {
+        return withSpan(child).execute(fn);
+      } catch (e) {
+        // TODO: follow standard if exists and add stack trace
+        span.setStatus(StatusCode.error);
+        span.attributes.add(Attribute.fromString('exception', e.toString()));
+        rethrow;
+      } finally {
+        child.end();
+      }
+    });
+  }
 
   /// Get the [Span] attached to this [Context], or null if no such
   /// [Span] exists.
