@@ -26,6 +26,7 @@ import 'dart:async';
 import '../../sdk/common/attribute.dart';
 import '../../sdk/trace/span.dart';
 import '../../sdk/trace/span_context.dart';
+import '../../sdk/open_telemetry.dart';
 import '../trace/span_status.dart';
 
 /// [ContextKey] used to store spans in a [Context].
@@ -76,15 +77,22 @@ class Context {
 
   /// Records a span of the given [name] about the given function and marks the
   /// span as errored if an exception occurs.
-  R trace<R>(String name, R Function() fn) {
-    return execute(() {
-      final child = span.tracer.startSpan(name);
+  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
+      {String instrumentationName = 'opentelemetry',
+      String instrumentationVersion}) {
+    return execute(() async {
+      final child = (span != null
+              ? span.tracer
+              : globalTracerProvider.getTracer(instrumentationName,
+                  version: instrumentationVersion))
+          .startSpan(name);
       try {
-        return withSpan(child).execute(fn);
-      } catch (e) {
-        // TODO: follow standard if exists and add stack trace
-        span.setStatus(StatusCode.error);
-        span.attributes.add(Attribute.fromString('exception', e.toString()));
+        return await withSpan(child).execute(fn);
+      } catch (e, s) {
+        child.setStatus(StatusCode.error);
+        child.attributes.add(Attribute.fromBoolean('error', true));
+        child.attributes.add(Attribute.fromString('exception', e.toString()));
+        child.attributes.add(Attribute.fromString('stacktrace', s.toString()));
         rethrow;
       } finally {
         child.end();
