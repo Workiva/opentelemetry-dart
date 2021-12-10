@@ -1,6 +1,6 @@
 import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/common/attributes.dart';
+import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';

@@ -1,15 +1,12 @@
-import 'package:opentelemetry/api.dart';
-import 'package:opentelemetry/src/api/trace/sampling_result.dart' as api;
-
-enum Decision {
-  DROP,
-  RECORD_ONLY,
-  RECORD_AND_SAMPLE,
-}
+import '../../../../api.dart';
+import '../../../api/trace/sampling_result.dart' as api;
 
 class SamplingResult implements api.SamplingResult {
-  final Decision decision;
+  @override
+  final api.Decision decision;
+  @override
   final Attributes spanAttributes;
+  @override
   final TraceState traceState;
 
   SamplingResult(this.decision, this.spanAttributes, this.traceState);

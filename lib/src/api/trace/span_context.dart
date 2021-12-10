@@ -19,4 +19,8 @@ abstract class SpanContext {
   TraceState get traceState;
 
   bool get isValid;
+
+  /// Whether this SpanContext represents an operation which originated
+  /// from a remote source.
+  bool get isRemote;
 }

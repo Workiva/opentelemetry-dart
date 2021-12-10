@@ -10,6 +10,7 @@ class SpanContext implements api.SpanContext {
   final TraceId _traceId;
   final TraceFlags _traceFlags;
   final TraceState _traceState;
+  final bool _isRemote;
 
   @override
   TraceId get traceId => _traceId;
@@ -27,9 +28,19 @@ class SpanContext implements api.SpanContext {
   bool get isValid => spanId.isValid && traceId.isValid;
 
   /// Construct a [SpanContext].
-  SpanContext(this._traceId, this._spanId, this._traceFlags, this._traceState);
+  SpanContext(this._traceId, this._spanId, this._traceFlags, this._traceState)
+      : _isRemote = false;
+
+  /// Construct a [SpanContext] representing an operation which originated
+  /// from a remote source.
+  SpanContext.remote(
+      this._traceId, this._spanId, this._traceFlags, this._traceState)
+      : _isRemote = true;
 
   /// Construct an invalid [SpanContext].
   factory SpanContext.invalid() => SpanContext(TraceId.invalid(),
       SpanId.invalid(), TraceFlags.invalid(), TraceState.empty());
+
+  @override
+  bool get isRemote => _isRemote;
 }
