@@ -79,7 +79,6 @@ class CollectorExporter implements SpanExporter {
 
   pb_trace.Span _spanToProtobuf(Span span) {
     pb_trace.Status_StatusCode statusCode;
-
     switch (span.status.code) {
       case StatusCode.unset:
         statusCode = pb_trace.Status_StatusCode.STATUS_CODE_UNSET;
@@ -99,6 +98,9 @@ class CollectorExporter implements SpanExporter {
         name: span.name,
         startTimeUnixNano: span.startTime * 1000,
         endTimeUnixNano: span.endTime * 1000,
+        attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
+            key: key,
+            value: _attributeValueToProtobuf(span.attributes.get(key)))),
         status: pb_trace.Status(
             code: statusCode, message: span.status.description));
   }

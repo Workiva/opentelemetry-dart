@@ -47,7 +47,8 @@ void main() {
         SpanId([4, 5, 6]),
         [],
         resource,
-        instrumentationLibrary)
+        instrumentationLibrary,
+        attributes: Attributes.empty()..add(Attribute.fromString('foo', 'bar')))
       ..end();
     final span2 = Span(
         'baz',
@@ -56,7 +57,9 @@ void main() {
         SpanId([4, 5, 6]),
         [],
         resource,
-        instrumentationLibrary)
+        instrumentationLibrary,
+        attributes: Attributes.empty()
+          ..add(Attribute.fromBoolean('bool', true)))
       ..end();
 
     CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -78,6 +81,11 @@ void main() {
                       name: 'foo',
                       startTimeUnixNano: span1.startTime * 1000,
                       endTimeUnixNano: span1.endTime * 1000,
+                      attributes: [
+                        pb_common.KeyValue(
+                            key: 'foo',
+                            value: pb_common.AnyValue(stringValue: 'bar'))
+                      ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
                           message: null)),
@@ -88,6 +96,11 @@ void main() {
                       name: 'baz',
                       startTimeUnixNano: span2.startTime * 1000,
                       endTimeUnixNano: span2.endTime * 1000,
+                      attributes: [
+                        pb_common.KeyValue(
+                            key: 'bool',
+                            value: pb_common.AnyValue(boolValue: true))
+                      ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
                           message: null))
