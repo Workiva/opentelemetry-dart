@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import '../../../api.dart' as api;
 import '../../api/trace/sampler.dart';
 import '../../api/trace/sampling_result.dart';
+import '../common/attribute.dart';
 import '../common/attributes.dart';
 import '../instrumentation_library.dart';
 import '../resource/resource.dart';
@@ -59,5 +62,29 @@ class Tracer implements api.Tracer {
     return Span(name, spanContext, parentSpanId, _processors, _resource,
         _instrumentationLibrary,
         attributes: attributes);
+  }
+
+  /// Records a span of the given [name] for the given function and marks the
+  /// span as errored if an exception occurs.
+  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
+      {api.Context context}) {
+    final operationContext = context ?? api.Context.current;
+
+    return operationContext.execute(() async {
+      final span = startSpan(name, context: operationContext);
+      try {
+        return await operationContext.withSpan(span).execute(fn);
+      } catch (e, s) {
+        span.setStatus(api.StatusCode.error, description: e.toString());
+        span.attributes.addAll([
+          Attribute.fromBoolean('error', true),
+          Attribute.fromString('exception', e.toString()),
+          Attribute.fromString('stacktrace', s.toString()),
+        ]);
+        rethrow;
+      } finally {
+        span.end();
+      }
+    });
   }
 }
