@@ -74,7 +74,8 @@ class Span implements api.Span {
   api.Resource get resource => _resource;
 
   @override
-  api.InstrumentationLibrary get instrumentationLibrary => _instrumentationLibrary;
+  api.InstrumentationLibrary get instrumentationLibrary =>
+      _instrumentationLibrary;
 
   @override
   api.Attributes attributes;

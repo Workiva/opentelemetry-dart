@@ -1,9 +1,7 @@
-import '../../../api/exporters/span_exporter.dart';
-import '../../../api/span_processors/span_processor.dart';
-import '../../../api/trace/span.dart';
+import '../../../../api.dart' as api;
 
-class SimpleSpanProcessor implements SpanProcessor {
-  final SpanExporter _exporter;
+class SimpleSpanProcessor implements api.SpanProcessor {
+  final api.SpanExporter _exporter;
   bool _isShutdown = false;
 
   SimpleSpanProcessor(this._exporter);
@@ -12,7 +10,7 @@ class SimpleSpanProcessor implements SpanProcessor {
   void forceFlush() {}
 
   @override
-  void onEnd(Span span) {
+  void onEnd(api.Span span) {
     if (_isShutdown) {
       return;
     }

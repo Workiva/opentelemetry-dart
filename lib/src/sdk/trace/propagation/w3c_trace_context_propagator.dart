@@ -1,8 +1,7 @@
 import '../../../../api.dart' as api;
+import '../../../../sdk.dart' as sdk;
 import '../../../api/trace/nonrecording_span.dart';
-import '../span_context.dart';
 import '../span_id.dart';
-import '../trace_flags.dart';
 import '../trace_id.dart';
 import '../trace_state.dart';
 
@@ -21,7 +20,7 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
       RegExp('^(?<$_traceVersionFieldKey>[0-9a-f]{2})-'
           '(?<$_traceIdFieldKey>[0-9a-f]{${api.TraceId.sizeBits}})-'
           '(?<$_parentIdFieldKey>[0-9a-f]{${api.SpanId.sizeBits}})-'
-          '(?<$_traceFlagsFieldKey>[0-9a-f]{${api.TraceFlags.size}})\$');
+          '(?<$_traceFlagsFieldKey>[0-9a-f]{${2}})\$');
 
   @override
   api.Context extract(
@@ -48,8 +47,8 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
     final parentId = SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
         SpanId(api.SpanId.invalid);
     final traceFlags =
-        TraceFlags.fromString(parentHeaderFields[_traceFlagsFieldKey]) ??
-            TraceFlags(api.TraceFlags.sampledFlag);
+        int.parse(parentHeaderFields[_traceFlagsFieldKey], radix: 16) ??
+            api.TraceFlags.none;
 
     final traceStateHeader = getter.get(carrier, _traceStateHeaderKey);
     final traceState = (traceStateHeader != null)
@@ -57,7 +56,7 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
         : TraceState.empty();
 
     return context.withSpan(NonRecordingSpan(
-        SpanContext.remote(traceId, parentId, traceFlags, traceState)));
+        sdk.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
   }
 
   @override
@@ -65,8 +64,12 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
     final spanContext = context.spanContext;
 
     setter
-      ..set(carrier, _traceParentHeaderKey,
-          '$_traceVersion-${spanContext.traceId.toString()}-${spanContext.spanId.toString()}-${spanContext.traceFlags.toString()}')
+      ..set(
+          carrier,
+          _traceParentHeaderKey,
+          '$_traceVersion-${spanContext.traceId.toString()}-'
+          '${spanContext.spanId.toString()}-'
+          '${spanContext.traceFlags.toRadixString(16).padLeft(2, '0')}')
       ..set(carrier, _traceStateHeaderKey, spanContext.traceState.toString());
   }
 }

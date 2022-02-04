@@ -1,9 +1,10 @@
-import '../../sdk.dart';
+import '../../api.dart' as api;
+import '../../sdk.dart' as sdk;
 
-final TracerProvider _noopTracerProvider = TracerProvider();
-TracerProvider _tracerProvider = _noopTracerProvider;
+final api.TracerProvider _noopTracerProvider = sdk.TracerProvider();
+api.TracerProvider _tracerProvider = _noopTracerProvider;
 
-void registerGlobalTracerProvider(TracerProvider tracerProvider) {
+void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
   if (_tracerProvider != _noopTracerProvider) {
     throw StateError('A global TracerProvider has already been created. '
         'registerGlobalTracerProvider must be called only once before any '
@@ -13,4 +14,4 @@ void registerGlobalTracerProvider(TracerProvider tracerProvider) {
   _tracerProvider = tracerProvider;
 }
 
-TracerProvider get globalTracerProvider => _tracerProvider;
+api.TracerProvider get globalTracerProvider => _tracerProvider;

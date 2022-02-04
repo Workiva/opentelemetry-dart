@@ -15,7 +15,6 @@ import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/trace/
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/span_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:test/test.dart';
@@ -42,8 +41,8 @@ void main() {
         InstrumentationLibrary('library_name', 'library_version');
     final span1 = Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
+        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]), api.TraceFlags.none,
+            TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         resource,
@@ -53,7 +52,7 @@ void main() {
     final span2 = Span(
         'baz',
         SpanContext(TraceId([1, 2, 3]), SpanId([10, 11, 12]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
+            api.TraceFlags.none, TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         resource,
@@ -118,8 +117,8 @@ void main() {
   test('does not send spans when shutdown', () {
     final span = Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
+        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]), api.TraceFlags.none,
+            TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
         Resource(Attributes.empty()),

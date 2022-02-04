@@ -1,4 +1,4 @@
-import '../api/instrumentation_library.dart' as api;
+import '../../api.dart' as api;
 
 // Represents the instrumentation library.
 class InstrumentationLibrary implements api.InstrumentationLibrary {

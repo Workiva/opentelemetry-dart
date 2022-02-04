@@ -1,18 +1,14 @@
-import '../common/attributes.dart';
-import '../context/context.dart';
-import 'sampling_result.dart';
-import 'span.dart';
-import 'trace_id.dart';
+import '../../../api.dart' as api;
 
-/// Represents an entity which determines whether a [Span] should be sampled
+/// Represents an entity which determines whether a [api.Span] should be sampled
 /// and sent for collection.
 abstract class Sampler {
-  SamplingResult shouldSample(
-      Context context,
-      TraceId traceId,
+  api.SamplingResult shouldSample(
+      api.Context context,
+      api.TraceId traceId,
       String spanName,
       bool spanIsRemote, // ignore: avoid_positional_boolean_parameters
-      Attributes spanAttributes);
+      api.Attributes spanAttributes);
 
   String get description;
 }

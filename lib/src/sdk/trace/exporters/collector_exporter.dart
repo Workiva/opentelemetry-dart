@@ -1,17 +1,13 @@
 import 'package:http/http.dart' as http;
 
-import '../../../api/exporters/span_exporter.dart';
-import '../../../api/instrumentation_library.dart';
-import '../../../api/resource/resource.dart';
-import '../../../api/trace/span.dart';
-import '../../../api/trace/span_status.dart';
+import '../../../../api.dart' as api;
 import 'opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
     as pb_trace_service;
 import 'opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 import 'opentelemetry/proto/resource/v1/resource.pb.dart' as pb_resource;
 import 'opentelemetry/proto/common/v1/common.pb.dart' as pb_common;
 
-class CollectorExporter implements SpanExporter {
+class CollectorExporter implements api.SpanExporter {
   Uri uri;
   http.Client client;
   var _isShutdown = false;
@@ -21,7 +17,7 @@ class CollectorExporter implements SpanExporter {
   }
 
   @override
-  void export(List<Span> spans) {
+  void export(List<api.Span> spans) {
     if (_isShutdown) {
       return;
     }
@@ -38,15 +34,16 @@ class CollectorExporter implements SpanExporter {
         headers: {'Content-Type': 'application/x-protobuf'});
   }
 
-  /// Group and construct the protobuf equivalent of the given list of [Span]s.
-  /// Spans are grouped by a trace provider's [Resource] and a tracer's
-  /// [InstrumentationLibrary].
-  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<Span> spans) {
+  /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
+  /// Spans are grouped by a trace provider's [api.Resource] and a tracer's
+  /// [api.InstrumentationLibrary].
+  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
     // use a map of maps to group spans by resource and instrumentation library
-    final rsm = <Resource, Map<InstrumentationLibrary, List<pb_trace.Span>>>{};
+    final rsm =
+        <api.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
     for (final span in spans) {
-      final il =
-          rsm[span.resource] ?? <InstrumentationLibrary, List<pb_trace.Span>>{};
+      final il = rsm[span.resource] ??
+          <api.InstrumentationLibrary, List<pb_trace.Span>>{};
       il[span.instrumentationLibrary] =
           il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
             ..add(_spanToProtobuf(span));
@@ -77,16 +74,16 @@ class CollectorExporter implements SpanExporter {
     return rss;
   }
 
-  pb_trace.Span _spanToProtobuf(Span span) {
+  pb_trace.Span _spanToProtobuf(api.Span span) {
     pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
-      case StatusCode.unset:
+      case api.StatusCode.unset:
         statusCode = pb_trace.Status_StatusCode.STATUS_CODE_UNSET;
         break;
-      case StatusCode.error:
+      case api.StatusCode.error:
         statusCode = pb_trace.Status_StatusCode.STATUS_CODE_ERROR;
         break;
-      case StatusCode.ok:
+      case api.StatusCode.ok:
         statusCode = pb_trace.Status_StatusCode.STATUS_CODE_OK;
         break;
     }

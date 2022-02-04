@@ -5,29 +5,26 @@ import '../../api/trace/sampler.dart';
 import '../../api/trace/sampling_result.dart';
 import '../common/attribute.dart';
 import '../common/attributes.dart';
-import '../instrumentation_library.dart';
-import '../resource/resource.dart';
 import 'id_generator.dart';
 import 'span.dart';
 import 'span_context.dart';
 import 'span_id.dart';
-import 'trace_flags.dart';
 import 'trace_id.dart';
 import 'trace_state.dart';
 
 /// An interface for creating [Span]s and propagating context in-process.
 class Tracer implements api.Tracer {
   final List<api.SpanProcessor> _processors;
-  final Resource _resource;
+  final api.Resource _resource;
   final Sampler _sampler;
   final IdGenerator _idGenerator;
-  final InstrumentationLibrary _instrumentationLibrary;
+  final api.InstrumentationLibrary _instrumentationLibrary;
 
   Tracer(this._processors, this._resource, this._sampler, this._idGenerator,
       this._instrumentationLibrary);
 
   @override
-  Span startSpan(String name,
+  api.Span startSpan(String name,
       {api.Context context, api.Attributes attributes}) {
     context ??= api.Context.current;
     attributes ??= Attributes.empty();
@@ -55,8 +52,8 @@ class Tracer implements api.Tracer {
     final samplerResult =
         _sampler.shouldSample(context, traceId, name, false, attributes);
     final traceFlags = (samplerResult.decision == Decision.recordAndSample)
-        ? TraceFlags(api.TraceFlags.sampledFlag)
-        : TraceFlags(api.TraceFlags.none);
+        ? api.TraceFlags.sampled
+        : api.TraceFlags.none;
     final spanContext = SpanContext(traceId, spanId, traceFlags, traceState);
 
     return Span(name, spanContext, parentSpanId, _processors, _resource,

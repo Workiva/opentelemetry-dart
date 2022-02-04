@@ -1,4 +1,4 @@
-import '../../api/common/attribute.dart' as api;
+import '../../../api.dart' as api;
 
 class Attribute implements api.Attribute {
   @override

@@ -15,8 +15,8 @@ class SpanId implements api.SpanId {
       _id.add(int.parse('${id[i]}${id[i + 1]}', radix: 16));
     }
   }
-  factory SpanId.invalid() => SpanId(api.SpanId.invalid);
-  factory SpanId.root() => SpanId(api.SpanId.root);
+  SpanId.invalid() : this(api.SpanId.invalid);
+  SpanId.root() : this(api.SpanId.root);
 
   @override
   List<int> get() => _id;

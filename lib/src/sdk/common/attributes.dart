@@ -1,5 +1,4 @@
-import '../../api/common/attribute.dart';
-import '../../api/common/attributes.dart' as api;
+import '../../../api.dart' as api;
 
 class Attributes implements api.Attributes {
   Map<String, Object> _attributes = {};
@@ -21,12 +20,12 @@ class Attributes implements api.Attributes {
   Iterable<String> get keys => _attributes.keys;
 
   @override
-  void add(Attribute attribute) {
+  void add(api.Attribute attribute) {
     _attributes[attribute.key] = attribute.value;
   }
 
   @override
-  void addAll(List<Attribute> attributes) {
+  void addAll(List<api.Attribute> attributes) {
     attributes.forEach(add);
   }
 }

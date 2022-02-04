@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../../../src/api/trace/id_generator.dart' as api;
+import '../../../../api.dart' as api;
 
 /// Generator responsible for generating OTel compatible.
 class IdGenerator implements api.IdGenerator {

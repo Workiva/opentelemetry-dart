@@ -1,5 +1,4 @@
 import 'span_id.dart';
-import 'trace_flags.dart';
 import 'trace_id.dart';
 import 'trace_state.dart';
 
@@ -11,9 +10,8 @@ abstract class SpanContext {
   /// Get the ID of the trace the span is a part of.
   TraceId get traceId;
 
-  /// Get flags (sampling, trace level, etc.) set for the trace the span is a
-  /// part of.
-  TraceFlags get traceFlags;
+  /// Get W3C trace context flags used in propagation represented by a one byte bitmap.
+  int get traceFlags;
 
   /// Get the state of the entire trace.
   TraceState get traceState;

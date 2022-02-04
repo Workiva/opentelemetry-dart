@@ -15,7 +15,7 @@ class TraceId implements api.TraceId {
       _id.add(int.parse('${id[i]}${id[i + 1]}', radix: 16));
     }
   }
-  factory TraceId.invalid() => TraceId(api.TraceId.invalid);
+  TraceId.invalid() : this(api.TraceId.invalid);
 
   @override
   List<int> get() => _id;

@@ -8,7 +8,6 @@ import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propag
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/span_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
@@ -42,7 +41,7 @@ void main() {
         SpanContext(
             TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             SpanId.fromString('0000000000c0ffee'),
-            TraceFlags(api.TraceFlags.sampledFlag),
+            api.TraceFlags.sampled,
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
@@ -63,8 +62,8 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
-    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags.isValid, isTrue);
-    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags.sampled, isTrue);
+    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
+        equals(api.TraceFlags.sampled));
     expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
@@ -75,7 +74,7 @@ void main() {
         SpanContext(
             TraceId.fromString('00000000000000000000000000000000'),
             SpanId.fromString('0000000000c0ffee'),
-            TraceFlags(api.TraceFlags.invalid),
+            api.TraceFlags.none,
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('0000000000000000'),
         [],
@@ -96,8 +95,8 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('00000000000000000000000000000000'));
-    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags.isValid, isFalse);
-    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags.sampled, isFalse);
+    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
+        equals(api.TraceFlags.none));
     expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
@@ -108,7 +107,7 @@ void main() {
         SpanContext(
             TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             SpanId.fromString('0000000000c0ffee'),
-            TraceFlags(api.TraceFlags.sampledFlag),
+            api.TraceFlags.sampled,
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],

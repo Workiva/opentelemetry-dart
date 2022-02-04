@@ -1,41 +1,34 @@
-import '../../../sdk.dart';
-import '../../api/span_processors/span_processor.dart';
-import '../../api/trace/sampler.dart';
-import '../../api/trace/tracer_provider.dart' as api;
-import '../instrumentation_library.dart';
-import '../resource/resource.dart';
-import 'id_generator.dart';
-import 'samplers/parent_based_sampler.dart';
-import 'tracer.dart';
+import '../../../api.dart' as api;
+import '../../../sdk.dart' as sdk;
 
-/// A registry for creating named [Tracer]s.
+/// A registry for creating named [api.Tracer]s.
 class TracerProvider implements api.TracerProvider {
-  final Map<String, Tracer> _tracers = {};
-  List<SpanProcessor> _processors;
-  Resource _resource;
-  Sampler _sampler;
-  IdGenerator _idGenerator;
+  final Map<String, api.Tracer> _tracers = {};
+  List<api.SpanProcessor> _processors;
+  api.Resource _resource;
+  api.Sampler _sampler;
+  api.IdGenerator _idGenerator;
 
   TracerProvider(
-      {List<SpanProcessor> processors,
-      Resource resource,
-      Sampler sampler,
-      IdGenerator idGenerator}) {
+      {List<api.SpanProcessor> processors,
+      api.Resource resource,
+      api.Sampler sampler,
+      api.IdGenerator idGenerator}) {
     _processors = processors ?? []; // Default to a no-op TracerProvider.
-    _resource = resource ?? Resource(Attributes.empty());
-    _sampler = sampler ?? ParentBasedSampler(AlwaysOnSampler());
-    _idGenerator = idGenerator ?? IdGenerator();
+    _resource = resource ?? sdk.Resource(sdk.Attributes.empty());
+    _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler());
+    _idGenerator = idGenerator ?? sdk.IdGenerator();
   }
 
-  List<SpanProcessor> get spanProcessors => _processors;
+  List<api.SpanProcessor> get spanProcessors => _processors;
 
   @override
-  Tracer getTracer(String name, {String version = ''}) {
+  api.Tracer getTracer(String name, {String version = ''}) {
     final key = '$name@$version';
     return _tracers.putIfAbsent(
         key,
-        () => Tracer(_processors, _resource, _sampler, _idGenerator,
-            InstrumentationLibrary(name, version)));
+        () => sdk.Tracer(_processors, _resource, _sampler, _idGenerator,
+            sdk.InstrumentationLibrary(name, version)));
   }
 
   @override

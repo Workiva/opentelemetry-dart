@@ -1,9 +1,7 @@
 import '../../../api.dart' as api;
-import '../../sdk/trace/span_context.dart';
-import 'nonrecording_span.dart';
-import 'tracer.dart' as api;
+import '../../../sdk.dart' as sdk;
 
-/// A [api.Tracer] class which yields [NonRecordingSpan]s and no-ops for most
+/// A [api.Tracer] class which yields [api.NonRecordingSpan]s and no-ops for most
 /// operations.
 class NoopTracer implements api.Tracer {
   @override
@@ -11,7 +9,7 @@ class NoopTracer implements api.Tracer {
       {api.Context context, api.Attributes attributes}) {
     final parentContext = context.spanContext;
 
-    return NonRecordingSpan(
-        (parentContext.isValid) ? parentContext : SpanContext.invalid());
+    return api.NonRecordingSpan(
+        (parentContext.isValid) ? parentContext : sdk.SpanContext.invalid());
   }
 }
