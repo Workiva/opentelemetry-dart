@@ -1,7 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
-import '../../../sdk.dart' as sdk;
 
 /// A representation of a single operation within a trace.
 class Span implements api.Span {
@@ -25,7 +24,7 @@ class Span implements api.Span {
       this._resource, this._instrumentationLibrary,
       {api.Attributes attributes}) {
     _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
-    this.attributes = attributes ?? sdk.Attributes.empty();
+    this.attributes = attributes ?? api.Attributes.empty();
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onStart();
     }

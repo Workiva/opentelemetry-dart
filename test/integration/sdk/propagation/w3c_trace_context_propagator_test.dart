@@ -1,7 +1,6 @@
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
@@ -45,7 +44,7 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = {};
@@ -78,7 +77,7 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('0000000000000000'),
         [],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = W3CTraceContextPropagator();
     final testCarrier = {};
@@ -111,7 +110,7 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         SpanId.fromString('00f067aa0ba902b7'),
         [],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
     final tracer =
         TracerProvider(processors: []).getTracer('appName', version: '1.0.0');

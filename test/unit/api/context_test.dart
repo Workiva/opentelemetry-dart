@@ -1,6 +1,5 @@
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
@@ -18,7 +17,7 @@ void main() {
       testSpanContext,
       SpanId([4, 5, 6]),
       [],
-      Resource(Attributes.empty()),
+      Resource(api.Attributes.empty()),
       InstrumentationLibrary('library_name', 'library_version'));
 
   group('get Span', () {

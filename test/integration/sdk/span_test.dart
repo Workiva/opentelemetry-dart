@@ -1,8 +1,6 @@
 import 'package:mockito/mockito.dart';
+import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/api/trace/span_status.dart';
-import 'package:opentelemetry/src/api/trace/trace_flags.dart' as api;
-import 'package:opentelemetry/src/sdk/common/attribute.dart';
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
@@ -25,7 +23,7 @@ void main() {
             TraceState.empty()),
         parentSpanId,
         [mockProcessor1, mockProcessor2],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
 
     expect(span.startTime, isNotNull);
@@ -54,7 +52,7 @@ void main() {
             TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
 
     // Verify span status' defaults.
@@ -92,14 +90,14 @@ void main() {
 
   test('span add and retrieve attributes', () {
     final attributeList = [
-      Attribute.fromString('First', 'First Attribute'),
-      Attribute.fromBoolean('Second', false),
-      Attribute.fromDouble('Third', 3.14),
-      Attribute.fromInt('Fourth', 4),
-      Attribute.fromStringList('Fifth', ['String', 'List']),
-      Attribute.fromBooleanList('Sixth', [true, false]),
-      Attribute.fromDoubleList('Seventh', [7.1, 7.2]),
-      Attribute.fromIntList('Eighth', [8, 8]),
+      api.Attribute.fromString('First', 'First Attribute'),
+      api.Attribute.fromBoolean('Second', false),
+      api.Attribute.fromDouble('Third', 3.14),
+      api.Attribute.fromInt('Fourth', 4),
+      api.Attribute.fromStringList('Fifth', ['String', 'List']),
+      api.Attribute.fromBooleanList('Sixth', [true, false]),
+      api.Attribute.fromDoubleList('Seventh', [7.1, 7.2]),
+      api.Attribute.fromIntList('Eighth', [8, 8]),
     ];
     final expectedAttributeMap = {
       'First': 'First Attribute',
@@ -117,10 +115,10 @@ void main() {
             TraceState.empty()),
         SpanId([4, 5, 6]),
         [],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
 
-    expect(span.attributes.isEmpty, equals(true));
+    expect(span.attributes.keys.length, isZero);
 
     span.attributes.add(attributeList.removeAt(0));
     span.attributes.addAll(attributeList);

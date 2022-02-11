@@ -1,27 +1,29 @@
 import 'attribute.dart';
 
 /// A representation of a collection of metadata attached to a trace span.
-abstract class Attributes {
+class Attributes {
+  Map<String, Object> _attributes = {};
+
   /// Instantiate an empty Attributes.
-  Attributes.empty();
-
-  /// The size of this collection of Attributes.
-  int get length;
-
-  /// Whether this collection of Attributes is empty.
-  bool get isEmpty;
+  Attributes.empty() {
+    _attributes = {};
+  }
 
   /// Retrieve the value associated with the Attribute with key [key].
-  Object get(String key);
+  Object get(String key) => _attributes[key];
 
   /// Retrieve the keys of all Attributes in this collection.
-  Iterable<String> get keys;
+  Iterable<String> get keys => _attributes.keys;
 
   /// Add an Attribute [attribute].
   /// If an Attribute with the same key already exists, it will be overwritten.
-  void add(Attribute attribute);
+  void add(Attribute attribute) {
+    _attributes[attribute.key] = attribute.value;
+  }
 
   /// Add all Attributes in List [attributes].
   /// If an Attribute with the same key already exists, it will be overwritten.
-  void addAll(List<Attribute> attributes);
+  void addAll(List<Attribute> attributes) {
+    attributes.forEach(add);
+  }
 }

@@ -26,7 +26,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         sdk.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource(api.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'))
       ..end();
 
@@ -45,7 +45,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         sdk.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource(api.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     sdk.ConsoleExporter()

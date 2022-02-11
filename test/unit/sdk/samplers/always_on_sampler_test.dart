@@ -12,7 +12,7 @@ void main() {
             traceId, sdk.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         sdk.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource(api.Attributes.empty()),
         sdk.InstrumentationLibrary(
             'always_on_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
@@ -32,7 +32,7 @@ void main() {
             sdk.TraceState.empty()),
         sdk.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource(api.Attributes.empty()),
         sdk.InstrumentationLibrary(
             'always_on_sampler_test', 'sampler_test_version'));
 

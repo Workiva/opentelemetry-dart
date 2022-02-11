@@ -1,5 +1,3 @@
-export 'src/sdk/common/attribute.dart' show Attribute;
-export 'src/sdk/common/attributes.dart' show Attributes;
 export 'src/sdk/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/sdk/open_telemetry.dart'
     show registerGlobalTracerProvider, globalTracerProvider;
