@@ -8,10 +8,24 @@ void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
   if (_tracerProvider != _noopTracerProvider) {
     throw StateError('A global TracerProvider has already been created. '
         'registerGlobalTracerProvider must be called only once before any '
-        'calls to getter globalTracerProvider.');
+        'calls to the getter globalTracerProvider.');
   }
 
   _tracerProvider = tracerProvider;
 }
 
 api.TracerProvider get globalTracerProvider => _tracerProvider;
+
+api.TextMapPropagator _textMapPropagator;
+
+void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
+  if (_textMapPropagator != null) {
+    throw StateError('A global TextMapPropagator has already been created. '
+        'registerGlobalTextMapPropagator must be called only once before any '
+        'calls to the getter globalTextMapPropagator.');
+  }
+
+  _textMapPropagator = textMapPropagator;
+}
+
+api.TextMapPropagator get globalTextMapPropagator => _textMapPropagator;
