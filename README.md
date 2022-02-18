@@ -41,7 +41,7 @@ final exporter = otel_sdk.ConsoleExporter();
 
 ### Span Processors
 
-Next, you will need a at least one span processor.  A span processor is responsible for collectoring the spans you create and feeding them to the exporter.
+Next, you will need at least one span processor.  A span processor is responsible for collectoring the spans you create and feeding them to the exporter.
 The current options are:
 
 | SpanProcessor | Description |
