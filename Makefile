@@ -18,6 +18,9 @@ format:
 	@find ./test/ -name '*.dart' | xargs dart format --fix
 
 test: format analyze
-	@dart test ./test --chain-stack-traces
+	@dart test ./test \
+		--chain-stack-traces \
+		--platform vm \
+		--platform chrome
 
 .PHONY: init analyze test

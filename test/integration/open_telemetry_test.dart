@@ -1,26 +1,40 @@
+@TestOn('vm')
 import 'dart:async';
 
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
+import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('trace synchronous execution', () {
-    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
-    sdk.Span span;
+    final tracer = Tracer([],
+        sdk.Resource([]),
+        sdk.AlwaysOnSampler(),
+        sdk.DateTimeTimeProvider(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
+    Span span;
 
     sdk.trace('syncTrace', () {
       span = api.Context.current.span;
     }, tracer: tracer);
 
-    expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
+    expect(
+        span.endTime,
+        lessThan(DateTime.now().microsecondsSinceEpoch *
+            api.TimeProvider.nanosecondsPerMicrosecond));
   });
 
   test('trace synchronous looped execution timing', () {
-    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
-    final spans = <sdk.Span>[];
+    final tracer = Tracer([],
+        sdk.Resource([]),
+        sdk.AlwaysOnSampler(),
+        sdk.DateTimeTimeProvider(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
+    final spans = <Span>[];
 
     for (var i = 0; i < 5; i++) {
       sdk.trace('syncTrace', () {
@@ -35,9 +49,13 @@ void main() {
   });
 
   test('trace synchronous execution with error', () {
-    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
-    sdk.Span span;
+    final tracer = Tracer([],
+        sdk.Resource([]),
+        sdk.AlwaysOnSampler(),
+        sdk.DateTimeTimeProvider(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
+    Span span;
 
     expect(
         () => sdk.trace('syncTrace', () {
@@ -53,21 +71,32 @@ void main() {
   });
 
   test('trace asynchronous execution', () async {
-    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
-    sdk.Span span;
+    final tracer = Tracer([],
+        sdk.Resource([]),
+        sdk.AlwaysOnSampler(),
+        sdk.DateTimeTimeProvider(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
+    Span span;
 
     await sdk.trace('asyncTrace', () async {
       span = api.Context.current.span;
     }, tracer: tracer);
 
-    expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
+    expect(
+        span.endTime,
+        lessThan(DateTime.now().microsecondsSinceEpoch *
+            api.TimeProvider.nanosecondsPerMicrosecond));
   });
 
   test('trace asynchronous looped execution timing', () async {
-    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
-    final spans = <sdk.Span>[];
+    final tracer = Tracer([],
+        sdk.Resource([]),
+        sdk.AlwaysOnSampler(),
+        sdk.DateTimeTimeProvider(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
+    final spans = <Span>[];
 
     for (var i = 0; i < 5; i++) {
       await sdk.trace('asyncTrace', () async {
@@ -82,9 +111,13 @@ void main() {
   });
 
   test('trace asynchronous execution with thrown error', () async {
-    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
-    sdk.Span span;
+    final tracer = Tracer([],
+        sdk.Resource([]),
+        sdk.AlwaysOnSampler(),
+        sdk.DateTimeTimeProvider(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
+    Span span;
 
     try {
       await sdk.trace('asyncTrace', () async {
@@ -102,9 +135,13 @@ void main() {
   });
 
   test('trace asynchronous execution completes with error', () async {
-    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
-    sdk.Span span;
+    final tracer = Tracer([],
+        sdk.Resource([]),
+        sdk.AlwaysOnSampler(),
+        sdk.DateTimeTimeProvider(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
+    Span span;
 
     try {
       await sdk.trace('asyncTrace', () async {

@@ -1,6 +1,8 @@
+@TestOn('vm')
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 import '../../unit/mocks.dart';
@@ -10,12 +12,13 @@ void main() {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
     final parentSpanId = api.SpanId([4, 5, 6]);
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         parentSpanId,
         [mockProcessor1, mockProcessor2],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
@@ -39,12 +42,13 @@ void main() {
   });
 
   test('span status', () {
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
@@ -104,12 +108,13 @@ void main() {
       'Seventh': [7.1, 7.2],
       'Eighth': [8, 8],
     };
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
@@ -127,12 +132,13 @@ void main() {
   });
 
   test('span record error', () {
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 

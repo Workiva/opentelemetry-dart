@@ -1,3 +1,5 @@
+@TestOn('vm')
+
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart';
 import 'package:test/test.dart';
@@ -20,10 +22,10 @@ void main() {
       maxNumAttributeLength: maxAttributeLength);
 
   test('test default spanlimits', () {
-    final attrs = [attrShort, attrDoubleArray, attrStringArray];
-    final span = sdkspan.Span(
-        'limitTest', null, SpanId([4, 5, 6]), [], null, null,
-        attributes: attrs, spanlimits: SpanLimits());
+    final span = sdkspan.Span('limitTest', null, SpanId([4, 5, 6]), [],
+        DateTimeTimeProvider(), null, null,
+        attributes: [attrShort, attrDoubleArray, attrStringArray],
+        spanlimits: SpanLimits());
     expect(span.attributes.length, equals(3));
     expect(span.attributes.get('shortkey'), equals('55555'));
     expect(span.attributes.get('doubleList'), equals([0.1, 0.2]));
@@ -31,25 +33,27 @@ void main() {
   });
 
   test('test spanlimits maxNumAttributes', () {
-    final attrs = [attrShort, attrLong, attrInt, attrBool];
-    final span = sdkspan.Span('foo', null, SpanId([4, 5, 6]), [], null, null,
-        attributes: attrs, spanlimits: limits);
+    final span = sdkspan.Span(
+        'foo', null, SpanId([4, 5, 6]), [], DateTimeTimeProvider(), null, null,
+        attributes: [attrShort, attrLong, attrInt, attrBool],
+        spanlimits: limits);
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('boolean'), equals(null));
   });
 
   test('test spanlimits maxNumAttributeLength', () {
-    final attrs = [attrShort, attrLong];
-    final span = sdkspan.Span('foo', null, SpanId([4, 5, 6]), [], null, null,
-        attributes: attrs, spanlimits: limits);
+    final span = sdkspan.Span(
+        'foo', null, SpanId([4, 5, 6]), [], DateTimeTimeProvider(), null, null,
+        attributes: [attrShort, attrLong], spanlimits: limits);
     expect(span.attributes.get('shortkey'), equals('55555'));
     expect(span.attributes.get('longkey'), equals('55555'));
   });
 
   test('test spanlimits normal from span', () {
-    final span =
-        sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes([attrShort, attrInt, attrDoubleArray]);
+    final span = sdkspan.Span(
+        'test', null, null, [], DateTimeTimeProvider(), null, null,
+        spanlimits: limits)
+      ..setAttributes([attrShort, attrInt, attrDoubleArray]);
     expect(span.attributes.length, equals(3));
     expect(span.attributes.get('shortkey'), equals('55555'));
     expect(span.attributes.get('intKey'), equals(12));
@@ -57,27 +61,30 @@ void main() {
   });
 
   test('test spanlimits maxNumAttributes from span', () {
-    final span =
-        sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes(
-              [attrShort, attrLong, attrInt, attrBool, attrStringArray]);
+    final span = sdkspan.Span(
+        'test', null, null, [], DateTimeTimeProvider(), null, null,
+        spanlimits: limits)
+      ..setAttributes(
+          [attrShort, attrLong, attrInt, attrBool, attrStringArray]);
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('boolean'), equals(null));
     expect(span.droppedAttributes, equals(2));
   });
 
   test('test spanlimits maxNumAttributeLength with setAttributes', () {
-    final span =
-        sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes([attrShort, attrLong]);
+    final span = sdkspan.Span(
+        'test', null, null, [], DateTimeTimeProvider(), null, null,
+        spanlimits: limits)
+      ..setAttributes([attrShort, attrLong]);
     expect(span.attributes.get('shortkey'), equals('55555'));
     expect(span.attributes.get('longkey'), equals('55555'));
   });
 
   test('test spanlimits from span, then add more', () {
-    final span =
-        sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttribute(attrShort);
+    final span = sdkspan.Span(
+        'test', null, null, [], DateTimeTimeProvider(), null, null,
+        spanlimits: limits)
+      ..setAttribute(attrShort);
     expect(span.attributes.get('shortkey'), equals('55555'));
     span.setAttribute(attrLong);
     expect(span.attributes.get('longkey'), equals('55555'));
@@ -92,9 +99,10 @@ void main() {
   });
 
   test('test add same key twice', () {
-    final span =
-        sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes([attrShort, dupShort]);
+    final span = sdkspan.Span(
+        'test', null, null, [], DateTimeTimeProvider(), null, null,
+        spanlimits: limits)
+      ..setAttributes([attrShort, dupShort]);
     expect(span.attributes.length, 1);
     expect(span.attributes.get('shortkey'), equals('66666'));
     span.setAttributes([attrLong, dupLong]);
@@ -104,18 +112,20 @@ void main() {
   });
 
   test('test add same key twice', () {
-    final span =
-        sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes([attrShort, dupShort, attrLong, dupLong]);
+    final span = sdkspan.Span(
+        'test', null, null, [], DateTimeTimeProvider(), null, null,
+        spanlimits: limits)
+      ..setAttributes([attrShort, dupShort, attrLong, dupLong]);
     expect(span.attributes.length, 2);
     expect(span.attributes.get('shortkey'), equals('66666'));
     expect(span.attributes.get('longkey'), equals('66666'));
   });
 
   test('test add oversized string list', () {
-    final span =
-        sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes([attrShort, dupShort, attrLong, dupLong]);
+    final span = sdkspan.Span(
+        'test', null, null, [], DateTimeTimeProvider(), null, null,
+        spanlimits: limits)
+      ..setAttributes([attrShort, dupShort, attrLong, dupLong]);
     expect(span.attributes.length, 2);
     expect(span.attributes.get('shortkey'), equals('66666'));
     expect(span.attributes.get('longkey'), equals('66666'));

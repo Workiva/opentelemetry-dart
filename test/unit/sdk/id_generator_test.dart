@@ -1,3 +1,4 @@
+@TestOn('vm')
 import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
 import 'package:test/test.dart';
 

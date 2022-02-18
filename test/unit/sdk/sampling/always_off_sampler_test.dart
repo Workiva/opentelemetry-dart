@@ -1,17 +1,20 @@
+@TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('Context contains a Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = sdk.TraceState.fromString('test=onetwo');
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'foo',
         sdk.SpanContext(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'always_off_sampler_test', 'sampler_test_version'));
@@ -30,12 +33,13 @@ void main() {
       api.Attribute.fromBoolean('boolTest', true),
       api.Attribute.fromDouble('double', 0.3)
     ];
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'foo',
         sdk.SpanContext(traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none,
             sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'always_off_sampler_test', 'sampler_test_version'),

@@ -1,3 +1,4 @@
+@TestOn('vm')
 import 'package:opentelemetry/api.dart';
 import 'package:test/test.dart';
 

@@ -1,5 +1,7 @@
+@TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -13,11 +15,12 @@ void main() {
   final traceId = api.TraceId([1, 2, 3]);
 
   test('Invalid parent span context', () {
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'test',
         sdk.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
@@ -33,11 +36,12 @@ void main() {
   });
 
   test('Missing parent span context', () {
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'test',
         sdk.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
@@ -53,12 +57,13 @@ void main() {
   test('with sampled, remote sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = sdk.TraceState.fromString('test=onetwo');
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'foo',
         sdk.SpanContext.remote(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.sampled, traceState),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
@@ -75,12 +80,13 @@ void main() {
   test('with non-sampled, remote sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = sdk.TraceState.fromString('test=onetwo');
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'foo',
         sdk.SpanContext.remote(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
@@ -97,12 +103,13 @@ void main() {
   test('with sampled, local sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = sdk.TraceState.fromString('test=onetwo');
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'foo',
         sdk.SpanContext(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.sampled, traceState),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
@@ -119,12 +126,13 @@ void main() {
   test('with non-sampled, local sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = sdk.TraceState.fromString('test=onetwo');
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'foo',
         sdk.SpanContext(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
