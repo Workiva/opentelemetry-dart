@@ -1,6 +1,6 @@
-import '../text_map_propagator.dart';
+import '../../../../api.dart' as api;
 
-/// Interface that allows a [TextMapPropagator] to read propagated fields from a carrier.
+/// Interface that allows a [api.TextMapPropagator] to read propagated fields from a carrier.
 abstract class TextMapGetter<C> {
   /// Returns all the keys in the given carrier.
   Iterable<String> keys(C carrier);

@@ -25,7 +25,7 @@ class Tracer implements api.Tracer {
     // a root Span with a new Trace ID and default state.
     // See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#determining-the-parent-span-from-a-context
     final parent = context.span;
-    final spanId = sdk.SpanId.fromIdGenerator(_idGenerator);
+    final spanId = api.SpanId.fromIdGenerator(_idGenerator);
     api.TraceId traceId;
     api.TraceState traceState;
     api.SpanId parentSpanId;
@@ -35,8 +35,8 @@ class Tracer implements api.Tracer {
       traceId = parent.spanContext.traceId;
       traceState = parent.spanContext.traceState;
     } else {
-      parentSpanId = sdk.SpanId.root();
-      traceId = sdk.TraceId.fromIdGenerator(_idGenerator);
+      parentSpanId = api.SpanId.root();
+      traceId = api.TraceId.fromIdGenerator(_idGenerator);
       traceState = sdk.TraceState.empty();
     }
 

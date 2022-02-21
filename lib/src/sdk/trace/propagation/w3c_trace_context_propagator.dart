@@ -1,9 +1,5 @@
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
-import '../../../api/trace/nonrecording_span.dart';
-import '../span_id.dart';
-import '../trace_id.dart';
-import '../trace_state.dart';
 
 class W3CTraceContextPropagator implements api.TextMapPropagator {
   static const String _traceVersion = '00';
@@ -42,20 +38,22 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
         key: (element) => element.toString(),
         value: (element) => parentHeaderMatch.namedGroup(element));
 
-    final traceId = TraceId.fromString(parentHeaderFields[_traceIdFieldKey]) ??
-        TraceId(api.TraceId.invalid);
-    final parentId = SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
-        SpanId(api.SpanId.invalid);
+    final traceId =
+        api.TraceId.fromString(parentHeaderFields[_traceIdFieldKey]) ??
+            api.TraceId.invalid();
+    final parentId =
+        api.SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
+            api.SpanId.invalid();
     final traceFlags =
         int.parse(parentHeaderFields[_traceFlagsFieldKey], radix: 16) ??
             api.TraceFlags.none;
 
     final traceStateHeader = getter.get(carrier, _traceStateHeaderKey);
     final traceState = (traceStateHeader != null)
-        ? TraceState.fromString(traceStateHeader)
-        : TraceState.empty();
+        ? sdk.TraceState.fromString(traceStateHeader)
+        : sdk.TraceState.empty();
 
-    return context.withSpan(NonRecordingSpan(
+    return context.withSpan(api.NonRecordingSpan(
         sdk.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
   }
 

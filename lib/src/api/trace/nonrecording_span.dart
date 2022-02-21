@@ -1,7 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
-import '../../../sdk.dart' as sdk;
 
 /// A class representing a [api.Span] which should not be sampled or recorded.
 ///
@@ -10,14 +9,12 @@ import '../../../sdk.dart' as sdk;
 ///
 /// This class should not be exposed to consumers and is used internally to wrap
 /// [api.SpanContext] being injected or extracted for external calls.
-class NonRecordingSpan extends sdk.Span implements api.Span {
+class NonRecordingSpan implements api.Span {
   final api.Attributes _attributes = api.Attributes.empty();
   final api.SpanStatus _status = api.SpanStatus()..code = api.StatusCode.ok;
   final api.SpanContext _spanContext;
 
-  NonRecordingSpan(this._spanContext)
-      : super('NON_RECORDING', _spanContext, sdk.SpanId.invalid(), [], null,
-            null);
+  NonRecordingSpan(this._spanContext);
 
   @override
   api.Attributes get attributes => _attributes;
@@ -42,7 +39,7 @@ class NonRecordingSpan extends sdk.Span implements api.Span {
   bool get isRecording => false;
 
   @override
-  api.SpanId get parentSpanId => sdk.SpanId.invalid();
+  api.SpanId get parentSpanId => api.SpanId.invalid();
 
   @override
   void setStatus(api.StatusCode status, {String description}) {

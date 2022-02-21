@@ -4,13 +4,13 @@ import 'package:test/test.dart';
 
 void main() {
   test('Context contains a Span', () {
-    final traceId = sdk.TraceId([1, 2, 3]);
+    final traceId = api.TraceId([1, 2, 3]);
     final traceState = sdk.TraceState.fromString('test=onetwo');
     final testSpan = sdk.Span(
         'foo',
         sdk.SpanContext(
-            traceId, sdk.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
-        sdk.SpanId([4, 5, 6]),
+            traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
+        api.SpanId([4, 5, 6]),
         [],
         sdk.Resource(api.Attributes.empty()),
         sdk.InstrumentationLibrary(
@@ -25,12 +25,12 @@ void main() {
     expect(result.traceState, same(traceState));
   });
   test('Context does not contain a Span', () {
-    final traceId = sdk.TraceId([1, 2, 3]);
+    final traceId = api.TraceId([1, 2, 3]);
     final testSpan = sdk.Span(
         'foo',
-        sdk.SpanContext(traceId, sdk.SpanId([7, 8, 9]), api.TraceFlags.none,
+        sdk.SpanContext(traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none,
             sdk.TraceState.empty()),
-        sdk.SpanId([4, 5, 6]),
+        api.SpanId([4, 5, 6]),
         [],
         sdk.Resource(api.Attributes.empty()),
         sdk.InstrumentationLibrary(

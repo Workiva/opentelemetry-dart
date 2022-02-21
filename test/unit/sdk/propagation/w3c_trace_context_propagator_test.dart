@@ -5,8 +5,6 @@ import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
-import 'package:opentelemetry/src/sdk/trace/span_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:test/test.dart';
 
@@ -141,11 +139,11 @@ void main() {
     final testSpan = Span(
         'TestSpan',
         SpanContext(
-            TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
-            SpanId.fromString('0000000000c0ffee'),
+            api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
+            api.SpanId.fromString('0000000000c0ffee'),
             api.TraceFlags.sampled,
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
-        SpanId.fromString('00f067aa0ba902b7'),
+        api.SpanId.fromString('00f067aa0ba902b7'),
         [],
         Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
@@ -165,11 +163,11 @@ void main() {
     final testSpan = Span(
         'TestSpan',
         SpanContext(
-            TraceId.fromString('00000000000000000000000000000000'),
-            SpanId.fromString('0000000000000000'),
+            api.TraceId.fromString('00000000000000000000000000000000'),
+            api.SpanId.fromString('0000000000000000'),
             api.TraceFlags.none,
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
-        SpanId.fromString('0000000000c0ffee'),
+        api.SpanId.fromString('0000000000c0ffee'),
         [],
         Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));

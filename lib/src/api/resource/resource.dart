@@ -1,5 +1,5 @@
-import '../common/attributes.dart';
+import '../../../api.dart' as api;
 
 abstract class Resource {
-  Attributes get attributes;
+  api.Attributes get attributes;
 }

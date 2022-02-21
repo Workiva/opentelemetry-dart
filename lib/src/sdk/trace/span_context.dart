@@ -36,8 +36,8 @@ class SpanContext implements api.SpanContext {
 
   /// Construct an invalid [SpanContext].
   SpanContext.invalid()
-      : _spanId = sdk.SpanId.invalid(),
-        _traceId = sdk.TraceId.invalid(),
+      : _spanId = api.SpanId.invalid(),
+        _traceId = api.TraceId.invalid(),
         _traceFlags = api.TraceFlags.none,
         _traceState = sdk.TraceState.empty(),
         _isRemote = false;

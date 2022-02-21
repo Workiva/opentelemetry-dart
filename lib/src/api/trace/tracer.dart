@@ -1,13 +1,12 @@
-import '../../../src/api/context/context.dart';
-import '../common/attributes.dart';
-import 'span.dart';
+import '../../../api.dart' as api;
 
-/// An interface for creating [Span]s and propagating context in-process.
+/// An interface for creating [api.Span]s and propagating context in-process.
 ///
 /// Users may choose to use manual or automatic Context propagation. Because of
 /// that, this class offers APIs to facilitate both usages.
 abstract class Tracer {
-  /// Starts a new [Span] without setting it as the current span in this
+  /// Starts a new [api.Span] without setting it as the current span in this
   /// tracer's context.
-  Span startSpan(String name, {Context context, Attributes attributes});
+  api.Span startSpan(String name,
+      {api.Context context, api.Attributes attributes});
 }

@@ -1,11 +1,6 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:opentelemetry/src/api/instrumentation_library.dart';
 
-import '../common/attributes.dart';
-import '../resource/resource.dart';
-import 'span_context.dart';
-import 'span_id.dart';
-import 'span_status.dart';
+import '../../../api.dart' as api;
 
 /// A representation of a single operation within a trace.
 ///
@@ -19,7 +14,7 @@ abstract class Span {
   /// This context is an immutable, serializable identifier for this span that
   /// can be used to create new child spans and remains usable even after this
   /// span ends.
-  SpanContext get spanContext;
+  api.SpanContext get spanContext;
 
   /// Get the time when the span was closed, or null if still open.
   Int64 get endTime;
@@ -28,7 +23,7 @@ abstract class Span {
   Int64 get startTime;
 
   /// The parent span id.
-  SpanId get parentSpanId;
+  api.SpanId get parentSpanId;
 
   /// The name of the span.
   String get name;
@@ -40,26 +35,26 @@ abstract class Span {
   /// Sets the status to the [Span].
   ///
   /// If used, this will override the default [Span] status. Default status code
-  /// is [StatusCode.unset].
+  /// is [api.StatusCode.unset].
   ///
   /// Only the value of the last call will be recorded, and implementations are
   /// free to ignore previous calls.
-  void setStatus(StatusCode status, {String description});
+  void setStatus(api.StatusCode status, {String description});
 
   /// Retrieve the status of the [Span].
-  SpanStatus get status;
+  api.SpanStatus get status;
 
   /// Set metadata to be included on this span.
-  set attributes(Attributes attributes);
+  set attributes(api.Attributes attributes);
 
   /// Retrieve metadata included on this span.
-  Attributes get attributes;
+  api.Attributes get attributes;
 
   // Retrieve the resource on this span.
-  Resource get resource;
+  api.Resource get resource;
 
   // Retrieve the resource on this span.
-  InstrumentationLibrary get instrumentationLibrary;
+  api.InstrumentationLibrary get instrumentationLibrary;
 
   /// Marks the end of this span's execution.
   void end();

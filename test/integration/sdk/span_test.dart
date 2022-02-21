@@ -1,13 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/src/api/trace/span_status.dart';
-import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
-import 'package:opentelemetry/src/sdk/resource/resource.dart';
-import 'package:opentelemetry/src/sdk/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_context.dart';
-import 'package:opentelemetry/src/sdk/trace/span_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:test/test.dart';
 
 import '../../unit/mocks.dart';
@@ -16,15 +9,15 @@ void main() {
   test('span set and end time', () {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
-    final parentSpanId = SpanId([4, 5, 6]);
-    final span = Span(
+    final parentSpanId = api.SpanId([4, 5, 6]);
+    final span = sdk.Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]), api.TraceFlags.none,
-            TraceState.empty()),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
         parentSpanId,
         [mockProcessor1, mockProcessor2],
-        Resource(api.Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        sdk.Resource(api.Attributes.empty()),
+        sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
@@ -46,45 +39,47 @@ void main() {
   });
 
   test('span status', () {
-    final span = Span(
+    final span = sdk.Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]), api.TraceFlags.none,
-            TraceState.empty()),
-        SpanId([4, 5, 6]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
         [],
-        Resource(api.Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        sdk.Resource(api.Attributes.empty()),
+        sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     // Verify span status' defaults.
-    expect(span.status.code, equals(StatusCode.unset));
+    expect(span.status.code, equals(api.StatusCode.unset));
     expect(span.status.description, equals(null));
 
     // Verify that span status can be set to "Error".
-    span.setStatus(StatusCode.error, description: 'Something s\'ploded.');
-    expect(span.status.code, equals(StatusCode.error));
+    span.setStatus(api.StatusCode.error, description: 'Something s\'ploded.');
+    expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Something s\'ploded.'));
 
     // Verify that multiple errors update the span to the most recently set.
-    span.setStatus(StatusCode.error, description: 'Another error happened.');
-    expect(span.status.code, equals(StatusCode.error));
+    span.setStatus(api.StatusCode.error,
+        description: 'Another error happened.');
+    expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status cannot be set to "Unset" and that description
     // is ignored for statuses other than "Error".
-    span.setStatus(StatusCode.unset,
+    span.setStatus(api.StatusCode.unset,
         description: 'Oops.  Can we turn this back off?');
-    expect(span.status.code, equals(StatusCode.error));
+    expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status can be set to "Ok" and that description is
     // ignored for statuses other than "Error".
-    span.setStatus(StatusCode.ok, description: 'All done here.');
-    expect(span.status.code, equals(StatusCode.ok));
+    span.setStatus(api.StatusCode.ok, description: 'All done here.');
+    expect(span.status.code, equals(api.StatusCode.ok));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status cannot be changed once set to "Ok".
-    span.setStatus(StatusCode.error, description: 'Something else went wrong.');
-    expect(span.status.code, equals(StatusCode.ok));
+    span.setStatus(api.StatusCode.error,
+        description: 'Something else went wrong.');
+    expect(span.status.code, equals(api.StatusCode.ok));
     expect(span.status.description, equals('Another error happened.'));
   });
 
@@ -109,14 +104,14 @@ void main() {
       'Seventh': [7.1, 7.2],
       'Eighth': [8, 8],
     };
-    final span = Span(
+    final span = sdk.Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]), api.TraceFlags.none,
-            TraceState.empty()),
-        SpanId([4, 5, 6]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
         [],
-        Resource(api.Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        sdk.Resource(api.Attributes.empty()),
+        sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     expect(span.attributes.keys.length, isZero);
 

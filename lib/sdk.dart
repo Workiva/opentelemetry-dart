@@ -18,12 +18,10 @@ export 'src/sdk/trace/samplers/parent_based_sampler.dart'
 export 'src/sdk/trace/samplers/sampling_result.dart' show SamplingResult;
 export 'src/sdk/trace/span.dart' show Span;
 export 'src/sdk/trace/span_context.dart' show SpanContext;
-export 'src/sdk/trace/span_id.dart' show SpanId;
 export 'src/sdk/trace/span_processors/batch_processor.dart'
     show BatchSpanProcessor;
 export 'src/sdk/trace/span_processors/simple_processor.dart'
     show SimpleSpanProcessor;
 export 'src/sdk/trace/tracer.dart' show Tracer;
 export 'src/sdk/trace/tracer_provider.dart' show TracerProvider;
-export 'src/sdk/trace/trace_id.dart' show TraceId;
 export 'src/sdk/trace/trace_state.dart' show TraceState;

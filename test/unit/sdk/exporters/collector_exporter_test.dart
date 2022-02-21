@@ -33,9 +33,9 @@ void main() {
         sdk.InstrumentationLibrary('library_name', 'library_version');
     final span1 = sdk.Span(
         'foo',
-        sdk.SpanContext(sdk.TraceId([1, 2, 3]), sdk.SpanId([7, 8, 9]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
-        sdk.SpanId([4, 5, 6]),
+        api.SpanId([4, 5, 6]),
         [],
         resource,
         instrumentationLibrary,
@@ -44,9 +44,9 @@ void main() {
       ..end();
     final span2 = sdk.Span(
         'baz',
-        sdk.SpanContext(sdk.TraceId([1, 2, 3]), sdk.SpanId([10, 11, 12]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
             api.TraceFlags.none, sdk.TraceState.empty()),
-        sdk.SpanId([4, 5, 6]),
+        api.SpanId([4, 5, 6]),
         [],
         resource,
         instrumentationLibrary,
@@ -110,9 +110,9 @@ void main() {
   test('does not send spans when shutdown', () {
     final span = sdk.Span(
         'foo',
-        sdk.SpanContext(sdk.TraceId([1, 2, 3]), sdk.SpanId([7, 8, 9]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
-        sdk.SpanId([4, 5, 6]),
+        api.SpanId([4, 5, 6]),
         [],
         sdk.Resource(api.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'))

@@ -1,4 +1,3 @@
-import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:test/test.dart';
 
@@ -16,7 +15,7 @@ class MockIdGenerator implements api.IdGenerator {
 
 void main() {
   test('create with int list', () {
-    final testTraceId = TraceId([1, 2, 3]);
+    final testTraceId = api.TraceId([1, 2, 3]);
 
     expect(testTraceId.get(), equals([1, 2, 3]));
     expect(testTraceId.isValid, isTrue);
@@ -24,7 +23,7 @@ void main() {
   });
 
   test('create from id generator', () {
-    final testTraceId = TraceId.fromIdGenerator(MockIdGenerator());
+    final testTraceId = api.TraceId.fromIdGenerator(MockIdGenerator());
 
     expect(testTraceId.get(),
         equals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]));
@@ -33,7 +32,7 @@ void main() {
   });
 
   test('create from string', () {
-    final testTraceId = TraceId.fromString('010203');
+    final testTraceId = api.TraceId.fromString('010203');
 
     expect(testTraceId.get(),
         equals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3]));
@@ -42,7 +41,7 @@ void main() {
   });
 
   test('create invalid id', () {
-    final testTraceId = TraceId.invalid();
+    final testTraceId = api.TraceId.invalid();
 
     expect(testTraceId.get(),
         equals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
