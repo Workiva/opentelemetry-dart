@@ -1,6 +1,6 @@
 import '../../../api.dart' as api;
 
-/// Representation of the context of the context of an individual span.
+/// Representation of the context of an individual span.
 abstract class SpanContext {
   /// Get the ID of the span.
   api.SpanId get spanId;

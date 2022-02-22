@@ -53,7 +53,7 @@ abstract class Span {
   // Retrieve the resource on this span.
   api.Resource get resource;
 
-  // Retrieve the resource on this span.
+  // Retrieve the instrumentation library on this span.
   api.InstrumentationLibrary get instrumentationLibrary;
 
   /// Marks the end of this span's execution.
