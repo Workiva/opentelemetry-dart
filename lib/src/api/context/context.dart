@@ -9,7 +9,7 @@
 /// requirements of immutability and being able to read and write values:
 ///
 /// - Immutable: a Zone's values are set when the Zone is created and cannot be
-/// changed aftewards.
+/// changed afterwards.
 /// - Reading and writing values: a Zone implements the `[]` operator, allowing
 /// values to be read directly from it like a [Map], and writing values is
 /// possible only by forking another Zone and providing values to add/override

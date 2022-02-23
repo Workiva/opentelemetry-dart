@@ -53,27 +53,46 @@ class Tracer implements api.Tracer {
         attributes: attributes);
   }
 
-  /// Records a span of the given [name] for the given function and marks the
-  /// span as errored if an exception occurs.
-  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
-      {api.Context context}) {
+  /// Records a span of the given [name] for the given synchronous function
+  /// and marks the span as errored if an exception occurs.
+  R traceSync<R>(String name, R Function() fn, {api.Context context}) {
     final operationContext = context ?? api.Context.current;
+    final span = startSpan(name, context: operationContext);
 
-    return operationContext.execute(() async {
-      final span = startSpan(name, context: operationContext);
-      try {
-        return await operationContext.withSpan(span).execute(fn);
-      } catch (e, s) {
-        span.setStatus(api.StatusCode.error, description: e.toString());
-        span.attributes.addAll([
-          api.Attribute.fromBoolean('error', true),
-          api.Attribute.fromString('exception', e.toString()),
-          api.Attribute.fromString('stacktrace', s.toString()),
-        ]);
-        rethrow;
-      } finally {
-        span.end();
-      }
-    });
+    try {
+      return operationContext.withSpan(span).execute(fn);
+    } catch (e, s) {
+      span.setStatus(api.StatusCode.error, description: e.toString());
+      span.attributes.addAll([
+        api.Attribute.fromBoolean('error', true),
+        api.Attribute.fromString('exception', e.toString()),
+        api.Attribute.fromString('stacktrace', s.toString()),
+      ]);
+      rethrow;
+    } finally {
+      span.end();
+    }
+  }
+
+  /// Records a span of the given [name] for the given asynchronous function
+  /// and marks the span as errored if an exception occurs.
+  Future<R> traceAsync<R>(String name, Future<R> Function() fn,
+      {api.Context context}) async {
+    final operationContext = context ?? api.Context.current;
+    final span = startSpan(name, context: operationContext);
+
+    try {
+      return await operationContext.withSpan(span).execute(fn);
+    } catch (e, s) {
+      span.setStatus(api.StatusCode.error, description: e.toString());
+      span.attributes.addAll([
+        api.Attribute.fromBoolean('error', true),
+        api.Attribute.fromString('exception', e.toString()),
+        api.Attribute.fromString('stacktrace', s.toString()),
+      ]);
+      rethrow;
+    } finally {
+      span.end();
+    }
   }
 }
