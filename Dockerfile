@@ -25,7 +25,7 @@ ARG GIT_MERGE_HEAD
 ARG GIT_MERGE_BRANCH
 
 RUN pub global activate --hosted-url https://pub.workiva.org semver_audit ^2.2.0
-RUN pub global run semver_audit report --repo Workiva/opentelemetry
+RUN pub global run semver_audit report --repo Workiva/opentelemetry-dart
 
 ARG BUILD_ARTIFACTS_PUB=/build/pub_package.pub.tgz
 
