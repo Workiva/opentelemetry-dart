@@ -1,16 +1,14 @@
-import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
-import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
-import 'package:opentelemetry/src/sdk/resource/resource.dart';
-import 'package:opentelemetry/src/sdk/trace/id_generator.dart';
-import 'package:opentelemetry/src/sdk/trace/samplers/always_on_sampler.dart';
-import 'package:opentelemetry/src/sdk/trace/tracer.dart';
+import 'package:opentelemetry/api.dart' as api;
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:test/test.dart';
 
 void main() {
   test('startSpan new trace', () {
-    final tracer = Tracer([], Resource(Attributes.empty()), AlwaysOnSampler(),
-        IdGenerator(), InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([],
+        sdk.Resource(api.Attributes.empty()),
+        sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
 
     final span = tracer.startSpan('foo');
 
@@ -21,11 +19,14 @@ void main() {
   });
 
   test('startSpan child span', () {
-    final tracer = Tracer([], Resource(Attributes.empty()), AlwaysOnSampler(),
-        IdGenerator(), InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([],
+        sdk.Resource(api.Attributes.empty()),
+        sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(),
+        sdk.InstrumentationLibrary('name', 'version'));
 
     final parentSpan = tracer.startSpan('foo');
-    final context = Context.current.withSpan(parentSpan);
+    final context = api.Context.current.withSpan(parentSpan);
 
     final childSpan = tracer.startSpan('bar', context: context);
 

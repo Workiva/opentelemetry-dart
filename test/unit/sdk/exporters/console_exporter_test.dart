@@ -1,16 +1,7 @@
 import 'dart:async';
 
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
-import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
-import 'package:opentelemetry/src/sdk/resource/resource.dart';
-import 'package:opentelemetry/src/sdk/trace/exporters/console_exporter.dart';
-import 'package:opentelemetry/src/sdk/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_context.dart';
-import 'package:opentelemetry/src/sdk/trace/span_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
-import 'package:opentelemetry/src/api/trace/trace_flags.dart' as api;
-import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
+import 'package:opentelemetry/api.dart' as api;
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:test/test.dart';
 
 List<String> printLogs = [];
@@ -29,35 +20,35 @@ void main() {
   });
 
   test('prints', overridePrint(() {
-    final span = Span(
+    final span = sdk.Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
-        SpanId([4, 5, 6]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
         [],
-        Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'))
+        sdk.Resource(api.Attributes.empty()),
+        sdk.InstrumentationLibrary('library_name', 'library_version'))
       ..end();
 
-    ConsoleExporter().export([span]);
+    sdk.ConsoleExporter().export([span]);
 
     final expected = RegExp(
         r'{traceId: 010203, parentId: 040506, name: foo, id: 070809, timestamp: \d+, duration: \d+, flags: 00, state: , status: StatusCode.unset}');
     expect(printLogs.length, 1);
-    expect(expected.hasMatch(printLogs[0]), true);
+    expect(printLogs[0], matches(expected));
   }));
 
   test('does not print after shutdown', overridePrint(() {
-    final span = Span(
+    final span = sdk.Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
-        SpanId([4, 5, 6]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
         [],
-        Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'));
+        sdk.Resource(api.Attributes.empty()),
+        sdk.InstrumentationLibrary('library_name', 'library_version'));
 
-    ConsoleExporter()
+    sdk.ConsoleExporter()
       ..shutdown()
       ..export([span]);
 

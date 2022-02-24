@@ -3,16 +3,14 @@ import 'dart:math';
 
 import 'package:logging/logging.dart';
 
-import '../../../api/exporters/span_exporter.dart';
-import '../../../api/span_processors/span_processor.dart';
-import '../../../api/trace/span.dart';
+import '../../../../api.dart' as api;
 
-class BatchSpanProcessor implements SpanProcessor {
+class BatchSpanProcessor implements api.SpanProcessor {
   final _log = Logger('opentelemetry.BatchSpanProcessor');
 
-  final SpanExporter _exporter;
+  final api.SpanExporter _exporter;
   bool _isShutdown = false;
-  final List<Span> _spanBuffer = [];
+  final List<api.Span> _spanBuffer = [];
   Timer _timer;
 
   int _maxExportBatchSize = 512;
@@ -40,7 +38,7 @@ class BatchSpanProcessor implements SpanProcessor {
   }
 
   @override
-  void onEnd(Span span) {
+  void onEnd(api.Span span) {
     if (_isShutdown) {
       return;
     }
@@ -58,7 +56,7 @@ class BatchSpanProcessor implements SpanProcessor {
     _exporter.shutdown();
   }
 
-  void _addToBuffer(Span span) {
+  void _addToBuffer(api.Span span) {
     if (_spanBuffer.length >= _maxQueueSize) {
       // Buffer is full, drop span.
       _log.warning(

@@ -23,8 +23,7 @@
 /// OpenTelemetry SDKs.
 import 'dart:async';
 
-import 'package:opentelemetry/src/sdk/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_context.dart';
+import '../../../api.dart' as api;
 
 /// [ContextKey] used to store spans in a [Context].
 final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
@@ -65,20 +64,20 @@ class Context {
   Context setValue(ContextKey key, Object value) =>
       Context._(_zone.fork(zoneValues: {key: value}));
 
-  /// Returns a new [Context] created from this one with the given [Span]
+  /// Returns a new [Context] created from this one with the given [api.Span]
   /// set.
-  Context withSpan(Span span) => setValue(spanKey, span);
+  Context withSpan(api.Span span) => setValue(spanKey, span);
 
   /// Execute a function [fn] within this [Context] and return its result.
   R execute<R>(R Function() fn) => _zone.run(fn);
 
-  /// Get the [Span] attached to this [Context], or null if no such
-  /// [Span] exists.
-  Span get span => getValue(spanKey);
+  /// Get the [api.Span] attached to this [Context], or null if no such
+  /// [api.Span] exists.
+  api.Span get span => getValue(spanKey);
 
-  /// Get the [SpanContext] from this [Context], or null if no such
-  /// [SpanContext] exists.
-  SpanContext get spanContext => getValue(spanKey)?.spanContext;
+  /// Get the [api.SpanContext] from this [Context], or null if no such
+  /// [api.SpanContext] exists.
+  api.SpanContext get spanContext => getValue(spanKey)?.spanContext;
 }
 
 class ContextKey {

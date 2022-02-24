@@ -1,13 +1,10 @@
 import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
-import 'package:opentelemetry/src/sdk/trace/span_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:test/test.dart';
 
@@ -52,8 +49,8 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
-    expect(resultSpan.spanContext.traceFlags.isValid, isTrue);
-    expect(resultSpan.spanContext.traceFlags.sampled, isTrue);
+    expect(resultSpan.spanContext.traceFlags & api.TraceFlags.sampled,
+        equals(api.TraceFlags.sampled));
     expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
@@ -77,8 +74,8 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('00000000000000000000000000000000'));
-    expect(resultSpan.spanContext.traceFlags.isValid, isFalse);
-    expect(resultSpan.spanContext.traceFlags.sampled, isFalse);
+    expect(resultSpan.spanContext.traceFlags & api.TraceFlags.sampled,
+        equals(api.TraceFlags.sampled));
     expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
@@ -131,8 +128,8 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
-    expect(resultSpan.spanContext.traceFlags.isValid, isTrue);
-    expect(resultSpan.spanContext.traceFlags.sampled, isTrue);
+    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
+        equals(api.TraceFlags.sampled));
     // Extract should not allow a TraceState with malformed IDs to be attached to
     // a Context.  Thus, there should be an empty TraceState on this context.
     expect(resultSpan.spanContext.traceState.toString(), equals(''));
@@ -142,13 +139,13 @@ void main() {
     final testSpan = Span(
         'TestSpan',
         SpanContext(
-            TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
-            SpanId.fromString('0000000000c0ffee'),
-            TraceFlags(api.TraceFlags.sampledFlag),
+            api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
+            api.SpanId.fromString('0000000000c0ffee'),
+            api.TraceFlags.sampled,
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
-        SpanId.fromString('00f067aa0ba902b7'),
+        api.SpanId.fromString('00f067aa0ba902b7'),
         [],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
@@ -166,13 +163,13 @@ void main() {
     final testSpan = Span(
         'TestSpan',
         SpanContext(
-            TraceId.fromString('00000000000000000000000000000000'),
-            SpanId.fromString('0000000000000000'),
-            TraceFlags(api.TraceFlags.invalid),
+            api.TraceId.fromString('00000000000000000000000000000000'),
+            api.SpanId.fromString('0000000000000000'),
+            api.TraceFlags.none,
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
-        SpanId.fromString('0000000000c0ffee'),
+        api.SpanId.fromString('0000000000c0ffee'),
         [],
-        Resource(Attributes.empty()),
+        Resource(api.Attributes.empty()),
         InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
@@ -181,7 +178,7 @@ void main() {
         .inject(testContext, testCarrier, TestingInjector());
 
     expect(testCarrier['traceparent'],
-        equals('00-00000000000000000000000000000000-0000000000000000-ff'));
+        equals('00-00000000000000000000000000000000-0000000000000000-00'));
     expect(testCarrier['tracestate'],
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });

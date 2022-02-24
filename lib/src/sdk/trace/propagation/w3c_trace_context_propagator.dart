@@ -1,10 +1,5 @@
 import '../../../../api.dart' as api;
-import '../../../api/trace/nonrecording_span.dart';
-import '../span_context.dart';
-import '../span_id.dart';
-import '../trace_flags.dart';
-import '../trace_id.dart';
-import '../trace_state.dart';
+import '../../../../sdk.dart' as sdk;
 
 class W3CTraceContextPropagator implements api.TextMapPropagator {
   static const String _traceVersion = '00';
@@ -21,7 +16,7 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
       RegExp('^(?<$_traceVersionFieldKey>[0-9a-f]{2})-'
           '(?<$_traceIdFieldKey>[0-9a-f]{${api.TraceId.sizeBits}})-'
           '(?<$_parentIdFieldKey>[0-9a-f]{${api.SpanId.sizeBits}})-'
-          '(?<$_traceFlagsFieldKey>[0-9a-f]{${api.TraceFlags.size}})\$');
+          '(?<$_traceFlagsFieldKey>[0-9a-f]{${2}})\$');
 
   @override
   api.Context extract(
@@ -43,21 +38,23 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
         key: (element) => element.toString(),
         value: (element) => parentHeaderMatch.namedGroup(element));
 
-    final traceId = TraceId.fromString(parentHeaderFields[_traceIdFieldKey]) ??
-        TraceId(api.TraceId.invalid);
-    final parentId = SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
-        SpanId(api.SpanId.invalid);
+    final traceId =
+        api.TraceId.fromString(parentHeaderFields[_traceIdFieldKey]) ??
+            api.TraceId.invalid();
+    final parentId =
+        api.SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
+            api.SpanId.invalid();
     final traceFlags =
-        TraceFlags.fromString(parentHeaderFields[_traceFlagsFieldKey]) ??
-            TraceFlags(api.TraceFlags.sampledFlag);
+        int.parse(parentHeaderFields[_traceFlagsFieldKey], radix: 16) ??
+            api.TraceFlags.none;
 
     final traceStateHeader = getter.get(carrier, _traceStateHeaderKey);
     final traceState = (traceStateHeader != null)
-        ? TraceState.fromString(traceStateHeader)
-        : TraceState.empty();
+        ? sdk.TraceState.fromString(traceStateHeader)
+        : sdk.TraceState.empty();
 
-    return context.withSpan(NonRecordingSpan(
-        SpanContext.remote(traceId, parentId, traceFlags, traceState)));
+    return context.withSpan(api.NonRecordingSpan(
+        sdk.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
   }
 
   @override
@@ -65,8 +62,12 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
     final spanContext = context.spanContext;
 
     setter
-      ..set(carrier, _traceParentHeaderKey,
-          '$_traceVersion-${spanContext.traceId.toString()}-${spanContext.spanId.toString()}-${spanContext.traceFlags.toString()}')
+      ..set(
+          carrier,
+          _traceParentHeaderKey,
+          '$_traceVersion-${spanContext.traceId.toString()}-'
+          '${spanContext.spanId.toString()}-'
+          '${spanContext.traceFlags.toRadixString(16).padLeft(2, '0')}')
       ..set(carrier, _traceStateHeaderKey, spanContext.traceState.toString());
   }
 }

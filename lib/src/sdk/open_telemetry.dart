@@ -1,16 +1,31 @@
-import '../../sdk.dart';
+import '../../api.dart' as api;
+import '../../sdk.dart' as sdk;
 
-final TracerProvider _noopTracerProvider = TracerProvider();
-TracerProvider _tracerProvider = _noopTracerProvider;
+final api.TracerProvider _noopTracerProvider = sdk.TracerProvider();
+api.TracerProvider _tracerProvider = _noopTracerProvider;
 
-void registerGlobalTracerProvider(TracerProvider tracerProvider) {
+void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
   if (_tracerProvider != _noopTracerProvider) {
     throw StateError('A global TracerProvider has already been created. '
         'registerGlobalTracerProvider must be called only once before any '
-        'calls to getter globalTracerProvider.');
+        'calls to the getter globalTracerProvider.');
   }
 
   _tracerProvider = tracerProvider;
 }
 
-TracerProvider get globalTracerProvider => _tracerProvider;
+api.TracerProvider get globalTracerProvider => _tracerProvider;
+
+api.TextMapPropagator _textMapPropagator;
+
+void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
+  if (_textMapPropagator != null) {
+    throw StateError('A global TextMapPropagator has already been created. '
+        'registerGlobalTextMapPropagator must be called only once before any '
+        'calls to the getter globalTextMapPropagator.');
+  }
+
+  _textMapPropagator = textMapPropagator;
+}
+
+api.TextMapPropagator get globalTextMapPropagator => _textMapPropagator;

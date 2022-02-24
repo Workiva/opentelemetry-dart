@@ -1,4 +1,4 @@
-import '../../../src/api/trace/trace_state.dart' as api;
+import '../../../api.dart' as api;
 
 /// Representation of the state of a trace.
 ///

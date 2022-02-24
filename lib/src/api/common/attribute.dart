@@ -1,5 +1,5 @@
 /// A representation of a single piece of metadata attached to trace span.
-abstract class Attribute {
+class Attribute {
   final String key;
   final Object value;
 

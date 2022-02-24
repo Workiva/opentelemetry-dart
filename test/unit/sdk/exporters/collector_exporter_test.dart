@@ -1,10 +1,7 @@
 import 'package:mockito/mockito.dart';
-import 'package:opentelemetry/src/api/trace/trace_flags.dart' as api;
-import 'package:opentelemetry/src/sdk/common/attribute.dart';
-import 'package:opentelemetry/src/sdk/common/attributes.dart';
-import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
-import 'package:opentelemetry/src/sdk/resource/resource.dart';
-import 'package:opentelemetry/src/sdk/trace/exporters/collector_exporter.dart';
+
+import 'package:opentelemetry/api.dart' as api;
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart';
 import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/common/v1/common.pb.dart'
     as pb_common;
@@ -12,12 +9,6 @@ import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/resour
     as pb_resource;
 import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/trace/v1/trace.pb.dart'
     as pb;
-import 'package:opentelemetry/src/sdk/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_context.dart';
-import 'package:opentelemetry/src/sdk/trace/span_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_flags.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_id.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
@@ -36,33 +27,34 @@ void main() {
   });
 
   test('sends spans', () {
-    final resource = Resource(
-        Attributes.empty()..add(Attribute.fromString('service.name', 'bar')));
+    final resource = sdk.Resource(api.Attributes.empty()
+      ..add(api.Attribute.fromString('service.name', 'bar')));
     final instrumentationLibrary =
-        InstrumentationLibrary('library_name', 'library_version');
-    final span1 = Span(
+        sdk.InstrumentationLibrary('library_name', 'library_version');
+    final span1 = sdk.Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
-        SpanId([4, 5, 6]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
         [],
         resource,
         instrumentationLibrary,
-        attributes: Attributes.empty()..add(Attribute.fromString('foo', 'bar')))
+        attributes: api.Attributes.empty()
+          ..add(api.Attribute.fromString('foo', 'bar')))
       ..end();
-    final span2 = Span(
+    final span2 = sdk.Span(
         'baz',
-        SpanContext(TraceId([1, 2, 3]), SpanId([10, 11, 12]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
-        SpanId([4, 5, 6]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
         [],
         resource,
         instrumentationLibrary,
-        attributes: Attributes.empty()
-          ..add(Attribute.fromBoolean('bool', true)))
+        attributes: api.Attributes.empty()
+          ..add(api.Attribute.fromBoolean('bool', true)))
       ..end();
 
-    CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
+    sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
 
     final expectedBody = ExportTraceServiceRequest(resourceSpans: [
       pb.ResourceSpans(
@@ -116,17 +108,17 @@ void main() {
   });
 
   test('does not send spans when shutdown', () {
-    final span = Span(
+    final span = sdk.Span(
         'foo',
-        SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-            TraceFlags(api.TraceFlags.none), TraceState.empty()),
-        SpanId([4, 5, 6]),
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
         [],
-        Resource(Attributes.empty()),
-        InstrumentationLibrary('library_name', 'library_version'))
+        sdk.Resource(api.Attributes.empty()),
+        sdk.InstrumentationLibrary('library_name', 'library_version'))
       ..end();
 
-    CollectorExporter(uri, httpClient: mockClient)
+    sdk.CollectorExporter(uri, httpClient: mockClient)
       ..shutdown()
       ..export([span]);
 

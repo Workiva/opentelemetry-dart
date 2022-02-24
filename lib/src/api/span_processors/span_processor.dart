@@ -1,9 +1,9 @@
-import '../trace/span.dart';
+import '../../../api.dart' as api;
 
 abstract class SpanProcessor {
   void onStart();
 
-  void onEnd(Span span);
+  void onEnd(api.Span span);
 
   void shutdown();
 

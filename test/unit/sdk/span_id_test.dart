@@ -1,4 +1,3 @@
-import 'package:opentelemetry/src/sdk/trace/span_id.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:test/test.dart';
 
@@ -16,7 +15,7 @@ class MockIdGenerator implements api.IdGenerator {
 
 void main() {
   test('create with int list', () {
-    final testSpanId = SpanId([1, 2, 3]);
+    final testSpanId = api.SpanId([1, 2, 3]);
 
     expect(testSpanId.get(), equals([1, 2, 3]));
     expect(testSpanId.isValid, isTrue);
@@ -24,7 +23,7 @@ void main() {
   });
 
   test('create from id generator', () {
-    final testSpanId = SpanId.fromIdGenerator(MockIdGenerator());
+    final testSpanId = api.SpanId.fromIdGenerator(MockIdGenerator());
 
     expect(testSpanId.get(), equals([1, 2, 3, 4, 5, 6, 7, 8]));
     expect(testSpanId.isValid, isTrue);
@@ -32,7 +31,7 @@ void main() {
   });
 
   test('create from string', () {
-    final testSpanId = SpanId.fromString('010203');
+    final testSpanId = api.SpanId.fromString('010203');
 
     expect(testSpanId.get(), equals([0, 0, 0, 0, 0, 1, 2, 3]));
     expect(testSpanId.isValid, isTrue);
@@ -40,7 +39,7 @@ void main() {
   });
 
   test('create invalid id', () {
-    final testSpanId = SpanId.invalid();
+    final testSpanId = api.SpanId.invalid();
 
     expect(testSpanId.get(), equals([0, 0, 0, 0, 0, 0, 0, 0]));
     expect(testSpanId.isValid, isFalse);
@@ -48,7 +47,7 @@ void main() {
   });
 
   test('create root id', () {
-    final testSpanId = SpanId.root();
+    final testSpanId = api.SpanId.root();
 
     expect(testSpanId.get(), equals([]));
     expect(testSpanId.isValid, true);

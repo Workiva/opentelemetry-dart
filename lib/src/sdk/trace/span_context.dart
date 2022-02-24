@@ -1,28 +1,25 @@
 import '../../../api.dart' as api;
-import 'span_id.dart';
-import 'trace_flags.dart';
-import 'trace_id.dart';
-import 'trace_state.dart';
+import '../../../sdk.dart' as sdk;
 
 /// Representation of the context of the context of an individual span.
 class SpanContext implements api.SpanContext {
-  final SpanId _spanId;
-  final TraceId _traceId;
-  final TraceFlags _traceFlags;
-  final TraceState _traceState;
+  final api.SpanId _spanId;
+  final api.TraceId _traceId;
+  final int _traceFlags;
+  final api.TraceState _traceState;
   final bool _isRemote;
 
   @override
-  TraceId get traceId => _traceId;
+  api.TraceId get traceId => _traceId;
 
   @override
-  SpanId get spanId => _spanId;
+  api.SpanId get spanId => _spanId;
 
   @override
-  TraceFlags get traceFlags => _traceFlags;
+  int get traceFlags => _traceFlags;
 
   @override
-  TraceState get traceState => _traceState;
+  api.TraceState get traceState => _traceState;
 
   @override
   bool get isValid => spanId.isValid && traceId.isValid;
@@ -38,8 +35,12 @@ class SpanContext implements api.SpanContext {
       : _isRemote = true;
 
   /// Construct an invalid [SpanContext].
-  factory SpanContext.invalid() => SpanContext(TraceId.invalid(),
-      SpanId.invalid(), TraceFlags.invalid(), TraceState.empty());
+  SpanContext.invalid()
+      : _spanId = api.SpanId.invalid(),
+        _traceId = api.TraceId.invalid(),
+        _traceFlags = api.TraceFlags.none,
+        _traceState = sdk.TraceState.empty(),
+        _isRemote = false;
 
   @override
   bool get isRemote => _isRemote;

@@ -1,22 +1,18 @@
-import 'span_id.dart';
-import 'trace_flags.dart';
-import 'trace_id.dart';
-import 'trace_state.dart';
+import '../../../api.dart' as api;
 
-/// Representation of the context of the context of an individual span.
+/// Representation of the context of an individual span.
 abstract class SpanContext {
   /// Get the ID of the span.
-  SpanId get spanId;
+  api.SpanId get spanId;
 
   /// Get the ID of the trace the span is a part of.
-  TraceId get traceId;
+  api.TraceId get traceId;
 
-  /// Get flags (sampling, trace level, etc.) set for the trace the span is a
-  /// part of.
-  TraceFlags get traceFlags;
+  /// Get W3C trace context flags used in propagation represented by a one byte bitmap.
+  int get traceFlags;
 
   /// Get the state of the entire trace.
-  TraceState get traceState;
+  api.TraceState get traceState;
 
   bool get isValid;
 

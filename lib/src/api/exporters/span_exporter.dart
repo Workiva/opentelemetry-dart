@@ -1,7 +1,7 @@
-import '../trace/span.dart';
+import '../../../api.dart' as api;
 
 abstract class SpanExporter {
-  void export(List<Span> spans);
+  void export(List<api.Span> spans);
 
   void shutdown();
 }
