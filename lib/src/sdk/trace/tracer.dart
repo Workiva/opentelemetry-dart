@@ -55,6 +55,7 @@ class Tracer implements api.Tracer {
 
   /// Records a span of the given [name] for the given synchronous function
   /// and marks the span as errored if an exception occurs.
+  @override
   R traceSync<R>(String name, R Function() fn, {api.Context context}) {
     final operationContext = context ?? api.Context.current;
     final span = startSpan(name, context: operationContext);
@@ -76,6 +77,7 @@ class Tracer implements api.Tracer {
 
   /// Records a span of the given [name] for the given asynchronous function
   /// and marks the span as errored if an exception occurs.
+  @override
   Future<R> traceAsync<R>(String name, Future<R> Function() fn,
       {api.Context context}) async {
     final operationContext = context ?? api.Context.current;

@@ -9,4 +9,13 @@ abstract class Tracer {
   /// tracer's context.
   api.Span startSpan(String name,
       {api.Context context, api.Attributes attributes});
+
+  /// Records a span of the given [name] for the given synchronous function
+  /// and marks the span as errored if an exception occurs.
+  R traceSync<R>(String name, R Function() fn, {api.Context context});
+
+  /// Records a span of the given [name] for the given asynchronous function
+  /// and marks the span as errored if an exception occurs.
+  Future<R> traceAsync<R>(String name, Future<R> Function() fn,
+      {api.Context context});
 }
