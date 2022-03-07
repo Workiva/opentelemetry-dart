@@ -50,12 +50,15 @@ abstract class Span {
   /// Retrieve metadata included on this span.
   api.Attributes get attributes;
 
-  // Retrieve the resource on this span.
+  /// Retrieve the resource on this span.
   api.Resource get resource;
 
-  // Retrieve the instrumentation library on this span.
+  /// Retrieve the instrumentation library on this span.
   api.InstrumentationLibrary get instrumentationLibrary;
 
   /// Marks the end of this span's execution.
   void end();
+
+  /// Record metadata about an exception occurring during this span.
+  void recordException(dynamic exception, {StackTrace stackTrace});
 }

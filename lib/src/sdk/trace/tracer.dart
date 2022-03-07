@@ -63,12 +63,7 @@ class Tracer implements api.Tracer {
     try {
       return operationContext.withSpan(span).execute(fn);
     } catch (e, s) {
-      span.setStatus(api.StatusCode.error, description: e.toString());
-      span.attributes.addAll([
-        api.Attribute.fromBoolean('error', true),
-        api.Attribute.fromString('exception', e.toString()),
-        api.Attribute.fromString('stacktrace', s.toString()),
-      ]);
+      span.recordException(e, stackTrace: s);
       rethrow;
     } finally {
       span.end();
@@ -84,14 +79,11 @@ class Tracer implements api.Tracer {
     final span = startSpan(name, context: operationContext);
 
     try {
+      // Operation must be awaited here to ensure the catch block intercepts
+      // errors thrown by [fn].
       return await operationContext.withSpan(span).execute(fn);
     } catch (e, s) {
-      span.setStatus(api.StatusCode.error, description: e.toString());
-      span.attributes.addAll([
-        api.Attribute.fromBoolean('error', true),
-        api.Attribute.fromString('exception', e.toString()),
-        api.Attribute.fromString('stacktrace', s.toString()),
-      ]);
+      span.recordException(e, stackTrace: s);
       rethrow;
     } finally {
       span.end();
