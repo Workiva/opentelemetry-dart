@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
@@ -43,28 +42,19 @@ void main() {
         allOf([isNotNull, isNot(equals(parentSpan.spanContext.spanId))]));
   });
 
-  test('traceSync execution timing', () {
+  test('traceSync execution', () {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    final startTime = DateTime.now();
-    final waitDuration = Duration(seconds: 1);
-    Duration traceCallbackDuration;
     sdk.Span span;
 
     tracer.traceSync('syncTrace', () {
       span = api.Context.current.span;
-      sleep(waitDuration);
-      traceCallbackDuration = DateTime.now().difference(startTime);
-    }, context: api.Context.root);
-    final traceExecutionDuration = DateTime.now().difference(startTime);
+    });
 
-    expect(traceExecutionDuration, greaterThan(traceCallbackDuration));
-    expect(traceExecutionDuration, greaterThan(waitDuration));
-    expect((span.endTime - span.startTime).toInt() / 1000000,
-        closeTo(waitDuration.inSeconds, 0.02));
+    expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
   });
 
   test('traceSync looped execution timing', () {
@@ -73,19 +63,17 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    final waitDuration = Duration(seconds: 1);
     final spans = <sdk.Span>[];
 
     for (var i = 0; i < 5; i++) {
       tracer.traceSync('syncTrace', () {
         spans.add(api.Context.current.span);
-        sleep(waitDuration);
       });
     }
 
-    for (final span in spans) {
-      expect((span.endTime - span.startTime).toInt() / 1000000,
-          closeTo(waitDuration.inSeconds, 0.02));
+    for (var i = 1; i < spans.length; i++) {
+      expect(spans[i].startTime, greaterThan(spans[i - 1].startTime));
+      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime));
     }
   });
 
@@ -101,7 +89,7 @@ void main() {
         () => tracer.traceSync('syncTrace', () {
               span = api.Context.current.span;
               throw Exception('Oh noes!');
-            }, context: api.Context.root),
+            }),
         throwsException);
     expect(span.endTime, isNotNull);
     expect(span.status.code, equals(api.StatusCode.error));
@@ -110,29 +98,19 @@ void main() {
     expect(span.attributes.get('exception'), equals('Exception: Oh noes!'));
   });
 
-  test('traceAsync execution timing', () async {
+  test('traceAsync execution', () async {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    final startTime = DateTime.now();
-    final waitDuration = Duration(seconds: 1);
-    Duration traceCallbackDuration;
     sdk.Span span;
 
-    final asyncTrace = tracer.traceAsync('asyncTrace', () async {
+    await tracer.traceAsync('asyncTrace', () async {
       span = api.Context.current.span;
-      await Future.delayed(waitDuration);
-      traceCallbackDuration = DateTime.now().difference(startTime);
-    }, context: api.Context.root);
-    final traceRegistrationDuration = DateTime.now().difference(startTime);
-    await asyncTrace;
+    });
 
-    expect(traceRegistrationDuration, lessThan(traceCallbackDuration));
-    expect(traceRegistrationDuration, lessThan(waitDuration));
-    expect((span.endTime - span.startTime).toInt() / 1000000,
-        closeTo(waitDuration.inSeconds, 0.02));
+    expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
   });
 
   test('traceAsync looped execution timing', () async {
@@ -146,13 +124,12 @@ void main() {
     for (var i = 0; i < 5; i++) {
       await tracer.traceAsync('asyncTrace', () async {
         spans.add(api.Context.current.span);
-        await Future.delayed(Duration(seconds: 1));
       });
     }
 
-    for (final span in spans) {
-      expect(
-          (span.endTime - span.startTime).toInt() / 1000000, closeTo(1, 0.02));
+    for (var i = 1; i < spans.length; i++) {
+      expect(spans[i].startTime, greaterThan(spans[i - 1].startTime));
+      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime));
     }
   });
 
