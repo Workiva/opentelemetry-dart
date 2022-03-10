@@ -42,7 +42,7 @@ void main() {
         allOf([isNotNull, isNot(equals(parentSpan.spanContext.spanId))]));
   });
 
-  test('traceSync execution', () {
+  test('trace synchronous execution', () {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
@@ -50,14 +50,14 @@ void main() {
         sdk.InstrumentationLibrary('name', 'version'));
     sdk.Span span;
 
-    tracer.traceSync('syncTrace', () {
+    tracer.trace('syncTrace', () {
       span = api.Context.current.span;
     });
 
     expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
   });
 
-  test('traceSync looped execution timing', () {
+  test('trace synchronous looped execution timing', () {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
@@ -66,7 +66,7 @@ void main() {
     final spans = <sdk.Span>[];
 
     for (var i = 0; i < 5; i++) {
-      tracer.traceSync('syncTrace', () {
+      tracer.trace('syncTrace', () {
         spans.add(api.Context.current.span);
       });
     }
@@ -77,7 +77,7 @@ void main() {
     }
   });
 
-  test('traceSync execution with error', () {
+  test('trace synchronous execution with error', () {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
@@ -86,7 +86,7 @@ void main() {
     sdk.Span span;
 
     expect(
-        () => tracer.traceSync('syncTrace', () {
+        () => tracer.trace('syncTrace', () {
               span = api.Context.current.span;
               throw Exception('Oh noes!');
             }),
@@ -98,7 +98,7 @@ void main() {
     expect(span.attributes.get('exception'), equals('Exception: Oh noes!'));
   });
 
-  test('traceAsync execution', () async {
+  test('trace asynchronous execution', () async {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
@@ -106,14 +106,14 @@ void main() {
         sdk.InstrumentationLibrary('name', 'version'));
     sdk.Span span;
 
-    await tracer.traceAsync('asyncTrace', () async {
+    await tracer.trace('asyncTrace', () async {
       span = api.Context.current.span;
     });
 
     expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
   });
 
-  test('traceAsync looped execution timing', () async {
+  test('trace asynchronous looped execution timing', () async {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
@@ -122,7 +122,7 @@ void main() {
     final spans = <sdk.Span>[];
 
     for (var i = 0; i < 5; i++) {
-      await tracer.traceAsync('asyncTrace', () async {
+      await tracer.trace('asyncTrace', () async {
         spans.add(api.Context.current.span);
       });
     }
@@ -133,7 +133,7 @@ void main() {
     }
   });
 
-  test('traceAsync execution with thrown error', () async {
+  test('trace asynchronous execution with thrown error', () async {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
@@ -142,7 +142,7 @@ void main() {
     sdk.Span span;
 
     try {
-      await tracer.traceAsync('asyncTrace', () async {
+      await tracer.trace('asyncTrace', () async {
         span = api.Context.current.span;
         throw Exception('Oh noes!');
       });
@@ -156,7 +156,7 @@ void main() {
     expect(span.attributes.get('exception'), equals('Exception: Oh noes!'));
   });
 
-  test('traceAsync execution completes with error', () async {
+  test('trace asynchronous execution completes with error', () async {
     final tracer = sdk.Tracer([],
         sdk.Resource(api.Attributes.empty()),
         sdk.AlwaysOnSampler(),
@@ -165,7 +165,7 @@ void main() {
     sdk.Span span;
 
     try {
-      await tracer.traceAsync('asyncTrace', () async {
+      await tracer.trace('asyncTrace', () async {
         span = api.Context.current.span;
         return Future.error(Exception('Oh noes!'));
       });

@@ -53,35 +53,22 @@ class Tracer implements api.Tracer {
         attributes: attributes);
   }
 
-  /// Records a span of the given [name] for the given synchronous function
-  /// and marks the span as errored if an exception occurs.
-  @override
-  R traceSync<R>(String name, R Function() fn, {api.Context context}) {
-    final operationContext = context ?? api.Context.current;
-    final span = startSpan(name, context: operationContext);
-
-    try {
-      return operationContext.withSpan(span).execute(fn);
-    } catch (e, s) {
-      span.recordException(e, stackTrace: s);
-      rethrow;
-    } finally {
-      span.end();
-    }
-  }
-
   /// Records a span of the given [name] for the given asynchronous function
   /// and marks the span as errored if an exception occurs.
   @override
-  Future<R> traceAsync<R>(String name, Future<R> Function() fn,
+  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
       {api.Context context}) async {
-    final operationContext = context ?? api.Context.current;
-    final span = startSpan(name, context: operationContext);
+    context ??= api.Context.current;
+    final span = startSpan(name, context: context);
 
     try {
-      // Operation must be awaited here to ensure the catch block intercepts
-      // errors thrown by [fn].
-      return await operationContext.withSpan(span).execute(fn);
+      var result = context.withSpan(span).execute(fn);
+      if (result is Future) {
+        // Operation must be awaited here to ensure the catch block intercepts
+        // errors thrown by [fn].
+        result = await result;
+      }
+      return result;
     } catch (e, s) {
       span.recordException(e, stackTrace: s);
       rethrow;

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 
@@ -14,13 +16,8 @@ class NoopTracer implements api.Tracer {
   }
 
   @override
-  Future<R> traceAsync<R>(String name, Future<R> Function() fn,
+  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
       {api.Context context}) async {
     return await (context ?? api.Context.current).execute(fn);
-  }
-
-  @override
-  R traceSync<R>(String name, R Function() fn, {api.Context context}) {
-    return (context ?? api.Context.current).execute(fn);
   }
 }
