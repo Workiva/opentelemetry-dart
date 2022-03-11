@@ -53,7 +53,7 @@ class Tracer implements api.Tracer {
         attributes: attributes);
   }
 
-  /// Records a span of the given [name] for the given asynchronous function
+  /// Records a span of the given [name] for the given function
   /// and marks the span as errored if an exception occurs.
   @override
   FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
