@@ -125,4 +125,26 @@ void main() {
       expect(span.attributes.get(key), equals(value));
     });
   });
+
+  test('span record error', () {
+    final span = sdk.Span(
+        'foo',
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
+        [],
+        sdk.Resource(api.Attributes.empty()),
+        sdk.InstrumentationLibrary('library_name', 'library_version'));
+
+    try {
+      throw Exception('Oh noes!');
+    } catch (e, s) {
+      span.recordException(e, stackTrace: s);
+    }
+
+    expect(span.status.code, equals(api.StatusCode.error));
+    expect(span.status.description, equals('Exception: Oh noes!'));
+    expect(span.attributes.get('error'), isTrue);
+    expect(span.attributes.get('exception'), equals('Exception: Oh noes!'));
+  });
 }

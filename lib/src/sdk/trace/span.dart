@@ -78,4 +78,15 @@ class Span implements api.Span {
 
   @override
   api.Attributes attributes;
+
+  @override
+  void recordException(dynamic exception, {StackTrace stackTrace}) {
+    // TODO: O11Y-1531: Consider integration of Events here.
+    setStatus(api.StatusCode.error, description: exception.toString());
+    attributes.addAll([
+      api.Attribute.fromBoolean('error', true),
+      api.Attribute.fromString('exception', exception.toString()),
+      api.Attribute.fromString('stacktrace', stackTrace.toString()),
+    ]);
+  }
 }

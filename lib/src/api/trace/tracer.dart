@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../../api.dart' as api;
 
 /// An interface for creating [api.Span]s and propagating context in-process.
@@ -9,4 +11,9 @@ abstract class Tracer {
   /// tracer's context.
   api.Span startSpan(String name,
       {api.Context context, api.Attributes attributes});
+
+  /// Records a span of the given [name] for the given function
+  /// and marks the span as errored if an exception occurs.
+  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
+      {api.Context context});
 }

@@ -60,4 +60,7 @@ class NonRecordingSpan implements api.Span {
 
   @override
   api.InstrumentationLibrary get instrumentationLibrary => null;
+
+  @override
+  void recordException(dynamic exception, {StackTrace stackTrace}) {}
 }
