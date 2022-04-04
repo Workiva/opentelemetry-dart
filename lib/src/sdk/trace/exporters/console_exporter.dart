@@ -33,6 +33,11 @@ class ConsoleExporter implements SpanExporter {
   }
 
   @override
+  void forceFlush() {
+    throw UnimplementedError();
+  }
+
+  @override
   void shutdown() {
     _isShutdown = true;
   }

@@ -1,3 +1,5 @@
+import 'package:fixnum/fixnum.dart';
+
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 
@@ -18,7 +20,11 @@ class Tracer implements api.Tracer {
 
   @override
   api.Span startSpan(String name,
-      {api.Context context, List<api.Attribute> attributes}) {
+      {api.Context context,
+      api.SpanKind kind,
+      List<api.Attribute> attributes,
+      List<api.SpanLink> links,
+      Int64 startTime}) {
     context ??= api.Context.current;
 
     // If a valid, active Span is present in the context, use it as this Span's
@@ -41,8 +47,8 @@ class Tracer implements api.Tracer {
       traceState = sdk.TraceState.empty();
     }
 
-    final samplerResult =
-        _sampler.shouldSample(context, traceId, name, false, attributes);
+    final samplerResult = _sampler.shouldSample(
+        context, traceId, name, kind, false, attributes, links);
     final traceFlags = (samplerResult.decision == api.Decision.recordAndSample)
         ? api.TraceFlags.sampled
         : api.TraceFlags.none;
@@ -51,6 +57,10 @@ class Tracer implements api.Tracer {
 
     return sdk.Span(name, spanContext, parentSpanId, _processors, _resource,
         _instrumentationLibrary,
-        attributes: attributes, spanlimits: _spanLimits);
+        kind: kind,
+        attributes: attributes,
+        links: links,
+        spanlimits: _spanLimits,
+        startTime: startTime);
   }
 }

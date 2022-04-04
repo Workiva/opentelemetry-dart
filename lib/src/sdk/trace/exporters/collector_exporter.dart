@@ -152,6 +152,11 @@ class CollectorExporter implements api.SpanExporter {
   }
 
   @override
+  void forceFlush() {
+    throw UnimplementedError();
+  }
+
+  @override
   void shutdown() {
     _isShutdown = true;
   }

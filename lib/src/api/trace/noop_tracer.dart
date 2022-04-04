@@ -1,3 +1,5 @@
+import 'package:fixnum/fixnum.dart';
+
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 
@@ -6,7 +8,11 @@ import '../../../sdk.dart' as sdk;
 class NoopTracer implements api.Tracer {
   @override
   api.Span startSpan(String name,
-      {api.Context context, List<api.Attribute> attributes}) {
+      {api.Context context,
+      api.SpanKind kind,
+      List<api.Attribute> attributes,
+      List<api.SpanLink> links,
+      Int64 startTime}) {
     final parentContext = context.spanContext;
 
     return api.NonRecordingSpan(

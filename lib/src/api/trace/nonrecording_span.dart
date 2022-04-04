@@ -56,4 +56,10 @@ class NonRecordingSpan implements api.Span {
 
   @override
   void recordException(dynamic exception, {StackTrace stackTrace}) {}
+
+  @override
+  void addEvent(String name, Int64 timestamp, {api.Attributes attributes}) {}
+
+  @override
+  api.SpanKind get kind => throw UnimplementedError();
 }

@@ -21,6 +21,6 @@ abstract class TraceState {
   /// The number of key/value pairs contained in this TraceState.
   int get size;
 
-  /// Whether this TraceState is emtpy.
+  /// Whether this TraceState is empty.
   bool get isEmpty;
 }

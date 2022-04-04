@@ -1,3 +1,5 @@
+import 'package:fixnum/fixnum.dart';
+
 import '../../../api.dart' as api;
 
 /// An interface for creating [api.Span]s and propagating context in-process.
@@ -8,5 +10,9 @@ abstract class Tracer {
   /// Starts a new [api.Span] without setting it as the current span in this
   /// tracer's context.
   api.Span startSpan(String name,
-      {api.Context context, List<api.Attribute> attributes});
+      {api.Context context,
+      api.SpanKind kind,
+      List<api.Attribute> attributes,
+      List<api.SpanLink> links,
+      Int64 startTime});
 }
