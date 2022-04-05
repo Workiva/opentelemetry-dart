@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 
@@ -51,29 +49,5 @@ class Tracer implements api.Tracer {
     return sdk.Span(name, spanContext, parentSpanId, _processors, _resource,
         _instrumentationLibrary,
         attributes: attributes);
-  }
-
-  /// Records a span of the given [name] for the given function
-  /// and marks the span as errored if an exception occurs.
-  @override
-  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
-      {api.Context context}) async {
-    context ??= api.Context.current;
-    final span = startSpan(name, context: context);
-
-    try {
-      var result = context.withSpan(span).execute(fn);
-      if (result is Future) {
-        // Operation must be awaited here to ensure the catch block intercepts
-        // errors thrown by [fn].
-        result = await result;
-      }
-      return result;
-    } catch (e, s) {
-      span.recordException(e, stackTrace: s);
-      rethrow;
-    } finally {
-      span.end();
-    }
   }
 }

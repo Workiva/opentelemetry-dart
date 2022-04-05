@@ -1,10 +1,11 @@
 export 'src/sdk/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/sdk/open_telemetry.dart'
     show
-        registerGlobalTracerProvider,
+        globalTextMapPropagator,
         globalTracerProvider,
         registerGlobalTextMapPropagator,
-        globalTextMapPropagator;
+        registerGlobalTracerProvider,
+        trace;
 export 'src/sdk/resource/resource.dart' show Resource;
 export 'src/sdk/trace/exporters/collector_exporter.dart' show CollectorExporter;
 export 'src/sdk/trace/exporters/console_exporter.dart' show ConsoleExporter;
