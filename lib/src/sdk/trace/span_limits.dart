@@ -1,12 +1,10 @@
-import '../internal/utils.dart';
-
 class SpanLimits {
-  final _DEFAULT_MAXNUM_ATTRIBUTES = 200;
+  final _DEFAULT_MAXNUM_ATTRIBUTES = 128;
   final _DEFAULT_MAXNUM_EVENTS = 128;
   final _DEFAULT_MAXNUM_LINKS = 128;
   final _DEFAULT_MAXNUM_ATTRIBUTE_PER_EVENT = 128;
   final _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK = 128;
-  final _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH = 1000;
+  final _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH = -1;
 
   int _maxNumAttributes;
   int _maxNumEvents;
@@ -16,48 +14,73 @@ class SpanLimits {
   int _maxNumAttributeLength;
 
   ///setters
+  ///Set the max number of attributes per span
   set maxNumAttributes(int maxNumberOfAttributes) {
-    Utils.checkArgument(maxNumberOfAttributes >= 0,
-        'maxNumberOfAttributes must be greater or equal to zero');
-    _maxNumAttributes = maxNumberOfAttributes;
+    if (maxNumberOfAttributes < 0) {
+      throw ArgumentError('maxNumEvents must be greater or equal to zero');
+    }
   }
 
+  ///set the max number of events per span
   set maxNumEvents(int maxNumEvents) {
-    Utils.checkArgument(
-        maxNumEvents >= 0, 'maxNumEvents must be greater or equal to zero');
-    _maxNumEvents = maxNumEvents;
+    if (maxNumEvents < 0) {
+      throw ArgumentError('maxNumEvents must be greater or equal to zero');
+    }
   }
 
+  ///set the max number of links per span
   set maxNumLink(int maxNumLink) {
-    Utils.checkArgument(
-        maxNumLink >= 0, 'maxNumLink must be greater or equal to zero');
-    _maxNumLink = maxNumLink;
+    if (maxNumLink < 0) {
+      throw ArgumentError('maxNumEvents must be greater than or equal to zero');
+    }
   }
 
+  ///set the max number of attributes per event
   set maxNumAttributesPerEvent(int maxNumAttributesPerEvent) {
-    Utils.checkArgument(maxNumAttributesPerEvent >= 0,
-        'maxNumAttributesPerEvent must be greater or equal to zero');
-    _maxNumAttributesPerEvent = maxNumAttributesPerEvent;
+    if (maxNumAttributesPerEvent < 0) {
+      throw ArgumentError('maxNumEvents must be greater than or equal to zero');
+    }
   }
 
+  ///set the max number of attributes per link
   set maxNumAttributesPerLink(int maxNumAttributesPerLink) {
-    Utils.checkArgument(maxNumAttributesPerLink >= 0,
-        'maxNumAttributesPerLink must be greater or equal to zero');
-    _maxNumAttributesPerLink = maxNumAttributesPerLink;
+    if (maxNumAttributesPerLink < 0) {
+      throw ArgumentError('maxNumEvents must be greater than or equal to zero');
+    }
   }
 
+  ///return the maximum allowed attribute value length.
+  ///This limits only applies to string and string list attribute valuse.
+  ///Any string longer than this value will be truncated to this length.
+  ///
+  ///default is unlimited.
   set maxNumAttributeLength(int maxNumAttributeLength) {
-    Utils.checkArgument(maxNumAttributesPerLink >= 0,
-        'maxNumAttributesPerLink must be greater or equal to zero');
-    _maxNumAttributeLength = maxNumAttributeLength;
+    if (maxNumAttributeLength < 0) {
+      throw ArgumentError('maxNumEvents must be greater than or equal to zero');
+    }
   }
 
   ///getters
+  ///return the max number of attributes per span
   int get maxNumAttributes => _maxNumAttributes;
+
+  ///return the max number of events per span
   int get maxNumEvents => _maxNumEvents;
+
+  ///return the max number of links per span
   int get maxNumLink => _maxNumLink;
+
+  ///return the max number of attributes per event
   int get maxNumAttributesPerEvent => _maxNumAttributesPerEvent;
+
+  ///return the max number of attributes per link
   int get maxNumAttributesPerLink => _maxNumAttributesPerLink;
+
+  ///return the maximum allowed attribute value length.
+  ///This limits only applies to string and string list attribute valuse.
+  ///Any string longer than this value will be truncated to this length.
+  ///
+  ///default is unlimited.
   int get maxNumAttributeLength => _maxNumAttributeLength;
 
   ///constructor

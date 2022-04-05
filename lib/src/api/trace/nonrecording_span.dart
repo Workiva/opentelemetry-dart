@@ -20,24 +20,16 @@ class NonRecordingSpan implements api.Span {
   api.Attributes get attributes => _attributes;
 
   @override
-  set attributes(api.Attributes attributes) {
-    return;
-  }
+  set attributes(api.Attributes attributes) {}
 
   @override
-  void setAttribute(api.Attribute attribute) {
-    return;
-  }
+  void setAttribute(api.Attribute attribute) {}
 
   @override
-  void setAttributes(List<api.Attribute> attributes) {
-    return;
-  }
+  void setAttributes(List<api.Attribute> attributes) {}
 
   @override
-  void end() {
-    return;
-  }
+  void end() {}
 
   @override
   Int64 get endTime => null;
@@ -52,9 +44,7 @@ class NonRecordingSpan implements api.Span {
   api.SpanId get parentSpanId => api.SpanId.invalid();
 
   @override
-  void setStatus(api.StatusCode status, {String description}) {
-    return;
-  }
+  void setStatus(api.StatusCode status, {String description}) {}
 
   @override
   api.SpanContext get spanContext => _spanContext;

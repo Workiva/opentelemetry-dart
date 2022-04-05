@@ -91,6 +91,7 @@ class Span implements api.Span {
 
   @override
   void setAttributes(List<api.Attribute> attributeList) {
+    //Don't want to have any attribute
     if (_spanLimits.maxNumAttributes == 0) return;
 
     attributes ??= api.Attributes.empty();
@@ -103,7 +104,7 @@ class Span implements api.Span {
       if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
         continue;
       }
-      attributes.add(_reBuildAttribute(attr));
+      attributes.add(_rebuildAttribute(attr));
     }
   }
 
@@ -118,12 +119,15 @@ class Span implements api.Span {
     if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
       return;
     }
-    attributes.add(_reBuildAttribute(attr));
+    attributes.add(_rebuildAttribute(attr));
   }
 
   /// reBuild an attribute, this way it is tightly coupled with the type we supported,
   /// if later we added more types, then we need to change this method.
-  api.Attribute _reBuildAttribute(api.Attribute attr) {
+  api.Attribute _rebuildAttribute(api.Attribute attr) {
+    //if maxNumAttributeLength is less than zero, then it has unlimited length.
+    if (_spanLimits.maxNumAttributeLength < 0) return attr;
+
     if (attr.value is String) {
       attr = api.Attribute.fromString(
           attr.key,
