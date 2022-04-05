@@ -61,5 +61,5 @@ class NonRecordingSpan implements api.Span {
   void addEvent(String name, Int64 timestamp, {api.Attributes attributes}) {}
 
   @override
-  api.SpanKind get kind => throw UnimplementedError();
+  api.SpanKind get kind => api.SpanKind.internal;
 }
