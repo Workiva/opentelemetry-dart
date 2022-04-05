@@ -10,13 +10,19 @@ class Tracer implements api.Tracer {
   final api.Sampler _sampler;
   final api.IdGenerator _idGenerator;
   final api.InstrumentationLibrary _instrumentationLibrary;
+  sdk.SpanLimits _spanLimits = sdk.SpanLimits();
 
   Tracer(this._processors, this._resource, this._sampler, this._idGenerator,
-      this._instrumentationLibrary);
+      this._instrumentationLibrary,
+      [spanLimits]) {
+    _spanLimits = spanLimits ?? _spanLimits;
+  }
 
   @override
   api.Span startSpan(String name,
-      {api.Context context, api.Attributes attributes}) {
+      {api.Context context,
+      api.Attributes attributes,
+      List<api.Attribute> attribute_list}) {
     context ??= api.Context.current;
     attributes ??= api.Attributes.empty();
 
@@ -50,7 +56,9 @@ class Tracer implements api.Tracer {
 
     return sdk.Span(name, spanContext, parentSpanId, _processors, _resource,
         _instrumentationLibrary,
-        attributes: attributes);
+        attributes: attributes,
+        spanlimits: _spanLimits,
+        attribute_list: attribute_list);
   }
 
   /// Records a span of the given [name] for the given function

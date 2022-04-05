@@ -25,6 +25,16 @@ class NonRecordingSpan implements api.Span {
   }
 
   @override
+  void setAttribute(api.Attribute attribute) {
+    return;
+  }
+
+  @override
+  void setAttributes(List<api.Attribute> attributes) {
+    return;
+  }
+
+  @override
   void end() {
     return;
   }

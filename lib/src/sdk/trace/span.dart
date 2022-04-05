@@ -1,6 +1,7 @@
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
+import '../../../sdk.dart' as sdk;
 
 /// A representation of a single operation within a trace.
 class Span implements api.Span {
@@ -9,6 +10,7 @@ class Span implements api.Span {
   final api.SpanStatus _status = api.SpanStatus();
   final List<api.SpanProcessor> _processors;
   final api.Resource _resource;
+  sdk.SpanLimits _spanLimits = sdk.SpanLimits();
   final api.InstrumentationLibrary _instrumentationLibrary;
   Int64 _startTime;
   Int64 _endTime;
@@ -22,9 +24,17 @@ class Span implements api.Span {
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
       this._resource, this._instrumentationLibrary,
-      {api.Attributes attributes}) {
+      {api.Attributes attributes,
+      sdk.SpanLimits spanlimits,
+      List<api.Attribute> attribute_list}) {
     _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
     this.attributes = attributes ?? api.Attributes.empty();
+    if (spanlimits != null) _spanLimits = spanlimits;
+
+    if (attribute_list != null) {
+      setAttributes(attribute_list);
+    }
+
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onStart();
     }
@@ -80,13 +90,82 @@ class Span implements api.Span {
   api.Attributes attributes;
 
   @override
+  void setAttributes(List<api.Attribute> attributeList) {
+    if (_spanLimits.maxNumAttributes == 0) return;
+
+    attributes ??= api.Attributes.empty();
+
+    for (var i = 0; i < attributeList.length; i++) {
+      final attr = attributeList[i];
+      final obj = attributes.get(attr.key);
+      //If current attributes.length is equal or greater than maxNumAttributes and
+      //key is not in current map, drop it.
+      if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
+        continue;
+      }
+      attributes.add(_reBuildAttribute(attr));
+    }
+  }
+
+  @override
+  void setAttribute(api.Attribute attr) {
+    //Don't want to have any attribute
+    if (_spanLimits.maxNumAttributes == 0) return;
+
+    final obj = attributes.get(attr.key);
+    //If current attributes.length is equal or greater than maxNumAttributes and
+    //key is not in current map, drop it.
+    if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
+      return;
+    }
+    attributes.add(_reBuildAttribute(attr));
+  }
+
+  /// reBuild an attribute, this way it is tightly coupled with the type we supported,
+  /// if later we added more types, then we need to change this method.
+  api.Attribute _reBuildAttribute(api.Attribute attr) {
+    if (attr.value is String) {
+      attr = api.Attribute.fromString(
+          attr.key,
+          _applyAttributeLengthLimit(
+              attr.value, _spanLimits.maxNumAttributeLength));
+    } else if (attr.value is List<String>) {
+      final listString = attr.value as List<String>;
+      for (var j = 0; j < listString.length; j++) {
+        listString[j] = _applyAttributeLengthLimit(
+            listString[j], _spanLimits.maxNumAttributeLength);
+      }
+      attr = api.Attribute.fromStringList(attr.key, listString);
+    }
+    return attr;
+  }
+
+  @override
   void recordException(dynamic exception, {StackTrace stackTrace}) {
+    // ignore: todo
     // TODO: O11Y-1531: Consider integration of Events here.
     setStatus(api.StatusCode.error, description: exception.toString());
-    attributes.addAll([
+    setAttributes([
       api.Attribute.fromBoolean('error', true),
       api.Attribute.fromString('exception', exception.toString()),
       api.Attribute.fromString('stacktrace', stackTrace.toString()),
     ]);
+  }
+
+  //Truncate just strings which length is longer than configuration.
+  //Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
+  static Object _applyAttributeLengthLimit(Object value, int lengthLimit) {
+    if (value is String) {
+      return value.length > lengthLimit
+          ? value.substring(0, lengthLimit)
+          : value;
+    } else if (value is List<String>) {
+      for (var i = 0; i < value.length; i++) {
+        value[i] = value[i].length > lengthLimit
+            ? value[i].substring(0, lengthLimit)
+            : value[i];
+      }
+    }
+    return value;
   }
 }

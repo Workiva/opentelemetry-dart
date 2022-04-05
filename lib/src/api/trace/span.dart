@@ -50,6 +50,10 @@ abstract class Span {
   /// Retrieve metadata included on this span.
   api.Attributes get attributes;
 
+  void setAttribute(api.Attribute attribute);
+
+  void setAttributes(List<api.Attribute> attributes);
+
   /// Retrieve the resource on this span.
   api.Resource get resource;
 
