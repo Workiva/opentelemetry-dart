@@ -13,6 +13,9 @@ dependencies:
   protobuf: '>=1.1.0 <3.0.0'
 
 dev_dependencies:
+  benchmarking: ^0.6.0
+  build_runner: any
+  build_web_compilers: any
   mockito: ^5.0.7
   test: ^1.16.5
   workiva_analysis_options: ^1.2.2
