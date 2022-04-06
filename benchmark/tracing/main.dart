@@ -4,7 +4,7 @@ import 'package:benchmarking/benchmarking.dart';
 import 'package:opentelemetry/sdk.dart' as otel_sdk;
 
 void main() async {
-  final tracer = otel_sdk.globalTracerProvider.getTracer('benchmark');
+  final tracer = otel_sdk.TracerProvider().getTracer('benchmark');
 
   final result = await asyncBenchmark('Tracing (Zone.fork per span)', () async {
     // Sync trace
