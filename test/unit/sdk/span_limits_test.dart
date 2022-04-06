@@ -19,15 +19,15 @@ void main() {
       maxNumAttributes: maxAttributes,
       maxNumAttributeLength: maxAttributeLength);
 
-  test('test spanlimits normal', () {
+  test('test default spanlimits', () {
     final attrs = [attrShort, attrDoubleArray, attrStringArray];
     final span = sdkspan.Span(
         'limitTest', null, SpanId([4, 5, 6]), [], null, null,
-        attribute_list: attrs, spanlimits: limits);
+        attribute_list: attrs, spanlimits: SpanLimits());
     expect(span.attributes.length, equals(3));
     expect(span.attributes.get('shortkey'), equals('55555'));
     expect(span.attributes.get('doubleList'), equals([0.1, 0.2]));
-    expect(span.attributes.get('stringList'), equals(['1111', '11111']));
+    expect(span.attributes.get('stringList'), equals(['1111', '1111111']));
   });
 
   test('test spanlimits maxNumAttributes', () {
@@ -113,17 +113,5 @@ void main() {
     expect(span.attributes.length, 2);
     expect(span.attributes.get('shortkey'), equals('66666'));
     expect(span.attributes.get('longkey'), equals('66666'));
-  });
-
-  test('test default spanlimits', () {
-    final attrs = [attrLong, attrDoubleArray, attrStringArray];
-    final span_Limits = SpanLimits();
-    final span = sdkspan.Span(
-        'limitTest', null, SpanId([4, 5, 6]), [], null, null,
-        attribute_list: attrs, spanlimits: span_Limits);
-    expect(span.attributes.length, equals(3));
-    expect(span.attributes.get('longkey'), equals('5555555'));
-    expect(span.attributes.get('doubleList'), equals([0.1, 0.2]));
-    expect(span.attributes.get('stringList'), equals(['1111', '1111111']));
   });
 }
