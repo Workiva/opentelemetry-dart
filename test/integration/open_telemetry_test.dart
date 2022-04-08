@@ -15,7 +15,7 @@ void main() {
 
     sdk.trace('syncTrace', () {
       span = api.Context.current.span;
-    }, tracer);
+    }, tracer: tracer);
 
     expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
   });
@@ -31,7 +31,7 @@ void main() {
     for (var i = 0; i < 5; i++) {
       sdk.trace('syncTrace', () {
         spans.add(api.Context.current.span);
-      }, tracer);
+      }, tracer: tracer);
     }
 
     for (var i = 1; i < spans.length; i++) {
@@ -52,7 +52,7 @@ void main() {
         () => sdk.trace('syncTrace', () {
               span = api.Context.current.span;
               throw Exception('Oh noes!');
-            }, tracer),
+            }, tracer: tracer),
         throwsException);
     expect(span.endTime, isNotNull);
     expect(span.status.code, equals(api.StatusCode.error));
@@ -71,7 +71,7 @@ void main() {
 
     await sdk.trace('asyncTrace', () async {
       span = api.Context.current.span;
-    }, tracer);
+    }, tracer: tracer);
 
     expect(span.endTime, lessThan(DateTime.now().microsecondsSinceEpoch));
   });
@@ -87,7 +87,7 @@ void main() {
     for (var i = 0; i < 5; i++) {
       await sdk.trace('asyncTrace', () async {
         spans.add(api.Context.current.span);
-      }, tracer);
+      }, tracer: tracer);
     }
 
     for (var i = 1; i < spans.length; i++) {
@@ -108,7 +108,7 @@ void main() {
       await sdk.trace('asyncTrace', () async {
         span = api.Context.current.span;
         throw Exception('Oh noes!');
-      }, tracer);
+      }, tracer: tracer);
     } catch (e) {
       expect(e.toString(), equals('Exception: Oh noes!'));
     }
@@ -131,7 +131,7 @@ void main() {
       await sdk.trace('asyncTrace', () async {
         span = api.Context.current.span;
         return Future.error(Exception('Oh noes!'));
-      }, tracer);
+      }, tracer: tracer);
     } catch (e) {
       expect(e.toString(), equals('Exception: Oh noes!'));
     }

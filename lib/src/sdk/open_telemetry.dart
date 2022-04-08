@@ -33,9 +33,10 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
 
 /// Records a span of the given [name] for the given function with a given
 /// [api.Tracer] and marks the span as errored if an exception occurs.
-FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn, api.Tracer tracer,
-    {api.Context context}) async {
+FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
+    {api.Context context, api.Tracer tracer}) async {
   context ??= api.Context.current;
+  tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);
   try {
