@@ -44,14 +44,10 @@ abstract class Span {
   /// Retrieve the status of the [Span].
   api.SpanStatus get status;
 
-  /// Set metadata to be included on this span.
-  set attributes(api.Attributes attributes);
-
-  /// Retrieve metadata included on this span.
-  api.Attributes get attributes;
-
+  /// set single attribute
   void setAttribute(api.Attribute attribute);
 
+  /// set multiple attributes
   void setAttributes(List<api.Attribute> attributes);
 
   /// Retrieve the resource on this span.

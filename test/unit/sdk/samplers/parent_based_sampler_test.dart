@@ -25,10 +25,10 @@ void main() {
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
-        testContext, traceId, testSpan.name, false, testSpan.attributes);
+        testContext, traceId, testSpan.name, false, null);
 
     expect(result.decision, equals(api.Decision.recordAndSample));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals(null));
     expect(result.traceState.isEmpty, isTrue);
   });
 
@@ -43,10 +43,10 @@ void main() {
             'parent_sampler_test', 'sampler_test_version'));
 
     final result = testSampler.shouldSample(
-        api.Context.root, traceId, testSpan.name, false, testSpan.attributes);
+        api.Context.root, traceId, testSpan.name, false, null);
 
     expect(result.decision, equals(api.Decision.recordAndSample));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals(null));
     expect(result.traceState.isEmpty, isTrue);
   });
 
@@ -65,10 +65,10 @@ void main() {
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
-        testContext, traceId, testSpan.name, false, testSpan.attributes);
+        testContext, traceId, testSpan.name, false, null);
 
     expect(result.decision, equals(api.Decision.recordAndSample));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals(null));
     expect(result.traceState, same(traceState));
   });
 
@@ -87,10 +87,10 @@ void main() {
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
-        testContext, traceId, testSpan.name, false, testSpan.attributes);
+        testContext, traceId, testSpan.name, false, null);
 
     expect(result.decision, equals(api.Decision.drop));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals(null));
     expect(result.traceState, same(traceState));
   });
 
@@ -109,10 +109,10 @@ void main() {
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
-        testContext, traceId, testSpan.name, false, testSpan.attributes);
+        testContext, traceId, testSpan.name, false, null);
 
     expect(result.decision, equals(api.Decision.recordAndSample));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals(null));
     expect(result.traceState, same(traceState));
   });
 
@@ -131,10 +131,10 @@ void main() {
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
-        testContext, traceId, testSpan.name, false, testSpan.attributes);
+        testContext, traceId, testSpan.name, false, null);
 
     expect(result.decision, equals(api.Decision.drop));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals(null));
     expect(result.traceState, same(traceState));
   });
 }

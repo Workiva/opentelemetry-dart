@@ -31,7 +31,8 @@ class TracerProvider implements api.TracerProvider {
     return _tracers.putIfAbsent(
         key,
         () => sdk.Tracer(_processors, _resource, _sampler, _idGenerator,
-            sdk.InstrumentationLibrary(name, version), _spanLimits));
+            sdk.InstrumentationLibrary(name, version),
+            spanLimits: _spanLimits));
   }
 
   @override

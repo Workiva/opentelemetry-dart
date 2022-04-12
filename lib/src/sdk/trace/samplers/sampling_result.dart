@@ -5,7 +5,7 @@ class SamplingResult implements api.SamplingResult {
   @override
   final api.Decision decision;
   @override
-  final Attributes spanAttributes;
+  final List<Attribute> spanAttributes;
   @override
   final TraceState traceState;
 

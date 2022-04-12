@@ -23,7 +23,7 @@ void main() {
     final attrs = [attrShort, attrDoubleArray, attrStringArray];
     final span = sdkspan.Span(
         'limitTest', null, SpanId([4, 5, 6]), [], null, null,
-        attribute_list: attrs, spanlimits: SpanLimits());
+        attributes: attrs, spanlimits: SpanLimits());
     expect(span.attributes.length, equals(3));
     expect(span.attributes.get('shortkey'), equals('55555'));
     expect(span.attributes.get('doubleList'), equals([0.1, 0.2]));
@@ -33,7 +33,7 @@ void main() {
   test('test spanlimits maxNumAttributes', () {
     final attrs = [attrShort, attrLong, attrInt, attrBool];
     final span = sdkspan.Span('foo', null, SpanId([4, 5, 6]), [], null, null,
-        attribute_list: attrs, spanlimits: limits);
+        attributes: attrs, spanlimits: limits);
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('boolean'), equals(null));
   });
@@ -41,7 +41,7 @@ void main() {
   test('test spanlimits maxNumAttributeLength', () {
     final attrs = [attrShort, attrLong];
     final span = sdkspan.Span('foo', null, SpanId([4, 5, 6]), [], null, null,
-        attribute_list: attrs, spanlimits: limits);
+        attributes: attrs, spanlimits: limits);
     expect(span.attributes.get('shortkey'), equals('55555'));
     expect(span.attributes.get('longkey'), equals('55555'));
   });
@@ -59,9 +59,11 @@ void main() {
   test('test spanlimits maxNumAttributes from span', () {
     final span =
         sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes([attrShort, attrLong, attrInt, attrBool]);
+          ..setAttributes(
+              [attrShort, attrLong, attrInt, attrBool, attrStringArray]);
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('boolean'), equals(null));
+    expect(span.droppedAttributes, equals(2));
   });
 
   test('test spanlimits maxNumAttributeLength with setAttributes', () {
@@ -75,15 +77,18 @@ void main() {
   test('test spanlimits from span, then add more', () {
     final span =
         sdkspan.Span('test', null, null, [], null, null, spanlimits: limits)
-          ..setAttributes([attrShort, attrLong]);
+          ..setAttribute(attrShort);
     expect(span.attributes.get('shortkey'), equals('55555'));
+    span.setAttribute(attrLong);
     expect(span.attributes.get('longkey'), equals('55555'));
     span.setAttribute(attrBool);
+    expect(span.droppedAttributes, equals(0));
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('boolKey'), equals(true));
     span.setAttribute(attrDoubleArray);
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('doubleList'), equals(null));
+    expect(span.droppedAttributes, equals(1));
   });
 
   test('test add same key twice', () {
@@ -95,6 +100,7 @@ void main() {
     span.setAttributes([attrLong, dupLong]);
     expect(span.attributes.length, 2);
     expect(span.attributes.get('longkey'), equals('66666'));
+    expect(span.droppedAttributes, equals(0));
   });
 
   test('test add same key twice', () {
@@ -113,5 +119,6 @@ void main() {
     expect(span.attributes.length, 2);
     expect(span.attributes.get('shortkey'), equals('66666'));
     expect(span.attributes.get('longkey'), equals('66666'));
+    expect(span.droppedAttributes, equals(0));
   });
 }

@@ -10,17 +10,10 @@ import '../../../api.dart' as api;
 /// This class should not be exposed to consumers and is used internally to wrap
 /// [api.SpanContext] being injected or extracted for external calls.
 class NonRecordingSpan implements api.Span {
-  final api.Attributes _attributes = api.Attributes.empty();
   final api.SpanStatus _status = api.SpanStatus()..code = api.StatusCode.ok;
   final api.SpanContext _spanContext;
 
   NonRecordingSpan(this._spanContext);
-
-  @override
-  api.Attributes get attributes => _attributes;
-
-  @override
-  set attributes(api.Attributes attributes) {}
 
   @override
   void setAttribute(api.Attribute attribute) {}

@@ -6,6 +6,7 @@ import 'opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
 import 'opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 import 'opentelemetry/proto/resource/v1/resource.pb.dart' as pb_resource;
 import 'opentelemetry/proto/common/v1/common.pb.dart' as pb_common;
+import '../span.dart' as sdk;
 
 class CollectorExporter implements api.SpanExporter {
   Uri uri;
@@ -46,7 +47,7 @@ class CollectorExporter implements api.SpanExporter {
           <api.InstrumentationLibrary, List<pb_trace.Span>>{};
       il[span.instrumentationLibrary] =
           il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
-            ..add(_spanToProtobuf(span));
+            ..add(_spanToProtobuf(span as sdk.Span));
       rsm[span.resource] = il;
     }
 
@@ -74,7 +75,7 @@ class CollectorExporter implements api.SpanExporter {
     return rss;
   }
 
-  pb_trace.Span _spanToProtobuf(api.Span span) {
+  pb_trace.Span _spanToProtobuf(sdk.Span span) {
     pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
       case api.StatusCode.unset:

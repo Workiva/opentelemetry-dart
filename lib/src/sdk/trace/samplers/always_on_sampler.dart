@@ -1,19 +1,14 @@
-import '../../../api/common/attributes.dart';
-import '../../../api/context/context.dart';
-import '../../../api/trace/sampler.dart' as api;
-import '../../../api/trace/sampling_result.dart' as result_api;
-import '../../../api/trace/trace_id.dart';
-import '../trace_state.dart';
-import 'sampling_result.dart';
+import '../../../../api.dart' as api;
+import '../../../../sdk.dart' as sdk;
 
 class AlwaysOnSampler implements api.Sampler {
   @override
   String get description => 'AlwaysOnSampler';
 
   @override
-  result_api.SamplingResult shouldSample(Context context, TraceId traceId,
-      String spanName, bool spanIsRemote, Attributes spanAttributes) {
-    return SamplingResult(result_api.Decision.recordAndSample, spanAttributes,
-        context.spanContext?.traceState ?? TraceState.empty());
+  api.SamplingResult shouldSample(api.Context context, api.TraceId traceId,
+      String spanName, bool spanIsRemote, List<api.Attribute> spanAttributes) {
+    return sdk.SamplingResult(api.Decision.recordAndSample, spanAttributes,
+        context.spanContext?.traceState ?? sdk.TraceState.empty());
   }
 }

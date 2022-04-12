@@ -8,7 +8,7 @@ abstract class Sampler {
       api.TraceId traceId,
       String spanName,
       bool spanIsRemote, // ignore: avoid_positional_boolean_parameters
-      api.Attributes spanAttributes);
+      List<api.Attribute> spanAttributes);
 
   String get description;
 }

@@ -25,7 +25,7 @@ class ParentBasedSampler implements api.Sampler {
 
   @override
   api.SamplingResult shouldSample(api.Context context, api.TraceId traceId,
-      String spanName, bool spanIsRemote, api.Attributes spanAttributes) {
+      String spanName, bool spanIsRemote, List<api.Attribute> spanAttributes) {
     final parentSpanContext = context.spanContext;
 
     if (parentSpanContext == null || !parentSpanContext.isValid) {

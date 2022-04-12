@@ -14,6 +14,8 @@ class Span implements api.Span {
   final api.InstrumentationLibrary _instrumentationLibrary;
   Int64 _startTime;
   Int64 _endTime;
+  int _droppedSpanAttributes = 0;
+  final api.Attributes attributes = api.Attributes.empty();
 
   @override
   String name;
@@ -24,15 +26,13 @@ class Span implements api.Span {
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
       this._resource, this._instrumentationLibrary,
-      {api.Attributes attributes,
-      sdk.SpanLimits spanlimits,
-      List<api.Attribute> attribute_list}) {
+      {List<api.Attribute> attributes, sdk.SpanLimits spanlimits}) {
     _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
-    this.attributes = attributes ?? api.Attributes.empty();
+
     if (spanlimits != null) _spanLimits = spanlimits;
 
-    if (attribute_list != null) {
-      setAttributes(attribute_list);
+    if (attributes != null) {
+      setAttributes(attributes);
     }
 
     for (var i = 0; i < _processors.length; i++) {
@@ -87,36 +87,31 @@ class Span implements api.Span {
       _instrumentationLibrary;
 
   @override
-  api.Attributes attributes;
-
-  @override
   void setAttributes(List<api.Attribute> attributeList) {
     //Don't want to have any attribute
-    if (_spanLimits.maxNumAttributes == 0) return;
-
-    attributes ??= api.Attributes.empty();
+    if (_spanLimits.maxNumAttributes == 0) {
+      _droppedSpanAttributes += attributeList.length;
+      return;
+    }
 
     for (var i = 0; i < attributeList.length; i++) {
-      final attr = attributeList[i];
-      final obj = attributes.get(attr.key);
-      //If current attributes.length is equal or greater than maxNumAttributes and
-      //key is not in current map, drop it.
-      if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
-        continue;
-      }
-      attributes.add(_rebuildAttribute(attr));
+      setAttribute(attributeList[i]);
     }
   }
 
   @override
   void setAttribute(api.Attribute attr) {
     //Don't want to have any attribute
-    if (_spanLimits.maxNumAttributes == 0) return;
+    if (_spanLimits.maxNumAttributes == 0) {
+      _droppedSpanAttributes++;
+      return;
+    }
 
     final obj = attributes.get(attr.key);
     //If current attributes.length is equal or greater than maxNumAttributes and
     //key is not in current map, drop it.
     if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
+      _droppedSpanAttributes++;
       return;
     }
     attributes.add(_rebuildAttribute(attr));
@@ -158,18 +153,9 @@ class Span implements api.Span {
 
   //Truncate just strings which length is longer than configuration.
   //Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
-  static Object _applyAttributeLengthLimit(Object value, int lengthLimit) {
-    if (value is String) {
-      return value.length > lengthLimit
-          ? value.substring(0, lengthLimit)
-          : value;
-    } else if (value is List<String>) {
-      for (var i = 0; i < value.length; i++) {
-        value[i] = value[i].length > lengthLimit
-            ? value[i].substring(0, lengthLimit)
-            : value[i];
-      }
-    }
-    return value;
+  static String _applyAttributeLengthLimit(String value, int lengthLimit) {
+    return value.length > lengthLimit ? value.substring(0, lengthLimit) : value;
   }
+
+  int get droppedAttributes => _droppedSpanAttributes;
 }

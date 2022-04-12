@@ -10,9 +10,7 @@ abstract class Tracer {
   /// Starts a new [api.Span] without setting it as the current span in this
   /// tracer's context.
   api.Span startSpan(String name,
-      {api.Context context,
-      api.Attributes attributes,
-      List<api.Attribute> attribute_list});
+      {api.Context context, List<api.Attribute> attributes});
 
   /// Records a span of the given [name] for the given function
   /// and marks the span as errored if an exception occurs.
