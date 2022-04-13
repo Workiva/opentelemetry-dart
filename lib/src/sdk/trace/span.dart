@@ -87,32 +87,32 @@ class Span implements api.Span {
       _instrumentationLibrary;
 
   @override
-  void setAttributes(List<api.Attribute> attributeList) {
+  void setAttributes(List<api.Attribute> attributes) {
     //Don't want to have any attribute
     if (_spanLimits.maxNumAttributes == 0) {
-      _droppedSpanAttributes += attributeList.length;
+      _droppedSpanAttributes += attributes.length;
       return;
     }
 
-    attributeList.forEach(setAttribute);
+    attributes.forEach(setAttribute);
   }
 
   @override
-  void setAttribute(api.Attribute attr) {
+  void setAttribute(api.Attribute attribute) {
     //Don't want to have any attribute
     if (_spanLimits.maxNumAttributes == 0) {
       _droppedSpanAttributes++;
       return;
     }
 
-    final obj = attributes.get(attr.key);
+    final obj = attributes.get(attribute.key);
     //If current attributes.length is equal or greater than maxNumAttributes and
     //key is not in current map, drop it.
     if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
       _droppedSpanAttributes++;
       return;
     }
-    attributes.add(_rebuildAttribute(attr));
+    attributes.add(_rebuildAttribute(attribute));
   }
 
   /// reBuild an attribute, this way it is tightly coupled with the type we supported,
