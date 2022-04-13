@@ -28,7 +28,7 @@ abstract class Span {
   api.SpanId get parentSpanId;
 
   /// The name of the span.
-  String get name;
+  String name;
 
   /// Whether this Span is recording information like events with the
   /// addEvent operation, status with setStatus, etc.

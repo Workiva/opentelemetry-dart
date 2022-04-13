@@ -31,6 +31,9 @@ class NonRecordingSpan implements api.Span {
   String get name => 'NON_RECORDING';
 
   @override
+  set name(String _name) {}
+
+  @override
   bool get isRecording => false;
 
   @override
