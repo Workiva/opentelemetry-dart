@@ -8,5 +8,5 @@ abstract class Tracer {
   /// Starts a new [api.Span] without setting it as the current span in this
   /// tracer's context.
   api.Span startSpan(String name,
-      {api.Context context, api.Attributes attributes});
+      {api.Context context, List<api.Attribute> attributes});
 }
