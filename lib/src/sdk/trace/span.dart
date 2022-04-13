@@ -94,9 +94,7 @@ class Span implements api.Span {
       return;
     }
 
-    for (var i = 0; i < attributeList.length; i++) {
-      setAttribute(attributeList[i]);
-    }
+    attributeList.forEach(setAttribute);
   }
 
   @override

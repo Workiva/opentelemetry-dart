@@ -22,7 +22,6 @@ class Tracer implements api.Tracer {
   api.Span startSpan(String name,
       {api.Context context, List<api.Attribute> attributes}) {
     context ??= api.Context.current;
-    //attributes ??= api.Attributes.empty();
 
     // If a valid, active Span is present in the context, use it as this Span's
     // parent.  If the Context does not contain an active parent Span, create
