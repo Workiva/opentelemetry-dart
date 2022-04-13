@@ -18,10 +18,10 @@ void main() {
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = sdk.AlwaysOffSampler().shouldSample(testContext, traceId,
-        testSpan.name, api.SpanKind.internal, false, null, []);
+        testSpan.name, api.SpanKind.internal, false, [], []);
 
     expect(result.decision, equals(api.Decision.drop));
-    expect(result.spanAttributes, equals(null));
+    expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
   test('Context does not contain a Span', () {

@@ -30,7 +30,9 @@ class Span implements api.Span {
       this._resource, this._instrumentationLibrary,
       {api.SpanKind kind,
       List<api.Attribute> attributes,
-      sdk.SpanLimits spanlimits})
+      List<api.SpanLink> links,
+      sdk.SpanLimits spanlimits,
+      Int64 startTime})
       : _links = links ?? [],
         _kind = kind ?? api.SpanKind.internal,
         _startTime =

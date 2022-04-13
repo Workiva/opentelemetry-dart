@@ -17,11 +17,11 @@ void main() {
             'always_on_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
 
-    final result = sdk.AlwaysOnSampler()
-        .shouldSample(testContext, traceId, testSpan.name, api.SpanKind.internal, false, null, []);
+    final result = sdk.AlwaysOnSampler().shouldSample(testContext, traceId,
+        testSpan.name, api.SpanKind.internal, false, [], []);
 
     expect(result.decision, equals(api.Decision.recordAndSample));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
   test('Context does not contain a Span', () {
@@ -36,11 +36,11 @@ void main() {
         sdk.InstrumentationLibrary(
             'always_on_sampler_test', 'sampler_test_version'));
 
-    final result = sdk.AlwaysOnSampler()
-        .shouldSample(api.Context.root, traceId, testSpan.name, api.SpanKind.internal, false, null, []);
+    final result = sdk.AlwaysOnSampler().shouldSample(api.Context.root, traceId,
+        testSpan.name, api.SpanKind.internal, false, [], []);
 
     expect(result.decision, equals(api.Decision.recordAndSample));
-    expect(result.spanAttributes, same(testSpan.attributes));
+    expect(result.spanAttributes, equals([]));
     expect(result.traceState.isEmpty, isTrue);
   });
 }

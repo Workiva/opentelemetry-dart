@@ -43,15 +43,16 @@ class ParentBasedSampler implements api.Sampler {
       return ((parentSpanContext.traceFlags & api.TraceFlags.sampled) ==
               api.TraceFlags.sampled)
           ? _remoteParentSampled.shouldSample(context, traceId, spanName,
-          spanKind, spanIsRemote, spanAttributes, spanLinks)
+              spanKind, spanIsRemote, spanAttributes, spanLinks)
           : _remoteParentNotSampled.shouldSample(context, traceId, spanName,
-          spanKind, spanIsRemote, spanAttributes, spanLinks);
+              spanKind, spanIsRemote, spanAttributes, spanLinks);
     }
 
-    return ((parentSpanContext.traceFlags & api.TraceFlags.sampled) ==
+    return (parentSpanContext.traceFlags & api.TraceFlags.sampled) ==
+            api.TraceFlags.sampled
         ? _localParentSampled.shouldSample(context, traceId, spanName, spanKind,
-        spanIsRemote, spanAttributes, spanLinks)
+            spanIsRemote, spanAttributes, spanLinks)
         : _localParentNotSampled.shouldSample(context, traceId, spanName,
-    spanKind, spanIsRemote, spanAttributes, spanLinks);
+            spanKind, spanIsRemote, spanAttributes, spanLinks);
   }
 }
