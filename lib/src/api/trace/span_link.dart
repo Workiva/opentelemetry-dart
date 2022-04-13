@@ -2,12 +2,12 @@ import '../../../api.dart' as api;
 
 class SpanLink {
   final api.SpanContext _context;
-  final api.Attributes _attributes;
+  final List<api.Attribute> _attributes;
 
-  SpanLink(this._context, {api.Attributes attributes})
-      : _attributes = attributes ?? api.Attributes.empty();
+  SpanLink(this._context, {List<api.Attribute> attributes})
+      : _attributes = attributes ?? [];
 
-  api.Attributes get attributes => _attributes;
+  List<api.Attribute> get attributes => _attributes;
 
   api.SpanContext get context => _context;
 }
