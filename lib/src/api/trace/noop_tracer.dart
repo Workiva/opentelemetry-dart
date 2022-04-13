@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 
@@ -13,11 +11,5 @@ class NoopTracer implements api.Tracer {
 
     return api.NonRecordingSpan(
         (parentContext.isValid) ? parentContext : sdk.SpanContext.invalid());
-  }
-
-  @override
-  FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
-      {api.Context context}) async {
-    return await (context ?? api.Context.current).execute(fn);
   }
 }
