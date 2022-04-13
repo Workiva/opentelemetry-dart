@@ -71,6 +71,22 @@ void main() {
     expect(testTraceState.size, equals(0));
   });
 
+  test('remove valid value', () {
+    final testTraceState = TraceState.empty()
+      ..put('key_0-1', 'value@2')
+      ..put('key_0-2', 'value@1')
+      ..put('key_@vendor', 'value@3')
+      ..remove('key_@vendor');
+
+    expect(testTraceState.get('key_0-1'), equals('value@2'));
+    expect(testTraceState.get('key_0-2'), equals('value@1'));
+    expect(testTraceState.get('key_@vendor'), isNull);
+    expect(
+        testTraceState.toString(), equals('key_0-1=value@2,key_0-2=value@1'));
+    expect(testTraceState.isEmpty, isFalse);
+    expect(testTraceState.size, equals(2));
+  });
+
   test('key regex, valid key', () {
     final matchResult = TraceState.validKeyRegex.matchAsPrefix('key_0-1');
 
