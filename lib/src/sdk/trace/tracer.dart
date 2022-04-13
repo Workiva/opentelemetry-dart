@@ -8,15 +8,18 @@ class Tracer implements api.Tracer {
   final api.Sampler _sampler;
   final api.IdGenerator _idGenerator;
   final api.InstrumentationLibrary _instrumentationLibrary;
+  sdk.SpanLimits _spanLimits;
 
   Tracer(this._processors, this._resource, this._sampler, this._idGenerator,
-      this._instrumentationLibrary);
+      this._instrumentationLibrary,
+      {sdk.SpanLimits spanLimits}) {
+    _spanLimits = spanLimits ?? sdk.SpanLimits();
+  }
 
   @override
   api.Span startSpan(String name,
-      {api.Context context, api.Attributes attributes}) {
+      {api.Context context, List<api.Attribute> attributes}) {
     context ??= api.Context.current;
-    attributes ??= api.Attributes.empty();
 
     // If a valid, active Span is present in the context, use it as this Span's
     // parent.  If the Context does not contain an active parent Span, create
@@ -48,6 +51,6 @@ class Tracer implements api.Tracer {
 
     return sdk.Span(name, spanContext, parentSpanId, _processors, _resource,
         _instrumentationLibrary,
-        attributes: attributes);
+        attributes: attributes, spanlimits: _spanLimits);
   }
 }

@@ -8,16 +8,19 @@ class TracerProvider implements api.TracerProvider {
   api.Resource _resource;
   api.Sampler _sampler;
   api.IdGenerator _idGenerator;
+  sdk.SpanLimits _spanLimits;
 
   TracerProvider(
       {List<api.SpanProcessor> processors,
       api.Resource resource,
       api.Sampler sampler,
-      api.IdGenerator idGenerator}) {
+      api.IdGenerator idGenerator,
+      sdk.SpanLimits spanLimits}) {
     _processors = processors ?? []; // Default to a no-op TracerProvider.
     _resource = resource ?? sdk.Resource(api.Attributes.empty());
     _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler());
     _idGenerator = idGenerator ?? sdk.IdGenerator();
+    _spanLimits = spanLimits ?? sdk.SpanLimits();
   }
 
   List<api.SpanProcessor> get spanProcessors => _processors;
@@ -28,7 +31,8 @@ class TracerProvider implements api.TracerProvider {
     return _tracers.putIfAbsent(
         key,
         () => sdk.Tracer(_processors, _resource, _sampler, _idGenerator,
-            sdk.InstrumentationLibrary(name, version)));
+            sdk.InstrumentationLibrary(name, version),
+            spanLimits: _spanLimits));
   }
 
   @override

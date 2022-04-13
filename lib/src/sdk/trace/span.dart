@@ -1,6 +1,7 @@
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
+import '../../../sdk.dart' as sdk;
 
 /// A representation of a single operation within a trace.
 class Span implements api.Span {
@@ -9,9 +10,12 @@ class Span implements api.Span {
   final api.SpanStatus _status = api.SpanStatus();
   final List<api.SpanProcessor> _processors;
   final api.Resource _resource;
+  sdk.SpanLimits _spanLimits = sdk.SpanLimits();
   final api.InstrumentationLibrary _instrumentationLibrary;
   Int64 _startTime;
   Int64 _endTime;
+  int _droppedSpanAttributes = 0;
+  final api.Attributes attributes = api.Attributes.empty();
 
   @override
   String name;
@@ -22,9 +26,15 @@ class Span implements api.Span {
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
       this._resource, this._instrumentationLibrary,
-      {api.Attributes attributes}) {
+      {List<api.Attribute> attributes, sdk.SpanLimits spanlimits}) {
     _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
-    this.attributes = attributes ?? api.Attributes.empty();
+
+    if (spanlimits != null) _spanLimits = spanlimits;
+
+    if (attributes != null) {
+      setAttributes(attributes);
+    }
+
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onStart();
     }
@@ -77,16 +87,73 @@ class Span implements api.Span {
       _instrumentationLibrary;
 
   @override
-  api.Attributes attributes;
+  void setAttributes(List<api.Attribute> attributes) {
+    //Don't want to have any attribute
+    if (_spanLimits.maxNumAttributes == 0) {
+      _droppedSpanAttributes += attributes.length;
+      return;
+    }
+
+    attributes.forEach(setAttribute);
+  }
+
+  @override
+  void setAttribute(api.Attribute attribute) {
+    //Don't want to have any attribute
+    if (_spanLimits.maxNumAttributes == 0) {
+      _droppedSpanAttributes++;
+      return;
+    }
+
+    final obj = attributes.get(attribute.key);
+    //If current attributes.length is equal or greater than maxNumAttributes and
+    //key is not in current map, drop it.
+    if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
+      _droppedSpanAttributes++;
+      return;
+    }
+    attributes.add(_rebuildAttribute(attribute));
+  }
+
+  /// reBuild an attribute, this way it is tightly coupled with the type we supported,
+  /// if later we added more types, then we need to change this method.
+  api.Attribute _rebuildAttribute(api.Attribute attr) {
+    //if maxNumAttributeLength is less than zero, then it has unlimited length.
+    if (_spanLimits.maxNumAttributeLength < 0) return attr;
+
+    if (attr.value is String) {
+      attr = api.Attribute.fromString(
+          attr.key,
+          _applyAttributeLengthLimit(
+              attr.value, _spanLimits.maxNumAttributeLength));
+    } else if (attr.value is List<String>) {
+      final listString = attr.value as List<String>;
+      for (var j = 0; j < listString.length; j++) {
+        listString[j] = _applyAttributeLengthLimit(
+            listString[j], _spanLimits.maxNumAttributeLength);
+      }
+      attr = api.Attribute.fromStringList(attr.key, listString);
+    }
+    return attr;
+  }
 
   @override
   void recordException(dynamic exception, {StackTrace stackTrace}) {
+    // ignore: todo
     // TODO: O11Y-1531: Consider integration of Events here.
     setStatus(api.StatusCode.error, description: exception.toString());
-    attributes.addAll([
+    setAttributes([
       api.Attribute.fromBoolean('error', true),
       api.Attribute.fromString('exception', exception.toString()),
       api.Attribute.fromString('stacktrace', stackTrace.toString()),
     ]);
   }
+
+  //Truncate just strings which length is longer than configuration.
+  //Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
+  static String _applyAttributeLengthLimit(String value, int lengthLimit) {
+    return value.length > lengthLimit ? value.substring(0, lengthLimit) : value;
+  }
+
+  int get droppedAttributes => _droppedSpanAttributes;
 }

@@ -10,7 +10,7 @@ enum Decision {
 /// be processed for collection.
 abstract class SamplingResult {
   final api.Decision decision;
-  final api.Attributes spanAttributes;
+  final List<api.Attribute> spanAttributes;
   final api.TraceState traceState;
 
   SamplingResult(this.decision, this.spanAttributes, this.traceState);

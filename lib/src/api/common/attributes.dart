@@ -12,6 +12,9 @@ class Attributes {
   /// Retrieve the value associated with the Attribute with key [key].
   Object get(String key) => _attributes[key];
 
+  ///
+  int get length => _attributes.length;
+
   /// Retrieve the keys of all Attributes in this collection.
   Iterable<String> get keys => _attributes.keys;
 

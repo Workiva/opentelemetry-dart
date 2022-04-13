@@ -4,27 +4,59 @@ class Attribute {
   final Object value;
 
   /// Create an Attribute from a String value.
-  Attribute.fromString(this.key, String this.value);
+  Attribute.fromString(this.key, String this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 
   /// Create an Attribute from a boolean value.
   // ignore: avoid_positional_boolean_parameters
-  Attribute.fromBoolean(this.key, bool this.value);
+  Attribute.fromBoolean(this.key, bool this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 
   /// Create an Attribute from a double-precision floating-point value.
-  Attribute.fromDouble(this.key, double this.value);
+  Attribute.fromDouble(this.key, double this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 
   /// Create an Attribute from an integer value.
-  Attribute.fromInt(this.key, int this.value);
+  Attribute.fromInt(this.key, int this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 
   /// Create an Attribute from a list of String values.
-  Attribute.fromStringList(this.key, List<String> this.value);
+  Attribute.fromStringList(this.key, List<String> this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 
   /// Create an Attribute from a list of boolean values.
-  Attribute.fromBooleanList(this.key, List<bool> this.value);
+  Attribute.fromBooleanList(this.key, List<bool> this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 
   /// Create an Attribute from a list of double-precision floating-point values.
-  Attribute.fromDoubleList(this.key, List<double> this.value);
+  Attribute.fromDoubleList(this.key, List<double> this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 
   /// Create an Attribute from a list of integer values.
-  Attribute.fromIntList(this.key, List<int> this.value);
+  Attribute.fromIntList(this.key, List<int> this.value) {
+    if (key == null) {
+      throw ArgumentError("key can't be null.");
+    }
+  }
 }

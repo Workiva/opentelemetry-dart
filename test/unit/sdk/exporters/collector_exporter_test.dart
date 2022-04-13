@@ -39,8 +39,7 @@ void main() {
         [],
         resource,
         instrumentationLibrary,
-        attributes: api.Attributes.empty()
-          ..add(api.Attribute.fromString('foo', 'bar')))
+        attributes: [api.Attribute.fromString('foo', 'bar')])
       ..end();
     final span2 = sdk.Span(
         'baz',
@@ -50,8 +49,7 @@ void main() {
         [],
         resource,
         instrumentationLibrary,
-        attributes: api.Attributes.empty()
-          ..add(api.Attribute.fromBoolean('bool', true)))
+        attributes: [api.Attribute.fromBoolean('bool', true)])
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
