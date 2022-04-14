@@ -161,7 +161,8 @@ class Span implements api.Span {
   api.SpanKind get kind => _kind;
 
   @override
-  void addEvent(String name, Int64 timestamp, {api.Attributes attributes}) {
+  void addEvent(String name, Int64 timestamp,
+      {List<api.Attribute> attributes}) {
     // TODO: O11Y-1531
     throw UnimplementedError();
   }

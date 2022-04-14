@@ -18,7 +18,7 @@ abstract class TraceState {
   /// characters (i.e., the range 0x20 to 0x7E) except comma , and =.
   void put(String key, String value);
 
-  /// Removes a key value pairs from the TraceState.
+  /// Removes a key value pair from the TraceState.
   ///
   /// Key is an opaque string up to 256 characters printable. It MUST begin
   /// with a lowercase letter, and can only contain lowercase letters a-z,
