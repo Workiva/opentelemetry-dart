@@ -1,0 +1,10 @@
+name: opentelemetry-dart
+contact: "Slack: #support-observability"
+description: Placeholder test to be updated prior to 1.0 release.
+run:
+  when-branch-name-is:
+    - .+
+size: small
+timeout: 300
+scripts:
+  - 'true'
