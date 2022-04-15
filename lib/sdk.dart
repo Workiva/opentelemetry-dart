@@ -12,11 +12,13 @@ export 'src/sdk/trace/exporters/console_exporter.dart' show ConsoleExporter;
 export 'src/sdk/trace/id_generator.dart' show IdGenerator;
 export 'src/sdk/trace/propagation/w3c_trace_context_propagator.dart'
     show W3CTraceContextPropagator;
-export 'src/sdk/trace/samplers/always_off_sampler.dart' show AlwaysOffSampler;
-export 'src/sdk/trace/samplers/always_on_sampler.dart' show AlwaysOnSampler;
-export 'src/sdk/trace/samplers/parent_based_sampler.dart'
+export 'src/sdk/trace/sampling/always_off_sampler.dart' show AlwaysOffSampler;
+export 'src/sdk/trace/sampling/always_on_sampler.dart' show AlwaysOnSampler;
+export 'src/sdk/trace/sampling/parent_based_sampler.dart'
     show ParentBasedSampler;
-export 'src/sdk/trace/samplers/sampling_result.dart' show SamplingResult;
+export 'src/sdk/trace/sampling/sampler.dart' show Sampler;
+export 'src/sdk/trace/sampling/sampling_result.dart'
+    show Decision, SamplingResult;
 export 'src/sdk/trace/span.dart' show Span;
 export 'src/sdk/trace/span_context.dart' show SpanContext;
 export 'src/sdk/trace/span_processors/batch_processor.dart'

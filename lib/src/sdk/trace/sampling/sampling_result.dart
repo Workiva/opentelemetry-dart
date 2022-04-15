@@ -1,4 +1,4 @@
-import '../../../api.dart' as api;
+import '../../../../api.dart' as api;
 
 enum Decision {
   drop,
@@ -6,10 +6,8 @@ enum Decision {
   recordAndSample,
 }
 
-/// Represents the result of a Sampler as to whether a Span should
-/// be processed for collection.
-abstract class SamplingResult {
-  final api.Decision decision;
+class SamplingResult {
+  final Decision decision;
   final List<api.Attribute> spanAttributes;
   final api.TraceState traceState;
 

@@ -1,20 +1,20 @@
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
 
-class AlwaysOffSampler implements api.Sampler {
+class AlwaysOnSampler implements sdk.Sampler {
   @override
-  String get description => 'AlwaysOffSampler';
+  String get description => 'AlwaysOnSampler';
 
   @override
-  api.SamplingResult shouldSample(
+  sdk.SamplingResult shouldSample(
       api.Context context,
       api.TraceId traceId,
       String spanName,
       api.SpanKind spanKind,
       bool spanIsRemote,
       List<api.Attribute> spanAttributes,
-      List<api.SpanLink> links) {
-    return sdk.SamplingResult(api.Decision.drop, spanAttributes,
+      List<api.SpanLink> spanLinks) {
+    return sdk.SamplingResult(sdk.Decision.recordAndSample, spanAttributes,
         context.spanContext?.traceState ?? sdk.TraceState.empty());
   }
 }
