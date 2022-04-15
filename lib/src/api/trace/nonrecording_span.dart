@@ -31,6 +31,9 @@ class NonRecordingSpan implements api.Span {
   String get name => 'NON_RECORDING';
 
   @override
+  set name(String _name) {}
+
+  @override
   bool get isRecording => false;
 
   @override
@@ -56,4 +59,11 @@ class NonRecordingSpan implements api.Span {
 
   @override
   void recordException(dynamic exception, {StackTrace stackTrace}) {}
+
+  @override
+  void addEvent(String name, Int64 timestamp,
+      {List<api.Attribute> attributes}) {}
+
+  @override
+  api.SpanKind get kind => api.SpanKind.internal;
 }

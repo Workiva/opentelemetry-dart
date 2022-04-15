@@ -2,6 +2,8 @@ import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
 
+enum SpanKind { server, client, producer, consumer, internal }
+
 /// A representation of a single operation within a trace.
 ///
 /// Examples of a span might include remote procedure calls or in-process
@@ -26,11 +28,14 @@ abstract class Span {
   api.SpanId get parentSpanId;
 
   /// The name of the span.
-  String get name;
+  String name;
 
   /// Whether this Span is recording information like events with the
   /// addEvent operation, status with setStatus, etc.
   bool get isRecording;
+
+  /// The kind of the span.
+  SpanKind get kind;
 
   /// Sets the status to the [Span].
   ///
@@ -55,6 +60,9 @@ abstract class Span {
 
   /// Retrieve the instrumentation library on this span.
   api.InstrumentationLibrary get instrumentationLibrary;
+
+  /// Record metadata about an event occurring during this span.
+  void addEvent(String name, Int64 timestamp, {List<api.Attribute> attributes});
 
   /// Marks the end of this span's execution.
   void end();

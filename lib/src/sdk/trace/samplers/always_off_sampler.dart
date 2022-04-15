@@ -6,8 +6,14 @@ class AlwaysOffSampler implements api.Sampler {
   String get description => 'AlwaysOffSampler';
 
   @override
-  api.SamplingResult shouldSample(api.Context context, api.TraceId traceId,
-      String spanName, bool spanIsRemote, List<api.Attribute> spanAttributes) {
+  api.SamplingResult shouldSample(
+      api.Context context,
+      api.TraceId traceId,
+      String spanName,
+      api.SpanKind spanKind,
+      bool spanIsRemote,
+      List<api.Attribute> spanAttributes,
+      List<api.SpanLink> links) {
     return sdk.SamplingResult(api.Decision.drop, spanAttributes,
         context.spanContext?.traceState ?? sdk.TraceState.empty());
   }

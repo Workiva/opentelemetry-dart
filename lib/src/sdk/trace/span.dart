@@ -7,12 +7,14 @@ import '../../../sdk.dart' as sdk;
 class Span implements api.Span {
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
+  final api.SpanKind _kind; // ignore: unused_field
   final api.SpanStatus _status = api.SpanStatus();
   final List<api.SpanProcessor> _processors;
+  final List<api.SpanLink> _links; // ignore: unused_field
   final api.Resource _resource;
   sdk.SpanLimits _spanLimits = sdk.SpanLimits();
   final api.InstrumentationLibrary _instrumentationLibrary;
-  Int64 _startTime;
+  final Int64 _startTime;
   Int64 _endTime;
   int _droppedSpanAttributes = 0;
   final api.Attributes attributes = api.Attributes.empty();
@@ -26,9 +28,15 @@ class Span implements api.Span {
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
       this._resource, this._instrumentationLibrary,
-      {List<api.Attribute> attributes, sdk.SpanLimits spanlimits}) {
-    _startTime = Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
-
+      {api.SpanKind kind,
+      List<api.Attribute> attributes,
+      List<api.SpanLink> links,
+      sdk.SpanLimits spanlimits,
+      Int64 startTime})
+      : _links = links ?? [],
+        _kind = kind ?? api.SpanKind.internal,
+        _startTime =
+            startTime ?? Int64(DateTime.now().toUtc().microsecondsSinceEpoch) {
     if (spanlimits != null) _spanLimits = spanlimits;
 
     if (attributes != null) {
@@ -147,6 +155,16 @@ class Span implements api.Span {
       api.Attribute.fromString('exception', exception.toString()),
       api.Attribute.fromString('stacktrace', stackTrace.toString()),
     ]);
+  }
+
+  @override
+  api.SpanKind get kind => _kind;
+
+  @override
+  void addEvent(String name, Int64 timestamp,
+      {List<api.Attribute> attributes}) {
+    // TODO: O11Y-1531
+    throw UnimplementedError();
   }
 
   //Truncate just strings which length is longer than configuration.
