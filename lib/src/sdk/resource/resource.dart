@@ -1,10 +1,9 @@
-import '../../../api.dart' as api;
+import '../../../sdk.dart' as sdk;
 
-class Resource implements api.Resource {
-  final api.Attributes _attributes;
+class Resource {
+  final sdk.Attributes _attributes;
 
   Resource(this._attributes);
 
-  @override
-  api.Attributes get attributes => _attributes;
+  sdk.Attributes get attributes => _attributes;
 }

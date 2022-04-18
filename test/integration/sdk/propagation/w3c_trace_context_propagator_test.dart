@@ -35,7 +35,7 @@ void main() {
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource(sdk.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = sdk.W3CTraceContextPropagator();
     final testCarrier = {};
@@ -69,7 +69,7 @@ void main() {
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('0000000000000000'),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource(sdk.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = sdk.W3CTraceContextPropagator();
     final testCarrier = {};
@@ -103,7 +103,7 @@ void main() {
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource(sdk.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     final tracer = sdk.TracerProvider(processors: [])
         .getTracer('appName', version: '1.0.0');

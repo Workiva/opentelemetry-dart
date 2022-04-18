@@ -1,12 +1,12 @@
 import 'package:http/http.dart' as http;
 
 import '../../../../api.dart' as api;
+import '../../../../sdk.dart' as sdk;
 import 'opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
     as pb_trace_service;
 import 'opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 import 'opentelemetry/proto/resource/v1/resource.pb.dart' as pb_resource;
 import 'opentelemetry/proto/common/v1/common.pb.dart' as pb_common;
-import '../span.dart' as sdk;
 
 class CollectorExporter implements api.SpanExporter {
   Uri uri;
@@ -27,8 +27,13 @@ class CollectorExporter implements api.SpanExporter {
       return;
     }
 
+    final sdkSpans = <sdk.Span>[];
+    for (final span in spans) {
+      sdkSpans.add(span as sdk.Span);
+    }
+
     final body = pb_trace_service.ExportTraceServiceRequest(
-        resourceSpans: _spansToProtobuf(spans));
+        resourceSpans: _spansToProtobuf(sdkSpans));
 
     client.post(uri,
         body: body.writeToBuffer(),
@@ -36,18 +41,18 @@ class CollectorExporter implements api.SpanExporter {
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
-  /// Spans are grouped by a trace provider's [api.Resource] and a tracer's
+  /// Spans are grouped by a trace provider's [sdk.Resource] and a tracer's
   /// [api.InstrumentationLibrary].
-  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
+  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<sdk.Span> spans) {
     // use a map of maps to group spans by resource and instrumentation library
     final rsm =
-        <api.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
+        <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
     for (final span in spans) {
       final il = rsm[span.resource] ??
           <api.InstrumentationLibrary, List<pb_trace.Span>>{};
       il[span.instrumentationLibrary] =
           il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
-            ..add(_spanToProtobuf(span as sdk.Span));
+            ..add(_spanToProtobuf(span));
       rsm[span.resource] = il;
     }
 

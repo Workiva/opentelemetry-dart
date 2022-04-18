@@ -27,7 +27,7 @@ void main() {
   });
 
   test('sends spans', () {
-    final resource = sdk.Resource(api.Attributes.empty()
+    final resource = sdk.Resource(sdk.Attributes.empty()
       ..add(api.Attribute.fromString('service.name', 'bar')));
     final instrumentationLibrary =
         sdk.InstrumentationLibrary('library_name', 'library_version');
@@ -112,7 +112,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource(sdk.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'))
       ..end();
 

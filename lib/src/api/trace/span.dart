@@ -55,9 +55,6 @@ abstract class Span {
   /// set multiple attributes
   void setAttributes(List<api.Attribute> attributes);
 
-  /// Retrieve the resource on this span.
-  api.Resource get resource;
-
   /// Retrieve the instrumentation library on this span.
   api.InstrumentationLibrary get instrumentationLibrary;
 

@@ -10,7 +10,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource(sdk.Attributes.empty()),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     expect(span.name, 'foo');
 

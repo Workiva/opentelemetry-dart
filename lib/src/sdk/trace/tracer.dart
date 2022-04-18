@@ -6,7 +6,7 @@ import '../../../sdk.dart' as sdk;
 /// An interface for creating [api.Span]s and propagating context in-process.
 class Tracer implements api.Tracer {
   final List<api.SpanProcessor> _processors;
-  final api.Resource _resource;
+  final sdk.Resource _resource;
   final api.Sampler _sampler;
   final api.IdGenerator _idGenerator;
   final api.InstrumentationLibrary _instrumentationLibrary;

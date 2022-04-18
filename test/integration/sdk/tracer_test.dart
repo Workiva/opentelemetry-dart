@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() {
   test('startSpan new trace', () {
     final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource(sdk.Attributes.empty()),
         sdk.AlwaysOnSampler(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
@@ -20,7 +20,7 @@ void main() {
 
   test('startSpan child span', () {
     final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource(sdk.Attributes.empty()),
         sdk.AlwaysOnSampler(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));

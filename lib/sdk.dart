@@ -27,3 +27,4 @@ export 'src/sdk/trace/tracer.dart' show Tracer;
 export 'src/sdk/trace/tracer_provider.dart' show TracerProvider;
 export 'src/sdk/trace/trace_state.dart' show TraceState;
 export 'src/sdk/trace/span_limits.dart' show SpanLimits;
+export 'src/sdk/common/attributes.dart' show Attributes;

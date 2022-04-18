@@ -11,13 +11,13 @@ class Span implements api.Span {
   final api.SpanStatus _status = api.SpanStatus();
   final List<api.SpanProcessor> _processors;
   final List<api.SpanLink> _links; // ignore: unused_field
-  final api.Resource _resource;
+  final sdk.Resource _resource;
   sdk.SpanLimits _spanLimits = sdk.SpanLimits();
   final api.InstrumentationLibrary _instrumentationLibrary;
   final Int64 _startTime;
   Int64 _endTime;
   int _droppedSpanAttributes = 0;
-  final api.Attributes attributes = api.Attributes.empty();
+  final sdk.Attributes attributes = sdk.Attributes.empty();
 
   @override
   String name;
@@ -87,8 +87,7 @@ class Span implements api.Span {
   @override
   api.SpanStatus get status => _status;
 
-  @override
-  api.Resource get resource => _resource;
+  sdk.Resource get resource => _resource;
 
   @override
   api.InstrumentationLibrary get instrumentationLibrary =>

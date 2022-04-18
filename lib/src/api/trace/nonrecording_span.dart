@@ -52,9 +52,6 @@ class NonRecordingSpan implements api.Span {
   api.SpanStatus get status => _status;
 
   @override
-  api.Resource get resource => null;
-
-  @override
   api.InstrumentationLibrary get instrumentationLibrary => null;
 
   @override

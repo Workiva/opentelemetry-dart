@@ -5,19 +5,19 @@ import '../../../sdk.dart' as sdk;
 class TracerProvider implements api.TracerProvider {
   final Map<String, api.Tracer> _tracers = {};
   List<api.SpanProcessor> _processors;
-  api.Resource _resource;
+  sdk.Resource _resource;
   api.Sampler _sampler;
   api.IdGenerator _idGenerator;
   sdk.SpanLimits _spanLimits;
 
   TracerProvider(
       {List<api.SpanProcessor> processors,
-      api.Resource resource,
+      sdk.Resource resource,
       api.Sampler sampler,
       api.IdGenerator idGenerator,
       sdk.SpanLimits spanLimits}) {
     _processors = processors ?? []; // Default to a no-op TracerProvider.
-    _resource = resource ?? sdk.Resource(api.Attributes.empty());
+    _resource = resource ?? sdk.Resource(sdk.Attributes.empty());
     _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler());
     _idGenerator = idGenerator ?? sdk.IdGenerator();
     _spanLimits = spanLimits ?? sdk.SpanLimits();
