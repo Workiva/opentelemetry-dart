@@ -1,12 +1,12 @@
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
 
-class ParentBasedSampler implements api.Sampler {
-  final api.Sampler _root;
-  final api.Sampler _remoteParentSampled;
-  final api.Sampler _remoteParentNotSampled;
-  final api.Sampler _localParentSampled;
-  final api.Sampler _localParentNotSampled;
+class ParentBasedSampler implements sdk.Sampler {
+  final sdk.Sampler _root;
+  final sdk.Sampler _remoteParentSampled;
+  final sdk.Sampler _remoteParentNotSampled;
+  final sdk.Sampler _localParentSampled;
+  final sdk.Sampler _localParentNotSampled;
 
   ParentBasedSampler(this._root,
       {remoteParentSampled,
@@ -24,7 +24,7 @@ class ParentBasedSampler implements api.Sampler {
   String get description => 'ParentBasedSampler{root=${_root.description}}';
 
   @override
-  api.SamplingResult shouldSample(
+  sdk.SamplingResult shouldSample(
       api.Context context,
       api.TraceId traceId,
       String spanName,

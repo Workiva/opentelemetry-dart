@@ -27,7 +27,7 @@ void main() {
     final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
         api.SpanKind.internal, false, null, []);
 
-    expect(result.decision, equals(api.Decision.recordAndSample));
+    expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals(null));
     expect(result.traceState.isEmpty, isTrue);
   });
@@ -45,7 +45,7 @@ void main() {
     final result = testSampler.shouldSample(api.Context.root, traceId,
         testSpan.name, api.SpanKind.internal, false, null, []);
 
-    expect(result.decision, equals(api.Decision.recordAndSample));
+    expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals(null));
     expect(result.traceState.isEmpty, isTrue);
   });
@@ -67,7 +67,7 @@ void main() {
     final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
         api.SpanKind.internal, false, null, []);
 
-    expect(result.decision, equals(api.Decision.recordAndSample));
+    expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals(null));
     expect(result.traceState, same(traceState));
   });
@@ -89,7 +89,7 @@ void main() {
     final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
         api.SpanKind.internal, false, [], []);
 
-    expect(result.decision, equals(api.Decision.drop));
+    expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
@@ -111,7 +111,7 @@ void main() {
     final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
         api.SpanKind.internal, false, [], []);
 
-    expect(result.decision, equals(api.Decision.recordAndSample));
+    expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
@@ -133,7 +133,7 @@ void main() {
     final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
         api.SpanKind.internal, false, [], []);
 
-    expect(result.decision, equals(api.Decision.drop));
+    expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
