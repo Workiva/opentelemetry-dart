@@ -7,7 +7,7 @@ import '../../../sdk.dart' as sdk;
 class Tracer implements api.Tracer {
   final List<api.SpanProcessor> _processors;
   final sdk.Resource _resource;
-  final api.Sampler _sampler;
+  final sdk.Sampler _sampler;
   final api.IdGenerator _idGenerator;
   final api.InstrumentationLibrary _instrumentationLibrary;
   sdk.SpanLimits _spanLimits;
@@ -49,7 +49,7 @@ class Tracer implements api.Tracer {
 
     final samplerResult = _sampler.shouldSample(
         context, traceId, name, kind, false, attributes, links);
-    final traceFlags = (samplerResult.decision == api.Decision.recordAndSample)
+    final traceFlags = (samplerResult.decision == sdk.Decision.recordAndSample)
         ? api.TraceFlags.sampled
         : api.TraceFlags.none;
     final spanContext =

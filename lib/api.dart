@@ -8,8 +8,6 @@ export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;
 export 'src/api/span_processors/span_processor.dart' show SpanProcessor;
 export 'src/api/trace/id_generator.dart' show IdGenerator;
 export 'src/api/trace/nonrecording_span.dart' show NonRecordingSpan;
-export 'src/api/trace/sampler.dart' show Sampler;
-export 'src/api/trace/sampling_result.dart' show Decision, SamplingResult;
 export 'src/api/trace/span.dart' show Span, SpanKind;
 export 'src/api/trace/span_context.dart' show SpanContext;
 export 'src/api/trace/span_id.dart' show SpanId;

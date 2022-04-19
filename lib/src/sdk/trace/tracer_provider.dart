@@ -6,14 +6,14 @@ class TracerProvider implements api.TracerProvider {
   final Map<String, api.Tracer> _tracers = {};
   List<api.SpanProcessor> _processors;
   sdk.Resource _resource;
-  api.Sampler _sampler;
+  sdk.Sampler _sampler;
   api.IdGenerator _idGenerator;
   sdk.SpanLimits _spanLimits;
 
   TracerProvider(
       {List<api.SpanProcessor> processors,
       sdk.Resource resource,
-      api.Sampler sampler,
+      sdk.Sampler sampler,
       api.IdGenerator idGenerator,
       sdk.SpanLimits spanLimits}) {
     _processors = processors ?? []; // Default to a no-op TracerProvider.

@@ -20,7 +20,7 @@ void main() {
     final result = sdk.AlwaysOnSampler().shouldSample(testContext, traceId,
         testSpan.name, api.SpanKind.internal, false, [], []);
 
-    expect(result.decision, equals(api.Decision.recordAndSample));
+    expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
@@ -39,7 +39,7 @@ void main() {
     final result = sdk.AlwaysOnSampler().shouldSample(api.Context.root, traceId,
         testSpan.name, api.SpanKind.internal, false, [], []);
 
-    expect(result.decision, equals(api.Decision.recordAndSample));
+    expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals([]));
     expect(result.traceState.isEmpty, isTrue);
   });

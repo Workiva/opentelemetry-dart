@@ -20,7 +20,7 @@ void main() {
     final result = sdk.AlwaysOffSampler().shouldSample(testContext, traceId,
         testSpan.name, api.SpanKind.internal, false, [], []);
 
-    expect(result.decision, equals(api.Decision.drop));
+    expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
@@ -49,7 +49,7 @@ void main() {
         false,
         attributesList, []);
 
-    expect(result.decision, equals(api.Decision.drop));
+    expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, attributesList);
     expect(result.traceState.isEmpty, isTrue);
   });
