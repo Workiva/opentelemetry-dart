@@ -7,6 +7,6 @@ void main() {
     expect(
         () => Resource([Attribute.fromBoolean('foo', true)]),
         throwsA(isA<ArgumentError>().having((error) => error.message, 'message',
-            'Both resource attributes key and value must be String.')));
+            'Attributes value must be String.')));
   });
 }
