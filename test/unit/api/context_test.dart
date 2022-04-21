@@ -10,7 +10,7 @@ void main() {
       testSpanContext,
       api.SpanId([4, 5, 6]),
       [],
-      sdk.Resource(sdk.Attributes.empty()),
+      sdk.Resource([]),
       sdk.InstrumentationLibrary('library_name', 'library_version'));
 
   group('get Span', () {

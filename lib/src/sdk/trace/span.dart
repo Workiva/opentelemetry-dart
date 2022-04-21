@@ -1,4 +1,5 @@
 import 'package:fixnum/fixnum.dart';
+import 'package:opentelemetry/src/sdk/common/attributes.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
@@ -17,7 +18,7 @@ class Span implements api.Span {
   final Int64 _startTime;
   Int64 _endTime;
   int _droppedSpanAttributes = 0;
-  final sdk.Attributes attributes = sdk.Attributes.empty();
+  final Attributes attributes = Attributes.empty();
 
   @override
   String name;

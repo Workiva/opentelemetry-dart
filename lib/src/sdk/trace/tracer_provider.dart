@@ -17,7 +17,7 @@ class TracerProvider implements api.TracerProvider {
       api.IdGenerator idGenerator,
       sdk.SpanLimits spanLimits}) {
     _processors = processors ?? []; // Default to a no-op TracerProvider.
-    _resource = resource ?? sdk.Resource(sdk.Attributes.empty());
+    _resource = resource;
     _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler());
     _idGenerator = idGenerator ?? sdk.IdGenerator();
     _spanLimits = spanLimits ?? sdk.SpanLimits();

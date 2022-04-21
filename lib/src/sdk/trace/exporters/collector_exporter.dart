@@ -27,13 +27,8 @@ class CollectorExporter implements api.SpanExporter {
       return;
     }
 
-    final sdkSpans = <sdk.Span>[];
-    for (final span in spans) {
-      sdkSpans.add(span as sdk.Span);
-    }
-
     final body = pb_trace_service.ExportTraceServiceRequest(
-        resourceSpans: _spansToProtobuf(sdkSpans));
+        resourceSpans: _spansToProtobuf(spans));
 
     client.post(uri,
         body: body.writeToBuffer(),
@@ -43,17 +38,17 @@ class CollectorExporter implements api.SpanExporter {
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
   /// Spans are grouped by a trace provider's [sdk.Resource] and a tracer's
   /// [api.InstrumentationLibrary].
-  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<sdk.Span> spans) {
+  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
     // use a map of maps to group spans by resource and instrumentation library
     final rsm =
         <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
     for (final span in spans) {
-      final il = rsm[span.resource] ??
+      final il = rsm[(span as sdk.Span).resource] ??
           <api.InstrumentationLibrary, List<pb_trace.Span>>{};
       il[span.instrumentationLibrary] =
           il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
             ..add(_spanToProtobuf(span));
-      rsm[span.resource] = il;
+      rsm[(span as sdk.Span).resource] = il;
     }
 
     final rss = <pb_trace.ResourceSpans>[];

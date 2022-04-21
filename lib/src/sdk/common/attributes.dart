@@ -1,4 +1,4 @@
-import '../../api/common/attribute.dart';
+import '../../../api.dart';
 
 /// A representation of a collection of metadata attached to a trace span.
 class Attributes {

@@ -1,9 +1,19 @@
-import '../../../sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/common/attributes.dart';
+
+import '../../../api.dart' as api;
 
 class Resource {
-  final sdk.Attributes _attributes;
+  final Attributes _attributes = Attributes.empty();
 
-  Resource(this._attributes);
+  Resource(List<api.Attribute> attributes) {
+    for (final attribute in attributes) {
+      if (attribute.value is! String || attribute.key is! String) {
+        throw ArgumentError(
+            'Both resource attributes key and value must be String.');
+      }
+    }
+    _attributes.addAll(attributes);
+  }
 
-  sdk.Attributes get attributes => _attributes;
+  Attributes get attributes => _attributes;
 }

@@ -16,7 +16,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         parentSpanId,
         [mockProcessor1, mockProcessor2],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     expect(span.startTime, isNotNull);
@@ -45,7 +45,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     // Verify span status' defaults.
@@ -110,7 +110,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     expect(span.attributes.keys.length, isZero);
@@ -133,7 +133,7 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(sdk.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 
     try {
