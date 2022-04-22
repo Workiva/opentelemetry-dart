@@ -4,7 +4,7 @@ WORKDIR /build
 RUN apt update && apt install -y make protobuf-compiler
 
 COPY pubspec.yaml .
-RUN pub get
+RUN dart pub get
 
 COPY . .
 
@@ -24,8 +24,8 @@ ARG GIT_HEAD_URL
 ARG GIT_MERGE_HEAD
 ARG GIT_MERGE_BRANCH
 
-RUN pub global activate --hosted-url https://pub.workiva.org semver_audit ^2.2.0
-RUN pub global run semver_audit report --repo Workiva/opentelemetry-dart
+RUN dart pub global activate --hosted-url https://pub.workiva.org semver_audit ^2.2.0
+RUN dart pub global run semver_audit report --repo Workiva/opentelemetry-dart
 
 ARG BUILD_ARTIFACTS_PUB=/build/pub_package.pub.tgz
 
