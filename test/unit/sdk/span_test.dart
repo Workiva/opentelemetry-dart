@@ -10,11 +10,12 @@ void main() {
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource([api.Attribute.fromString('service-name', 'foo')]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     expect(span.name, 'foo');
 
     span.name = 'bar';
     expect(span.name, 'bar');
+    expect(span.resource.attributes.get('service-name'), equals('foo'));
   });
 }

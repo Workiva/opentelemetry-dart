@@ -18,7 +18,7 @@ void main() {
         sdk.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
 
@@ -38,7 +38,7 @@ void main() {
         sdk.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
 
@@ -59,7 +59,7 @@ void main() {
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.sampled, traceState),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
@@ -81,7 +81,7 @@ void main() {
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
@@ -103,7 +103,7 @@ void main() {
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.sampled, traceState),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
@@ -125,7 +125,7 @@ void main() {
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
-        sdk.Resource(api.Attributes.empty()),
+        sdk.Resource([]),
         sdk.InstrumentationLibrary(
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);

@@ -4,24 +4,23 @@ import '../../../sdk.dart' as sdk;
 /// A registry for creating named [api.Tracer]s.
 class TracerProvider implements api.TracerProvider {
   final Map<String, api.Tracer> _tracers = {};
-  List<api.SpanProcessor> _processors;
-  api.Resource _resource;
-  sdk.Sampler _sampler;
-  api.IdGenerator _idGenerator;
-  sdk.SpanLimits _spanLimits;
+  final List<api.SpanProcessor> _processors;
+  final sdk.Resource _resource;
+  final sdk.Sampler _sampler;
+  final api.IdGenerator _idGenerator;
+  final sdk.SpanLimits _spanLimits;
 
   TracerProvider(
       {List<api.SpanProcessor> processors,
-      api.Resource resource,
+      sdk.Resource resource,
       sdk.Sampler sampler,
       api.IdGenerator idGenerator,
-      sdk.SpanLimits spanLimits}) {
-    _processors = processors ?? []; // Default to a no-op TracerProvider.
-    _resource = resource ?? sdk.Resource(api.Attributes.empty());
-    _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler());
-    _idGenerator = idGenerator ?? sdk.IdGenerator();
-    _spanLimits = spanLimits ?? sdk.SpanLimits();
-  }
+      sdk.SpanLimits spanLimits})
+      : _processors = processors ?? [], // Default to a no-op TracerProvider.
+        _resource = resource ?? sdk.Resource([]),
+        _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
+        _idGenerator = idGenerator ?? sdk.IdGenerator(),
+        _spanLimits = spanLimits ?? sdk.SpanLimits();
 
   List<api.SpanProcessor> get spanProcessors => _processors;
 

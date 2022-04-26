@@ -6,11 +6,8 @@ import 'package:test/test.dart';
 
 void main() {
   test('trace synchronous execution', () {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
     sdk.Span span;
 
     sdk.trace('syncTrace', () {
@@ -21,11 +18,8 @@ void main() {
   });
 
   test('trace synchronous looped execution timing', () {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
     final spans = <sdk.Span>[];
 
     for (var i = 0; i < 5; i++) {
@@ -41,11 +35,8 @@ void main() {
   });
 
   test('trace synchronous execution with error', () {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
     sdk.Span span;
 
     expect(
@@ -62,11 +53,8 @@ void main() {
   });
 
   test('trace asynchronous execution', () async {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
     sdk.Span span;
 
     await sdk.trace('asyncTrace', () async {
@@ -77,11 +65,8 @@ void main() {
   });
 
   test('trace asynchronous looped execution timing', () async {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
     final spans = <sdk.Span>[];
 
     for (var i = 0; i < 5; i++) {
@@ -97,11 +82,8 @@ void main() {
   });
 
   test('trace asynchronous execution with thrown error', () async {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
     sdk.Span span;
 
     try {
@@ -120,11 +102,8 @@ void main() {
   });
 
   test('trace asynchronous execution completes with error', () async {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
     sdk.Span span;
 
     try {

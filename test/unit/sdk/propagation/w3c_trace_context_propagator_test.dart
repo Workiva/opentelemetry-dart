@@ -145,7 +145,7 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
-        Resource(api.Attributes.empty()),
+        Resource([]),
         InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
@@ -169,7 +169,7 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('0000000000c0ffee'),
         [],
-        Resource(api.Attributes.empty()),
+        Resource([]),
         InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);

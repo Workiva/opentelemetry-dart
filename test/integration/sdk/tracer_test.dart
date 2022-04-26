@@ -4,11 +4,8 @@ import 'package:test/test.dart';
 
 void main() {
   test('startSpan new trace', () {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
 
     final span = tracer.startSpan('foo');
 
@@ -19,11 +16,8 @@ void main() {
   });
 
   test('startSpan child span', () {
-    final tracer = sdk.Tracer([],
-        sdk.Resource(api.Attributes.empty()),
-        sdk.AlwaysOnSampler(),
-        sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+    final tracer = sdk.Tracer([], sdk.Resource([]), sdk.AlwaysOnSampler(),
+        sdk.IdGenerator(), sdk.InstrumentationLibrary('name', 'version'));
 
     final parentSpan = tracer.startSpan('foo');
     final context = api.Context.current.withSpan(parentSpan);

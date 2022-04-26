@@ -1,10 +1,17 @@
 import '../../../api.dart' as api;
+import '../common/attributes.dart';
 
-class Resource implements api.Resource {
-  final api.Attributes _attributes;
+class Resource {
+  final Attributes _attributes = Attributes.empty();
 
-  Resource(this._attributes);
+  Resource(List<api.Attribute> attributes) {
+    for (final attribute in attributes) {
+      if (attribute.value is! String) {
+        throw ArgumentError('Attributes value must be String.');
+      }
+    }
+    _attributes.addAll(attributes);
+  }
 
-  @override
-  api.Attributes get attributes => _attributes;
+  Attributes get attributes => _attributes;
 }
