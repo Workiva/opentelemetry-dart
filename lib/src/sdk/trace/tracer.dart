@@ -10,13 +10,12 @@ class Tracer implements api.Tracer {
   final sdk.Sampler _sampler;
   final api.IdGenerator _idGenerator;
   final api.InstrumentationLibrary _instrumentationLibrary;
-  sdk.SpanLimits _spanLimits;
+  final sdk.SpanLimits _spanLimits;
 
   Tracer(this._processors, this._resource, this._sampler, this._idGenerator,
       this._instrumentationLibrary,
-      {sdk.SpanLimits spanLimits}) {
-    _spanLimits = spanLimits ?? sdk.SpanLimits();
-  }
+      {sdk.SpanLimits spanLimits})
+      : _spanLimits = spanLimits ?? sdk.SpanLimits();
 
   @override
   api.Span startSpan(String name,

@@ -47,7 +47,7 @@ class CollectorExporter implements api.SpanExporter {
           <api.InstrumentationLibrary, List<pb_trace.Span>>{};
       il[span.instrumentationLibrary] =
           il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
-            ..add(_spanToProtobuf(span));
+            ..add(_spanToProtobuf(span as sdk.Span));
       rsm[(span as sdk.Span).resource] = il;
     }
 
