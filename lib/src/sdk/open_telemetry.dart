@@ -3,7 +3,7 @@ import 'dart:async';
 import '../../api.dart' as api;
 import '../../sdk.dart' as sdk;
 
-final api.TracerProvider _noopTracerProvider = sdk.TracerProvider();
+final api.TracerProvider _noopTracerProvider = sdk.TracerProviderBase();
 api.TracerProvider _tracerProvider = _noopTracerProvider;
 api.TextMapPropagator _textMapPropagator;
 

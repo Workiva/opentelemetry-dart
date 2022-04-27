@@ -1,7 +1,9 @@
+@TestOn('vm')
 import 'dart:async';
 
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 List<String> printLogs = [];
@@ -20,12 +22,13 @@ void main() {
   });
 
   test('prints', overridePrint(() {
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'))
       ..end();
@@ -39,12 +42,13 @@ void main() {
   }));
 
   test('does not print after shutdown', overridePrint(() {
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
 

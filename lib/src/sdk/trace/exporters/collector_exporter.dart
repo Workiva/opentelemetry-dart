@@ -94,8 +94,8 @@ class CollectorExporter implements api.SpanExporter {
         spanId: span.spanContext.spanId.get(),
         parentSpanId: span.parentSpanId?.get(),
         name: span.name,
-        startTimeUnixNano: span.startTime * 1000,
-        endTimeUnixNano: span.endTime * 1000,
+        startTimeUnixNano: span.startTime,
+        endTimeUnixNano: span.endTime,
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
             key: key,
             value: _attributeValueToProtobuf(span.attributes.get(key)))),

@@ -1,5 +1,5 @@
+@TestOn('vm')
 import 'package:mockito/mockito.dart';
-
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart';
@@ -9,6 +9,7 @@ import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/resour
     as pb_resource;
 import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/trace/v1/trace.pb.dart'
     as pb;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
@@ -31,22 +32,24 @@ void main() {
         sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
     final instrumentationLibrary =
         sdk.InstrumentationLibrary('library_name', 'library_version');
-    final span1 = sdk.Span(
+    final span1 = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
         attributes: [api.Attribute.fromString('foo', 'bar')])
       ..end();
-    final span2 = sdk.Span(
+    final span2 = Span(
         'baz',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
         attributes: [api.Attribute.fromBoolean('bool', true)])
@@ -69,8 +72,8 @@ void main() {
                       spanId: [7, 8, 9],
                       parentSpanId: [4, 5, 6],
                       name: 'foo',
-                      startTimeUnixNano: span1.startTime * 1000,
-                      endTimeUnixNano: span1.endTime * 1000,
+                      startTimeUnixNano: span1.startTime,
+                      endTimeUnixNano: span1.endTime,
                       attributes: [
                         pb_common.KeyValue(
                             key: 'foo',
@@ -84,8 +87,8 @@ void main() {
                       spanId: [10, 11, 12],
                       parentSpanId: [4, 5, 6],
                       name: 'baz',
-                      startTimeUnixNano: span2.startTime * 1000,
-                      endTimeUnixNano: span2.endTime * 1000,
+                      startTimeUnixNano: span2.startTime,
+                      endTimeUnixNano: span2.endTime,
                       attributes: [
                         pb_common.KeyValue(
                             key: 'bool',
@@ -106,12 +109,13 @@ void main() {
   });
 
   test('does not send spans when shutdown', () {
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, sdk.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'))
       ..end();

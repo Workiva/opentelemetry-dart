@@ -105,6 +105,37 @@ final tracer = provider.getTracer('instrumentation-name');
 final tracer = otel_sdk.globalTracerProvider.getTracer('instrumentation-name');
 ```
 
+#### Tracer Provider with Browser Performance Features
+
+A web-specific trace provider is also available.  This trace provider makes available configurable options using the browser's performance API.
+
+```dart
+import 'package:opentelemetry/sdk.dart' as otel_sdk;
+import 'package:opentelemetry/web_sdk.dart' as web_sdk;
+
+final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
+final processor = otel_sdk.BatchSpanProcessor(exporter);
+
+// This provider is configured to create tracers which use the browser's
+// performance API instead of Dart's DateTime class when determining
+// timestamps for any spans they create.
+final provider = web_sdk.WebTracerProvider(
+  processors: [processor],
+  timeProvider: web_sdk.WebTimeProvider()
+);
+
+// This tracer has been configured to use the browser's performance API when
+// determining timestamps for any spans it creates.
+final tracer = provider.getTracer('instrumentation-name');
+
+// Or, these trace providers can also be registered globally.
+otel_sdk.registerGlobalTracerProvider(provider);
+final tracer = otel_sdk.globalTracerProvider.getTracer('instrumentation-name');
+```
+
+Important Note: Span timestamps resulting from use of this trace provider may be inaccurate if the executing system is suspended for sleep.
+See https://github.com/open-telemetry/opentelemetry-js/issues/852 for more information.
+
 ## Collecting Spans
 
 To start a span, execute `startSpan` on the tracer with the name of what you are tracing.  When complete, call `end` on the span.

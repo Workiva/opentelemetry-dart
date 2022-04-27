@@ -1,5 +1,7 @@
+@TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 class TestingInjector implements api.TextMapSetter<Map> {
@@ -25,7 +27,7 @@ class TestingExtractor implements api.TextMapGetter<Map> {
 
 void main() {
   test('inject and extract trace context', () {
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'TestSpan',
         sdk.SpanContext(
             api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
@@ -35,6 +37,7 @@ void main() {
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = sdk.W3CTraceContextPropagator();
@@ -59,7 +62,7 @@ void main() {
   });
 
   test('inject and extract invalid trace parent', () {
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'TestSpan',
         sdk.SpanContext(
             api.TraceId.fromString('00000000000000000000000000000000'),
@@ -69,6 +72,7 @@ void main() {
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('0000000000000000'),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     final testPropagator = sdk.W3CTraceContextPropagator();
@@ -93,7 +97,7 @@ void main() {
   });
 
   test('extract and inject with child span', () {
-    final testSpan = sdk.Span(
+    final testSpan = Span(
         'TestSpan',
         sdk.SpanContext(
             api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
@@ -103,9 +107,10 @@ void main() {
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
+        sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
-    final tracer = sdk.TracerProvider(processors: [])
+    final tracer = sdk.TracerProviderBase(processors: [])
         .getTracer('appName', version: '1.0.0');
     final testPropagator = sdk.W3CTraceContextPropagator();
     final testCarrier = {};

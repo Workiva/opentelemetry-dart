@@ -2,18 +2,20 @@ import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
+import 'span.dart';
 
 /// An interface for creating [api.Span]s and propagating context in-process.
 class Tracer implements api.Tracer {
   final List<api.SpanProcessor> _processors;
   final sdk.Resource _resource;
   final sdk.Sampler _sampler;
+  final sdk.TimeProvider _timeProvider;
   final api.IdGenerator _idGenerator;
   final api.InstrumentationLibrary _instrumentationLibrary;
   final sdk.SpanLimits _spanLimits;
 
-  Tracer(this._processors, this._resource, this._sampler, this._idGenerator,
-      this._instrumentationLibrary,
+  Tracer(this._processors, this._resource, this._sampler, this._timeProvider,
+      this._idGenerator, this._instrumentationLibrary,
       {sdk.SpanLimits spanLimits})
       : _spanLimits = spanLimits ?? sdk.SpanLimits();
 
@@ -54,8 +56,8 @@ class Tracer implements api.Tracer {
     final spanContext =
         sdk.SpanContext(traceId, spanId, traceFlags, traceState);
 
-    return sdk.Span(name, spanContext, parentSpanId, _processors, _resource,
-        _instrumentationLibrary,
+    return Span(name, spanContext, parentSpanId, _processors, _timeProvider,
+        _resource, _instrumentationLibrary,
         kind: kind,
         attributes: attributes,
         links: links,

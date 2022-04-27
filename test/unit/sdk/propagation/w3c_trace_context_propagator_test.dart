@@ -1,3 +1,4 @@
+@TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
@@ -145,6 +146,7 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
+        sdk.DateTimeTimeProvider(),
         Resource([]),
         InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};
@@ -169,6 +171,7 @@ void main() {
             TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('0000000000c0ffee'),
         [],
+        sdk.DateTimeTimeProvider(),
         Resource([]),
         InstrumentationLibrary('library_name', 'library_version'));
     final testCarrier = {};

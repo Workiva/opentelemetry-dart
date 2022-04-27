@@ -1,3 +1,4 @@
+@TestOn('vm')
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:test/test.dart';
 

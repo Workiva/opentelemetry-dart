@@ -1,14 +1,15 @@
-@TestOn('vm')
+@TestOn('chrome')
 import 'package:mockito/mockito.dart';
+import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/span_processors/span_processor.dart';
-import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
+import 'package:opentelemetry/src/sdk/platforms/web/trace/web_tracer_provider.dart';
 import 'package:test/test.dart';
 
-import '../mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
   test('getTracer stores tracers by name', () {
-    final provider = TracerProviderBase();
+    final provider = WebTracerProvider();
     final fooTracer = provider.getTracer('foo');
     final barTracer = provider.getTracer('bar');
     final fooWithVersionTracer = provider.getTracer('foo', version: '1.0');
@@ -24,31 +25,41 @@ void main() {
     expect(provider.spanProcessors, isA<List<SpanProcessor>>());
   });
 
-  test('tracerProvider custom span processors', () {
+  test('browserTracerProvider custom span processors', () {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
     final provider =
-        TracerProviderBase(processors: [mockProcessor1, mockProcessor2]);
+        WebTracerProvider(processors: [mockProcessor1, mockProcessor2]);
 
     expect(provider.spanProcessors, [mockProcessor1, mockProcessor2]);
   });
 
-  test('tracerProvider force flushes all processors', () {
+  test('browserTracerProvider force flushes all processors', () {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
-    TracerProviderBase(processors: [mockProcessor1, mockProcessor2])
+    WebTracerProvider(processors: [mockProcessor1, mockProcessor2])
         .forceFlush();
 
     verify(mockProcessor1.forceFlush()).called(1);
     verify(mockProcessor2.forceFlush()).called(1);
   });
 
-  test('tracerProvider shuts down all processors', () {
+  test('browserTracerProvider shuts down all processors', () {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
-    TracerProviderBase(processors: [mockProcessor1, mockProcessor2]).shutdown();
+    WebTracerProvider(processors: [mockProcessor1, mockProcessor2]).shutdown();
 
     verify(mockProcessor1.shutdown()).called(1);
     verify(mockProcessor2.shutdown()).called(1);
+  });
+
+  test('browserTracerProvider creates a tracer which can create valid spans',
+      () async {
+    final span = WebTracerProvider(processors: [MockSpanProcessor()])
+        .getTracer('testTracer')
+        .startSpan('testSpan', context: Context.root)
+          ..end();
+
+    expect(span.startTime, lessThanOrEqualTo(span.endTime));
   });
 }

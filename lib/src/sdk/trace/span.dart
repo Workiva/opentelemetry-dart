@@ -1,8 +1,8 @@
 import 'package:fixnum/fixnum.dart';
-import '../common/attributes.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
+import '../common/attributes.dart';
 
 /// A representation of a single operation within a trace.
 class Span implements api.Span {
@@ -12,6 +12,7 @@ class Span implements api.Span {
   final api.SpanStatus _status = api.SpanStatus();
   final List<api.SpanProcessor> _processors;
   final List<api.SpanLink> _links; // ignore: unused_field
+  final sdk.TimeProvider _timeProvider;
   final sdk.Resource _resource;
   final sdk.SpanLimits _spanLimits;
   final api.InstrumentationLibrary _instrumentationLibrary;
@@ -28,7 +29,7 @@ class Span implements api.Span {
 
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
-      this._resource, this._instrumentationLibrary,
+      this._timeProvider, this._resource, this._instrumentationLibrary,
       {api.SpanKind kind,
       List<api.Attribute> attributes,
       List<api.SpanLink> links,
@@ -36,8 +37,7 @@ class Span implements api.Span {
       Int64 startTime})
       : _links = links ?? [],
         _kind = kind ?? api.SpanKind.internal,
-        _startTime =
-            startTime ?? Int64(DateTime.now().toUtc().microsecondsSinceEpoch),
+        _startTime = startTime ?? _timeProvider.now,
         _spanLimits = spanlimits ?? sdk.SpanLimits() {
     if (attributes != null) {
       setAttributes(attributes);
@@ -62,7 +62,8 @@ class Span implements api.Span {
 
   @override
   void end() {
-    _endTime ??= Int64(DateTime.now().toUtc().microsecondsSinceEpoch);
+    _endTime ??= _timeProvider.now;
+
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onEnd(this);
     }
