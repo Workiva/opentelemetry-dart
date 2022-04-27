@@ -12,7 +12,7 @@ class Span implements api.Span {
   final api.SpanStatus _status = api.SpanStatus();
   final List<api.SpanProcessor> _processors;
   final List<api.SpanLink> _links; // ignore: unused_field
-  final api.TimeProvider _timeProvider;
+  final sdk.TimeProvider _timeProvider;
   final sdk.Resource _resource;
   final sdk.SpanLimits _spanLimits;
   final api.InstrumentationLibrary _instrumentationLibrary;

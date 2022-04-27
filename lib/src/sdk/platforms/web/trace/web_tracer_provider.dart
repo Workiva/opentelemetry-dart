@@ -17,14 +17,14 @@ class WebTracerProvider extends sdk.TracerProviderBase {
   final List<api.SpanProcessor> _processors;
   final sdk.Resource _resource;
   final sdk.Sampler _sampler;
-  final api.TimeProvider _timeProvider;
+  final sdk.TimeProvider _timeProvider;
   final api.IdGenerator _idGenerator;
 
   WebTracerProvider(
       {List<api.SpanProcessor> processors,
       sdk.Resource resource,
       sdk.Sampler sampler,
-      api.TimeProvider timeProvider,
+      sdk.TimeProvider timeProvider,
       api.IdGenerator idGenerator})
       :
         // Default to a no-op TracerProvider.

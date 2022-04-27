@@ -9,7 +9,7 @@ class Tracer implements api.Tracer {
   final List<api.SpanProcessor> _processors;
   final sdk.Resource _resource;
   final sdk.Sampler _sampler;
-  final api.TimeProvider _timeProvider;
+  final sdk.TimeProvider _timeProvider;
   final api.IdGenerator _idGenerator;
   final api.InstrumentationLibrary _instrumentationLibrary;
   final sdk.SpanLimits _spanLimits;

@@ -24,7 +24,7 @@ void main() {
     expect(
         span.endTime,
         lessThan(DateTime.now().microsecondsSinceEpoch *
-            api.TimeProvider.nanosecondsPerMicrosecond));
+            sdk.TimeProvider.nanosecondsPerMicrosecond));
   });
 
   test('trace synchronous looped execution timing', () {
@@ -86,7 +86,7 @@ void main() {
     expect(
         span.endTime,
         lessThan(DateTime.now().microsecondsSinceEpoch *
-            api.TimeProvider.nanosecondsPerMicrosecond));
+            sdk.TimeProvider.nanosecondsPerMicrosecond));
   });
 
   test('trace asynchronous looped execution timing', () async {

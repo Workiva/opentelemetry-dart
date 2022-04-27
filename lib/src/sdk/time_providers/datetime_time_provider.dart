@@ -1,5 +1,5 @@
 import 'package:fixnum/fixnum.dart';
-import '../../api/time_providers/time_provider.dart';
+import 'time_provider.dart';
 
 /// DateTimeTimeProvider retrieves timestamps using DateTime.
 class DateTimeTimeProvider implements TimeProvider {

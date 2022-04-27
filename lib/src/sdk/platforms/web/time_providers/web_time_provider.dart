@@ -3,7 +3,7 @@ import 'dart:js';
 
 import 'package:fixnum/fixnum.dart';
 
-import '../../../../../api.dart' as api;
+import '../../../../../sdk.dart' as sdk;
 
 /// BrowserTimeProvider retrieves high-resolution timestamps utilizing the
 /// `window.performance` API.
@@ -14,7 +14,7 @@ import '../../../../../api.dart' as api;
 /// Note that this time may be inaccurate if the executing system is suspended
 /// for sleep.  See https://github.com/open-telemetry/opentelemetry-js/issues/852
 /// for more information.
-class WebTimeProvider implements api.TimeProvider {
+class WebTimeProvider implements sdk.TimeProvider {
   static final Int64 _timeOrigin = _fromDouble(
       JsObject.fromBrowserObject(window)['performance']['timeOrigin'] ??
           // fallback for browsers that don't support timeOrigin, like Dartium
@@ -22,7 +22,7 @@ class WebTimeProvider implements api.TimeProvider {
 
   /// Derive a time, in nanoseconds, from a floating-point time, in milliseconds.
   static Int64 _fromDouble(double time) =>
-      Int64((time * api.TimeProvider.nanosecondsPerMillisecond).round());
+      Int64((time * sdk.TimeProvider.nanosecondsPerMillisecond).round());
 
   /// The current time, in nanoseconds since Unix Epoch.
   ///
