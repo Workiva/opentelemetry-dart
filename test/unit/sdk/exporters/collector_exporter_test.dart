@@ -41,7 +41,8 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
-        attributes: [api.Attribute.fromString('foo', 'bar')])
+        attributes: [api.Attribute.fromString('foo', 'bar')],
+        kind: api.SpanKind.client)
       ..end();
     final span2 = Span(
         'baz',
@@ -52,7 +53,8 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
-        attributes: [api.Attribute.fromBoolean('bool', true)])
+        attributes: [api.Attribute.fromBoolean('bool', true)],
+        kind: api.SpanKind.internal)
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -81,7 +83,8 @@ void main() {
                       ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
-                          message: null)),
+                          message: null),
+                      kind: pb.Span_SpanKind.SPAN_KIND_CLIENT),
                   pb.Span(
                       traceId: [1, 2, 3],
                       spanId: [10, 11, 12],
@@ -96,7 +99,8 @@ void main() {
                       ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
-                          message: null))
+                          message: null),
+                      kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL)
                 ],
                 instrumentationLibrary: pb_common.InstrumentationLibrary(
                     name: 'library_name', version: 'library_version'))

@@ -89,6 +89,27 @@ class CollectorExporter implements api.SpanExporter {
         break;
     }
 
+    pb_trace.Span_SpanKind spanKind;
+    switch (span.kind) {
+      case api.SpanKind.client:
+        spanKind = pb_trace.Span_SpanKind.SPAN_KIND_CLIENT;
+        break;
+      case api.SpanKind.consumer:
+        spanKind = pb_trace.Span_SpanKind.SPAN_KIND_CONSUMER;
+        break;
+      case api.SpanKind.internal:
+        spanKind = pb_trace.Span_SpanKind.SPAN_KIND_INTERNAL;
+        break;
+      case api.SpanKind.producer:
+        spanKind = pb_trace.Span_SpanKind.SPAN_KIND_PRODUCER;
+        break;
+      case api.SpanKind.server:
+        spanKind = pb_trace.Span_SpanKind.SPAN_KIND_SERVER;
+        break;
+      default:
+        spanKind = pb_trace.Span_SpanKind.SPAN_KIND_UNSPECIFIED;
+    }
+
     return pb_trace.Span(
         traceId: span.spanContext.traceId.get(),
         spanId: span.spanContext.spanId.get(),
@@ -99,8 +120,9 @@ class CollectorExporter implements api.SpanExporter {
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
             key: key,
             value: _attributeValueToProtobuf(span.attributes.get(key)))),
-        status: pb_trace.Status(
-            code: statusCode, message: span.status.description));
+        status:
+            pb_trace.Status(code: statusCode, message: span.status.description),
+        kind: spanKind);
   }
 
   pb_common.AnyValue _attributeValueToProtobuf(Object value) {
