@@ -27,8 +27,8 @@ void main() {
 
     final testContext = api.Context.current.withSpan(testSpan);
 
-    final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
-        api.SpanKind.internal, false, null, []);
+    final result = testSampler.shouldSample(
+        testContext, traceId, testSpan.name, api.SpanKind.internal, null, []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals(null));
@@ -47,7 +47,7 @@ void main() {
             'parent_sampler_test', 'sampler_test_version'));
 
     final result = testSampler.shouldSample(api.Context.root, traceId,
-        testSpan.name, api.SpanKind.internal, false, null, []);
+        testSpan.name, api.SpanKind.internal, null, []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals(null));
@@ -69,8 +69,8 @@ void main() {
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
 
-    final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
-        api.SpanKind.internal, false, null, []);
+    final result = testSampler.shouldSample(
+        testContext, traceId, testSpan.name, api.SpanKind.internal, null, []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals(null));
@@ -92,8 +92,8 @@ void main() {
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
 
-    final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
-        api.SpanKind.internal, false, [], []);
+    final result = testSampler.shouldSample(
+        testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, equals([]));
@@ -115,8 +115,8 @@ void main() {
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
 
-    final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
-        api.SpanKind.internal, false, [], []);
+    final result = testSampler.shouldSample(
+        testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals([]));
@@ -138,8 +138,8 @@ void main() {
             'parent_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
 
-    final result = testSampler.shouldSample(testContext, traceId, testSpan.name,
-        api.SpanKind.internal, false, [], []);
+    final result = testSampler.shouldSample(
+        testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, equals([]));

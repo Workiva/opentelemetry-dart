@@ -29,30 +29,29 @@ class ParentBasedSampler implements sdk.Sampler {
       api.TraceId traceId,
       String spanName,
       api.SpanKind spanKind,
-      bool spanIsRemote,
       List<api.Attribute> spanAttributes,
       List<api.SpanLink> spanLinks) {
     final parentSpanContext = context.spanContext;
 
     if (parentSpanContext == null || !parentSpanContext.isValid) {
-      return _root.shouldSample(context, traceId, spanName, spanKind,
-          spanIsRemote, spanAttributes, spanLinks);
+      return _root.shouldSample(
+          context, traceId, spanName, spanKind, spanAttributes, spanLinks);
     }
 
     if (parentSpanContext.isRemote) {
       return ((parentSpanContext.traceFlags & api.TraceFlags.sampled) ==
               api.TraceFlags.sampled)
-          ? _remoteParentSampled.shouldSample(context, traceId, spanName,
-              spanKind, spanIsRemote, spanAttributes, spanLinks)
-          : _remoteParentNotSampled.shouldSample(context, traceId, spanName,
-              spanKind, spanIsRemote, spanAttributes, spanLinks);
+          ? _remoteParentSampled.shouldSample(
+              context, traceId, spanName, spanKind, spanAttributes, spanLinks)
+          : _remoteParentNotSampled.shouldSample(
+              context, traceId, spanName, spanKind, spanAttributes, spanLinks);
     }
 
     return (parentSpanContext.traceFlags & api.TraceFlags.sampled) ==
             api.TraceFlags.sampled
-        ? _localParentSampled.shouldSample(context, traceId, spanName, spanKind,
-            spanIsRemote, spanAttributes, spanLinks)
-        : _localParentNotSampled.shouldSample(context, traceId, spanName,
-            spanKind, spanIsRemote, spanAttributes, spanLinks);
+        ? _localParentSampled.shouldSample(
+            context, traceId, spanName, spanKind, spanAttributes, spanLinks)
+        : _localParentNotSampled.shouldSample(
+            context, traceId, spanName, spanKind, spanAttributes, spanLinks);
   }
 }

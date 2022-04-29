@@ -20,8 +20,8 @@ void main() {
             'always_off_sampler_test', 'sampler_test_version'));
     final testContext = api.Context.current.withSpan(testSpan);
 
-    final result = sdk.AlwaysOffSampler().shouldSample(testContext, traceId,
-        testSpan.name, api.SpanKind.internal, false, [], []);
+    final result = sdk.AlwaysOffSampler().shouldSample(
+        testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, equals([]));
@@ -45,13 +45,8 @@ void main() {
             'always_off_sampler_test', 'sampler_test_version'),
         attributes: attributesList);
 
-    final result = sdk.AlwaysOffSampler().shouldSample(
-        api.Context.root,
-        traceId,
-        testSpan.name,
-        api.SpanKind.internal,
-        false,
-        attributesList, []);
+    final result = sdk.AlwaysOffSampler().shouldSample(api.Context.root,
+        traceId, testSpan.name, api.SpanKind.internal, attributesList, []);
 
     expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, attributesList);

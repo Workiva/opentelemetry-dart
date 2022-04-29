@@ -48,8 +48,8 @@ class Tracer implements api.Tracer {
       traceState = sdk.TraceState.empty();
     }
 
-    final samplerResult = _sampler.shouldSample(
-        context, traceId, name, kind, false, attributes, links);
+    final samplerResult =
+        _sampler.shouldSample(context, traceId, name, kind, attributes, links);
     final traceFlags = (samplerResult.decision == sdk.Decision.recordAndSample)
         ? api.TraceFlags.sampled
         : api.TraceFlags.none;
