@@ -47,8 +47,7 @@ class AttributeKey {
   /// This is the number of bytes transferred excluding headers and is often,
   /// but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header.
   /// For requests using transport encoding, this should be the compressed size.
-  static const String httpRequestContentLength =
-      'http.request_content_length';
+  static const String httpRequestContentLength = 'http.request_content_length';
 
   /// The size of the uncompressed request payload body after transport decoding. Not set if
   /// transport encoding not used.
