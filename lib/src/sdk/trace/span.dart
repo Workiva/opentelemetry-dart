@@ -96,7 +96,7 @@ class Span implements api.Span {
 
   @override
   void setAttributes(List<api.Attribute> attributes) {
-    //Don't want to have any attribute
+    // Don't want to have any attribute
     if (_spanLimits.maxNumAttributes == 0) {
       _droppedSpanAttributes += attributes.length;
       return;
@@ -107,15 +107,15 @@ class Span implements api.Span {
 
   @override
   void setAttribute(api.Attribute attribute) {
-    //Don't want to have any attribute
+    // Don't want to have any attribute
     if (_spanLimits.maxNumAttributes == 0) {
       _droppedSpanAttributes++;
       return;
     }
 
     final obj = attributes.get(attribute.key);
-    //If current attributes.length is equal or greater than maxNumAttributes and
-    //key is not in current map, drop it.
+    // If current attributes.length is equal or greater than maxNumAttributes and
+    // key is not in current map, drop it.
     if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
       _droppedSpanAttributes++;
       return;
@@ -126,7 +126,7 @@ class Span implements api.Span {
   /// reBuild an attribute, this way it is tightly coupled with the type we supported,
   /// if later we added more types, then we need to change this method.
   api.Attribute _rebuildAttribute(api.Attribute attr) {
-    //if maxNumAttributeLength is less than zero, then it has unlimited length.
+    // if maxNumAttributeLength is less than zero, then it has unlimited length.
     if (_spanLimits.maxNumAttributeLength < 0) return attr;
 
     if (attr.value is String) {
@@ -149,11 +149,13 @@ class Span implements api.Span {
   void recordException(dynamic exception, {StackTrace stackTrace}) {
     // ignore: todo
     // TODO: O11Y-1531: Consider integration of Events here.
-    setStatus(api.StatusCode.error, description: exception.toString());
     setAttributes([
-      api.Attribute.fromBoolean('error', true),
-      api.Attribute.fromString('exception', exception.toString()),
-      api.Attribute.fromString('stacktrace', stackTrace.toString()),
+      api.Attribute.fromString(api.SemanticAttributes.exceptionType,
+          exception.runtimeType.toString()),
+      api.Attribute.fromString(
+          api.SemanticAttributes.exceptionMessage, exception.toString()),
+      api.Attribute.fromString(
+          api.SemanticAttributes.exceptionStacktrace, stackTrace.toString()),
     ]);
   }
 
@@ -167,8 +169,8 @@ class Span implements api.Span {
     throw UnimplementedError();
   }
 
-  //Truncate just strings which length is longer than configuration.
-  //Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
+  // Truncate just strings which length is longer than configuration.
+  // Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
   static String _applyAttributeLengthLimit(String value, int lengthLimit) {
     return value.length > lengthLimit ? value.substring(0, lengthLimit) : value;
   }

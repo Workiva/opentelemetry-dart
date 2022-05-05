@@ -148,9 +148,9 @@ void main() {
       span.recordException(e, stackTrace: s);
     }
 
-    expect(span.status.code, equals(api.StatusCode.error));
-    expect(span.status.description, equals('Exception: Oh noes!'));
-    expect(span.attributes.get('error'), isTrue);
-    expect(span.attributes.get('exception'), equals('Exception: Oh noes!'));
+    expect(span.attributes.get(api.SemanticAttributes.exceptionType),
+        equals('_Exception'));
+    expect(span.attributes.get(api.SemanticAttributes.exceptionMessage),
+        equals('Exception: Oh noes!'));
   });
 }
