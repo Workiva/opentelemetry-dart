@@ -1,4 +1,5 @@
 export 'src/api/common/attribute.dart' show Attribute;
+export 'src/api/common/attribute_key.dart' show AttributeKey;
 export 'src/api/context/context.dart' show Context;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
