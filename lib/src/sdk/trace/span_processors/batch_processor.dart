@@ -46,7 +46,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onStart() {}
+  void onStart(api.Span span, api.Context context) {}
 
   @override
   void shutdown() {

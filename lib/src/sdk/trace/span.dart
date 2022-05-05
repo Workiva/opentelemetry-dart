@@ -6,6 +6,7 @@ import '../common/attributes.dart';
 
 /// A representation of a single operation within a trace.
 class Span implements api.Span {
+  final api.Context _context;
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
   final api.SpanKind _kind; // ignore: unused_field
@@ -30,12 +31,14 @@ class Span implements api.Span {
   /// Construct a [Span].
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
       this._timeProvider, this._resource, this._instrumentationLibrary,
-      {api.SpanKind kind,
+      {api.Context context,
+      api.SpanKind kind,
       List<api.Attribute> attributes,
       List<api.SpanLink> links,
       sdk.SpanLimits spanlimits,
       Int64 startTime})
-      : _links = links ?? [],
+      : _context = context,
+        _links = links ?? [],
         _kind = kind ?? api.SpanKind.internal,
         _startTime = startTime ?? _timeProvider.now,
         _spanLimits = spanlimits ?? sdk.SpanLimits() {
@@ -44,7 +47,7 @@ class Span implements api.Span {
     }
 
     for (var i = 0; i < _processors.length; i++) {
-      _processors[i].onStart();
+      _processors[i].onStart(this, _context);
     }
   }
 

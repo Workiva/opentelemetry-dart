@@ -58,6 +58,7 @@ class Tracer implements api.Tracer {
 
     return Span(name, spanContext, parentSpanId, _processors, _timeProvider,
         _resource, _instrumentationLibrary,
+        context: context,
         kind: kind,
         attributes: attributes,
         links: links,
