@@ -128,6 +128,7 @@ void main() {
       ..shutdown()
       ..export([span]);
 
+    verify(mockClient.close()).called(1);
     verifyNever(mockClient.post(uri,
         body: anything, headers: {'Content-Type': 'application/x-protobuf'}));
   });

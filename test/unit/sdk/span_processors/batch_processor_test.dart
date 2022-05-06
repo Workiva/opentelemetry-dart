@@ -36,11 +36,13 @@ void main() {
 
     verify(mockExporter.export([mockSpan1, mockSpan2])).called(1);
     verify(mockExporter.export([mockSpan3])).called(1);
+    verify(mockExporter.forceFlush()).called(1);
   });
 
   test('shutdown shuts exporter down', () {
     processor.shutdown();
 
     verify(mockExporter.shutdown()).called(1);
+    verify(mockExporter.forceFlush()).called(1);
   });
 }
