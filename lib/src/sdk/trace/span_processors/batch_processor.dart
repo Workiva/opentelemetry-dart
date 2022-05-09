@@ -35,6 +35,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
     while (_spanBuffer.isNotEmpty) {
       _flushBatch();
     }
+    _exporter.forceFlush();
   }
 
   @override

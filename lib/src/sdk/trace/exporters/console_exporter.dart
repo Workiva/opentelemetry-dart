@@ -34,7 +34,7 @@ class ConsoleExporter implements SpanExporter {
 
   @override
   void forceFlush() {
-    throw UnimplementedError();
+    return;
   }
 
   @override

@@ -24,12 +24,19 @@ void main() {
     verify(exporter.export([span])).called(1);
   });
 
-  test('does not export if shutdown', () {
+  test('flushes exporter on forced flush', () {
+    processor.forceFlush();
+
+    verify(exporter.forceFlush()).called(1);
+  });
+
+  test('does not export if shut down', () {
     processor
       ..shutdown()
       ..onEnd(span);
 
     verify(exporter.shutdown()).called(1);
+    verify(exporter.forceFlush()).called(1);
     verifyNever(exporter.export([span]));
   });
 }

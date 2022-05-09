@@ -7,7 +7,9 @@ class SimpleSpanProcessor implements api.SpanProcessor {
   SimpleSpanProcessor(this._exporter);
 
   @override
-  void forceFlush() {}
+  void forceFlush() {
+    _exporter.forceFlush();
+  }
 
   @override
   void onEnd(api.Span span) {
