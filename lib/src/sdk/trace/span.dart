@@ -8,16 +8,16 @@ import '../common/attributes.dart';
 class Span implements api.Span {
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
-  final api.SpanKind _kind; // ignore: unused_field
+  final api.SpanKind _kind;
   final api.SpanStatus _status = api.SpanStatus();
   final List<api.SpanProcessor> _processors;
-  final List<api.SpanLink> _links; // ignore: unused_field
+  final List<api.SpanLink> _links;
   final sdk.TimeProvider _timeProvider;
   final sdk.Resource _resource;
-  final sdk.SpanLimits _spanLimits;
+  final sdk.SpanLimits _limits;
   final api.InstrumentationLibrary _instrumentationLibrary;
   final Int64 _startTime;
-  final Attributes attributes = Attributes.empty();
+  final Attributes _attributes = Attributes.empty();
   Int64 _endTime;
   int _droppedSpanAttributes = 0;
 
@@ -33,12 +33,12 @@ class Span implements api.Span {
       {api.SpanKind kind,
       List<api.Attribute> attributes,
       List<api.SpanLink> links,
-      sdk.SpanLimits spanlimits,
+      sdk.SpanLimits limits,
       Int64 startTime})
-      : _links = links ?? [],
+      : _links = _addLinks(links, limits ?? sdk.SpanLimits()),
         _kind = kind ?? api.SpanKind.internal,
         _startTime = startTime ?? _timeProvider.now,
-        _spanLimits = spanlimits ?? sdk.SpanLimits() {
+        _limits = limits ?? sdk.SpanLimits() {
     if (attributes != null) {
       setAttributes(attributes);
     }
@@ -97,7 +97,7 @@ class Span implements api.Span {
   @override
   void setAttributes(List<api.Attribute> attributes) {
     //Don't want to have any attribute
-    if (_spanLimits.maxNumAttributes == 0) {
+    if (_limits.maxNumAttributes == 0) {
       _droppedSpanAttributes += attributes.length;
       return;
     }
@@ -108,37 +108,33 @@ class Span implements api.Span {
   @override
   void setAttribute(api.Attribute attribute) {
     //Don't want to have any attribute
-    if (_spanLimits.maxNumAttributes == 0) {
+    if (_limits.maxNumAttributes == 0) {
       _droppedSpanAttributes++;
       return;
     }
 
-    final obj = attributes.get(attribute.key);
+    final obj = _attributes.get(attribute.key);
     //If current attributes.length is equal or greater than maxNumAttributes and
     //key is not in current map, drop it.
-    if (attributes.length >= _spanLimits.maxNumAttributes && obj == null) {
+    if (_attributes.length >= _limits.maxNumAttributes && obj == null) {
       _droppedSpanAttributes++;
       return;
     }
-    attributes.add(_rebuildAttribute(attribute));
+    _attributes
+        .add(_rebuildAttribute(attribute, _limits.maxNumAttributeLength));
   }
 
-  /// reBuild an attribute, this way it is tightly coupled with the type we supported,
-  /// if later we added more types, then we need to change this method.
-  api.Attribute _rebuildAttribute(api.Attribute attr) {
+  static api.Attribute _rebuildAttribute(api.Attribute attr, int maxLength) {
     //if maxNumAttributeLength is less than zero, then it has unlimited length.
-    if (_spanLimits.maxNumAttributeLength < 0) return attr;
+    if (maxLength < 0) return attr;
 
     if (attr.value is String) {
       attr = api.Attribute.fromString(
-          attr.key,
-          _applyAttributeLengthLimit(
-              attr.value, _spanLimits.maxNumAttributeLength));
+          attr.key, _applyAttributeLengthLimit(attr.value, maxLength));
     } else if (attr.value is List<String>) {
       final listString = attr.value as List<String>;
       for (var j = 0; j < listString.length; j++) {
-        listString[j] = _applyAttributeLengthLimit(
-            listString[j], _spanLimits.maxNumAttributeLength);
+        listString[j] = _applyAttributeLengthLimit(listString[j], maxLength);
       }
       attr = api.Attribute.fromStringList(attr.key, listString);
     }
@@ -166,6 +162,58 @@ class Span implements api.Span {
     // TODO: O11Y-1531
     throw UnimplementedError();
   }
+
+  // This method just can be called once during construction.
+  static List<api.SpanLink> _addLinks(
+      List<api.SpanLink> links, sdk.SpanLimits limits) {
+    if (links == null) return [];
+    final spanLink = <api.SpanLink>[];
+
+    for (final link in links) {
+      if (spanLink.length >= limits.maxNumLink) {
+        break;
+      }
+
+      if (!link.context.isValid) continue;
+
+      final linkAttributes = <api.Attribute>[];
+
+      // make sure override duplicated attributes in the list
+      final attributeMap = <String, int>{};
+
+      for (final attr in link.attributes) {
+        // if attributes num is already greater than maxNumAttributesPerLink
+        // and this key doesn't exist in the list, drop it.
+        if (attributeMap.length >= limits.maxNumAttributesPerLink &&
+            !attributeMap.containsKey(attr.key)) {
+          continue;
+        }
+
+        // apply maxNumAttributeLength limit.
+        final trimedAttr =
+            _rebuildAttribute(attr, limits.maxNumAttributeLength);
+
+        // if this key has been added before, found its index,
+        // and replace it with new value.
+        if (attributeMap.containsKey(attr.key)) {
+          final idx = attributeMap[attr.key];
+          linkAttributes[idx] = trimedAttr;
+        } else {
+          // record this new key's index with linkAttributes length,
+          // and add this new attr in linkAttributes.
+          attributeMap[attr.key] = linkAttributes.length;
+          linkAttributes.add(trimedAttr);
+        }
+      }
+
+      spanLink.add(api.SpanLink(link.context, attributes: linkAttributes));
+    }
+    return spanLink;
+  }
+
+  List<api.SpanLink> get links => _links;
+
+  Attributes get attributes => _attributes;
 
   //Truncate just strings which length is longer than configuration.
   //Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
