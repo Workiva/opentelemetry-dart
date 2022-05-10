@@ -1,7 +1,7 @@
-FROM google/dart:2.13
+FROM dart:2.13
 WORKDIR /build
 
-RUN apt update && apt install -y make protobuf-compiler wget
+RUN apt update && apt install -y make protobuf-compiler gnupg wget
 
 COPY pubspec.yaml .
 RUN dart pub get
@@ -15,7 +15,8 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     mv /usr/bin/google-chrome-stable /usr/bin/google-chrome && \
     sed -i --follow-symlinks -e 's/\"\$HERE\/chrome\"/\"\$HERE\/chrome\" --no-sandbox/g' /usr/bin/google-chrome
 
-RUN make init analyze test
+RUN export PATH="$PATH":"$HOME/.pub-cache/bin" && \
+    make init analyze test
 
 RUN ./package.sh
 
