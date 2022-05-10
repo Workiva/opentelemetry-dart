@@ -33,6 +33,7 @@ class Span implements api.Span {
       {api.SpanKind kind,
       List<api.Attribute> attributes,
       List<api.SpanLink> links,
+      api.Context parentContext,
       sdk.SpanLimits spanlimits,
       Int64 startTime})
       : _links = links ?? [],
@@ -44,7 +45,7 @@ class Span implements api.Span {
     }
 
     for (var i = 0; i < _processors.length; i++) {
-      _processors[i].onStart();
+      _processors[i].onStart(this, parentContext);
     }
   }
 

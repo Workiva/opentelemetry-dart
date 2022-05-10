@@ -21,7 +21,7 @@ class SimpleSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onStart() {}
+  void onStart(api.Span span, api.Context parentContext) {}
 
   @override
   void shutdown() {
