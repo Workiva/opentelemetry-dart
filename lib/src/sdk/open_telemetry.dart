@@ -47,26 +47,52 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
 
 /// Records a span of the given [name] for the given function with a given
 /// [api.Tracer] and marks the span as errored if an exception occurs.
-FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
-    {api.Context context, api.Tracer tracer}) async {
+R trace<R>(String name, R Function() fn,
+    {api.Context context, api.Tracer tracer}) {
   context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);
-  try {
-    var result = context.withSpan(span).execute(fn);
-    if (result is Future) {
-      // Operation must be awaited here to ensure the catch block intercepts
-      // errors thrown by [fn].
-      result = await result;
+
+  if (R is! Future) {
+    try {
+      return context.withSpan(span).execute(fn);
+    } catch (e, s) {
+      span
+        ..setStatus(api.StatusCode.error, description: e.toString())
+        ..recordException(e, stackTrace: s);
+      rethrow;
+    } finally {
+      span.end();
     }
-    return result;
-  } catch (e, s) {
+  }
+
+  // NOTE: When [R] is a [Future] then wrap the call to [fn] to avoid
+  //       unhandled synchronous errors from leaking out of this function.
+  //       This allows all errors to be handled and logged by the
+  //       [Future.catchError] below.
+  //
+  // From https://www.dartlang.org/guides/libraries/futures-error-handling#solution-using-futuresync-to-wrap-your-code
+  //   >
+  //   > A common pattern for ensuring that no synchronous error is
+  //   > accidentally thrown from a function is to wrap the function body
+  //   > inside a new Future.sync() callback
+  return Future
+      .sync(() => context.withSpan(span).execute(fn))
+      .then((value) => value)
+      .catchError((e, s) {
+    // Since [fn] is wrapped in a [Future.sync], this error handler
+    // will also catch errors thrown from the synchronous portion of [fn].
+    // If [fn] is an async function and/or returns a [Future] then errors
+    // thrown by the returned future will also be handled here.
     span
       ..setStatus(api.StatusCode.error, description: e.toString())
       ..recordException(e, stackTrace: s);
-    rethrow;
-  } finally {
-    span.end();
-  }
+
+    // Throwing the original error from within the [Future.catchError] handler
+    // is equivalent to a [rethrow] from within a regular `catch (e) {...}` handler.
+    // In this way, the originating [StackTrace] is preserved.
+    throw e;
+  })
+      .whenComplete(span.end) as R;
 }
