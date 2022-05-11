@@ -19,7 +19,7 @@ void main() {
 
     mockExporter = MockSpanExporter();
     processor = BatchSpanProcessor(mockExporter,
-        maxExportBatchSize: 2, scheduledDelay: 100);
+        maxExportBatchSize: 2, scheduledDelayMillis: 100);
   });
 
   tearDown(() {
