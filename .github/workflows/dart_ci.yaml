@@ -27,7 +27,7 @@ jobs:
         with:
           sdk: ${{ matrix.sdk }}
       - name: Install protobuf-compiler
-        run: apt update && apt install -y protobuf-compiler
+        run: sudo apt install -y protobuf-compiler
       - name: Install Dart dependencies
         run: dart pub get
       - name: Initialize protobuf
