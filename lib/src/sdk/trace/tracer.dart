@@ -61,6 +61,7 @@ class Tracer implements api.Tracer {
         kind: kind,
         attributes: attributes,
         links: links,
+        parentContext: context,
         limits: _spanLimits,
         startTime: startTime);
   }
