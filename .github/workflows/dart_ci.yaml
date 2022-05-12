@@ -21,10 +21,16 @@ jobs:
         sdk: [ 2.13.4 ]
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.sdk }}
+      - name: Install protobuf-compiler
+        run: apt update && apt install -y protobuf-compiler
       - name: Install Dart dependencies
+        run: dart pub get
+      - name: Initialize protobuf
         run: make init
       - name: Format, analyze, and run tests
         run: make test
