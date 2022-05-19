@@ -19,7 +19,8 @@ export 'src/sdk/open_telemetry.dart'
         globalTracerProvider,
         registerGlobalTextMapPropagator,
         registerGlobalTracerProvider,
-        trace;
+        trace,
+        traceSync;
 export 'src/sdk/resource/resource.dart' show Resource;
 export 'src/sdk/time_providers/datetime_time_provider.dart'
     show DateTimeTimeProvider;
