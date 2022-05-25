@@ -1,0 +1,36 @@
+name: Dart CI
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'test_consume_*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Don't run on newer SDKs until we're able to get on analyzer 1.x,
+        # since our current analyzer version range results in build failures
+        # when analysis hits the `<<<` operator.
+        # sdk: [ 2.13.4, stable, dev ]
+        sdk: [ 2.13.4 ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install protobuf-compiler
+        run: sudo apt install -y protobuf-compiler
+      - name: Install Dart dependencies
+        run: dart pub get
+      - name: Initialize protobuf
+        run: make init
+      - name: Format, analyze, and run tests
+        run: make test
