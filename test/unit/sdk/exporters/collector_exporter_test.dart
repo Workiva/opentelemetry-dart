@@ -32,6 +32,7 @@ void main() {
         sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
     final instrumentationLibrary =
         sdk.InstrumentationLibrary('library_name', 'library_version');
+    final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
     final span1 = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
@@ -53,8 +54,15 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
+        limits: limits,
         attributes: [api.Attribute.fromBoolean('bool', true)],
-        kind: api.SpanKind.internal)
+        kind: api.SpanKind.internal,
+        links: [
+          api.SpanLink(span1.spanContext, attributes: [
+            api.Attribute.fromString('longKey',
+                'I am very long with maxNumAttributeLength: 5 limitation!')
+          ])
+        ])
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -100,7 +108,19 @@ void main() {
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
                           message: null),
-                      kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL)
+                      kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL,
+                      links: [
+                        pb.Span_Link(
+                            traceId: [1, 2, 3],
+                            spanId: [7, 8, 9],
+                            traceState: '',
+                            attributes: [
+                              pb_common.KeyValue(
+                                  key: 'longKey',
+                                  value:
+                                      pb_common.AnyValue(stringValue: 'I am '))
+                            ])
+                      ])
                 ],
                 instrumentationLibrary: pb_common.InstrumentationLibrary(
                     name: 'library_name', version: 'library_version'))
@@ -128,6 +148,7 @@ void main() {
       ..shutdown()
       ..export([span]);
 
+    verify(mockClient.close()).called(1);
     verifyNever(mockClient.post(uri,
         body: anything, headers: {'Content-Type': 'application/x-protobuf'}));
   });

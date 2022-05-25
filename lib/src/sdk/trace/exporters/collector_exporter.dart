@@ -75,6 +75,23 @@ class CollectorExporter implements api.SpanExporter {
     return rss;
   }
 
+  Iterable<pb_trace.Span_Link> _spanLinksToProtobuf(List<api.SpanLink> links) {
+    final pbLinks = <pb_trace.Span_Link>[];
+    for (final link in links) {
+      final attrs = <pb_common.KeyValue>[];
+      for (final attr in link.attributes) {
+        attrs.add(pb_common.KeyValue(
+            key: attr.key, value: _attributeValueToProtobuf(attr.value)));
+      }
+      pbLinks.add(pb_trace.Span_Link(
+          traceId: link.context.traceId.get(),
+          spanId: link.context.spanId.get(),
+          traceState: link.context.traceState.toString(),
+          attributes: attrs));
+    }
+    return pbLinks;
+  }
+
   pb_trace.Span _spanToProtobuf(sdk.Span span) {
     pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
@@ -122,7 +139,8 @@ class CollectorExporter implements api.SpanExporter {
             value: _attributeValueToProtobuf(span.attributes.get(key)))),
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),
-        kind: spanKind);
+        kind: spanKind,
+        links: _spanLinksToProtobuf(span.links));
   }
 
   pb_common.AnyValue _attributeValueToProtobuf(Object value) {
@@ -175,11 +193,12 @@ class CollectorExporter implements api.SpanExporter {
 
   @override
   void forceFlush() {
-    throw UnimplementedError();
+    return;
   }
 
   @override
   void shutdown() {
     _isShutdown = true;
+    client.close();
   }
 }

@@ -15,15 +15,15 @@ class BatchSpanProcessor implements api.SpanProcessor {
 
   int _maxExportBatchSize = 512;
   final int _maxQueueSize = 2048;
-  int _scheduledDelay = 5000;
+  int _scheduledDelayMillis = 5000;
 
   BatchSpanProcessor(this._exporter,
-      {int maxExportBatchSize, int scheduledDelay}) {
+      {int maxExportBatchSize, int scheduledDelayMillis}) {
     if (maxExportBatchSize != null) {
       _maxExportBatchSize = maxExportBatchSize;
     }
-    if (scheduledDelay != null) {
-      _scheduledDelay = scheduledDelay;
+    if (scheduledDelayMillis != null) {
+      _scheduledDelayMillis = scheduledDelayMillis;
     }
   }
 
@@ -35,6 +35,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
     while (_spanBuffer.isNotEmpty) {
       _flushBatch();
     }
+    _exporter.forceFlush();
   }
 
   @override
@@ -46,7 +47,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onStart() {}
+  void onStart(api.Span span, api.Context parentContext) {}
 
   @override
   void shutdown() {
@@ -74,7 +75,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
       return;
     }
 
-    _timer = Timer(Duration(milliseconds: _scheduledDelay), () {
+    _timer = Timer(Duration(milliseconds: _scheduledDelayMillis), () {
       _flushBatch();
       if (_spanBuffer.isNotEmpty) {
         _clearTimer();

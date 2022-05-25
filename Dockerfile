@@ -1,10 +1,10 @@
-FROM google/dart:2.13
+FROM dart:2.13
 WORKDIR /build
 
-RUN apt update && apt install -y make protobuf-compiler wget
+RUN apt update && apt install -y make protobuf-compiler gnupg wget
 
 COPY pubspec.yaml .
-RUN pub get
+RUN dart pub get
 
 COPY . .
 
@@ -15,7 +15,8 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     mv /usr/bin/google-chrome-stable /usr/bin/google-chrome && \
     sed -i --follow-symlinks -e 's/\"\$HERE\/chrome\"/\"\$HERE\/chrome\" --no-sandbox/g' /usr/bin/google-chrome
 
-RUN make init analyze test
+RUN export PATH="$PATH":"$HOME/.pub-cache/bin" && \
+    make init analyze test
 
 RUN ./package.sh
 
@@ -31,8 +32,8 @@ ARG GIT_HEAD_URL
 ARG GIT_MERGE_HEAD
 ARG GIT_MERGE_BRANCH
 
-RUN pub global activate --hosted-url https://pub.workiva.org semver_audit ^2.2.0
-RUN pub global run semver_audit report --repo Workiva/opentelemetry-dart
+RUN dart pub global activate --hosted-url https://pub.workiva.org semver_audit ^2.2.0
+RUN dart pub global run semver_audit report --repo Workiva/opentelemetry-dart
 
 ARG BUILD_ARTIFACTS_PUB=/build/pub_package.pub.tgz
 
