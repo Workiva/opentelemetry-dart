@@ -36,7 +36,7 @@ class Span implements api.Span {
       api.Context parentContext,
       sdk.SpanLimits limits,
       Int64 startTime})
-      : _links = _addLinks(links, limits ?? sdk.SpanLimits()),
+      : _links = _applyLinkLimits(links, limits ?? sdk.SpanLimits()),
         _kind = kind ?? api.SpanKind.internal,
         _startTime = startTime ?? _timeProvider.now,
         _limits = limits ?? sdk.SpanLimits() {
@@ -165,7 +165,7 @@ class Span implements api.Span {
   }
 
   // This method just can be called once during construction.
-  static List<api.SpanLink> _addLinks(
+  static List<api.SpanLink> _applyLinkLimits(
       List<api.SpanLink> links, sdk.SpanLimits limits) {
     if (links == null) return [];
     final spanLink = <api.SpanLink>[];
