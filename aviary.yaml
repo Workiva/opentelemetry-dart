@@ -1,2 +1,4 @@
 version: 1
 
+exclude:
+- ^lib\/src\/sdk\/proto\/
