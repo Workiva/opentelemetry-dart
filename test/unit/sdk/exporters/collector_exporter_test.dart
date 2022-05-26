@@ -1,3 +1,17 @@
+// Copyright 2021-2022 Workiva Inc.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 @TestOn('vm')
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
@@ -33,6 +47,7 @@ void main() {
         sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
     final instrumentationLibrary =
         sdk.InstrumentationLibrary('library_name', 'library_version');
+    final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
     final span1 = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
@@ -54,8 +69,15 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
+        limits: limits,
         attributes: [api.Attribute.fromBoolean('bool', true)],
-        kind: api.SpanKind.internal)
+        kind: api.SpanKind.internal,
+        links: [
+          api.SpanLink(span1.spanContext, attributes: [
+            api.Attribute.fromString('longKey',
+                'I am very long with maxNumAttributeLength: 5 limitation!')
+          ])
+        ])
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -102,7 +124,19 @@ void main() {
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
                           message: null),
-                      kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL)
+                      kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL,
+                      links: [
+                        pb.Span_Link(
+                            traceId: [1, 2, 3],
+                            spanId: [7, 8, 9],
+                            traceState: '',
+                            attributes: [
+                              pb_common.KeyValue(
+                                  key: 'longKey',
+                                  value:
+                                      pb_common.AnyValue(stringValue: 'I am '))
+                            ])
+                      ])
                 ],
                 instrumentationLibrary: pb_common.InstrumentationLibrary(
                     name: 'library_name', version: 'library_version'))

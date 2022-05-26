@@ -1,3 +1,17 @@
+// Copyright 2021-2022 Workiva Inc.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'package:http/http.dart' as http;
 
 import '../../../../api.dart' as api;
@@ -76,6 +90,23 @@ class CollectorExporter implements api.SpanExporter {
     return rss;
   }
 
+  Iterable<pb_trace.Span_Link> _spanLinksToProtobuf(List<api.SpanLink> links) {
+    final pbLinks = <pb_trace.Span_Link>[];
+    for (final link in links) {
+      final attrs = <pb_common.KeyValue>[];
+      for (final attr in link.attributes) {
+        attrs.add(pb_common.KeyValue(
+            key: attr.key, value: _attributeValueToProtobuf(attr.value)));
+      }
+      pbLinks.add(pb_trace.Span_Link(
+          traceId: link.context.traceId.get(),
+          spanId: link.context.spanId.get(),
+          traceState: link.context.traceState.toString(),
+          attributes: attrs));
+    }
+    return pbLinks;
+  }
+
   pb_trace.Span _spanToProtobuf(sdk.Span span) {
     pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
@@ -123,7 +154,8 @@ class CollectorExporter implements api.SpanExporter {
             value: _attributeValueToProtobuf(span.attributes.get(key)))),
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),
-        kind: spanKind);
+        kind: spanKind,
+        links: _spanLinksToProtobuf(span.links));
   }
 
   pb_common.AnyValue _attributeValueToProtobuf(Object value) {
