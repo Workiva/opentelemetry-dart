@@ -128,9 +128,10 @@ class Span implements api.Span {
       return;
     }
 
+
     final obj = _attributes.get(attribute.key);
-    //If current attributes.length is equal or greater than maxNumAttributes and
-    //key is not in current map, drop it.
+    // If current attributes.length is equal or greater than maxNumAttributes and
+    // key is not in current map, drop it.
     if (_attributes.length >= _limits.maxNumAttributes && obj == null) {
       _droppedSpanAttributes++;
       return;
@@ -139,8 +140,9 @@ class Span implements api.Span {
         .add(_rebuildAttribute(attribute, _limits.maxNumAttributeLength));
   }
 
+ 
   static api.Attribute _rebuildAttribute(api.Attribute attr, int maxLength) {
-    //if maxNumAttributeLength is less than zero, then it has unlimited length.
+    // if maxNumAttributeLength is less than zero, then it has unlimited length.
     if (maxLength < 0) return attr;
 
     if (attr.value is String) {
@@ -160,11 +162,13 @@ class Span implements api.Span {
   void recordException(dynamic exception, {StackTrace stackTrace}) {
     // ignore: todo
     // TODO: O11Y-1531: Consider integration of Events here.
-    setStatus(api.StatusCode.error, description: exception.toString());
     setAttributes([
-      api.Attribute.fromBoolean('error', true),
-      api.Attribute.fromString('exception', exception.toString()),
-      api.Attribute.fromString('stacktrace', stackTrace.toString()),
+      api.Attribute.fromString(api.SemanticAttributes.exceptionType,
+          exception.runtimeType.toString()),
+      api.Attribute.fromString(
+          api.SemanticAttributes.exceptionMessage, exception.toString()),
+      api.Attribute.fromString(
+          api.SemanticAttributes.exceptionStacktrace, stackTrace.toString()),
     ]);
   }
 
@@ -177,6 +181,7 @@ class Span implements api.Span {
     // TODO: O11Y-1531
     throw UnimplementedError();
   }
+
 
   // This method just can be called once during construction.
   static List<api.SpanLink> _applyLinkLimits(

@@ -62,7 +62,9 @@ FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
     }
     return result;
   } catch (e, s) {
-    span.recordException(e, stackTrace: s);
+    span
+      ..setStatus(api.StatusCode.error, description: e.toString())
+      ..recordException(e, stackTrace: s);
     rethrow;
   } finally {
     span.end();

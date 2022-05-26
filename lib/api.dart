@@ -13,6 +13,8 @@
 // limitations under the License.
 
 export 'src/api/common/attribute.dart' show Attribute;
+export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
+export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/context/context.dart' show Context;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
