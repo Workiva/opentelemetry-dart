@@ -16,12 +16,13 @@
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart';
-import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/common/v1/common.pb.dart'
+import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
+    as pb_trace_service;
+import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/common/v1/common.pb.dart'
     as pb_common;
-import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/resource/v1/resource.pb.dart'
+import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/resource/v1/resource.pb.dart'
     as pb_resource;
-import 'package:opentelemetry/src/sdk/trace/exporters/opentelemetry/proto/trace/v1/trace.pb.dart'
+import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/trace/v1/trace.pb.dart'
     as pb;
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
@@ -81,7 +82,8 @@ void main() {
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
 
-    final expectedBody = ExportTraceServiceRequest(resourceSpans: [
+    final expectedBody =
+        pb_trace_service.ExportTraceServiceRequest(resourceSpans: [
       pb.ResourceSpans(
           resource: pb_resource.Resource(attributes: [
             pb_common.KeyValue(

@@ -128,7 +128,6 @@ class Span implements api.Span {
       return;
     }
 
-
     final obj = _attributes.get(attribute.key);
     // If current attributes.length is equal or greater than maxNumAttributes and
     // key is not in current map, drop it.
@@ -140,7 +139,6 @@ class Span implements api.Span {
         .add(_rebuildAttribute(attribute, _limits.maxNumAttributeLength));
   }
 
- 
   static api.Attribute _rebuildAttribute(api.Attribute attr, int maxLength) {
     // if maxNumAttributeLength is less than zero, then it has unlimited length.
     if (maxLength < 0) return attr;
@@ -181,7 +179,6 @@ class Span implements api.Span {
     // TODO: O11Y-1531
     throw UnimplementedError();
   }
-
 
   // This method just can be called once during construction.
   static List<api.SpanLink> _applyLinkLimits(

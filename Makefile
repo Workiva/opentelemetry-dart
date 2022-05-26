@@ -1,8 +1,7 @@
 init:
-	git submodule update --init
 	dart pub get
 	dart pub global activate protoc_plugin 19.3.1
-	cd lib/src/sdk/trace/exporters && \
+	cd lib/src/sdk/proto && \
 		protoc --proto_path opentelemetry-proto \
 		--dart_out . \
 		opentelemetry-proto/opentelemetry/proto/common/v1/common.proto \
@@ -14,7 +13,7 @@ analyze:
 	@dart analyze
 
 format:
-	@find ./lib/ -name '*.dart' | xargs dart format --fix
+	@find ./lib -name '*.dart' -not -path './lib/src/sdk/proto/opentelemetry/*' | xargs dart format --fix
 	@find ./test/ -name '*.dart' | xargs dart format --fix
 
 test: format analyze
