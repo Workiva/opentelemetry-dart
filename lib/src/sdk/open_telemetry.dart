@@ -48,39 +48,22 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
 /// Records a span of the given [name] for the given function with a given
 /// [api.Tracer] and marks the span as errored if an exception occurs.
 Future<T> trace<T>(String name, Future<T> Function() fn,
-    {api.Context context, api.Tracer tracer}) {
+    {api.Context context, api.Tracer tracer}) async {
   context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);
 
-  // NOTE: Wrap the call to [fn] in a `Future.sync` to avoid
-  //       unhandled synchronous errors from leaking out of this function.
-  //       This allows all errors to be handled and logged by the
-  //       [Future.catchError] below.
-  //
-  // From https://www.dartlang.org/guides/libraries/futures-error-handling#solution-using-futuresync-to-wrap-your-code
-  //   >
-  //   > A common pattern for ensuring that no synchronous error is
-  //   > accidentally thrown from a function is to wrap the function body
-  //   > inside a new Future.sync() callback
-  return Future
-      .sync(() => context.withSpan(span).execute(fn))
-      .catchError((e, s) {
-    // Since [fn] is wrapped in a [Future.sync], this error handler
-    // will also catch errors thrown from the synchronous portion of [fn].
-    // If [fn] is an async function and/or returns a [Future] then errors
-    // thrown by the returned future will also be handled here.
+  try {
+    return await context.withSpan(span).execute(fn);
+  } catch (e, s) {
     span
       ..setStatus(api.StatusCode.error, description: e.toString())
       ..recordException(e, stackTrace: s);
-
-    // Throwing the original error from within the [Future.catchError] handler
-    // is equivalent to a [rethrow] from within a regular `catch (e) {...}` handler.
-    // In this way, the originating [StackTrace] is preserved.
-    throw e;
-  })
-      .whenComplete(span.end);
+    rethrow;
+  } finally {
+    span.end();
+  }
 }
 
 R traceSync<R>(String name, R Function() fn,
