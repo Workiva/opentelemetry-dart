@@ -66,6 +66,7 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
   }
 }
 
+/// Use [traceSync] instead of [trace] when [fn] is not an async function.
 R traceSync<R>(String name, R Function() fn,
     {api.Context context, api.Tracer tracer}) {
   context ??= api.Context.current;
@@ -90,4 +91,3 @@ R traceSync<R>(String name, R Function() fn,
     span.end();
   }
 }
-
