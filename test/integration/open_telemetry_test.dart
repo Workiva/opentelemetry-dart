@@ -31,7 +31,7 @@ void main() {
         sdk.InstrumentationLibrary('name', 'version'));
     Span span;
 
-    sdk.trace('syncTrace', () {
+    sdk.traceSync('syncTrace', () {
       span = api.Context.current.span;
     }, tracer: tracer);
 
@@ -51,7 +51,7 @@ void main() {
     final spans = <Span>[];
 
     for (var i = 0; i < 5; i++) {
-      sdk.trace('syncTrace', () {
+      sdk.traceSync('syncTrace', () {
         spans.add(api.Context.current.span);
       }, tracer: tracer);
     }
@@ -72,7 +72,7 @@ void main() {
     Span span;
 
     expect(
-        () => sdk.trace('syncTrace', () {
+        () => sdk.traceSync('syncTrace', () {
               span = api.Context.current.span;
               throw Exception('Oh noes!');
             }, tracer: tracer),

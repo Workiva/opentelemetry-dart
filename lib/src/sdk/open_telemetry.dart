@@ -47,20 +47,41 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
 
 /// Records a span of the given [name] for the given function with a given
 /// [api.Tracer] and marks the span as errored if an exception occurs.
-FutureOr<R> trace<R>(String name, FutureOr<R> Function() fn,
+Future<T> trace<T>(String name, Future<T> Function() fn,
     {api.Context context, api.Tracer tracer}) async {
   context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);
+
   try {
-    var result = context.withSpan(span).execute(fn);
-    if (result is Future) {
-      // Operation must be awaited here to ensure the catch block intercepts
-      // errors thrown by [fn].
-      result = await result;
+    return await context.withSpan(span).execute(fn);
+  } catch (e, s) {
+    span
+      ..setStatus(api.StatusCode.error, description: e.toString())
+      ..recordException(e, stackTrace: s);
+    rethrow;
+  } finally {
+    span.end();
+  }
+}
+
+/// Use [traceSync] instead of [trace] when [fn] is not an async function.
+R traceSync<R>(String name, R Function() fn,
+    {api.Context context, api.Tracer tracer}) {
+  context ??= api.Context.current;
+  tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
+
+  final span = tracer.startSpan(name, context: context);
+
+  try {
+    final r = context.withSpan(span).execute(fn);
+
+    if (r is Future) {
+      throw ArgumentError.value(fn, 'fn', 'Use traceSync to trace functions that do not return a [Future].');
     }
-    return result;
+
+    return r;
   } catch (e, s) {
     span
       ..setStatus(api.StatusCode.error, description: e.toString())
