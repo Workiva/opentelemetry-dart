@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 @TestOn('vm')
 import 'dart:async';
 import 'package:opentelemetry/sdk.dart' show trace;
@@ -22,7 +25,8 @@ void main() {
 
   test('trace returns future value', () async {
     await expectLater(trace('foo', () async => 'bar'), completion('bar'));
-    await expectLater(trace('foo', () => Future.value('bazz')), completion('bazz'));
+    await expectLater(
+        trace('foo', () => Future.value('bazz')), completion('bazz'));
   });
 
   test('trace throws future error', () async {
@@ -32,7 +36,8 @@ void main() {
 
     // Exception thrown from asynchronous code in async function.
     final buzz = Exception('buzz!!');
-    await expectLater(trace('foo', () async => Future.error(buzz)), throwsA(buzz));
+    await expectLater(
+        trace('foo', () async => Future.error(buzz)), throwsA(buzz));
 
     // Exception thrown from asynchronous code in async function.
     final bazz = Exception('bazz!!');

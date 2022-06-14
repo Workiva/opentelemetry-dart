@@ -15,6 +15,7 @@ analyze:
 format:
 	@find ./lib -name '*.dart' -not -path './lib/src/sdk/proto/opentelemetry/*' | xargs dart format --fix
 	@find ./test/ -name '*.dart' | xargs dart format --fix
+	@./scripts/attach_copyright.sh
 
 test: format analyze
 	@dart test ./test \
