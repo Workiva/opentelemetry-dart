@@ -1,10 +1,16 @@
 name: opentelemetry-dart
 contact: "Slack: #support-observability"
-description: Placeholder test to be updated prior to 1.0 release.
+description: Verify that the github actions run passed, this is needed to make pipelines pass without manual intervention
+env:
+# encrypted github token used for requests to api.github.com
+ - secure: +LDNyjraYQid1+rwIlipW5rY28rFC+UtaUIqLYUae6BuoOp6l6k0xfimWhLKRyzG3sGTo0fiwulFPeTtpCl5k741dkY=
+image: drydock.workiva.net/workiva/skynet-images:3728345 # Uses the image from this branch: https://github.com/Workiva/skynet-images/pull/127
 run:
-  when-branch-name-is:
-    - .+
-size: small
-timeout: 300
+  on-pull-request: true
+  on-promotion: true
+  when-modified-file-name-is: 
+    - skynet.yaml
 scripts:
   - 'true'
+size: small
+timeout: 300
