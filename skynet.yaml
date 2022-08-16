@@ -11,6 +11,6 @@ run:
   when-modified-file-name-is: 
     - skynet.yaml
 scripts:
-  - 'true'
+  - python3 /actions/verify_github_actions.py
 size: small
 timeout: 300
