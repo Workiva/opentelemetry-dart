@@ -4,7 +4,7 @@ description: Verify that the github actions run passed, this is needed to make p
 env:
 # encrypted github token used for requests to api.github.com
  - secure: +ZZnIr6KoTG7amJ6UoCsSz3MtdQfG/B1oiJqjLQQ/rKd8TScT3XP2Zp7yHAp9VOH+8iBOmRG1tRsXdmm/cYqK7YcjZA=
-image: drydock.workiva.net/workiva/skynet-images:3728345 # Uses the image from this branch: https://github.com/Workiva/skynet-images/pull/127
+image: drydock.workiva.net/workiva/skynet-images:3693290 # Uses the image from this branch: https://github.com/Workiva/skynet-images/pull/127
 run:
   on-pull-request: true
   on-promotion: true
