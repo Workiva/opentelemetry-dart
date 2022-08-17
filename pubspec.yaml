@@ -2,7 +2,6 @@ name: opentelemetry
 version: 0.14.1
 description: A framework for collecting traces from applications.
 homepage: https://github.com/Workiva/opentelemetry-dart
-publish_to: https://pub.workiva.org
 environment:
   sdk: ">=2.11.0 <3.0.0"
 
