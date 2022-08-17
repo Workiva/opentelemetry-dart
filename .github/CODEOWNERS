@@ -1,5 +1,5 @@
-# These owners will be the default owners for everything in
-# the repo. Unless a later match takes precedence,
-# @Workiva/observability will be requested for
-# review when someone opens a pull request.
-* @Workiva/observability
+# Code owners file.
+# This file controls who is tagged for review for any given pull request.
+
+ # For anything not explicitly taken by someone else:
+* @Workiva/observability @evanweible-wf @dustinlessard-wf
