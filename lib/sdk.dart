@@ -1,7 +1,12 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+export 'src/sdk/common/constants.dart';
 export 'src/sdk/instrumentation_library.dart' show InstrumentationLibrary;
+export 'src/sdk/metrics/counter.dart' show Counter;
+export 'src/sdk/metrics/meter_provider.dart' show MeterProvider;
+export 'src/sdk/metrics/meter.dart' show Meter;
+export 'src/sdk/metrics/metric_options.dart' show MetricOptions;
 export 'src/sdk/open_telemetry.dart'
     show
         globalTextMapPropagator,
@@ -26,12 +31,12 @@ export 'src/sdk/trace/sampling/parent_based_sampler.dart'
 export 'src/sdk/trace/sampling/sampler.dart' show Sampler;
 export 'src/sdk/trace/sampling/sampling_result.dart'
     show Decision, SamplingResult;
-export 'src/sdk/trace/span.dart' show Span;
 export 'src/sdk/trace/span_context.dart' show SpanContext;
 export 'src/sdk/trace/span_limits.dart' show SpanLimits;
 export 'src/sdk/trace/span_processors/batch_processor.dart'
     show BatchSpanProcessor;
 export 'src/sdk/trace/span_processors/simple_processor.dart'
     show SimpleSpanProcessor;
+export 'src/sdk/trace/span.dart' show Span;
 export 'src/sdk/trace/trace_state.dart' show TraceState;
 export 'src/sdk/trace/tracer_provider.dart' show TracerProviderBase;
