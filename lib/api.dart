@@ -24,7 +24,5 @@ export 'src/api/trace/trace_state.dart' show TraceState;
 export 'src/api/trace/tracer.dart' show Tracer;
 export 'src/api/trace/tracer_provider.dart' show TracerProvider;
 export 'src/api/metrics/meter.dart' show Meter;
-export 'src/api/metrics/intcounter.dart' show IntCounter;
-export 'src/api/metrics/intcounterbuilder.dart' show IntCounterBuilder;
-export 'src/api/metrics/MeterProvider.dart' show MeterProvider;
+export 'src/api/metrics/meter_provider.dart' show MeterProvider;
 export 'src/api/metrics/meterbuilder.dart' show MeterBuilder;
