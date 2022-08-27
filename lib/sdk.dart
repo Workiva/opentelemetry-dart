@@ -35,3 +35,6 @@ export 'src/sdk/trace/span_processors/simple_processor.dart'
     show SimpleSpanProcessor;
 export 'src/sdk/trace/trace_state.dart' show TraceState;
 export 'src/sdk/trace/tracer_provider.dart' show TracerProviderBase;
+export 'src/sdk/metrics/meter.dart' show Meter;
+export 'src/sdk/metrics/metric_options.dart' show MetricOptions;
+export 'src/sdk/metrics/meter_provider.dart' show MeterProvider;

@@ -1,6 +1,6 @@
 import 'package:opentelemetry/api.dart';
 
-abstract class Meter {
+class Meter {
   //
   // Creates a new `Counter` metric. Generally, this kind of metric when the
   // value is a quantity, the sum is of primary interest, and the event count
@@ -9,7 +9,9 @@ abstract class Meter {
   // @see <a
   //     href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument-naming-rule">Instrument
   //     Naming Rule</a>
-  // Counter createCounter(String name, MetricOptions options);
+  Counter createCounter<t>(String name, MetricOptions options) {
+    return Counter();
+  }
 
   // /// Creates a new `UpDownCounter` metric. UpDownCounter is a synchronous
   // /// instrument and very similar to Counter except that Add(increment)
