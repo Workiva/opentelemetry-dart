@@ -171,11 +171,10 @@ void main() {
       expect(identical(meterA, meterB), true);
     });
 
+    // todo: imlpement test that verifies that changes to attributes apply to
+    // previously created meters
+    // https://github.com/Workiva/opentelemetry-dart/issues/74
     // test('changes to attributes apply to previously created meters', () {
-    //   const meterName = 'meterA';
-    //   final meterProvider = sdk.MeterProvider();'
-    //   final meterA = meterProvider.get(meterName);
-
     // });
   });
 }
