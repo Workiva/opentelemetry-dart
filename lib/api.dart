@@ -27,4 +27,3 @@ export 'src/api/metrics/counter.dart' show Counter;
 export 'src/api/metrics/meter.dart' show Meter;
 export 'src/api/metrics/meter_provider.dart' show MeterProvider;
 export 'src/api/metrics/metric_options.dart' show MetricOptions;
-export 'src/api/metrics/noop/noop_meter.dart' show NoopMeter;

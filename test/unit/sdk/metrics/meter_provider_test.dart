@@ -1,4 +1,5 @@
 @TestOn('vm')
+
 // import 'package:opentelemetry/api.dart' as api;
 
 import 'package:logging/logging.dart';
@@ -51,49 +52,7 @@ The effect of associating a Schema URL with a Meter MUST be that the telemetry e
 
 import 'package:test/test.dart';
 
-class _LogRecordMatcher extends TypeMatcher<LogRecord> {
-  final Matcher _level;
-  final Matcher _message;
-
-  factory _LogRecordMatcher(dynamic levelOr, dynamic messageOr) =>
-      _LogRecordMatcher._(levelOr is Matcher ? levelOr : equals(levelOr),
-          messageOr is Matcher ? messageOr : equals(messageOr));
-
-  _LogRecordMatcher._(this._level, this._message);
-
-  @override
-  Description describe(Description description) {
-    description.add('level: ');
-    _level.describe(description);
-    description.add(', message: ');
-    _message.describe(description);
-    return description;
-  }
-
-  @override
-  Description describeMismatch(covariant LogRecord item,
-      Description description, Map<dynamic, dynamic> matchState, bool __) {
-    if (!_level.matches(item.level, matchState)) {
-      _level.describeMismatch(item.level, description, matchState, false);
-    }
-    if (!_message.matches(item.message, matchState)) {
-      _message.describeMismatch(item.message, description, matchState, false);
-    }
-    return description;
-  }
-
-  @override
-  bool matches(dynamic item, Map<dynamic, dynamic> matchState) =>
-      item is LogRecord &&
-      _level.matches(item.level, matchState) &&
-      _message.matches(item.message, matchState);
-}
-
 void main() {
-  /// Matches [LogRecord] of [Level.SEVERE] where message is [messageOrMatcher].
-  TypeMatcher<LogRecord> severeLogOf(dynamic messageOrMatcher) =>
-      _LogRecordMatcher(Level.SEVERE, messageOrMatcher);
-
   group('MeterProvider:', () {
     setUp(() {
       Logger.root.level = Level.ALL; // defaults to Level.INFO
