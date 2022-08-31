@@ -38,3 +38,4 @@ export 'src/sdk/trace/tracer_provider.dart' show TracerProviderBase;
 export 'src/sdk/metrics/meter.dart' show Meter;
 export 'src/sdk/metrics/metric_options.dart' show MetricOptions;
 export 'src/sdk/metrics/meter_provider.dart' show MeterProvider;
+export 'src/sdk/metrics/counter.dart' show Counter;

@@ -1,13 +1,10 @@
 import 'package:opentelemetry/api.dart';
 
-/// A registry for creating named {@link Meter}s.
+/// A registry for creating named [Meter]s.
 ///
 /// <p>The name <i>Provider</i> is for consistency with other languages and it is <b>NOT</b> loaded
 /// using reflection.
-///
-/// @see Meter
-/// @since 1.10.0
-class MeterProvider {
+abstract class MeterProvider {
   ///
   /// Gets or creates a named [Meter] instance.
   ///
@@ -17,7 +14,5 @@ class MeterProvider {
   Meter get(String instrumentationScopeName,
       {String instrumentationVersion = '',
       String schemaUrl = '',
-      Map<String, String> attributes = const {}}) {
-    return Meter();
-  }
+      Map<String, String> attributes = const {}});
 }

@@ -1,4 +1,4 @@
-class MetricOptions {
-  void setDescription(String description) {}
-  void setUnits(String units) {}
+abstract class MetricOptions {
+  void setDescription(String description);
+  void setUnits(String units);
 }
