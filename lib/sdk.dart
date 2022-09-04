@@ -39,3 +39,4 @@ export 'src/sdk/metrics/meter.dart' show Meter;
 export 'src/sdk/metrics/metric_options.dart' show MetricOptions;
 export 'src/sdk/metrics/meter_provider.dart' show MeterProvider;
 export 'src/sdk/metrics/counter.dart' show Counter;
+export 'src/sdk/common/constants.dart';

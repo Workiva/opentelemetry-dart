@@ -22,11 +22,11 @@ void main() {
         'meter and logs a message', () {
       Logger.root.onRecord.listen(expectAsync1((record) {
         expect(record.stackTrace, isNotNull);
-        expect(record.message, equals('Invalid Meter Name'));
+        expect(record.message, equals(sdk.invalidMeterNameMessage));
         expect(record.level, equals(Level.SEVERE));
       }));
 
-      final meter = sdk.MeterProvider().get(null)..createCounter('test', null);
+      final meter = sdk.MeterProvider().get(null)..createCounter('test');
       expect(meter, isNotNull);
     });
 
@@ -37,6 +37,17 @@ void main() {
       final meterB = meterProvider.get(meterName);
 
       expect(identical(meterA, meterB), true);
+    });
+
+    test('getting meters by different names will return different instances',
+        () {
+      const meterNameA = 'meterA';
+      const meterNameB = 'meterB';
+      final meterProvider = sdk.MeterProvider();
+      final meterA = meterProvider.get(meterNameA);
+      final meterB = meterProvider.get(meterNameB);
+
+      expect(identical(meterA, meterB), false);
     });
 
     test('getting by name and version will return the same meter', () {
@@ -52,6 +63,21 @@ void main() {
     });
 
     test(
+        'getting by same name yet different version will return different meter'
+        ' instances', () {
+      const meterName = 'meterA';
+      const versionA = 'v1';
+      const versionB = 'v2';
+      final meterProvider = sdk.MeterProvider();
+      final meterA =
+          meterProvider.get(meterName, instrumentationVersion: versionA);
+      final meterB =
+          meterProvider.get(meterName, instrumentationVersion: versionB);
+
+      expect(identical(meterA, meterB), false);
+    });
+
+    test(
         'getting by same name, version and schema_url will return the same meter',
         () {
       const meterName = 'meterA';
@@ -64,6 +90,22 @@ void main() {
           instrumentationVersion: version, schemaUrl: url);
 
       expect(identical(meterA, meterB), true);
+    });
+
+    test(
+        'getting by same name, same version and different schema_url will return'
+        ' different meter instances', () {
+      const meterName = 'meterA';
+      const version = 'v2';
+      const urlA = 'http:schemas.com';
+      const urlB = 'https:schemas.com';
+      final meterProvider = sdk.MeterProvider();
+      final meterA = meterProvider.get(meterName,
+          instrumentationVersion: version, schemaUrl: urlA);
+      final meterB = meterProvider.get(meterName,
+          instrumentationVersion: version, schemaUrl: urlB);
+
+      expect(identical(meterA, meterB), false);
     });
 
     test(
@@ -86,7 +128,28 @@ void main() {
       expect(identical(meterA, meterB), true);
     });
 
-    // todo: imlpement test that verifies that changes to attributes apply to
+    test(
+        'getting by same name, same version, same schema_url and different '
+        'attributes will return different meter instances', () {
+      const meterName = 'meterA';
+      const version = 'v2';
+      const url = 'http:schemas.com';
+      const attributesA = {'keyA': 'valueA', 'KeyB': 'valueB'};
+      const attributesB = {'keyA': 'valueA', 'KeyB': 'valueBBB'};
+      final meterProvider = sdk.MeterProvider();
+      final meterA = meterProvider.get(meterName,
+          instrumentationVersion: version,
+          schemaUrl: url,
+          attributes: attributesA);
+      final meterB = meterProvider.get(meterName,
+          instrumentationVersion: version,
+          schemaUrl: url,
+          attributes: attributesB);
+
+      expect(identical(meterA, meterB), false);
+    });
+
+    // todo: implement test that verifies that changes to attributes apply to
     // previously created meters
     // https://github.com/Workiva/opentelemetry-dart/issues/74
     // test('changes to attributes apply to previously created meters', () {

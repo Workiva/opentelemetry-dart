@@ -16,9 +16,9 @@ class MeterProvider implements api.MeterProvider {
       //throw and catch Argument error so that we capture a stacktrace,
       //identifying the caller
       try {
-        throw ArgumentError('Invalid Meter Name');
+        throw ArgumentError(sdk.invalidMeterNameMessage);
       } catch (e, stacktrace) {
-        _logger.severe('Invalid Meter Name', e, stacktrace);
+        _logger.warning(sdk.invalidMeterNameMessage, e, stacktrace);
       }
     }
     final key = instrumentationScopeName +
