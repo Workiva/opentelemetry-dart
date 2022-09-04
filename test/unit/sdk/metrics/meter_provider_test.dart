@@ -23,7 +23,7 @@ void main() {
       Logger.root.onRecord.listen(expectAsync1((record) {
         expect(record.stackTrace, isNotNull);
         expect(record.message, equals(sdk.invalidMeterNameMessage));
-        expect(record.level, equals(Level.SEVERE));
+        expect(record.level, equals(Level.WARNING));
       }));
 
       final meter = sdk.MeterProvider().get(null)..createCounter('test');
