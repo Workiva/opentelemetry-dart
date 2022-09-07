@@ -1,13 +1,14 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:test/test.dart';
+import 'package:opentelemetry/src/api/metrics/noop/noop_meter_provider.dart';
 
 void main() {
   group('MeterProvider:', () {
     setUp(() {});
 
     test('MeterProvider.get with name returns inert instance of Meter', () {
-      final provider = api.NoopMeterProvider();
+      final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
       final meter = provider.get('testname');
       expect(meter, isA<api.Meter>());
@@ -15,7 +16,7 @@ void main() {
     });
     test('MeterProvider.get with name+version returns inert instance of Meter',
         () {
-      final provider = api.NoopMeterProvider();
+      final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
       final meter = provider.get('testname', instrumentationVersion: 'version');
       expect(meter, isA<api.Meter>());
@@ -25,7 +26,7 @@ void main() {
     test(
         'MeterProvider.get with name+version+url returns inert instance of Meter',
         () {
-      final provider = api.NoopMeterProvider();
+      final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
       final meter = provider.get('testname',
           instrumentationVersion: 'version', schemaUrl: 'url');
@@ -36,7 +37,7 @@ void main() {
     test(
         'MeterProvider.get with name+version+url+attributes returns inert '
         'instance of Meter', () {
-      final provider = api.NoopMeterProvider();
+      final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
       final meter = provider.get('testname',
           instrumentationVersion: 'version', schemaUrl: 'url', attributes: {});

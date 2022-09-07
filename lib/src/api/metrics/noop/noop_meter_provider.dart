@@ -1,4 +1,5 @@
 import 'package:opentelemetry/api.dart';
+import 'package:opentelemetry/src/api/metrics/noop/noop_meter.dart';
 
 /// A noop registry for creating named [Meter]s.
 class NoopMeterProvider implements MeterProvider {
