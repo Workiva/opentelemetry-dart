@@ -9,5 +9,5 @@ abstract class Meter {
   /// [options] Options needed for metric creation. Pattern borrowed from
   /// opentelemetry-js. This is optional.
   ///
-  Counter createCounter<t>(String name, {MetricOptions options});
+  Counter createCounter<T>(String name, {MetricOptions options});
 }

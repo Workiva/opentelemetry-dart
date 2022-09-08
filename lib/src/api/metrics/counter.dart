@@ -1,6 +1,6 @@
 import 'package:opentelemetry/api.dart';
 
-abstract class Counter<T> {
+abstract class Counter<T extends num> {
   /// Records a value with a set of attributes.
   ///
   /// [value] The increment amount. MUST be non-negative.
