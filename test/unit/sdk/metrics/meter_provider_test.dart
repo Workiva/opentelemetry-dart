@@ -22,7 +22,8 @@ void main() {
         'meter and logs a message', () {
       Logger.root.onRecord.listen(expectAsync1((record) {
         expect(record.stackTrace, isNotNull);
-        expect(record.message, equals(sdk.Meter.invalidMeterNameMessage));
+        expect(
+            record.message, equals(sdk.MeterProvider.invalidMeterNameMessage));
         expect(record.level, equals(Level.WARNING));
       }));
 
