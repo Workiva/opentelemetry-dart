@@ -13,13 +13,8 @@ class MeterProvider implements api.MeterProvider {
       Map<String, String> attributes = const {}}) {
     if (instrumentationScopeName == null || instrumentationScopeName == '') {
       instrumentationScopeName = '';
-      //throw and catch Argument error so that we capture a stacktrace,
-      //identifying the caller
-      try {
-        throw ArgumentError(sdk.invalidMeterNameMessage);
-      } catch (e, stacktrace) {
-        _logger.warning(sdk.invalidMeterNameMessage, e, stacktrace);
-      }
+      _logger.warning(
+          sdk.Meter.invalidMeterNameMessage, '', StackTrace.current);
     }
     final key = instrumentationScopeName +
         instrumentationVersion +
