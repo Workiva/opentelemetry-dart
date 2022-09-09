@@ -2,14 +2,6 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 export 'src/sdk/instrumentation_library.dart' show InstrumentationLibrary;
-export 'src/sdk/open_telemetry.dart'
-    show
-        globalTextMapPropagator,
-        globalTracerProvider,
-        registerGlobalTextMapPropagator,
-        registerGlobalTracerProvider,
-        trace,
-        traceSync;
 export 'src/sdk/resource/resource.dart' show Resource;
 export 'src/sdk/time_providers/datetime_time_provider.dart'
     show DateTimeTimeProvider;

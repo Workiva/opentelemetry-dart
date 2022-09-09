@@ -3,8 +3,7 @@
 
 @TestOn('vm')
 import 'dart:async';
-import 'package:opentelemetry/sdk.dart' show trace;
-import 'package:opentelemetry/src/sdk/open_telemetry.dart';
+import 'package:opentelemetry/src/api/open_telemetry.dart';
 import 'package:test/test.dart';
 
 void main() {
