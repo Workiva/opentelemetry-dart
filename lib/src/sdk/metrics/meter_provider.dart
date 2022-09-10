@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 class MeterProvider implements api.MeterProvider {
-  final _meters = <String, api.Meter>{};
+  final _meters = <String /* name */, api.Meter>{};
   final _logger = Logger('opentelemetry.sdk.metrics.meterprovider');
 
   @visibleForTesting
