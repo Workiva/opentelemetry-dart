@@ -19,12 +19,19 @@ void main() {
     test(
         'failing to provide a name when getting a meter results in a functional'
         'meter and logs a message', () {
-      Logger.root.onRecord.listen(expectAsync1((record) {
-        expect(record.stackTrace, isNotNull);
-        expect(
-            record.message, equals(sdk.MeterProvider.invalidMeterNameMessage));
-        expect(record.level, equals(Level.WARNING));
-      }));
+      expect(
+          Logger.root.onRecord,
+          emits(isA<LogRecord>()
+              .having(
+                (r) => r.message,
+                'message',
+                equals(sdk.MeterProvider.invalidMeterNameMessage),
+              )
+              .having(
+                (r) => r.level,
+                'level',
+                equals(Level.WARNING),
+              )));
 
       final meter = sdk.MeterProvider().get(null)..createCounter('test');
       expect(meter, isNotNull);
