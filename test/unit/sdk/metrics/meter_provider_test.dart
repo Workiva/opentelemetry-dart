@@ -2,6 +2,7 @@
 
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/metrics/meter_provider.dart';
 
 //The following requirements were used to determine what should be tested.
 //[https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#meterprovider]
@@ -12,7 +13,9 @@ void main() {
   group('MeterProvider:', () {
     setUp(() {
       Logger.root.level = Level.ALL; // defaults to Level.INFO
-      Logger.root.onRecord.listen(printOnFailure);
+      Logger.root.onRecord.listen((record) {
+        printOnFailure(
+            '${record.level.name}: ${record.time}: ${record.message}');
       });
     });
 
@@ -25,7 +28,7 @@ void main() {
               .having(
                 (r) => r.message,
                 'message',
-                equals(sdk.MeterProvider.invalidMeterNameMessage),
+                equals(invalidMeterNameMessage),
               )
               .having(
                 (r) => r.level,
@@ -61,10 +64,8 @@ void main() {
       const meterName = 'meterA';
       const version = 'v2';
       final meterProvider = sdk.MeterProvider();
-      final meterA =
-          meterProvider.get(meterName, instrumentationVersion: version);
-      final meterB =
-          meterProvider.get(meterName, instrumentationVersion: version);
+      final meterA = meterProvider.get(meterName, version: version);
+      final meterB = meterProvider.get(meterName, version: version);
 
       expect(identical(meterA, meterB), true);
     });
@@ -76,10 +77,8 @@ void main() {
       const versionA = 'v1';
       const versionB = 'v2';
       final meterProvider = sdk.MeterProvider();
-      final meterA =
-          meterProvider.get(meterName, instrumentationVersion: versionA);
-      final meterB =
-          meterProvider.get(meterName, instrumentationVersion: versionB);
+      final meterA = meterProvider.get(meterName, version: versionA);
+      final meterB = meterProvider.get(meterName, version: versionB);
 
       expect(identical(meterA, meterB), false);
     });
@@ -91,10 +90,10 @@ void main() {
       const version = 'v2';
       const url = 'http:schemas.com';
       final meterProvider = sdk.MeterProvider();
-      final meterA = meterProvider.get(meterName,
-          instrumentationVersion: version, schemaUrl: url);
-      final meterB = meterProvider.get(meterName,
-          instrumentationVersion: version, schemaUrl: url);
+      final meterA =
+          meterProvider.get(meterName, version: version, schemaUrl: url);
+      final meterB =
+          meterProvider.get(meterName, version: version, schemaUrl: url);
 
       expect(identical(meterA, meterB), true);
     });
@@ -107,10 +106,10 @@ void main() {
       const urlA = 'http:schemas.com';
       const urlB = 'https:schemas.com';
       final meterProvider = sdk.MeterProvider();
-      final meterA = meterProvider.get(meterName,
-          instrumentationVersion: version, schemaUrl: urlA);
-      final meterB = meterProvider.get(meterName,
-          instrumentationVersion: version, schemaUrl: urlB);
+      final meterA =
+          meterProvider.get(meterName, version: version, schemaUrl: urlA);
+      final meterB =
+          meterProvider.get(meterName, version: version, schemaUrl: urlB);
 
       expect(identical(meterA, meterB), false);
     });
@@ -124,13 +123,9 @@ void main() {
       const attributes = {'keyA': 'valueA', 'KeyB': 'valueB'};
       final meterProvider = sdk.MeterProvider();
       final meterA = meterProvider.get(meterName,
-          instrumentationVersion: version,
-          schemaUrl: url,
-          attributes: attributes);
+          version: version, schemaUrl: url, attributes: attributes);
       final meterB = meterProvider.get(meterName,
-          instrumentationVersion: version,
-          schemaUrl: url,
-          attributes: attributes);
+          version: version, schemaUrl: url, attributes: attributes);
 
       expect(identical(meterA, meterB), true);
     });
@@ -145,13 +140,9 @@ void main() {
       const attributesB = {'keyA': 'valueA', 'KeyB': 'valueBBB'};
       final meterProvider = sdk.MeterProvider();
       final meterA = meterProvider.get(meterName,
-          instrumentationVersion: version,
-          schemaUrl: url,
-          attributes: attributesA);
+          version: version, schemaUrl: url, attributes: attributesA);
       final meterB = meterProvider.get(meterName,
-          instrumentationVersion: version,
-          schemaUrl: url,
-          attributes: attributesB);
+          version: version, schemaUrl: url, attributes: attributesB);
 
       expect(identical(meterA, meterB), false);
     });

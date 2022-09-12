@@ -6,8 +6,8 @@ class NoopMeterProvider implements MeterProvider {
   static final _noopMeter = NoopMeter();
 
   @override
-  Meter get(String instrumentationScopeName,
-      {String instrumentationVersion = '',
+  Meter get(String name,
+      {String version = '',
       String schemaUrl = '',
       Map<String, String> attributes = const {}}) {
     return _noopMeter;

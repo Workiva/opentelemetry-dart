@@ -1,32 +1,28 @@
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
+import 'package:opentelemetry/src/api/metrics/meter_key.dart';
+
+const invalidMeterNameMessage = 'Invalid Meter Name';
 
 class MeterProvider implements api.MeterProvider {
-  final _meters = <String /* name */, api.Meter>{};
+  final _meters = <MeterKey, api.Meter>{};
   final _logger = Logger('opentelemetry.sdk.metrics.meterprovider');
 
-  @visibleForTesting
-  static const invalidMeterNameMessage = 'Invalid Meter Name';
-
   @override
-  sdk.Meter get(String instrumentationScopeName,
-      {String instrumentationVersion = '',
+  sdk.Meter get(String name,
+      {String version = '',
       String schemaUrl = '',
       Map<String, String> attributes = const {}}) {
-    if (instrumentationScopeName == null || instrumentationScopeName == '') {
-      instrumentationScopeName = '';
+    if (name == null || name == '') {
+      name = '';
       _logger.warning(invalidMeterNameMessage, '', StackTrace.current);
     }
-    final key = instrumentationScopeName +
-        instrumentationVersion +
-        schemaUrl +
-        attributes.toString();
+    version ??= '';
+    schemaUrl ??= '';
+    attributes ??= const {};
+    final key = MeterKey(name, version, schemaUrl, attributes);
 
-    if (!_meters.containsKey(key)) {
-      _meters[key] = sdk.Meter();
-    }
-    return _meters[key];
+    return _meters.putIfAbsent(key, () => sdk.Meter());
   }
 }

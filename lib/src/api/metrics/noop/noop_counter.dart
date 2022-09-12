@@ -1,7 +1,7 @@
 import 'package:opentelemetry/api.dart';
 
 /// A no-op instance of a [Counter]
-class NoopCounter implements Counter<int> {
+class NoopCounter<T extends num> extends Counter<T> {
   @override
-  void add(int value, {List<Attribute> attributes, Context context}) {}
+  void add(T value, {List<Attribute> attributes, Context context}) {}
 }

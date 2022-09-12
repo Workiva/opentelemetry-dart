@@ -11,15 +11,13 @@ void main() {
       final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
       final meter = provider.get('testname');
-      expect(meter, isA<api.Meter>());
       meter.createCounter('test').add(1);
     });
     test('MeterProvider.get with name+version returns inert instance of Meter',
         () {
       final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
-      final meter = provider.get('testname', instrumentationVersion: 'version');
-      expect(meter, isA<api.Meter>());
+      final meter = provider.get('testname', version: 'version');
       meter.createCounter('test').add(1);
     });
 
@@ -28,9 +26,8 @@ void main() {
         () {
       final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
-      final meter = provider.get('testname',
-          instrumentationVersion: 'version', schemaUrl: 'url');
-      expect(meter, isA<api.Meter>());
+      final meter =
+          provider.get('testname', version: 'version', schemaUrl: 'url');
       meter.createCounter('test').add(1);
     });
 
@@ -40,9 +37,11 @@ void main() {
       final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
       final meter = provider.get('testname',
-          instrumentationVersion: 'version', schemaUrl: 'url', attributes: {});
-      expect(meter, isA<api.Meter>());
-      meter.createCounter('test').add(1);
+          version: 'version',
+          schemaUrl: 'url',
+          attributes: {'http.method': 'post', 'http.scheme': 'http'});
+      meter.createCounter<int>('test').add(1);
+      meter.createCounter<double>('test2').add(0.034);
     });
   });
 }
