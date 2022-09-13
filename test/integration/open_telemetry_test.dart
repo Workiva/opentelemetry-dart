@@ -20,7 +20,7 @@ void main() {
         sdk.InstrumentationLibrary('name', 'version'));
     Span span;
 
-    sdk.traceSync('syncTrace', () {
+    api.traceSync('syncTrace', () {
       span = api.Context.current.span;
     }, tracer: tracer);
 
@@ -40,7 +40,7 @@ void main() {
     final spans = <Span>[];
 
     for (var i = 0; i < 5; i++) {
-      sdk.traceSync('syncTrace', () {
+      api.traceSync('syncTrace', () {
         spans.add(api.Context.current.span);
       }, tracer: tracer);
     }
@@ -61,7 +61,7 @@ void main() {
     Span span;
 
     expect(
-        () => sdk.traceSync('syncTrace', () {
+        () => api.traceSync('syncTrace', () {
               span = api.Context.current.span;
               throw Exception('Oh noes!');
             }, tracer: tracer),
@@ -84,7 +84,7 @@ void main() {
         sdk.InstrumentationLibrary('name', 'version'));
     Span span;
 
-    await sdk.trace('asyncTrace', () async {
+    await api.trace('asyncTrace', () async {
       span = api.Context.current.span;
     }, tracer: tracer);
 
@@ -104,7 +104,7 @@ void main() {
     final spans = <Span>[];
 
     for (var i = 0; i < 5; i++) {
-      await sdk.trace('asyncTrace', () async {
+      await api.trace('asyncTrace', () async {
         spans.add(api.Context.current.span);
       }, tracer: tracer);
     }
@@ -125,7 +125,7 @@ void main() {
     Span span;
 
     try {
-      await sdk.trace('asyncTrace', () async {
+      await api.trace('asyncTrace', () async {
         span = api.Context.current.span;
         throw Exception('Oh noes!');
       }, tracer: tracer);
@@ -151,7 +151,7 @@ void main() {
     Span span;
 
     try {
-      await sdk.trace('asyncTrace', () async {
+      await api.trace('asyncTrace', () async {
         span = api.Context.current.span;
         return Future.error(Exception('Oh noes!'));
       }, tracer: tracer);
