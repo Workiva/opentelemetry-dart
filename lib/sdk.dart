@@ -5,14 +5,6 @@ export 'src/sdk/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/sdk/metrics/counter.dart' show Counter;
 export 'src/sdk/metrics/meter_provider.dart' show MeterProvider;
 export 'src/sdk/metrics/meter.dart' show Meter;
-export 'src/sdk/open_telemetry.dart'
-    show
-        globalTextMapPropagator,
-        globalTracerProvider,
-        registerGlobalTextMapPropagator,
-        registerGlobalTracerProvider,
-        trace,
-        traceSync;
 export 'src/sdk/resource/resource.dart' show Resource;
 export 'src/sdk/time_providers/datetime_time_provider.dart'
     show DateTimeTimeProvider;

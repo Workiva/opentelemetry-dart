@@ -10,6 +10,14 @@ export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/metrics/counter.dart' show Counter;
 export 'src/api/metrics/meter_provider.dart' show MeterProvider;
 export 'src/api/metrics/meter.dart' show Meter;
+export 'src/api/open_telemetry.dart'
+    show
+        globalTextMapPropagator,
+        globalTracerProvider,
+        registerGlobalTextMapPropagator,
+        registerGlobalTracerProvider,
+        trace,
+        traceSync;
 export 'src/api/propagation/extractors/text_map_getter.dart' show TextMapGetter;
 export 'src/api/propagation/injectors/text_map_setter.dart' show TextMapSetter;
 export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;
