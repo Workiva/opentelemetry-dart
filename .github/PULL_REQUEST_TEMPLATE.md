@@ -6,12 +6,6 @@ Fixes # (issue)
 
 ## Short description of the change
 
-## Type of change
-
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that is not backwards compatible)
-- [ ] This change requires a documentation update
 
 ## How Has This Been Tested?
 
