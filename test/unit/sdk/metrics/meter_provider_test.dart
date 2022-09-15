@@ -2,6 +2,7 @@
 
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/sdk/metrics/meter_provider.dart';
 
 //The following requirements were used to determine what should be tested.
@@ -120,7 +121,10 @@ void main() {
       const meterName = 'meterA';
       const version = 'v2';
       const url = 'http:schemas.com';
-      const attributes = {'keyA': 'valueA', 'KeyB': 'valueB'};
+      final attributes = [
+        api.Attribute.fromString('keyA', 'valueA'),
+        api.Attribute.fromString('KeyB', 'valueBBB')
+      ];
       final meterProvider = sdk.MeterProvider();
       final meterA = meterProvider.get(meterName,
           version: version, schemaUrl: url, attributes: attributes);
@@ -136,8 +140,14 @@ void main() {
       const meterName = 'meterA';
       const version = 'v2';
       const url = 'http:schemas.com';
-      const attributesA = {'keyA': 'valueA', 'KeyB': 'valueB'};
-      const attributesB = {'keyA': 'valueA', 'KeyB': 'valueBBB'};
+      final attributesA = [
+        api.Attribute.fromString('keyA', 'valueA'),
+        api.Attribute.fromString('KeyB', 'valueBBB')
+      ];
+      final attributesB = [
+        api.Attribute.fromString('keyA', 'valueA'),
+        api.Attribute.fromString('KeyB', 'valueB')
+      ];
       final meterProvider = sdk.MeterProvider();
       final meterA = meterProvider.get(meterName,
           version: version, schemaUrl: url, attributes: attributesA);

@@ -1,12 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:quiver/core.dart';
+import 'package:opentelemetry/api.dart';
 
 /// A class that acts as a unique key for a given Meter configuration.
 class MeterKey {
   final String name;
   final String version;
   final String schemaUrl;
-  final Map<String, String> attributes;
+  final List<Attribute> attributes;
 
   MeterKey(this.name, this.version, this.schemaUrl, this.attributes);
 
@@ -16,7 +17,7 @@ class MeterKey {
       name == other.name &&
       version == other.version &&
       schemaUrl == other.schemaUrl &&
-      const MapEquality().equals(attributes, other.attributes);
+      const ListEquality().equals(attributes, other.attributes);
 
   @override
   int get hashCode => hash4(name, version, schemaUrl, attributes);

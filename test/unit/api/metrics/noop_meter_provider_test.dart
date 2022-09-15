@@ -36,10 +36,11 @@ void main() {
         'instance of Meter', () {
       final provider = NoopMeterProvider();
       expect(provider, isA<api.MeterProvider>());
-      final meter = provider.get('testname',
-          version: 'version',
-          schemaUrl: 'url',
-          attributes: {'http.method': 'post', 'http.scheme': 'http'});
+      final meter = provider
+          .get('testname', version: 'version', schemaUrl: 'url', attributes: [
+        api.Attribute.fromString('http.method', 'post'),
+        api.Attribute.fromString('http.scheme', 'http')
+      ]);
       meter.createCounter<int>('test').add(1);
       meter.createCounter<double>('test2').add(0.034);
     });

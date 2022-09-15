@@ -13,14 +13,14 @@ class MeterProvider implements api.MeterProvider {
   sdk.Meter get(String name,
       {String version = '',
       String schemaUrl = '',
-      Map<String, String> attributes = const {}}) {
+      List<api.Attribute> attributes = const []}) {
     if (name == null || name == '') {
       name = '';
       _logger.warning(invalidMeterNameMessage, '', StackTrace.current);
     }
     version ??= '';
     schemaUrl ??= '';
-    attributes ??= const {};
+    attributes ??= const [];
     final key = MeterKey(name, version, schemaUrl, attributes);
 
     return _meters.putIfAbsent(key, () => sdk.Meter());

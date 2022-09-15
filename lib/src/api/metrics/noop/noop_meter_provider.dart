@@ -9,7 +9,7 @@ class NoopMeterProvider implements MeterProvider {
   Meter get(String name,
       {String version = '',
       String schemaUrl = '',
-      Map<String, String> attributes = const {}}) {
+      List<Attribute> attributes = const []}) {
     return _noopMeter;
   }
 }
