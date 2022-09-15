@@ -5,7 +5,7 @@ abstract class Meter {
   /// this metric can be captured in [description] and units can be specified in
   /// [units].
   ///
-  /// See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument-naming-rule"
+  /// See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument-naming-rule
   Counter<T> createCounter<T extends num>(String name,
       {String description, String units});
 }

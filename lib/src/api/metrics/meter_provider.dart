@@ -10,8 +10,8 @@ abstract class MeterProvider {
   /// (e.g. io.opentelemetry.contrib.mongodb), package, module or class name.
   /// The [version] specifies the version of the instrumentation scope if the
   /// scope has a version (e.g. a library version). The [schemaUrl] identifies
-  /// the schema this provider ahdheres to.  The [attributes] specifies
-  /// attributes to associate with emitted telemetry
+  /// the schema this provider adheres to.  The [attributes] specifies
+  /// attributes to associate with emitted telemetry.
   Meter get(String name,
       {String version = '',
       String schemaUrl = '',
