@@ -7,9 +7,6 @@ export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
 export 'src/api/context/context.dart' show Context;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
-export 'src/api/metrics/counter.dart' show Counter;
-export 'src/api/metrics/meter_provider.dart' show MeterProvider;
-export 'src/api/metrics/meter.dart' show Meter;
 export 'src/api/open_telemetry.dart'
     show
         globalTextMapPropagator,

@@ -1,4 +1,5 @@
 import 'package:opentelemetry/api.dart';
+import 'package:opentelemetry/src/experimental_api.dart';
 
 /// A registry for creating named [Meter]s.
 abstract class MeterProvider {

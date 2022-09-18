@@ -1,5 +1,6 @@
 import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/experimental_api.dart' as api;
+import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/src/api/metrics/meter_key.dart';
 

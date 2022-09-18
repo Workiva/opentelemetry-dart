@@ -2,6 +2,7 @@
 import 'package:opentelemetry/api.dart' as api;
 import 'package:test/test.dart';
 import 'package:opentelemetry/src/api/metrics/noop/noop_meter_provider.dart';
+import 'package:opentelemetry/src/experimental_api.dart' as api;
 
 void main() {
   group('MeterProvider:', () {

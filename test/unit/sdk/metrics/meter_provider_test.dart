@@ -1,8 +1,8 @@
 @TestOn('vm')
 
 import 'package:logging/logging.dart';
-import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/api.dart' as api;
+import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/metrics/meter_provider.dart';
 
 //The following requirements were used to determine what should be tested.
