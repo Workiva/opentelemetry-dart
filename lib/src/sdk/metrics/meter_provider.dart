@@ -1,14 +1,23 @@
 import 'package:opentelemetry/api.dart' as api;
+import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/src/api/metrics/meter_key.dart';
+import 'package:opentelemetry/src/sdk/metrics/view/view.dart';
 
 const invalidMeterNameMessage = 'Invalid Meter Name';
 
 class MeterProvider implements api.MeterProvider {
   final _meters = <MeterKey, api.Meter>{};
   final _logger = Logger('opentelemetry.sdk.metrics.meterprovider');
+  Resource _resource;
+  List<View> _views;
+
+  MeterProvider({Resource resource, List<View> views}){
+    _resource = resource;
+    _views = views;
+    }
 
   @override
   sdk.Meter get(String name,
