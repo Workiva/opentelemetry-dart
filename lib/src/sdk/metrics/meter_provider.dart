@@ -12,12 +12,11 @@ class MeterProvider implements api.MeterProvider {
   final _meters = <MeterKey, api.Meter>{};
   final _logger = Logger('opentelemetry.sdk.metrics.meterprovider');
   Resource _resource;
-  List<View> _views;
 
-  MeterProvider({Resource resource, List<View> views}){
+  MeterProvider({Resource resource}) {
     _resource = resource;
-    _views = views;
-    }
+    // this._sharedState = new MeterProviderSharedState(options?.resource ?? Resource.empty());
+  }
 
   @override
   sdk.Meter get(String name,
