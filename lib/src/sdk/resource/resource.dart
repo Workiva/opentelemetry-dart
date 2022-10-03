@@ -16,5 +16,7 @@ class Resource {
     _attributes.addAll(attributes);
   }
 
+  Resource.empty();
+
   Attributes get attributes => _attributes;
 }
