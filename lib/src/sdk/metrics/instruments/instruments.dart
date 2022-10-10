@@ -1,4 +1,5 @@
 import 'package:logging/logging.dart';
+import 'package:opentelemetry/src/api/common/hr_time.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/common/attribute.dart';
 import 'package:opentelemetry/src/sdk/metrics/instruments/instrument_descriptor.dart';
@@ -10,15 +11,28 @@ import '../../../experimental_api.dart';
 class SyncInstrument {
   final _writableMetricStorage;
   final _descriptor;
+  final _logger =
+      Logger('opentelemetry.sdk.metrics.instruments.syncinstrument');
 
-  SyncInstrument(this._writableMetricStorage, this._descriptor);
-  void _record(num value, {List<Attribute> attributes, Context context}) {}
+  SyncInstrument(WritableMetricStorage this._writableMetricStorage,
+      InstrumentDescriptor this._descriptor);
+
+  void _record(num value, {List<Attribute> attributes, Context context}) {
+    if (_descriptor.valueType == ValueType.int && !(value is int)) {
+      _logger.warning(
+          'INT value type cannot accept a floating-point value for ${_descriptor.name}, ignoring the fractional digits.',
+          '',
+          StackTrace.current);
+
+      value = value.truncate();
+    }
+    _writableMetricStorage.record(value, attributes, context, HrTime());
+  }
 }
 
 class CounterInstrument<T extends num> extends SyncInstrument
     implements Counter<T> {
-  final _logger =
-      Logger('opentelemetry.sdk.metrics.instruments.counterinstrument');
+  
 
   CounterInstrument(
       WritableMetricStorage metricStorage, InstrumentDescriptor descriptor)

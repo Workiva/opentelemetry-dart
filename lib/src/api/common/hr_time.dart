@@ -7,7 +7,7 @@ class HrTime {
   int seconds;
   int nanos;
 
-  HrTime(this.seconds, this.nanos);
+  HrTime([this.seconds, this.nanos]);
 }
 
 // Converts a number to HrTime, HrTime = [number, number].
