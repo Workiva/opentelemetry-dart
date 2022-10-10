@@ -1,13 +1,15 @@
 import 'package:opentelemetry/src/sdk/metrics/instruments/instrument_descriptor.dart';
 import 'package:opentelemetry/src/experimental_api.dart' as api;
-import 'package:opentelemetry/src/sdk/metrics/meter_shared_state.dart';
+import 'package:opentelemetry/src/sdk/metrics/state/meter_shared_state.dart';
 
-import 'instruments/counter_instrument.dart';
+import 'instruments/instruments.dart';
 
 class Meter implements api.Meter {
   /// Inspiration: https://github.com/open-telemetry/opentelemetry-js/blob/6807deff5a966aadbf5404f3e32564b07205d611/experimental/packages/opentelemetry-sdk-metrics/src/Meter.ts#L47
 
-  final _state = MeterSharedState();
+  Meter(this._state);
+
+  final MeterSharedState _state;
 
   @override
   api.Counter<T> createCounter<T extends num>(String name,
@@ -19,7 +21,5 @@ class Meter implements api.Meter {
         valuetype: valueType);  
      final storage = _state.registerMetricStorage(descriptor);
     return CounterInstrument<T>(storage, descriptor);
-
-    //return sdk.Counter<T>(name, description: description, units: unit);
   }
 }
