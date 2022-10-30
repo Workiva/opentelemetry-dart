@@ -15,7 +15,7 @@
  */
 import "package:@opentelemetry/api.dart" show Context, HrTime;
 import "package:@opentelemetry/api-metrics.dart" show MetricAttributes;
-import "WritableMetricStorage.dart" show WritableMetricStorage;
+import 'writable_metric_storage.dart' show WritableMetricStorage;
 import "../aggregator/types.dart" show Accumulation, Aggregator;
 import "../InstrumentDescriptor.dart" show InstrumentDescriptor;
 import "../view/AttributesProcessor.dart" show AttributesProcessor;

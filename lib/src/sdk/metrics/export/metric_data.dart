@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import "package:@opentelemetry/api.dart" show HrTime;
-import "package:@opentelemetry/api-metrics.dart" show MetricAttributes;
-import "package:@opentelemetry/core.dart" show InstrumentationScope;
-import "package:@opentelemetry/resources.dart" show Resource;
+// import "package:@opentelemetry/api.dart" show HrTime;
+// import "package:@opentelemetry/api-metrics.dart" show MetricAttributes;
+// import "package:@opentelemetry/core.dart" show InstrumentationScope;
+// import "package:@opentelemetry/resources.dart" show Resource;
 import 'package:opentelemetry/src/sdk/common/attributes.dart';
 import 'package:opentelemetry/src/sdk/metrics/instruments/instrument_descriptor.dart';
 
-import '../AggregationTemporality.dart' show AggregationTemporality;
-import '../../aggregator/types.dart' show Histogram;
+// import '../AggregationTemporality.dart' show AggregationTemporality;
+// import '../../aggregator/types.dart' show Histogram;
 
 /// Basic metric data fields.
 abstract class MetricData {

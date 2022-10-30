@@ -2,7 +2,7 @@ import 'package:logging/logging.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 
-import 'instruments/sync_instrument.dart';
+import 'instruments/instruments.dart';
 
 const invalidCounterValueMessage = 'Invalid Meter Name';
 

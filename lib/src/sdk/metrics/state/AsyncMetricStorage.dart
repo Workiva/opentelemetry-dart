@@ -24,7 +24,7 @@ import "TemporalMetricProcessor.dart" show TemporalMetricProcessor;
 import "../utils.dart" show Maybe;
 import "MetricCollector.dart" show MetricCollectorHandle;
 import "HashMap.dart" show AttributeHashMap;
-import "WritableMetricStorage.dart" show AsyncWritableMetricStorage;
+import 'writable_metric_storage.dart' show AsyncWritableMetricStorage;
 
 /**
  * Internal interface.

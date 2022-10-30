@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- import "dart:async"; import "package:@opentelemetry/core.dart" show hrTime ; import "../export/AggregationSelector.dart" show AggregationTemporalitySelector ; import '../export/metric_data.dart' show CollectionResult ; import "../export/MetricProducer.dart" show MetricProducer , MetricCollectOptions ; import "../export/MetricReader.dart" show MetricReader ; import "../InstrumentDescriptor.dart" show InstrumentType ; import "../types.dart" show ForceFlushOptions , ShutdownOptions ; import "../utils.dart" show FlatMap ; import "MeterProviderSharedState.dart" show MeterProviderSharedState ;
+ import "dart:async"; import "package:@opentelemetry/core.dart" show hrTime ; import "../export/AggregationSelector.dart" show AggregationTemporalitySelector ; import '../export/metric_data.dart' show CollectionResult ; import "../export/MetricProducer.dart" show MetricProducer , MetricCollectOptions ; import "../export/MetricReader.dart" show MetricReader ; import "../InstrumentDescriptor.dart" show InstrumentType ; import "../types.dart" show ForceFlushOptions , ShutdownOptions ; import "../utils.dart" show FlatMap ; import 'meter_provider_shared_state.dart' show MeterProviderSharedState ;
  /**
  * An internal opaque interface that the MetricReader receives as
  * MetricProducer. It acts as the storage key to the internal metric stream

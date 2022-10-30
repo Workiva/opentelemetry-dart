@@ -18,11 +18,14 @@ class MeterSharedState {
   }
 
   WritableMetricStorage registerMetricStorage(InstrumentDescriptor descriptor) {
-    // const storages = this._registerMetricStorage(descriptor, SyncMetricStorage);
+    final storages = _registerMetricStorage(descriptor, null);
 
     // if (storages.length === 1)  {
     //   return storages[0];
     // }
     // return new MultiMetricStorage(storages);
+  }
+
+  WritableMetricStorage _registerMetricStorage(InstrumentDescriptor descriptor) {
   }
 }
