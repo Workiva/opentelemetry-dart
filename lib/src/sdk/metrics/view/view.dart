@@ -17,7 +17,7 @@ bool hasWildcard(String pattern) {
 class View {
   String name;
   String description;
-  Aggregation aggregation;
+  //Aggregation aggregation;
   AttributesProcessor attributesProcessor;
   InstrumentSelector instrumentSelector;
   MeterSelector meterSelector;
@@ -27,7 +27,7 @@ class View {
       {this.name,
       this.description,
       List<String> attributeKeys,
-      this.aggregation=const Aggregation.default,
+      //this.aggregation=const Aggregation.default,
       InstrumentType instrumentType,
       String instrumentName,
       String meterName,
@@ -59,8 +59,6 @@ class View {
       attributesProcessor = AttributesProcessor.Noop();
     }
 
-    
-    
     // this.aggregation = viewOptions.aggregation ?? Aggregation.Default();
     // this.instrumentSelector = new InstrumentSelector({
     //   name: viewOptions.instrumentName,
@@ -77,4 +75,3 @@ class View {
 class MeterSelector {}
 
 class InstrumentSelector {}
-

@@ -18,11 +18,11 @@ class MeterProvider implements api.MeterProvider {
   MeterProvider({Resource resource, List<View> views}) {
     _resource = resource;
     _sharedState = MeterProviderSharedState(resource ?? Resource.empty());
-    // if(options?.views != null && options.views.length > 0){
-    //   for(const view of options.views){
-    //     this._sharedState.viewRegistry.addView(view);
-    //   }
-    // }
+    if (views != null && views.isNotEmpty) {
+      for (final view in views) {
+        _sharedState.viewRegistry.addView(view);
+      }
+    }
   }
 
   @override
