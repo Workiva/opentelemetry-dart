@@ -8,7 +8,6 @@ import 'MetricStorageRegistry.dart';
 
 class MeterSharedState {
   final metricStorageRegistry = MetricStorageRegistry();
-  //final observableRegistry = new ObservableRegistry();
   final MeterProviderSharedState _meterProviderSharedState;
   final InstrumentationScope _instrumentationScope;
   Meter meter;

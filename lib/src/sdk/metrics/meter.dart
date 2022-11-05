@@ -18,8 +18,8 @@ class Meter implements api.Meter {
     final descriptor = InstrumentDescriptor(name, description,
         unit: unit,
         instrumentType: InstrumentType.counter,
-        valuetype: valueType);  
-     final storage = _state.registerMetricStorage(descriptor);
+        valuetype: valueType);
+    final storage = _state.registerMetricStorage(descriptor);
     return CounterInstrument<T>(storage, descriptor);
   }
 }

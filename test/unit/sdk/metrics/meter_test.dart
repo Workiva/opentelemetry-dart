@@ -2,6 +2,8 @@
 import 'package:test/test.dart';
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
+import 'package:opentelemetry/api.dart';
+
 void main() {
   group('Meter:', () {
     setUp(() {
@@ -12,12 +14,12 @@ void main() {
       });
     });
 
-    test(
-        'createCounter should create a counter', () {
-      
+    test('resource is available from Meter', () {
+      final resource = sdk.Resource([Attribute.fromString('foo', 'bar')]);
+      final provider = sdk.MeterProvider(resource: resource);
+      final sdk.Meter meter = provider.get('test');
 
-      final meter = sdk.MeterProvider().get(null)..createCounter('test');
-      expect(meter, isA<sdk.CounterInstrument>());
+      expect(meter)
     });
   });
 }

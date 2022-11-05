@@ -11,13 +11,14 @@ const invalidMeterNameMessage = 'Invalid Meter Name';
 class MeterProvider implements api.MeterProvider {
   final _meters = <MeterKey, api.Meter>{};
   final _logger = Logger('opentelemetry.sdk.metrics.meterprovider');
-  var _shutdown = false;
+  final _shutdown = false;
   final MeterProviderSharedState _sharedState;
+
+  sdk.Resource get resource => _sharedState.resource;
 
   MeterProvider({sdk.Resource resource})
       : _sharedState = MeterProviderSharedState(resource);
-    
-  
+
   @override
   api.Meter get(String name,
       {String version = '',
@@ -27,7 +28,6 @@ class MeterProvider implements api.MeterProvider {
       name = '';
       _logger.warning(invalidMeterNameMessage, '', StackTrace.current);
     }
-    
 
     if (_shutdown) {
       _logger.warning('A shutdown MeterProvider cannot provide a Meter', '',
@@ -36,24 +36,7 @@ class MeterProvider implements api.MeterProvider {
     }
 
     return _sharedState
-      .getMeterSharedState(InstrumentationScope(name, version, schemaUrl))
-      .meter;
-
-  }
-
-  /// Flush all buffered data and shut down the MeterProvider and all registered
-  /// MetricReaders.
-  /// Returns a future which is resolved when all flushes are complete.
-  async shutdown(options?: ShutdownOptions): Promise<void> {
-    if (this._shutdown) {
-      api.diag.warn('shutdown may only be called once per MeterProvider');
-      return;
-    }
-
-    this._shutdown = true;
-
-    await Promise.all(this._sharedState.metricCollectors.map(collector => {
-      return collector.shutdown(options);
-    }));
+        .getMeterSharedState(InstrumentationScope(name, version, schemaUrl))
+        .meter;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/sdk/common/instrumentation_scope.dart';
-import 'package:opentelemetry/src/sdk/metrics/instruments/instrument_descriptor.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/meter_shared_state.dart';
 
 String instrumentationScopeId(InstrumentationScope instrumentationScope) {
@@ -9,8 +8,6 @@ String instrumentationScopeId(InstrumentationScope instrumentationScope) {
 
 class MeterProviderSharedState {
   Resource resource;
-  // var viewRegistry = new ViewRegistry ( ) ;
-  // List < MetricCollector > metricCollectors = [ ] ;
   Map<String, MeterSharedState> meterSharedStates = {};
 
   MeterProviderSharedState(this.resource);
@@ -24,13 +21,5 @@ class MeterProviderSharedState {
       meterSharedStates[id] = meterSharedState;
     }
     return meterSharedState;
-  }
-
-  void selectAggregations(InstrumentType instrumentType) {
-    // const result: [MetricCollectorHandle, Aggregation][] = [];
-    // for (const collector of this.metricCollectors) {
-    //   result.push([collector, collector.selectAggregation(instrumentType)]);
-    // }
-    // return result;
   }
 }
