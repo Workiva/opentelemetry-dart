@@ -34,7 +34,7 @@ class MeterProvider implements api.MeterProvider {
     }
 
     return _sharedState
-        .getMeterSharedState(InstrumentationScope(name, version, schemaUrl))
+        .getMeterSharedState(InstrumentationScope(name, version, schemaUrl, attributes))
         .meter;
   }
 }

@@ -1,14 +1,16 @@
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/sdk/common/instrumentation_scope.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/meter_shared_state.dart';
+import 'package:quiver/core.dart';
 
-String instrumentationScopeId(InstrumentationScope instrumentationScope) {
-  return "${instrumentationScope.name}:${instrumentationScope.version ?? ''}:${instrumentationScope.schemaUrl ?? ''}";
+int instrumentationScopeId(InstrumentationScope instrumentationScope) {
+  return hash4(instrumentationScope.name, instrumentationScope.version,
+      instrumentationScope.schemaUrl, instrumentationScope.attributes);
 }
 
 class MeterProviderSharedState {
   Resource resource;
-  Map<String, MeterSharedState> meterSharedStates = {};
+  Map<int, MeterSharedState> meterSharedStates = {};
 
   MeterProviderSharedState(this.resource);
 
