@@ -157,6 +157,12 @@ void main() {
       expect(identical(meterA, meterB), false);
     });
 
+    test('resource can be set', () {
+      final resource = sdk.Resource([api.Attribute.fromString('foo', 'bar')]);
+      final provider = sdk.MeterProvider(resource: resource);
+      expect(identical(resource, provider.resource), true);
+    });
+
     // todo: implement test that verifies that changes to attributes apply to
     // previously created meters
     // https://github.com/Workiva/opentelemetry-dart/issues/74
