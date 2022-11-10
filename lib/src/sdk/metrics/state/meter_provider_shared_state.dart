@@ -4,8 +4,13 @@ import 'package:opentelemetry/src/sdk/metrics/state/meter_shared_state.dart';
 import 'package:quiver/core.dart';
 
 int instrumentationScopeId(InstrumentationScope instrumentationScope) {
-  return hash4(instrumentationScope.name, instrumentationScope.version,
-      instrumentationScope.schemaUrl, instrumentationScope.attributes);
+  return hash4(
+      instrumentationScope.name,
+      instrumentationScope.version,
+      instrumentationScope.schemaUrl,
+      instrumentationScope.attributes.isEmpty
+          ? const []
+          : instrumentationScope.attributes);
 }
 
 class MeterProviderSharedState {
