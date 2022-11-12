@@ -34,6 +34,8 @@ jobs:
         run: make init
       - name: Format, analyze, and run tests
         run: make test
+      - name: install Flutter
+        run: sudo snap install flutter --classic
       - name: Generate Coverage
         run: flutter test --coverage
       - uses: romeovs/lcov-reporter-action@v0.2.16
