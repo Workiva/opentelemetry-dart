@@ -34,3 +34,8 @@ jobs:
         run: make init
       - name: Format, analyze, and run tests
         run: make test
+      - name: Generate Coverage
+        run: flutter test --coverage
+       - uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./coverage/lcov.info
