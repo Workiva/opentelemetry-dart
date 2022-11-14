@@ -8,6 +8,10 @@ on:
   pull_request:
     branches:
       - '*'
+      
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   test:
@@ -37,7 +41,12 @@ jobs:
       - name: install Flutter
         run: sudo snap install flutter --classic
       - name: Generate Coverage
-        run: flutter test --coverage
+        run: dart run test --coverage=./coverage
+        run: dart pub global activate coverage
+        run: dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
+        # run: genhtml -o ./coverage/report ./coverage/lcov.info
+        # run: pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r '\.g\.dart$'
       - uses: romeovs/lcov-reporter-action@v0.2.16
         with:
           lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
