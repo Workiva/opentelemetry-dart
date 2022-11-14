@@ -11,6 +11,7 @@ on:
       
 permissions:
   contents: read
+  issues: write
   pull-requests: write
 
 jobs:
@@ -42,7 +43,9 @@ jobs:
         run: sudo snap install flutter --classic
       - name: Generate Coverage
         run: dart run test --coverage=./coverage
+      - name: Activate Coverage Package
         run: dart pub global activate coverage
+      - name: Format Coverage
         run: dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
         # run: genhtml -o ./coverage/report ./coverage/lcov.info
         # run: pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r '\.g\.dart$'
