@@ -32,11 +32,9 @@ jobs:
         run: dart pub get
       - name: Initialize protobuf
         run: make init
-      - name: Format Code
-        run: make format
-      - name: Analyze Code
-        run: make analyze
-      - name: Run Tests and Generate Coverage
+      - name: Format, analyze, and run tests
+        run: make test
+      - name: Generate Coverage
         run: dart run test --coverage=./coverage
       - name: Activate Coverage Package
         run: dart pub global activate coverage
