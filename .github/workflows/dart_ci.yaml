@@ -32,5 +32,17 @@ jobs:
         run: dart pub get
       - name: Initialize protobuf
         run: make init
-      - name: Format, analyze, and run tests
-        run: make test
+      - name: Format Code
+        run: make format
+      - name: Analyze Code
+        run: make analyze
+      - name: Run Tests and Generate Coverage
+        run: dart run test --chain-stack-traces --platform vm --platform chrome --coverage=./coverage
+      - name: Activate Coverage Package
+        run: dart pub global activate coverage
+      - name: Format Coverage
+        run: dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
+      - uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -17,10 +17,4 @@ format:
 	@find ./test/ -name '*.dart' | xargs dart format --fix
 	@./scripts/attach_copyright.sh
 
-test: format analyze
-	@dart test ./test \
-		--chain-stack-traces \
-		--platform vm \
-		--platform chrome
-
-.PHONY: init analyze test
+.PHONY: init analyze
