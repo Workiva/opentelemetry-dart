@@ -37,7 +37,7 @@ jobs:
       - name: Analyze Code
         run: make analyze
       - name: Run Tests and Generate Coverage
-        run: dart run test --chain-stack-traces --platform vm --platform chrome --coverage=./coverage
+        run: dart run test --coverage=./coverage
       - name: Activate Coverage Package
         run: dart pub global activate coverage
       - name: Format Coverage
