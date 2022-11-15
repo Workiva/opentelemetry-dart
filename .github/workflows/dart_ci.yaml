@@ -8,7 +8,11 @@ on:
   pull_request:
     branches:
       - '*'
-
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -34,3 +38,17 @@ jobs:
         run: make init
       - name: Format, analyze, and run tests
         run: make test
+      - name: Generate Coverage
+        run: dart run test --coverage=./coverage
+      - name: Activate Coverage Package
+        run: dart pub global activate coverage
+      - name: Format Coverage
+        run: dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
+      - name: Activate RemoveFromCoverage Package
+        run: dart pub global activate remove_from_coverage
+      - name: Ignore Files For Coverage
+        run: pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
+      - uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
