@@ -1,9 +1,11 @@
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 
+import 'state/meter_shared_state.dart';
+
 class Meter implements api.Meter {
   // ignore: unused_field
-  final sdk.MeterSharedState _state;
+  final MeterSharedState _state;
 
   Meter(this._state);
 
