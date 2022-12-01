@@ -136,7 +136,7 @@ void main() {
 
     test(
         'getting by same name, same version, same schema_url and different '
-        'attributes will return different meter instances', () {
+        'attributes will return the same meter instance', () {
       const meterName = 'meterA';
       const version = 'v2';
       const url = 'http:schemas.com';
@@ -154,7 +154,7 @@ void main() {
       final meterB = meterProvider.get(meterName,
           version: version, schemaUrl: url, attributes: attributesB);
 
-      expect(identical(meterA, meterB), false);
+      expect(identical(meterA, meterB), true);
     });
 
     test('resource can be set', () {
