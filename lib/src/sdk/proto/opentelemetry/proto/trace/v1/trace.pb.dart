@@ -1,12 +1,9 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 ///
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/trace/v1/trace.proto
 //
-// @dart = 2.7
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// @dart = 2.12
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:core' as $core;
 
@@ -30,9 +27,9 @@ class ResourceSpans extends $pb.GeneratedMessage {
 
   ResourceSpans._() : super();
   factory ResourceSpans({
-    $1.Resource resource,
-    $core.Iterable<InstrumentationLibrarySpans> instrumentationLibrarySpans,
-    $core.String schemaUrl,
+    $1.Resource? resource,
+    $core.Iterable<InstrumentationLibrarySpans>? instrumentationLibrarySpans,
+    $core.String? schemaUrl,
   }) {
     final _result = create();
     if (resource != null) {
@@ -65,7 +62,7 @@ class ResourceSpans extends $pb.GeneratedMessage {
   static $pb.PbList<ResourceSpans> createRepeated() => $pb.PbList<ResourceSpans>();
   @$core.pragma('dart2js:noInline')
   static ResourceSpans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ResourceSpans>(create);
-  static ResourceSpans _defaultInstance;
+  static ResourceSpans? _defaultInstance;
 
   @$pb.TagNumber(1)
   $1.Resource get resource => $_getN(0);
@@ -101,9 +98,9 @@ class InstrumentationLibrarySpans extends $pb.GeneratedMessage {
 
   InstrumentationLibrarySpans._() : super();
   factory InstrumentationLibrarySpans({
-    $0.InstrumentationLibrary instrumentationLibrary,
-    $core.Iterable<Span> spans,
-    $core.String schemaUrl,
+    $0.InstrumentationLibrary? instrumentationLibrary,
+    $core.Iterable<Span>? spans,
+    $core.String? schemaUrl,
   }) {
     final _result = create();
     if (instrumentationLibrary != null) {
@@ -136,7 +133,7 @@ class InstrumentationLibrarySpans extends $pb.GeneratedMessage {
   static $pb.PbList<InstrumentationLibrarySpans> createRepeated() => $pb.PbList<InstrumentationLibrarySpans>();
   @$core.pragma('dart2js:noInline')
   static InstrumentationLibrarySpans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InstrumentationLibrarySpans>(create);
-  static InstrumentationLibrarySpans _defaultInstance;
+  static InstrumentationLibrarySpans? _defaultInstance;
 
   @$pb.TagNumber(1)
   $0.InstrumentationLibrary get instrumentationLibrary => $_getN(0);
@@ -173,10 +170,10 @@ class Span_Event extends $pb.GeneratedMessage {
 
   Span_Event._() : super();
   factory Span_Event({
-    $fixnum.Int64 timeUnixNano,
-    $core.String name,
-    $core.Iterable<$0.KeyValue> attributes,
-    $core.int droppedAttributesCount,
+    $fixnum.Int64? timeUnixNano,
+    $core.String? name,
+    $core.Iterable<$0.KeyValue>? attributes,
+    $core.int? droppedAttributesCount,
   }) {
     final _result = create();
     if (timeUnixNano != null) {
@@ -212,7 +209,7 @@ class Span_Event extends $pb.GeneratedMessage {
   static $pb.PbList<Span_Event> createRepeated() => $pb.PbList<Span_Event>();
   @$core.pragma('dart2js:noInline')
   static Span_Event getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Span_Event>(create);
-  static Span_Event _defaultInstance;
+  static Span_Event? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get timeUnixNano => $_getI64(0);
@@ -257,11 +254,11 @@ class Span_Link extends $pb.GeneratedMessage {
 
   Span_Link._() : super();
   factory Span_Link({
-    $core.List<$core.int> traceId,
-    $core.List<$core.int> spanId,
-    $core.String traceState,
-    $core.Iterable<$0.KeyValue> attributes,
-    $core.int droppedAttributesCount,
+    $core.List<$core.int>? traceId,
+    $core.List<$core.int>? spanId,
+    $core.String? traceState,
+    $core.Iterable<$0.KeyValue>? attributes,
+    $core.int? droppedAttributesCount,
   }) {
     final _result = create();
     if (traceId != null) {
@@ -300,7 +297,7 @@ class Span_Link extends $pb.GeneratedMessage {
   static $pb.PbList<Span_Link> createRepeated() => $pb.PbList<Span_Link>();
   @$core.pragma('dart2js:noInline')
   static Span_Link getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Span_Link>(create);
-  static Span_Link _defaultInstance;
+  static Span_Link? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get traceId => $_getN(0);
@@ -364,21 +361,21 @@ class Span extends $pb.GeneratedMessage {
 
   Span._() : super();
   factory Span({
-    $core.List<$core.int> traceId,
-    $core.List<$core.int> spanId,
-    $core.String traceState,
-    $core.List<$core.int> parentSpanId,
-    $core.String name,
-    Span_SpanKind kind,
-    $fixnum.Int64 startTimeUnixNano,
-    $fixnum.Int64 endTimeUnixNano,
-    $core.Iterable<$0.KeyValue> attributes,
-    $core.int droppedAttributesCount,
-    $core.Iterable<Span_Event> events,
-    $core.int droppedEventsCount,
-    $core.Iterable<Span_Link> links,
-    $core.int droppedLinksCount,
-    Status status,
+    $core.List<$core.int>? traceId,
+    $core.List<$core.int>? spanId,
+    $core.String? traceState,
+    $core.List<$core.int>? parentSpanId,
+    $core.String? name,
+    Span_SpanKind? kind,
+    $fixnum.Int64? startTimeUnixNano,
+    $fixnum.Int64? endTimeUnixNano,
+    $core.Iterable<$0.KeyValue>? attributes,
+    $core.int? droppedAttributesCount,
+    $core.Iterable<Span_Event>? events,
+    $core.int? droppedEventsCount,
+    $core.Iterable<Span_Link>? links,
+    $core.int? droppedLinksCount,
+    Status? status,
   }) {
     final _result = create();
     if (traceId != null) {
@@ -447,7 +444,7 @@ class Span extends $pb.GeneratedMessage {
   static $pb.PbList<Span> createRepeated() => $pb.PbList<Span>();
   @$core.pragma('dart2js:noInline')
   static Span getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Span>(create);
-  static Span _defaultInstance;
+  static Span? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get traceId => $_getN(0);
@@ -580,9 +577,9 @@ class Status extends $pb.GeneratedMessage {
   Status._() : super();
   factory Status({
   @$core.Deprecated('This field is deprecated.')
-    Status_DeprecatedStatusCode deprecatedCode,
-    $core.String message,
-    Status_StatusCode code,
+    Status_DeprecatedStatusCode? deprecatedCode,
+    $core.String? message,
+    Status_StatusCode? code,
   }) {
     final _result = create();
     if (deprecatedCode != null) {
@@ -616,7 +613,7 @@ class Status extends $pb.GeneratedMessage {
   static $pb.PbList<Status> createRepeated() => $pb.PbList<Status>();
   @$core.pragma('dart2js:noInline')
   static Status getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Status>(create);
-  static Status _defaultInstance;
+  static Status? _defaultInstance;
 
   @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(1)

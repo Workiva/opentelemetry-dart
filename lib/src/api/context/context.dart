@@ -57,30 +57,30 @@ class Context {
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
-  T getValue<T>(ContextKey key) => _zone[key];
+  T? getValue<T>(ContextKey key) => _zone[key];
 
   /// Returns a new context created from this one with the given key/value pair
   /// set.
   ///
   /// If [key] was already set in this context, it will be overridden. The rest
   /// of the context values will be inherited.
-  Context setValue(ContextKey key, Object value) =>
+  Context setValue(ContextKey key, Object? value) =>
       Context._(_zone.fork(zoneValues: {key: value}));
 
   /// Returns a new [Context] created from this one with the given [api.Span]
   /// set.
-  Context withSpan(api.Span span) => setValue(spanKey, span);
+  Context withSpan(api.Span? span) => setValue(spanKey, span);
 
   /// Execute a function [fn] within this [Context] and return its result.
   R execute<R>(R Function() fn) => _zone.run(fn);
 
   /// Get the [api.Span] attached to this [Context], or null if no such
   /// [api.Span] exists.
-  api.Span get span => getValue(spanKey);
+  api.Span? get span => getValue(spanKey);
 
   /// Get the [api.SpanContext] from this [Context], or null if no such
   /// [api.SpanContext] exists.
-  api.SpanContext get spanContext => getValue(spanKey)?.spanContext;
+  api.SpanContext? get spanContext => getValue(spanKey)?.spanContext;
 }
 
 class ContextKey {

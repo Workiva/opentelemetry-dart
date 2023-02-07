@@ -11,9 +11,9 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  SpanExporter exporter;
-  SimpleSpanProcessor processor;
-  Span span;
+  late SpanExporter exporter;
+  late SimpleSpanProcessor processor;
+  late Span span;
 
   setUp(() {
     exporter = MockSpanExporter();

@@ -18,14 +18,14 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    Span span;
+    Span? span;
 
     api.traceSync('syncTrace', () {
-      span = api.Context.current.span;
+      span = api.Context.current.span as Span?;
     }, tracer: tracer);
 
     expect(
-        span.endTime,
+        span!.endTime,
         lessThan(DateTime.now().microsecondsSinceEpoch *
             sdk.TimeProvider.nanosecondsPerMicrosecond));
   });
@@ -37,17 +37,17 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    final spans = <Span>[];
+    final spans = <Span?>[];
 
     for (var i = 0; i < 5; i++) {
       api.traceSync('syncTrace', () {
-        spans.add(api.Context.current.span);
+        spans.add(api.Context.current.span as Span?);
       }, tracer: tracer);
     }
 
     for (var i = 1; i < spans.length; i++) {
-      expect(spans[i].startTime, greaterThan(spans[i - 1].startTime));
-      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime));
+      expect(spans[i]!.startTime, greaterThan(spans[i - 1]!.startTime));
+      expect(spans[i]!.endTime, greaterThan(spans[i - 1]!.endTime!));
     }
   });
 
@@ -58,20 +58,20 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    Span span;
+    Span? span;
 
     expect(
         () => api.traceSync('syncTrace', () {
-              span = api.Context.current.span;
+              span = api.Context.current.span as Span?;
               throw Exception('Oh noes!');
             }, tracer: tracer),
         throwsException);
-    expect(span.endTime, isNotNull);
-    expect(span.status.code, equals(api.StatusCode.error));
-    expect(span.status.description, equals('Exception: Oh noes!'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionType),
+    expect(span!.endTime, isNotNull);
+    expect(span!.status.code, equals(api.StatusCode.error));
+    expect(span!.status.description, equals('Exception: Oh noes!'));
+    expect(span!.attributes.get(api.SemanticAttributes.exceptionType),
         equals('_Exception'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionMessage),
+    expect(span!.attributes.get(api.SemanticAttributes.exceptionMessage),
         equals('Exception: Oh noes!'));
   });
 
@@ -82,14 +82,14 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    Span span;
+    Span? span;
 
     await api.trace('asyncTrace', () async {
-      span = api.Context.current.span;
+      span = api.Context.current.span as Span?;
     }, tracer: tracer);
 
     expect(
-        span.endTime,
+        span!.endTime,
         lessThan(DateTime.now().microsecondsSinceEpoch *
             sdk.TimeProvider.nanosecondsPerMicrosecond));
   });
@@ -101,17 +101,17 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    final spans = <Span>[];
+    final spans = <Span?>[];
 
     for (var i = 0; i < 5; i++) {
       await api.trace('asyncTrace', () async {
-        spans.add(api.Context.current.span);
+        spans.add(api.Context.current.span as Span?);
       }, tracer: tracer);
     }
 
     for (var i = 1; i < spans.length; i++) {
-      expect(spans[i].startTime, greaterThan(spans[i - 1].startTime));
-      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime));
+      expect(spans[i]!.startTime, greaterThan(spans[i - 1]!.startTime));
+      expect(spans[i]!.endTime, greaterThan(spans[i - 1]!.endTime!));
     }
   });
 
@@ -122,22 +122,22 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    Span span;
+    Span? span;
 
     try {
       await api.trace('asyncTrace', () async {
-        span = api.Context.current.span;
+        span = api.Context.current.span as Span?;
         throw Exception('Oh noes!');
       }, tracer: tracer);
     } catch (e) {
       expect(e.toString(), equals('Exception: Oh noes!'));
     }
-    expect(span.endTime, isNotNull);
-    expect(span.status.code, equals(api.StatusCode.error));
-    expect(span.status.description, equals('Exception: Oh noes!'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionType),
+    expect(span!.endTime, isNotNull);
+    expect(span!.status.code, equals(api.StatusCode.error));
+    expect(span!.status.description, equals('Exception: Oh noes!'));
+    expect(span!.attributes.get(api.SemanticAttributes.exceptionType),
         equals('_Exception'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionMessage),
+    expect(span!.attributes.get(api.SemanticAttributes.exceptionMessage),
         equals('Exception: Oh noes!'));
   });
 
@@ -148,23 +148,23 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    Span span;
+    Span? span;
 
     try {
       await api.trace('asyncTrace', () async {
-        span = api.Context.current.span;
+        span = api.Context.current.span as Span?;
         return Future.error(Exception('Oh noes!'));
       }, tracer: tracer);
     } catch (e) {
       expect(e.toString(), equals('Exception: Oh noes!'));
     }
 
-    expect(span.endTime, isNotNull);
-    expect(span.status.code, equals(api.StatusCode.error));
-    expect(span.status.description, equals('Exception: Oh noes!'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionType),
+    expect(span!.endTime, isNotNull);
+    expect(span!.status.code, equals(api.StatusCode.error));
+    expect(span!.status.description, equals('Exception: Oh noes!'));
+    expect(span!.attributes.get(api.SemanticAttributes.exceptionType),
         equals('_Exception'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionMessage),
+    expect(span!.attributes.get(api.SemanticAttributes.exceptionMessage),
         equals('Exception: Oh noes!'));
   });
 }

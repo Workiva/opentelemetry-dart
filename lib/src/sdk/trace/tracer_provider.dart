@@ -15,11 +15,11 @@ class TracerProviderBase implements api.TracerProvider {
   final sdk.SpanLimits _spanLimits;
 
   TracerProviderBase(
-      {List<api.SpanProcessor> processors,
-      sdk.Resource resource,
-      sdk.Sampler sampler,
-      api.IdGenerator idGenerator,
-      sdk.SpanLimits spanLimits})
+      {List<api.SpanProcessor>? processors,
+      sdk.Resource? resource,
+      sdk.Sampler? sampler,
+      api.IdGenerator? idGenerator,
+      sdk.SpanLimits? spanLimits})
       : _processors = processors ?? [], // Default to a no-op TracerProvider.
         _resource = resource ?? sdk.Resource([]),
         _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
@@ -29,7 +29,7 @@ class TracerProviderBase implements api.TracerProvider {
   List<api.SpanProcessor> get spanProcessors => _processors;
 
   @override
-  api.Tracer getTracer(String name, {String version = ''}) {
+  api.Tracer getTracer(String name, {String? version = ''}) {
     final key = '$name@$version';
     return _tracers.putIfAbsent(
         key,

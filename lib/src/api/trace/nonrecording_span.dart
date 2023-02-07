@@ -28,13 +28,13 @@ class NonRecordingSpan implements api.Span {
   void end() {}
 
   @override
-  Int64 get endTime => null;
+  Int64? get endTime => null;
 
   @override
   String get name => 'NON_RECORDING';
 
   @override
-  set name(String _name) {}
+  set name(String? _name) {}
 
   @override
   bool get isRecording => false;
@@ -43,26 +43,26 @@ class NonRecordingSpan implements api.Span {
   api.SpanId get parentSpanId => api.SpanId.invalid();
 
   @override
-  void setStatus(api.StatusCode status, {String description}) {}
+  void setStatus(api.StatusCode status, {String? description}) {}
 
   @override
   api.SpanContext get spanContext => _spanContext;
 
   @override
-  Int64 get startTime => null;
+  Int64? get startTime => null;
 
   @override
   api.SpanStatus get status => _status;
 
   @override
-  api.InstrumentationLibrary get instrumentationLibrary => null;
+  api.InstrumentationLibrary? get instrumentationLibrary => null;
 
   @override
-  void recordException(dynamic exception, {StackTrace stackTrace}) {}
+  void recordException(dynamic exception, {StackTrace? stackTrace}) {}
 
   @override
   void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute> attributes}) {}
+      {List<api.Attribute>? attributes}) {}
 
   @override
   api.SpanKind get kind => api.SpanKind.internal;

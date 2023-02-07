@@ -10,21 +10,19 @@ import 'package:test/test.dart';
 class TestingInjector implements api.TextMapSetter<Map> {
   @override
   void set(Map carrier, String key, String value) {
-    if (carrier != null) {
-      carrier[key] = value;
-    }
+    carrier[key] = value;
   }
 }
 
 class TestingExtractor implements api.TextMapGetter<Map> {
   @override
-  String get(Map carrier, String key) {
-    return (carrier == null) ? null : carrier[key];
+  String? get(Map carrier, String key) {
+    return carrier[key];
   }
 
   @override
   Iterable<String> keys(Map carrier) {
-    return carrier.keys;
+    return carrier.keys as Iterable<String>;
   }
 }
 
@@ -50,17 +48,17 @@ void main() {
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = testPropagator
         .extract(testContext, testCarrier, TestingExtractor())
-        .span;
+        .span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext.isValid, isTrue);
+    expect(resultSpan.spanContext!.isValid, isTrue);
     expect(
-        resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
-    expect(resultSpan.spanContext.traceId.toString(),
+        resultSpan.spanContext!.spanId.toString(), equals('0000000000c0ffee'));
+    expect(resultSpan.spanContext!.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
     expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
         equals(api.TraceFlags.sampled));
-    expect(resultSpan.spanContext.traceState.toString(),
+    expect(resultSpan.spanContext!.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
 
@@ -85,17 +83,17 @@ void main() {
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = testPropagator
         .extract(testContext, testCarrier, TestingExtractor())
-        .span;
+        .span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext.isValid, isFalse);
+    expect(resultSpan.spanContext!.isValid, isFalse);
     expect(
-        resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
-    expect(resultSpan.spanContext.traceId.toString(),
+        resultSpan.spanContext!.spanId.toString(), equals('0000000000c0ffee'));
+    expect(resultSpan.spanContext!.traceId.toString(),
         equals('00000000000000000000000000000000'));
     expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
         equals(api.TraceFlags.none));
-    expect(resultSpan.spanContext.traceState.toString(),
+    expect(resultSpan.spanContext!.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
 
@@ -127,19 +125,19 @@ void main() {
         .span;
 
     // Use the transmitted Span as a receiver.
-    api.Span resultSpan;
+    late api.Span resultSpan;
     api.Context.current.withSpan(parentSpan).execute(() {
       resultSpan = tracer.startSpan('doWork')..end();
     });
 
     // Verify that data from the original Span propagates to the child.
     expect(resultSpan.parentSpanId.toString(),
-        testSpan.spanContext.spanId.toString());
-    expect(resultSpan.spanContext.traceId.toString(),
-        equals(testSpan.spanContext.traceId.toString()));
-    expect(resultSpan.spanContext.traceState.toString(),
-        equals(testSpan.spanContext.traceState.toString()));
-    expect(resultSpan.spanContext.traceFlags.toString(),
-        equals(testSpan.spanContext.traceFlags.toString()));
+        testSpan.spanContext!.spanId.toString());
+    expect(resultSpan.spanContext!.traceId.toString(),
+        equals(testSpan.spanContext!.traceId.toString()));
+    expect(resultSpan.spanContext!.traceState.toString(),
+        equals(testSpan.spanContext!.traceState.toString()));
+    expect(resultSpan.spanContext!.traceFlags.toString(),
+        equals(testSpan.spanContext!.traceFlags.toString()));
   });
 }

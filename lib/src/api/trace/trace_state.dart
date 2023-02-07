@@ -4,7 +4,7 @@
 /// Representation of the state of a trace.
 abstract class TraceState {
   /// Retrieve a value from the TraceState for a given key.
-  String get(String key);
+  String? get(String key);
 
   /// Adds a key value pair to the TraceState.
   ///

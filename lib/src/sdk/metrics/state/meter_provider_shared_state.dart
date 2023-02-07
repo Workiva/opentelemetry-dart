@@ -9,7 +9,7 @@ int instrumentationScopeId(InstrumentationScope instrumentationScope) {
 }
 
 class MeterProviderSharedState {
-  Resource resource;
+  Resource? resource;
   final Map<int, MeterSharedState> _meterSharedStates = {};
 
   MeterProviderSharedState(this.resource);

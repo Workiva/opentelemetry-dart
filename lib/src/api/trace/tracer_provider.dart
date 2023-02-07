@@ -10,7 +10,7 @@ abstract class TracerProvider {
   ///
   /// [name] should be the name of the tracer or instrumentation library.
   /// [version] should be the version of the tracer or instrumentation library.
-  api.Tracer getTracer(String name, {String version});
+  api.Tracer getTracer(String name, {String? version});
 
   /// Flush all registered span processors.
   void forceFlush();

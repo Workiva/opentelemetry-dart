@@ -1,12 +1,9 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 ///
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/trace/v1/trace.proto
 //
-// @dart = 2.7
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// @dart = 2.12
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 // ignore_for_file: UNDEFINED_SHOWN_NAME
 import 'dart:core' as $core;
@@ -30,7 +27,7 @@ class Span_SpanKind extends $pb.ProtobufEnum {
   ];
 
   static final $core.Map<$core.int, Span_SpanKind> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static Span_SpanKind valueOf($core.int value) => _byValue[value];
+  static Span_SpanKind? valueOf($core.int value) => _byValue[value];
 
   const Span_SpanKind._($core.int v, $core.String n) : super(v, n);
 }
@@ -75,7 +72,7 @@ class Status_DeprecatedStatusCode extends $pb.ProtobufEnum {
   ];
 
   static final $core.Map<$core.int, Status_DeprecatedStatusCode> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static Status_DeprecatedStatusCode valueOf($core.int value) => _byValue[value];
+  static Status_DeprecatedStatusCode? valueOf($core.int value) => _byValue[value];
 
   const Status_DeprecatedStatusCode._($core.int v, $core.String n) : super(v, n);
 }
@@ -92,7 +89,7 @@ class Status_StatusCode extends $pb.ProtobufEnum {
   ];
 
   static final $core.Map<$core.int, Status_StatusCode> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static Status_StatusCode valueOf($core.int value) => _byValue[value];
+  static Status_StatusCode? valueOf($core.int value) => _byValue[value];
 
   const Status_StatusCode._($core.int v, $core.String n) : super(v, n);
 }

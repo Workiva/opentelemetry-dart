@@ -63,6 +63,6 @@ void main() {
         .startSpan('testSpan', context: Context.root)
           ..end();
 
-    expect(span.startTime, lessThanOrEqualTo(span.endTime));
+    expect(span.startTime, lessThanOrEqualTo(span.endTime!));
   });
 }

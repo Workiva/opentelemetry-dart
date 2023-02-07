@@ -6,5 +6,5 @@
 // See https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md#instrumentationlibrary
 abstract class InstrumentationLibrary {
   String get name;
-  String get version;
+  String? get version;
 }

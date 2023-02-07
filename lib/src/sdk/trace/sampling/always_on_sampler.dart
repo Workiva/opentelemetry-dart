@@ -12,10 +12,10 @@ class AlwaysOnSampler implements sdk.Sampler {
   sdk.SamplingResult shouldSample(
       api.Context context,
       api.TraceId traceId,
-      String spanName,
-      api.SpanKind spanKind,
-      List<api.Attribute> spanAttributes,
-      List<api.SpanLink> spanLinks) {
+      String? spanName,
+      api.SpanKind? spanKind,
+      List<api.Attribute>? spanAttributes,
+      List<api.SpanLink>? spanLinks) {
     return sdk.SamplingResult(sdk.Decision.recordAndSample, spanAttributes,
         context.spanContext?.traceState ?? sdk.TraceState.empty());
   }

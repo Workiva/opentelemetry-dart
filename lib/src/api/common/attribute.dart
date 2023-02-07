@@ -3,7 +3,7 @@
 
 /// A representation of a single piece of metadata attached to trace span.
 class Attribute {
-  final String key;
+  final String? key;
   final Object value;
 
   /// Create an Attribute from a String value.

@@ -15,21 +15,19 @@ import 'package:test/test.dart';
 class TestingInjector implements api.TextMapSetter<Map> {
   @override
   void set(Map carrier, String key, String value) {
-    if (carrier != null) {
-      carrier[key] = value;
-    }
+    carrier[key] = value;
   }
 }
 
 class TestingExtractor implements api.TextMapGetter<Map> {
   @override
-  String get(Map carrier, String key) {
-    return (carrier == null) ? null : carrier[key];
+  String? get(Map carrier, String key) {
+    return carrier[key];
   }
 
   @override
   Iterable<String> keys(Map carrier) {
-    return carrier.keys;
+    return carrier.keys as Iterable<String>;
   }
 }
 
@@ -45,17 +43,17 @@ void main() {
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
         api.Context.current, testCarrier, TestingExtractor());
-    final resultSpan = resultContext.span;
+    final resultSpan = resultContext.span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext.isValid, isTrue);
+    expect(resultSpan.spanContext!.isValid, isTrue);
     expect(
-        resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
-    expect(resultSpan.spanContext.traceId.toString(),
+        resultSpan.spanContext!.spanId.toString(), equals('00f067aa0ba902b7'));
+    expect(resultSpan.spanContext!.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
-    expect(resultSpan.spanContext.traceFlags & api.TraceFlags.sampled,
+    expect(resultSpan.spanContext!.traceFlags & api.TraceFlags.sampled,
         equals(api.TraceFlags.sampled));
-    expect(resultSpan.spanContext.traceState.toString(),
+    expect(resultSpan.spanContext!.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
 
@@ -70,17 +68,17 @@ void main() {
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
         api.Context.current, testCarrier, TestingExtractor());
-    final resultSpan = resultContext.span;
+    final resultSpan = resultContext.span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext.isValid, isFalse);
+    expect(resultSpan.spanContext!.isValid, isFalse);
     expect(
-        resultSpan.spanContext.spanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext.traceId.toString(),
+        resultSpan.spanContext!.spanId.toString(), equals('0000000000000000'));
+    expect(resultSpan.spanContext!.traceId.toString(),
         equals('00000000000000000000000000000000'));
-    expect(resultSpan.spanContext.traceFlags & api.TraceFlags.sampled,
+    expect(resultSpan.spanContext!.traceFlags & api.TraceFlags.sampled,
         equals(api.TraceFlags.sampled));
-    expect(resultSpan.spanContext.traceState.toString(),
+    expect(resultSpan.spanContext!.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
 
@@ -124,19 +122,19 @@ void main() {
           'rojo=00f067aa,0ba902b7,con@go=t61rcWk=gMzE');
     final resultSpan = testPropagator
         .extract(api.Context.current, testCarrier, TestingExtractor())
-        .span;
+        .span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext.isValid, isTrue);
+    expect(resultSpan.spanContext!.isValid, isTrue);
     expect(
-        resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
-    expect(resultSpan.spanContext.traceId.toString(),
+        resultSpan.spanContext!.spanId.toString(), equals('00f067aa0ba902b7'));
+    expect(resultSpan.spanContext!.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
     expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
         equals(api.TraceFlags.sampled));
     // Extract should not allow a TraceState with malformed IDs to be attached to
     // a Context.  Thus, there should be an empty TraceState on this context.
-    expect(resultSpan.spanContext.traceState.toString(), equals(''));
+    expect(resultSpan.spanContext!.traceState.toString(), equals(''));
   });
 
   test('inject trace parent', () {
@@ -193,8 +191,8 @@ void main() {
     const traceParentHeader =
         '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01';
     final parentHeaderMatch = W3CTraceContextPropagator.traceParentHeaderRegEx
-        .firstMatch(traceParentHeader);
-    final parentHeaderFields = Map<String, String>.fromIterable(
+        .firstMatch(traceParentHeader)!;
+    final parentHeaderFields = Map<String, String?>.fromIterable(
         parentHeaderMatch.groupNames,
         key: (element) => element.toString(),
         value: (element) => parentHeaderMatch.namedGroup(element));
@@ -212,8 +210,8 @@ void main() {
     const traceParentHeader =
         '00-00000000000000000000000000000000-0000000000000000-00';
     final parentHeaderMatch = W3CTraceContextPropagator.traceParentHeaderRegEx
-        .firstMatch(traceParentHeader);
-    final parentHeaderFields = Map<String, String>.fromIterable(
+        .firstMatch(traceParentHeader)!;
+    final parentHeaderFields = Map<String, String?>.fromIterable(
         parentHeaderMatch.groupNames,
         key: (element) => element.toString(),
         value: (element) => parentHeaderMatch.namedGroup(element));

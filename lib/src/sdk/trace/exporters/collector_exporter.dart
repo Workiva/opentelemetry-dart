@@ -1,6 +1,7 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../api.dart' as api;
@@ -14,10 +15,10 @@ import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 
 class CollectorExporter implements api.SpanExporter {
   Uri uri;
-  http.Client client;
+  late http.Client client;
   var _isShutdown = false;
 
-  CollectorExporter(this.uri, {http.Client httpClient}) {
+  CollectorExporter(this.uri, {http.Client? httpClient}) {
     client = httpClient ?? http.Client();
   }
 
@@ -44,25 +45,26 @@ class CollectorExporter implements api.SpanExporter {
   /// [api.InstrumentationLibrary].
   Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
     // use a map of maps to group spans by resource and instrumentation library
-    final rsm =
-        <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
+    final Map<sdk.Resource?,
+            Map<api.InstrumentationLibrary?, List<pb_trace.Span>>> rsm =
+        <sdk.Resource?, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
     for (final span in spans) {
       final il = rsm[(span as sdk.Span).resource] ??
           <api.InstrumentationLibrary, List<pb_trace.Span>>{};
       il[span.instrumentationLibrary] =
           il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
-            ..add(_spanToProtobuf(span as sdk.Span));
-      rsm[(span as sdk.Span).resource] = il;
+            ..add(_spanToProtobuf(span));
+      rsm[span.resource] = il;
     }
 
     final rss = <pb_trace.ResourceSpans>[];
     for (final il in rsm.entries) {
       // for each distinct resource, construct the protobuf equivalent
       final attrs = <pb_common.KeyValue>[];
-      for (final attr in il.key.attributes.keys) {
+      for (final attr in il.key!.attributes.keys) {
         attrs.add(pb_common.KeyValue(
-            key: attr,
-            value: _attributeValueToProtobuf(il.key.attributes.get(attr))));
+            key: attr!,
+            value: _attributeValueToProtobuf(il.key!.attributes.get(attr))));
       }
       final rs = pb_trace.ResourceSpans(
           resource: pb_resource.Resource(attributes: attrs),
@@ -72,7 +74,7 @@ class CollectorExporter implements api.SpanExporter {
         rs.instrumentationLibrarySpans.add(pb_trace.InstrumentationLibrarySpans(
             spans: ils.value,
             instrumentationLibrary: pb_common.InstrumentationLibrary(
-                name: ils.key.name, version: ils.key.version)));
+                name: ils.key!.name, version: ils.key!.version!)));
       }
       rss.add(rs);
     }
@@ -85,19 +87,19 @@ class CollectorExporter implements api.SpanExporter {
       final attrs = <pb_common.KeyValue>[];
       for (final attr in link.attributes) {
         attrs.add(pb_common.KeyValue(
-            key: attr.key, value: _attributeValueToProtobuf(attr.value)));
+            key: attr.key!, value: _attributeValueToProtobuf(attr.value)));
       }
       pbLinks.add(pb_trace.Span_Link(
-          traceId: link.context.traceId.get(),
-          spanId: link.context.spanId.get(),
-          traceState: link.context.traceState.toString(),
+          traceId: link.context!.traceId.get()!,
+          spanId: link.context!.spanId.get()!,
+          traceState: link.context!.traceState.toString(),
           attributes: attrs));
     }
     return pbLinks;
   }
 
   pb_trace.Span _spanToProtobuf(sdk.Span span) {
-    pb_trace.Status_StatusCode statusCode;
+    late pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
       case api.StatusCode.unset:
         statusCode = pb_trace.Status_StatusCode.STATUS_CODE_UNSET;
@@ -132,14 +134,14 @@ class CollectorExporter implements api.SpanExporter {
     }
 
     return pb_trace.Span(
-        traceId: span.spanContext.traceId.get(),
-        spanId: span.spanContext.spanId.get(),
-        parentSpanId: span.parentSpanId?.get(),
-        name: span.name,
+        traceId: span.spanContext!.traceId.get()!,
+        spanId: span.spanContext!.spanId.get()!,
+        parentSpanId: span.parentSpanId?.get()!,
+        name: span.name!,
         startTimeUnixNano: span.startTime,
-        endTimeUnixNano: span.endTime,
+        endTimeUnixNano: span.endTime!,
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
-            key: key,
+            key: key!,
             value: _attributeValueToProtobuf(span.attributes.get(key)))),
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),
@@ -147,16 +149,16 @@ class CollectorExporter implements api.SpanExporter {
         links: _spanLinksToProtobuf(span.links));
   }
 
-  pb_common.AnyValue _attributeValueToProtobuf(Object value) {
+  pb_common.AnyValue _attributeValueToProtobuf(Object? value) {
     switch (value.runtimeType) {
       case String:
-        return pb_common.AnyValue(stringValue: value);
+        return pb_common.AnyValue(stringValue: value as String);
       case bool:
-        return pb_common.AnyValue(boolValue: value);
+        return pb_common.AnyValue(boolValue: value as bool);
       case double:
-        return pb_common.AnyValue(doubleValue: value);
+        return pb_common.AnyValue(doubleValue: value as double);
       case int:
-        return pb_common.AnyValue(intValue: value);
+        return pb_common.AnyValue(intValue: value as Int64);
       case List:
         final list = value as List;
         if (list.isNotEmpty) {

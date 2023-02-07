@@ -35,21 +35,18 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
     }
 
     final parentHeaderMatch =
-        traceParentHeaderRegEx.firstMatch(traceParentHeader);
-    final parentHeaderFields = Map<String, String>.fromIterable(
+        traceParentHeaderRegEx.firstMatch(traceParentHeader)!;
+    final parentHeaderFields = Map<String, String?>.fromIterable(
         parentHeaderMatch.groupNames,
         key: (element) => element.toString(),
         value: (element) => parentHeaderMatch.namedGroup(element));
 
     final traceId =
-        api.TraceId.fromString(parentHeaderFields[_traceIdFieldKey]) ??
-            api.TraceId.invalid();
+        api.TraceId.fromString(parentHeaderFields[_traceIdFieldKey]!);
     final parentId =
-        api.SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
-            api.SpanId.invalid();
+        api.SpanId.fromString(parentHeaderFields[_parentIdFieldKey]!);
     final traceFlags =
-        int.parse(parentHeaderFields[_traceFlagsFieldKey], radix: 16) ??
-            api.TraceFlags.none;
+        int.parse(parentHeaderFields[_traceFlagsFieldKey]!, radix: 16);
 
     final traceStateHeader = getter.get(carrier, _traceStateHeaderKey);
     final traceState = (traceStateHeader != null)
@@ -62,7 +59,7 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
 
   @override
   void inject(api.Context context, dynamic carrier, api.TextMapSetter setter) {
-    final spanContext = context.spanContext;
+    final spanContext = context.spanContext!;
 
     setter
       ..set(

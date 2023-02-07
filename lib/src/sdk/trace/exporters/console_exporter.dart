@@ -12,15 +12,15 @@ class ConsoleExporter implements SpanExporter {
     for (var i = 0; i < spans.length; i++) {
       final span = spans[i];
       print({
-        'traceId': '${span.spanContext.traceId}',
+        'traceId': '${span.spanContext!.traceId}',
         'parentId': '${span.parentSpanId}',
         'name': span.name,
-        'id': '${span.spanContext.spanId}',
+        'id': '${span.spanContext!.spanId}',
         'timestamp': span.startTime,
-        'duration': span.endTime - span.startTime,
+        'duration': span.endTime! - span.startTime!,
         'flags':
-            '${span.spanContext.traceFlags.toRadixString(16).padLeft(2, '0')}',
-        'state': '${span.spanContext.traceState}',
+            '${span.spanContext!.traceFlags.toRadixString(16).padLeft(2, '0')}',
+        'state': '${span.spanContext!.traceState}',
         'status': span.status.code
       });
     }

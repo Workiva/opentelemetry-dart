@@ -21,6 +21,6 @@ void main() {
 
     span.name = 'bar';
     expect(span.name, equals('bar'));
-    expect(span.resource.attributes.get('service-name'), equals('foo'));
+    expect(span.resource!.attributes.get('service-name'), equals('foo'));
   });
 }

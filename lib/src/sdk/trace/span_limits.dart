@@ -9,12 +9,12 @@ class SpanLimits {
   final _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK = 128;
   final _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH = -1;
 
-  int _maxNumAttributes;
-  int _maxNumEvents;
-  int _maxNumLink;
-  int _maxNumAttributesPerEvent;
-  int _maxNumAttributesPerLink;
-  int _maxNumAttributeLength;
+  late int _maxNumAttributes;
+  late int _maxNumEvents;
+  late int _maxNumLink;
+  late int _maxNumAttributesPerEvent;
+  late int _maxNumAttributesPerLink;
+  late int _maxNumAttributeLength;
 
   ///setters
   ///Set the max number of attributes per span
@@ -90,12 +90,12 @@ class SpanLimits {
   ///https://docs.newrelic.com/docs/data-apis/manage-data/view-system-limits/
   ///https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk/trace/src/main/java/io/opentelemetry/sdk/trace/SpanLimitsBuilder.java
   SpanLimits(
-      {int maxNumAttributes,
-      int maxNumEvents,
-      int maxNumLink,
-      int maxNumAttributesPerEvent,
-      int maxNumAttributesPerLink,
-      int maxNumAttributeLength}) {
+      {int? maxNumAttributes,
+      int? maxNumEvents,
+      int? maxNumLink,
+      int? maxNumAttributesPerEvent,
+      int? maxNumAttributesPerLink,
+      int? maxNumAttributeLength}) {
     _maxNumAttributes = maxNumAttributes ?? _DEFAULT_MAXNUM_ATTRIBUTES;
     _maxNumEvents = maxNumEvents ?? _DEFAULT_MAXNUM_EVENTS;
     _maxNumLink = maxNumLink ?? _DEFAULT_MAXNUM_LINKS;

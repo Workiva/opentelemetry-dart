@@ -11,9 +11,9 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  BatchSpanProcessor processor;
-  SpanExporter mockExporter;
-  Span mockSpan1, mockSpan2, mockSpan3;
+  late BatchSpanProcessor processor;
+  late SpanExporter mockExporter;
+  late Span mockSpan1, mockSpan2, mockSpan3;
 
   setUp(() {
     mockSpan1 = MockSpan();

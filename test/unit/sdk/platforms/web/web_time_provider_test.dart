@@ -21,6 +21,6 @@ void main() {
         sdk.InstrumentationLibrary('library_name', 'library_version'))
       ..end();
 
-    expect(span.startTime, lessThanOrEqualTo(span.endTime));
+    expect(span.startTime, lessThanOrEqualTo(span.endTime!));
   });
 }

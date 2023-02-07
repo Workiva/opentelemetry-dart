@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
+import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
@@ -19,7 +20,7 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  MockHTTPClient mockClient;
+  late MockHTTPClient mockClient;
   final uri =
       Uri.parse('https://h.wdesk.org/s/opentelemetry-collector/v1/traces');
 
@@ -31,12 +32,13 @@ void main() {
     reset(mockClient);
   });
 
-  test('sends spans', () {
+  test('sends spans', () async {
     final resource =
         sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
     final instrumentationLibrary =
         sdk.InstrumentationLibrary('library_name', 'library_version');
     final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
+
     final span1 = Span(
         'foo',
         sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
@@ -69,8 +71,6 @@ void main() {
         ])
       ..end();
 
-    sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
-
     final expectedBody =
         pb_trace_service.ExportTraceServiceRequest(resourceSpans: [
       pb.ResourceSpans(
@@ -88,7 +88,7 @@ void main() {
                       parentSpanId: [4, 5, 6],
                       name: 'foo',
                       startTimeUnixNano: span1.startTime,
-                      endTimeUnixNano: span1.endTime,
+                      endTimeUnixNano: span1.endTime!,
                       attributes: [
                         pb_common.KeyValue(
                             key: 'foo',
@@ -104,7 +104,7 @@ void main() {
                       parentSpanId: [4, 5, 6],
                       name: 'baz',
                       startTimeUnixNano: span2.startTime,
-                      endTimeUnixNano: span2.endTime,
+                      endTimeUnixNano: span2.endTime!,
                       attributes: [
                         pb_common.KeyValue(
                             key: 'bool',
@@ -131,6 +131,14 @@ void main() {
                     name: 'library_name', version: 'library_version'))
           ])
     ]);
+
+    when(mockClient.post(
+      uri,
+      body: expectedBody,
+      headers: {'Content-Type': 'application/x-protobuf'},
+    )).thenAnswer((_) => Future.value(Response('', 200)));
+
+    sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
 
     verify(mockClient.post(uri,
         body: expectedBody.writeToBuffer(),

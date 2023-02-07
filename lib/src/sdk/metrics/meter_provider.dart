@@ -12,13 +12,13 @@ class MeterProvider implements api.MeterProvider {
   final _shutdown = false;
   final MeterProviderSharedState _sharedState;
 
-  sdk.Resource get resource => _sharedState.resource;
+  sdk.Resource? get resource => _sharedState.resource;
 
-  MeterProvider({sdk.Resource resource})
+  MeterProvider({sdk.Resource? resource})
       : _sharedState = MeterProviderSharedState(resource);
 
   @override
-  api.Meter get(String name,
+  api.Meter? get(String? name,
       {String version = '',
       String schemaUrl = '',
       List<api.Attribute> attributes = const []}) {

@@ -215,7 +215,7 @@ void main() {
         if (attribute.value is String) {
           assert((attribute.value as String).length <= maxAttributeLength);
         } else if (attribute.value is List<String>) {
-          for (final value in attribute.value) {
+          for (final value in attribute.value as Iterable) {
             assert(value.length <= maxAttributeLength);
           }
         }

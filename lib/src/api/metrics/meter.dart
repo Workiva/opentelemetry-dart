@@ -7,5 +7,5 @@ abstract class Meter {
   ///
   /// See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument-naming-rule
   Counter<T> createCounter<T extends num>(String name,
-      {String description, String unit});
+      {String? description, String? unit});
 }

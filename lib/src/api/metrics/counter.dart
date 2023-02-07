@@ -6,5 +6,5 @@ abstract class Counter<T extends num> {
   /// [value] The increment amount. MUST be non-negative.
   /// [attributes] A set of attributes to associate with the value.
   /// [context] The explicit context to associate with this measurement.
-  void add(T value, {List<Attribute> attributes, Context context});
+  void add(T value, {List<Attribute>? attributes, Context? context});
 }
