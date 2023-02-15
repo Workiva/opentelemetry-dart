@@ -134,7 +134,7 @@ void main() {
 
     when(mockClient.post(
       uri,
-      body: expectedBody,
+      body: expectedBody.writeToBuffer(),
       headers: {'Content-Type': 'application/x-protobuf'},
     )).thenAnswer((_) => Future.value(Response('', 200)));
 

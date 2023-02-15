@@ -61,7 +61,7 @@ void main() {
     final span = WebTracerProvider(processors: [MockSpanProcessor()])
         .getTracer('testTracer')
         .startSpan('testSpan', context: Context.root)
-          ..end();
+      ..end();
 
     expect(span.startTime, lessThanOrEqualTo(span.endTime!));
   });

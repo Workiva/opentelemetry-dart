@@ -133,8 +133,8 @@ class Span implements api.Span {
     if (maxLength < 0) return attr;
 
     if (attr.value is String) {
-      attr = api.Attribute.fromString(
-          attr.key, _applyAttributeLengthLimit(attr.value as String, maxLength));
+      attr = api.Attribute.fromString(attr.key,
+          _applyAttributeLengthLimit(attr.value as String, maxLength));
     } else if (attr.value is List<String>) {
       final listString = attr.value as List<String>;
       for (var j = 0; j < listString.length; j++) {

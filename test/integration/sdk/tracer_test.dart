@@ -39,8 +39,8 @@ void main() {
 
     expect(childSpan.startTime, isNotNull);
     expect(childSpan.endTime, isNull);
-    expect(
-        childSpan.spanContext!.traceId, equals(parentSpan.spanContext!.traceId));
+    expect(childSpan.spanContext!.traceId,
+        equals(parentSpan.spanContext!.traceId));
     expect(childSpan.spanContext!.traceState,
         equals(parentSpan.spanContext!.traceState));
     expect(childSpan.spanContext!.spanId,

@@ -9,7 +9,7 @@ import 'package:opentelemetry/src/api/exporters/span_exporter.dart';
 import 'package:opentelemetry/src/api/span_processors/span_processor.dart';
 import 'package:opentelemetry/src/api/trace/span.dart';
 
-@GenerateNiceMocks([
+@GenerateMocks([], customMocks: [
   MockSpec<Client>(as: #MockHTTPClient),
 ])
 export 'mocks.mocks.dart';
