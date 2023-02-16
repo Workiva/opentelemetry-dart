@@ -63,7 +63,7 @@ class CollectorExporter implements api.SpanExporter {
       final attrs = <pb_common.KeyValue>[];
       for (final attr in il.key!.attributes.keys) {
         attrs.add(pb_common.KeyValue(
-            key: attr!,
+            key: attr,
             value: _attributeValueToProtobuf(il.key!.attributes.get(attr))));
       }
       final rs = pb_trace.ResourceSpans(
@@ -87,7 +87,7 @@ class CollectorExporter implements api.SpanExporter {
       final attrs = <pb_common.KeyValue>[];
       for (final attr in link.attributes) {
         attrs.add(pb_common.KeyValue(
-            key: attr.key!, value: _attributeValueToProtobuf(attr.value)));
+            key: attr.key, value: _attributeValueToProtobuf(attr.value)));
       }
       pbLinks.add(pb_trace.Span_Link(
           traceId: link.context!.traceId.get()!,
@@ -141,7 +141,7 @@ class CollectorExporter implements api.SpanExporter {
         startTimeUnixNano: span.startTime,
         endTimeUnixNano: span.endTime!,
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
-            key: key!,
+            key: key,
             value: _attributeValueToProtobuf(span.attributes.get(key)))),
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),

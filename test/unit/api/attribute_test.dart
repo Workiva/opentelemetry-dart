@@ -7,57 +7,57 @@ import 'package:opentelemetry/api.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test("test bool key can't be null", () {
+  test("test bool key can't be empty", () {
     expect(
-        () => Attribute.fromBoolean(null, true),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
+        () => Attribute.fromBoolean('', true),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
   });
 
-  test("test int key can't be null", () {
+  test("test int key can't be empty", () {
     expect(
-        () => Attribute.fromInt(null, 2),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
+        () => Attribute.fromInt('', 2),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
   });
 
-  test("test String key can't be null", () {
+  test("test String key can't be empty", () {
     expect(
-        () => Attribute.fromString(null, 'abc'),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
+        () => Attribute.fromString('', 'abc'),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
   });
 
-  test("test double key can't be null", () {
+  test("test double key can't be empty", () {
     expect(
-        () => Attribute.fromDouble(null, 0.1),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
+        () => Attribute.fromDouble('', 0.1),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
   });
-  test("test BoolList key can't be null", () {
+  test("test BoolList key can't be empty", () {
     expect(
-        () => Attribute.fromBooleanList(null, [true, false]),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
-  });
-
-  test("test IntList key can't be null", () {
-    expect(
-        () => Attribute.fromIntList(null, [2, 3]),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
-  });
-  test("test StringList key can't be null", () {
-    expect(
-        () => Attribute.fromStringList(null, ['1', '2']),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
+        () => Attribute.fromBooleanList('', [true, false]),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
   });
 
-  test("test DoubleList key can't be null", () {
+  test("test IntList key can't be empty", () {
     expect(
-        () => Attribute.fromDoubleList(null, [0.2, 0.1]),
-        throwsA(isA<ArgumentError>().having(
-            (error) => error.message, 'message', "key can't be null.")));
+        () => Attribute.fromIntList('', [2, 3]),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
+  });
+  test("test StringList key can't be empty", () {
+    expect(
+        () => Attribute.fromStringList('', ['1', '2']),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
+  });
+
+  test("test DoubleList key can't be empty", () {
+    expect(
+        () => Attribute.fromDoubleList('', [0.2, 0.1]),
+        throwsA(isA<AssertionError>().having((error) => error.message,
+            'message', "Attribute key can't be empty.")));
   });
 }
