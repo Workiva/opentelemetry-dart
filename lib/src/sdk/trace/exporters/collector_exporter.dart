@@ -91,7 +91,7 @@ class CollectorExporter implements api.SpanExporter {
       }
       pbLinks.add(pb_trace.Span_Link(
           traceId: link.context!.traceId.get()!,
-          spanId: link.context!.spanId.get()!,
+          spanId: link.context!.spanId.get(),
           traceState: link.context!.traceState.toString(),
           attributes: attrs));
     }
@@ -135,8 +135,8 @@ class CollectorExporter implements api.SpanExporter {
 
     return pb_trace.Span(
         traceId: span.spanContext!.traceId.get()!,
-        spanId: span.spanContext!.spanId.get()!,
-        parentSpanId: span.parentSpanId?.get()!,
+        spanId: span.spanContext!.spanId.get(),
+        parentSpanId: span.parentSpanId?.get(),
         name: span.name!,
         startTimeUnixNano: span.startTime,
         endTimeUnixNano: span.endTime!,
