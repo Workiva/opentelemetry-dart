@@ -40,7 +40,7 @@ void main() {
                 equals(Level.WARNING),
               )));
 
-      final meter = sdk.MeterProvider().get(null)?..createCounter('test');
+      final meter = sdk.MeterProvider().get('')..createCounter('test');
       expect(meter, isNotNull);
     });
 

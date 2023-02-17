@@ -34,7 +34,7 @@ class NonRecordingSpan implements api.Span {
   String get name => 'NON_RECORDING';
 
   @override
-  set name(String? _name) {}
+  set name(String _name) {}
 
   @override
   bool get isRecording => false;
@@ -43,7 +43,7 @@ class NonRecordingSpan implements api.Span {
   api.SpanId get parentSpanId => api.SpanId.invalid();
 
   @override
-  void setStatus(api.StatusCode status, {String? description}) {}
+  void setStatus(api.StatusCode status, {String description = ''}) {}
 
   @override
   api.SpanContext get spanContext => _spanContext;
@@ -61,8 +61,11 @@ class NonRecordingSpan implements api.Span {
   void recordException(dynamic exception, {StackTrace? stackTrace}) {}
 
   @override
-  void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute>? attributes}) {}
+  void addEvent(
+    String name,
+    Int64 timestamp, {
+    List<api.Attribute> attributes = const [],
+  }) {}
 
   @override
   api.SpanKind get kind => api.SpanKind.internal;

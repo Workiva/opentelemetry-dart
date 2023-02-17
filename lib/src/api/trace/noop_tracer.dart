@@ -16,9 +16,8 @@ class NoopTracer implements api.Tracer {
       List<api.Attribute>? attributes,
       List<api.SpanLink>? links,
       Int64? startTime}) {
-    final parentContext = context!.spanContext!;
+    final parentContext = (context ?? api.Context.current).spanContext;
 
-    return api.NonRecordingSpan(
-        (parentContext.isValid) ? parentContext : sdk.SpanContext.invalid());
+    return api.NonRecordingSpan(parentContext ?? sdk.SpanContext.invalid());
   }
 }

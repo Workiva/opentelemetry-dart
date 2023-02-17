@@ -21,11 +21,11 @@ class MeterProvider implements api.MeterProvider {
       : _sharedState = MeterProviderSharedState(resource);
 
   @override
-  api.Meter? get(String? name,
+  api.Meter get(String name,
       {String version = '',
       String schemaUrl = '',
       List<api.Attribute> attributes = const []}) {
-    if (name == null || name == '') {
+    if (name == '') {
       name = '';
       _logger.warning(invalidMeterNameMessage, '', StackTrace.current);
     }

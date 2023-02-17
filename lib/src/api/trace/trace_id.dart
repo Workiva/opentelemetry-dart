@@ -9,30 +9,34 @@ class TraceId {
   static const sizeBits = 32;
   static const sizeBytes = 16;
 
-  List<int>? _id;
+  List<int> _id;
 
   TraceId(this._id);
-  TraceId.fromIdGenerator(api.IdGenerator generator) {
-    _id = generator.generateTraceId();
-  }
-  TraceId.fromString(String id) {
-    _id = [];
-    id = id.padLeft(TraceId.sizeBits, '0');
 
-    for (var i = 0; i < id.length; i += 2) {
-      _id!.add(int.parse('${id[i]}${id[i + 1]}', radix: 16));
-    }
+  factory TraceId.fromIdGenerator(api.IdGenerator generator) {
+    return TraceId(generator.generateTraceId());
   }
+
+  factory TraceId.fromString(String id) {
+    final _id = <int>[];
+    final idString = id.padLeft(TraceId.sizeBits, '0');
+
+    for (var i = 0; i < idString.length; i += 2) {
+      _id.add(int.parse('${idString[i]}${idString[i + 1]}', radix: 16));
+    }
+    return TraceId(_id);
+  }
+
   TraceId.invalid() : this(List<int>.filled(sizeBytes, 0));
 
   /// Retrieve this TraceId as a list of byte values.
-  List<int>? get() => _id;
+  List<int> get() => _id;
 
   /// Whether this ID represents a valid Trace.
-  bool get isValid => !_id!.every((i) => i == 0);
+  bool get isValid => !_id.every((i) => i == 0);
 
   /// Retrieve this SpanId as a human-readable ID.
   @override
   String toString() =>
-      _id!.map((x) => x.toRadixString(16).padLeft(2, '0')).join();
+      _id.map((x) => x.toRadixString(16).padLeft(2, '0')).join();
 }

@@ -15,7 +15,7 @@ import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 
 class CollectorExporter implements api.SpanExporter {
   Uri uri;
-  late http.Client client;
+  late final http.Client client;
   var _isShutdown = false;
 
   CollectorExporter(this.uri, {http.Client? httpClient}) {
@@ -64,7 +64,7 @@ class CollectorExporter implements api.SpanExporter {
       for (final attr in il.key!.attributes.keys) {
         attrs.add(pb_common.KeyValue(
             key: attr,
-            value: _attributeValueToProtobuf(il.key!.attributes.get(attr))));
+            value: _attributeValueToProtobuf(il.key!.attributes.get(attr)!)));
       }
       final rs = pb_trace.ResourceSpans(
           resource: pb_resource.Resource(attributes: attrs),
@@ -90,16 +90,16 @@ class CollectorExporter implements api.SpanExporter {
             key: attr.key, value: _attributeValueToProtobuf(attr.value)));
       }
       pbLinks.add(pb_trace.Span_Link(
-          traceId: link.context!.traceId.get()!,
-          spanId: link.context!.spanId.get(),
-          traceState: link.context!.traceState.toString(),
+          traceId: link.context.traceId.get(),
+          spanId: link.context.spanId.get(),
+          traceState: link.context.traceState.toString(),
           attributes: attrs));
     }
     return pbLinks;
   }
 
   pb_trace.Span _spanToProtobuf(sdk.Span span) {
-    late pb_trace.Status_StatusCode statusCode;
+    pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
       case api.StatusCode.unset:
         statusCode = pb_trace.Status_StatusCode.STATUS_CODE_UNSET;
@@ -134,22 +134,22 @@ class CollectorExporter implements api.SpanExporter {
     }
 
     return pb_trace.Span(
-        traceId: span.spanContext!.traceId.get()!,
-        spanId: span.spanContext!.spanId.get(),
+        traceId: span.spanContext.traceId.get(),
+        spanId: span.spanContext.spanId.get(),
         parentSpanId: span.parentSpanId?.get(),
-        name: span.name!,
+        name: span.name,
         startTimeUnixNano: span.startTime,
         endTimeUnixNano: span.endTime!,
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
             key: key,
-            value: _attributeValueToProtobuf(span.attributes.get(key)))),
+            value: _attributeValueToProtobuf(span.attributes.get(key)!))),
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),
         kind: spanKind,
         links: _spanLinksToProtobuf(span.links));
   }
 
-  pb_common.AnyValue _attributeValueToProtobuf(Object? value) {
+  pb_common.AnyValue _attributeValueToProtobuf(Object value) {
     switch (value.runtimeType) {
       case String:
         return pb_common.AnyValue(stringValue: value as String);

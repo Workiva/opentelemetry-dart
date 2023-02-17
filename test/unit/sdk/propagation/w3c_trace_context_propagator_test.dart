@@ -46,14 +46,14 @@ void main() {
     final resultSpan = resultContext.span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext!.isValid, isTrue);
+    expect(resultSpan.spanContext.isValid, isTrue);
     expect(
-        resultSpan.spanContext!.spanId.toString(), equals('00f067aa0ba902b7'));
-    expect(resultSpan.spanContext!.traceId.toString(),
+        resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
+    expect(resultSpan.spanContext.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
-    expect(resultSpan.spanContext!.traceFlags & api.TraceFlags.sampled,
+    expect(resultSpan.spanContext.traceFlags & api.TraceFlags.sampled,
         equals(api.TraceFlags.sampled));
-    expect(resultSpan.spanContext!.traceState.toString(),
+    expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
 
@@ -71,14 +71,14 @@ void main() {
     final resultSpan = resultContext.span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext!.isValid, isFalse);
+    expect(resultSpan.spanContext.isValid, isFalse);
     expect(
-        resultSpan.spanContext!.spanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext!.traceId.toString(),
+        resultSpan.spanContext.spanId.toString(), equals('0000000000000000'));
+    expect(resultSpan.spanContext.traceId.toString(),
         equals('00000000000000000000000000000000'));
-    expect(resultSpan.spanContext!.traceFlags & api.TraceFlags.sampled,
+    expect(resultSpan.spanContext.traceFlags & api.TraceFlags.sampled,
         equals(api.TraceFlags.sampled));
-    expect(resultSpan.spanContext!.traceState.toString(),
+    expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
 
@@ -125,16 +125,16 @@ void main() {
         .span!;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
-    expect(resultSpan.spanContext!.isValid, isTrue);
+    expect(resultSpan.spanContext.isValid, isTrue);
     expect(
-        resultSpan.spanContext!.spanId.toString(), equals('00f067aa0ba902b7'));
-    expect(resultSpan.spanContext!.traceId.toString(),
+        resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
+    expect(resultSpan.spanContext.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
     expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
         equals(api.TraceFlags.sampled));
     // Extract should not allow a TraceState with malformed IDs to be attached to
     // a Context.  Thus, there should be an empty TraceState on this context.
-    expect(resultSpan.spanContext!.traceState.toString(), equals(''));
+    expect(resultSpan.spanContext.traceState.toString(), equals(''));
   });
 
   test('inject trace parent', () {

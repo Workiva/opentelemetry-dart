@@ -15,7 +15,7 @@ abstract class Tracer {
   api.Span startSpan(String name,
       {api.Context? context,
       api.SpanKind? kind,
-      List<api.Attribute>? attributes,
+      List<api.Attribute> attributes = const [],
       List<api.SpanLink>? links,
       Int64? startTime});
 }

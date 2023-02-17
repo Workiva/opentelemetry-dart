@@ -20,8 +20,8 @@ void main() {
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
-    expect(span.spanContext!.traceId, isNotNull);
-    expect(span.spanContext!.spanId, isNotNull);
+    expect(span.spanContext.traceId, isNotNull);
+    expect(span.spanContext.spanId, isNotNull);
   });
 
   test('startSpan child span', () {
@@ -39,11 +39,11 @@ void main() {
 
     expect(childSpan.startTime, isNotNull);
     expect(childSpan.endTime, isNull);
-    expect(childSpan.spanContext!.traceId,
-        equals(parentSpan.spanContext!.traceId));
-    expect(childSpan.spanContext!.traceState,
-        equals(parentSpan.spanContext!.traceState));
-    expect(childSpan.spanContext!.spanId,
-        allOf([isNotNull, isNot(equals(parentSpan.spanContext!.spanId))]));
+    expect(
+        childSpan.spanContext.traceId, equals(parentSpan.spanContext.traceId));
+    expect(childSpan.spanContext.traceState,
+        equals(parentSpan.spanContext.traceState));
+    expect(childSpan.spanContext.spanId,
+        allOf([isNotNull, isNot(equals(parentSpan.spanContext.spanId))]));
   });
 }

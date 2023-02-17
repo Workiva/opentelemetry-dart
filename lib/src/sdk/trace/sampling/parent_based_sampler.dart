@@ -32,7 +32,7 @@ class ParentBasedSampler implements sdk.Sampler {
       api.TraceId traceId,
       String? spanName,
       api.SpanKind? spanKind,
-      List<api.Attribute>? spanAttributes,
+      List<api.Attribute> spanAttributes,
       List<api.SpanLink>? spanLinks) {
     final parentSpanContext = context.spanContext;
 

@@ -18,14 +18,18 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
-    Span? span;
+    late Span span;
 
-    api.traceSync('syncTrace', () {
-      span = api.Context.current.span as Span?;
-    }, tracer: tracer);
+    api.traceSync(
+      'syncTrace',
+      () {
+        span = api.Context.current.span as Span;
+      },
+      tracer: tracer,
+    );
 
     expect(
-        span!.endTime,
+        span.endTime,
         lessThan(DateTime.now().microsecondsSinceEpoch *
             sdk.TimeProvider.nanosecondsPerMicrosecond));
   });

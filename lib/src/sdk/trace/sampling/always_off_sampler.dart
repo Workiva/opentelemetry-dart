@@ -14,7 +14,7 @@ class AlwaysOffSampler implements sdk.Sampler {
       api.TraceId traceId,
       String? spanName,
       api.SpanKind? spanKind,
-      List<api.Attribute>? spanAttributes,
+      List<api.Attribute> spanAttributes,
       List<api.SpanLink>? links) {
     return sdk.SamplingResult(sdk.Decision.drop, spanAttributes,
         context.spanContext?.traceState ?? sdk.TraceState.empty());

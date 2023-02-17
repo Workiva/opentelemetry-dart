@@ -16,7 +16,7 @@ abstract class MeterProvider {
   /// scope has a version (e.g. a library version). The [schemaUrl] identifies
   /// the schema this provider adheres to.  The [attributes] specifies
   /// attributes to associate with emitted telemetry.
-  Meter? get(String name,
+  Meter get(String name,
       {String version = '',
       String schemaUrl = '',
       List<Attribute> attributes = const []});

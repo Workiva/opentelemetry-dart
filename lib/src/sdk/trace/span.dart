@@ -9,7 +9,7 @@ import '../common/attributes.dart';
 
 /// A representation of a single operation within a trace.
 class Span implements api.Span {
-  final api.SpanContext? _spanContext;
+  final api.SpanContext _spanContext;
   final api.SpanId? _parentSpanId;
   final api.SpanKind _kind;
   final api.SpanStatus _status = api.SpanStatus();
@@ -25,7 +25,7 @@ class Span implements api.Span {
   int _droppedSpanAttributes = 0;
 
   @override
-  String? name;
+  String name;
 
   @override
   bool get isRecording => _endTime == null;
@@ -39,7 +39,7 @@ class Span implements api.Span {
       api.Context? parentContext,
       sdk.SpanLimits? limits,
       Int64? startTime})
-      : _links = _applyLinkLimits(links, limits ?? sdk.SpanLimits()),
+      : _links = _applyLinkLimits(links ?? [], limits ?? sdk.SpanLimits()),
         _kind = kind ?? api.SpanKind.internal,
         _startTime = startTime ?? _timeProvider.now,
         _limits = limits ?? sdk.SpanLimits() {
@@ -53,7 +53,7 @@ class Span implements api.Span {
   }
 
   @override
-  api.SpanContext? get spanContext => _spanContext;
+  api.SpanContext get spanContext => _spanContext;
 
   @override
   Int64? get endTime => _endTime;
@@ -74,7 +74,7 @@ class Span implements api.Span {
   }
 
   @override
-  void setStatus(api.StatusCode status, {String? description}) {
+  void setStatus(api.StatusCode status, {String description = ''}) {
     // A status cannot be Unset after being set, and cannot be set to any other
     // status after being marked "Ok".
     if (status == api.StatusCode.unset || _status.code == api.StatusCode.ok) {
@@ -84,7 +84,7 @@ class Span implements api.Span {
     _status.code = status;
 
     // Description is ignored for statuses other than "Error".
-    if (status == api.StatusCode.error && description != null) {
+    if (status == api.StatusCode.error && description.isNotEmpty) {
       _status.description = description;
     }
   }
@@ -163,8 +163,11 @@ class Span implements api.Span {
   api.SpanKind get kind => _kind;
 
   @override
-  void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute>? attributes}) {
+  void addEvent(
+    String name,
+    Int64 timestamp, {
+    List<api.Attribute> attributes = const [],
+  }) {
     // ignore: todo
     // TODO: O11Y-1531
     throw UnimplementedError();
@@ -172,8 +175,8 @@ class Span implements api.Span {
 
   // This method just can be called once during construction.
   static List<api.SpanLink> _applyLinkLimits(
-      List<api.SpanLink>? links, sdk.SpanLimits limits) {
-    if (links == null) return [];
+      List<api.SpanLink> links, sdk.SpanLimits limits) {
+    if (links.isEmpty) return links;
     final spanLink = <api.SpanLink>[];
 
     for (final link in links) {
@@ -181,12 +184,12 @@ class Span implements api.Span {
         break;
       }
 
-      if (!link.context!.isValid) continue;
+      if (!link.context.isValid) continue;
 
       final linkAttributes = <api.Attribute>[];
 
       // make sure override duplicated attributes in the list
-      final attributeMap = <String?, int>{};
+      final attributeMap = <String, int>{};
 
       for (final attr in link.attributes) {
         // if attributes num is already greater than maxNumAttributesPerLink
