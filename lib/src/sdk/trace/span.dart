@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:fixnum/fixnum.dart';
+import 'package:opentelemetry/src/api/context/context.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
@@ -43,12 +44,14 @@ class Span implements api.Span {
         _kind = kind ?? api.SpanKind.internal,
         _startTime = startTime ?? _timeProvider.now,
         _limits = limits ?? sdk.SpanLimits() {
+    final pContext = parentContext ?? Context.current;
+
     if (attributes != null) {
       setAttributes(attributes);
     }
 
     for (var i = 0; i < _processors.length; i++) {
-      _processors[i].onStart(this, parentContext);
+      _processors[i].onStart(this, pContext);
     }
   }
 
