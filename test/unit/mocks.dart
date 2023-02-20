@@ -11,6 +11,7 @@ import 'package:opentelemetry/src/api/trace/span.dart';
 
 @GenerateMocks([], customMocks: [
   MockSpec<Client>(as: #MockHTTPClient),
+  MockSpec<SpanProcessor>(),
 ])
 export 'mocks.mocks.dart';
 
@@ -19,5 +20,3 @@ class MockContext extends Mock implements Context {}
 class MockSpan extends Mock implements Span {}
 
 class MockSpanExporter extends Mock implements SpanExporter {}
-
-class MockSpanProcessor extends Mock implements SpanProcessor {}

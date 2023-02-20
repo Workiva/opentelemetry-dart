@@ -30,8 +30,8 @@ void main() {
     expect(span.parentSpanId, same(parentSpanId));
     expect(span.name, 'foo');
 
-    verify(mockProcessor1.onStart(span, null)).called(1);
-    verify(mockProcessor2.onStart(span, null)).called(1);
+    verify(mockProcessor1.onStart(span, argThat(isA<api.Context>()))).called(1);
+    verify(mockProcessor2.onStart(span, argThat(isA<api.Context>()))).called(1);
     verifyNever(mockProcessor1.onEnd(span));
     verifyNever(mockProcessor2.onEnd(span));
 
