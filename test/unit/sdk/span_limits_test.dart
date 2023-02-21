@@ -48,8 +48,14 @@ void main() {
   final spanLinkNoAttr = SpanLink(context);
 
   test('test default spanLimits', () {
-    final span = sdk.Span('limitTest', sdk.SpanContext.invalid(),
-        SpanId([4, 5, 6]), [], sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'limitTest',
+        sdk.SpanContext.invalid(),
+        SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         attributes: [attrShort, attrDoubleArray, attrStringArray],
         limits: sdk.SpanLimits());
     expect(span.attributes.length, equals(3));
@@ -60,17 +66,31 @@ void main() {
   });
 
   test('test spanLimits maxNumAttributes', () {
-    final span = sdk.Span('foo', sdk.SpanContext.invalid(), SpanId([4, 5, 6]),
-        [], sdk.DateTimeTimeProvider(), null, null,
-        attributes: [attrShort, attrLong, attrInt, attrBool], limits: limits);
+    final span = sdk.Span(
+        'foo',
+        sdk.SpanContext.invalid(),
+        SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        attributes: [attrShort, attrLong, attrInt, attrBool],
+        limits: limits);
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('boolean'), equals(null));
   });
 
   test('test spanLimits maxNumAttributeLength', () {
-    final span = sdk.Span('foo', sdk.SpanContext.invalid(), SpanId([4, 5, 6]),
-        [], sdk.DateTimeTimeProvider(), null, null,
-        attributes: [attrShort, attrLong], limits: limits);
+    final span = sdk.Span(
+        'foo',
+        sdk.SpanContext.invalid(),
+        SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        attributes: [attrShort, attrLong],
+        limits: limits);
     expect(span.attributes.get('shortkey'),
         equals((attrShort.value as String).substring(0, maxAttributeLength)));
     expect(span.attributes.get('longkey'),
@@ -78,8 +98,14 @@ void main() {
   });
 
   test('test spanLimits from span constructor', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         limits: limits)
       ..setAttributes([attrShort, attrInt, attrDoubleArray]);
     expect(span.attributes.length, equals(3));
@@ -90,8 +116,15 @@ void main() {
   });
 
   test('test spanLimits maxNumAttributes from span constructor', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null, limits: limits)
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        limits: limits)
       ..setAttributes(
           [attrShort, attrLong, attrInt, attrBool, attrStringArray]);
     expect(span.attributes.length, equals(maxAttributes));
@@ -100,8 +133,14 @@ void main() {
   });
 
   test('test spanLimits maxNumAttributeLength with setAttributes', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         limits: limits)
       ..setAttributes([attrShort, attrLong]);
     expect(span.attributes.get('shortkey'),
@@ -111,8 +150,14 @@ void main() {
   });
 
   test('test spanLimits from span, then add more', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         limits: limits)
       ..setAttribute(attrShort);
     expect(span.attributes.get('shortkey'),
@@ -131,8 +176,14 @@ void main() {
   });
 
   test('test add same key twice', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         limits: limits)
       ..setAttributes([attrShort, dupShort]);
     expect(span.attributes.length, 1);
@@ -146,8 +197,15 @@ void main() {
   });
 
   test('test add same key multitimes from constructor', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null, limits: limits)
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        limits: limits)
       ..setAttributes(
           [attrShort, dupShort, attrLong, dupLong, dupShort2, dupLong2]);
     expect(span.attributes.length, 2);
@@ -158,8 +216,14 @@ void main() {
   });
 
   test('test add oversized string list', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         limits: limits)
       ..setAttributes([attrShort, dupShort, attrLong, dupLong]);
     expect(span.attributes.length, 2);
@@ -171,8 +235,14 @@ void main() {
   });
 
   test('test spanlink unlimited', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         links: [spanLink1, spanLink2]);
 
     expect(span.links.length, equals(2));
@@ -183,17 +253,31 @@ void main() {
   });
 
   test('test add spanlinks greater than maxLinks', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
-        limits: limits, links: [spanLink1, spanLink2, spanLink3, spanLink4]);
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        limits: limits,
+        links: [spanLink1, spanLink2, spanLink3, spanLink4]);
     assert(span.links.length <= maxLinks);
   });
 
   test('test add more attributes than maxNumAttributesPerLink in spanlinks',
       () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
-        limits: limits, links: [spanLink3]);
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        limits: limits,
+        links: [spanLink3]);
     for (var i = 0; i < span.links.length; i++) {
       final link = span.links[i];
       expect(link.context, equals(context));
@@ -202,9 +286,16 @@ void main() {
   });
 
   test('test spanlinks with string and string list attributes', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
-        limits: limits, links: [spanLinkStrs]);
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        limits: limits,
+        links: [spanLinkStrs]);
     for (var i = 0; i < span.links.length; i++) {
       final link = span.links[i];
       expect(link.context, equals(context));
@@ -222,9 +313,16 @@ void main() {
   });
 
   test('test spanlink has duplicated attributes', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
-        limits: limits, links: [spanLinkDup]);
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
+        limits: limits,
+        links: [spanLinkDup]);
 
     expect(span.links.length, equals(1));
     for (var i = 0; i < span.links.length; i++) {
@@ -239,8 +337,14 @@ void main() {
   });
 
   test('test spanlink has no attributes', () {
-    final span = sdk.Span('test', sdk.SpanContext.invalid(), null, [],
-        sdk.DateTimeTimeProvider(), null, null,
+    final span = sdk.Span(
+        'test',
+        sdk.SpanContext.invalid(),
+        null,
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource.empty(),
+        sdk.InstrumentationLibrary('name', 'version'),
         links: [spanLinkNoAttr]);
 
     expect(span.links.length, equals(1));

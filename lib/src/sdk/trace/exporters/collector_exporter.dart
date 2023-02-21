@@ -45,9 +45,8 @@ class CollectorExporter implements api.SpanExporter {
   /// [api.InstrumentationLibrary].
   Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
     // use a map of maps to group spans by resource and instrumentation library
-    final Map<sdk.Resource?,
-            Map<api.InstrumentationLibrary?, List<pb_trace.Span>>> rsm =
-        <sdk.Resource?, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
+    final rsm =
+        <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
     for (final span in spans) {
       final il = rsm[(span as sdk.Span).resource] ??
           <api.InstrumentationLibrary, List<pb_trace.Span>>{};
@@ -61,10 +60,10 @@ class CollectorExporter implements api.SpanExporter {
     for (final il in rsm.entries) {
       // for each distinct resource, construct the protobuf equivalent
       final attrs = <pb_common.KeyValue>[];
-      for (final attr in il.key!.attributes.keys) {
+      for (final attr in il.key.attributes.keys) {
         attrs.add(pb_common.KeyValue(
             key: attr,
-            value: _attributeValueToProtobuf(il.key!.attributes.get(attr)!)));
+            value: _attributeValueToProtobuf(il.key.attributes.get(attr)!)));
       }
       final rs = pb_trace.ResourceSpans(
           resource: pb_resource.Resource(attributes: attrs),
@@ -74,7 +73,7 @@ class CollectorExporter implements api.SpanExporter {
         rs.instrumentationLibrarySpans.add(pb_trace.InstrumentationLibrarySpans(
             spans: ils.value,
             instrumentationLibrary: pb_common.InstrumentationLibrary(
-                name: ils.key!.name, version: ils.key!.version!)));
+                name: ils.key.name, version: ils.key.version!)));
       }
       rss.add(rs);
     }

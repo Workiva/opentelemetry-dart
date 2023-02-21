@@ -17,9 +17,9 @@ class Span implements api.Span {
   final List<api.SpanProcessor> _processors;
   final List<api.SpanLink> _links;
   final sdk.TimeProvider _timeProvider;
-  final sdk.Resource? _resource;
+  final sdk.Resource _resource;
   final sdk.SpanLimits _limits;
-  final api.InstrumentationLibrary? _instrumentationLibrary;
+  final api.InstrumentationLibrary _instrumentationLibrary;
   final Int64 _startTime;
   final Attributes _attributes = Attributes.empty();
   Int64? _endTime;
@@ -95,10 +95,10 @@ class Span implements api.Span {
   @override
   api.SpanStatus get status => _status;
 
-  sdk.Resource? get resource => _resource;
+  sdk.Resource get resource => _resource;
 
   @override
-  api.InstrumentationLibrary? get instrumentationLibrary =>
+  api.InstrumentationLibrary get instrumentationLibrary =>
       _instrumentationLibrary;
 
   @override
