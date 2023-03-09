@@ -15,10 +15,10 @@ import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 class CollectorExporter implements api.SpanExporter {
   Uri uri;
   http.Client client;
-  api.Credential credential;
+  Map<String, String> headers;
   var _isShutdown = false;
 
-  CollectorExporter(this.uri, {http.Client httpClient, this.credential}) {
+  CollectorExporter(this.uri, {http.Client httpClient, this.headers}) {
     client = httpClient ?? http.Client();
   }
 
@@ -32,14 +32,14 @@ class CollectorExporter implements api.SpanExporter {
       return;
     }
 
-    var headers = {'Content-Type': 'application/x-protobuf'};
-
-    if (credential != null) {
-      headers['Authorization'] = credential.toString();
-    }
-
     final body = pb_trace_service.ExportTraceServiceRequest(
         resourceSpans: _spansToProtobuf(spans));
+
+    final headers = {'Content-Type': 'application/x-protobuf'};
+
+    if (this.headers != null) {
+      headers.addAll(this.headers);
+    }
 
     client.post(uri, body: body.writeToBuffer(), headers: headers);
   }
