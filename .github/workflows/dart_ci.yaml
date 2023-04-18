@@ -8,6 +8,9 @@ on:
   pull_request:
     branches:
       - '*'
+concurrency:
+  group: opentelemetry-coverage-${{ github.ref }}-1
+  cancel-in-progress: true
 permissions:
   contents: read
   issues: write
@@ -15,21 +18,14 @@ permissions:
   
 jobs:
   test:
-    runs-on: workiva-runner-dev-small
-    strategy:
-      matrix:
-        # Don't run on newer SDKs until we're able to get on analyzer 1.x,
-        # since our current analyzer version range results in build failures
-        # when analysis hits the `<<<` operator.
-        # sdk: [ 2.13.4, stable, dev ]
-        sdk: [ 2.18.7 ]
+    runs-on: [self-hosted, workiva-runner-dev-small]
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.sdk }}
+          sdk: 2.18.7
       - name: Install protobuf-compiler
         run: sudo apt install -y protobuf-compiler
       - name: Install Dart dependencies
