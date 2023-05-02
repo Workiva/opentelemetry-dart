@@ -44,8 +44,3 @@ jobs:
         run: dart pub global activate remove_from_coverage
       - name: Ignore Files For Coverage
         run: dart pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
-      - uses: romeovs/lcov-reporter-action@v0.3.1
-        continue-on-error: true
-        with:
-          lcov-file: ./coverage/lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
