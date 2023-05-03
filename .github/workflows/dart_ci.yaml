@@ -8,6 +8,9 @@ on:
   pull_request:
     branches:
       - '*'
+concurrency:
+  group: opentelemetry-coverage-${{ github.ref }}-1
+  cancel-in-progress: true
 permissions:
   contents: read
   issues: write
@@ -16,20 +19,13 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Don't run on newer SDKs until we're able to get on analyzer 1.x,
-        # since our current analyzer version range results in build failures
-        # when analysis hits the `<<<` operator.
-        # sdk: [ 2.13.4, stable, dev ]
-        sdk: [ 2.13.4 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.sdk }}
+          sdk: 2.18.7
       - name: Install protobuf-compiler
         run: sudo apt install -y protobuf-compiler
       - name: Install Dart dependencies
@@ -47,8 +43,4 @@ jobs:
       - name: Activate RemoveFromCoverage Package
         run: dart pub global activate remove_from_coverage
       - name: Ignore Files For Coverage
-        run: pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
-      - uses: romeovs/lcov-reporter-action@v0.2.16
-        with:
-          lcov-file: ./coverage/lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: dart pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
