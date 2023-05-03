@@ -55,13 +55,13 @@ BatchSpanProcessors collect up to 2048 spans per interval, and executes the prov
 | Option | Description | Default |
 | ------ | ----------- | ------- |
 | maxExportBatchSize | At most, how many spans are processed per batch. | 512 |
-| scheduledDelay | How long to collect spans before processing them. | 5000 ms |
+| scheduledDelayMillis | How long to collect spans before processing them. | 5000 ms |
 
 ```dart
 import 'package:opentelemetry/sdk.dart' as otel_sdk;
 
 final exporter = otel_sdk.ConsoleExporter();
-final processor = otel_sdk.BatchSpanProcessor(exporter, scheduledDelay: 10000);
+final processor = otel_sdk.BatchSpanProcessor(exporter, scheduledDelayMillis: 10000);
 ```
 
 #### SimpleSpanProcessor
@@ -84,25 +84,26 @@ A trace provider registers your span processors, and is responsible for managing
 
 ```dart
 import 'package:opentelemetry/sdk.dart' as otel_sdk;
+import 'package:opentelemetry/api.dart';
 
 final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
 final processor = otel_sdk.BatchSpanProcessor(exporter);
 
 // Send spans to a collector every 5 seconds
-final provider = otel_sdk.TracerProvider([processor]);
+final provider = otel_sdk.TracerProviderBase(processors: [processor]);
 
 // Optionally, multiple processors can be registered
-final provider = otel_sdk.TracerProvider([
+final provider = otel_sdk.TracerProviderBase(processors: [
   otel_sdk.BatchSpanProcessor(otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'))),
   otel_sdk.SimpleSpanProcessor(otel_sdk.ConsoleExporter())
 ]);
 
 // Register the tracer provider as a global, so the MSDK middleware has access to it.
-otel_sdk.registerGlobalTracerProvider(provider);
+registerGlobalTracerProvider(provider);
 
 final tracer = provider.getTracer('instrumentation-name');
 // or
-final tracer = otel_sdk.globalTracerProvider.getTracer('instrumentation-name');
+final tracer = globalTracerProvider.getTracer('instrumentation-name');
 ```
 
 #### Tracer Provider with Browser Performance Features
@@ -112,6 +113,7 @@ A web-specific trace provider is also available.  This trace provider makes avai
 ```dart
 import 'package:opentelemetry/sdk.dart' as otel_sdk;
 import 'package:opentelemetry/web_sdk.dart' as web_sdk;
+import 'package:opentelemetry/api.dart';
 
 final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
 final processor = otel_sdk.BatchSpanProcessor(exporter);
@@ -129,8 +131,8 @@ final provider = web_sdk.WebTracerProvider(
 final tracer = provider.getTracer('instrumentation-name');
 
 // Or, these trace providers can also be registered globally.
-otel_sdk.registerGlobalTracerProvider(provider);
-final tracer = otel_sdk.globalTracerProvider.getTracer('instrumentation-name');
+registerGlobalTracerProvider(provider);
+final tracer = globalTracerProvider.getTracer('instrumentation-name');
 ```
 
 Important Note: Span timestamps resulting from use of this trace provider may be inaccurate if the executing system is suspended for sleep.
