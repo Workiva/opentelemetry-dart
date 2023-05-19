@@ -6,7 +6,6 @@ import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
-import 'package:opentelemetry/src/sdk/trace/propagation/w3c_trace_context_propagator.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_context.dart';
 import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
@@ -35,7 +34,7 @@ class TestingExtractor implements api.TextMapGetter<Map> {
 
 void main() {
   test('extract trace context', () {
-    final testPropagator = W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
 
     TestingInjector()
@@ -60,7 +59,7 @@ void main() {
   });
 
   test('extract invalid trace parent', () {
-    final testPropagator = W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
 
     TestingInjector()
@@ -85,7 +84,7 @@ void main() {
   });
 
   test('extract missing trace parent', () {
-    final testPropagator = W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
 
     final resultContext = testPropagator.extract(
@@ -96,7 +95,7 @@ void main() {
   });
 
   test('extract malformed trace parent', () {
-    final testPropagator = W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
 
     TestingInjector()
@@ -114,7 +113,7 @@ void main() {
   });
 
   test('extract malformed trace state', () {
-    final testPropagator = W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
 
     TestingInjector()
@@ -155,7 +154,7 @@ void main() {
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 
-    W3CTraceContextPropagator()
+    api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());
 
     expect(testCarrier['traceparent'],
@@ -180,7 +179,7 @@ void main() {
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 
-    W3CTraceContextPropagator()
+    api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());
 
     expect(testCarrier['traceparent'],
@@ -192,7 +191,8 @@ void main() {
   test('header regex, valid input', () {
     const traceParentHeader =
         '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01';
-    final parentHeaderMatch = W3CTraceContextPropagator.traceParentHeaderRegEx
+    final parentHeaderMatch = api
+        .W3CTraceContextPropagator.traceParentHeaderRegEx
         .firstMatch(traceParentHeader);
     final parentHeaderFields = Map<String, String>.fromIterable(
         parentHeaderMatch.groupNames,
@@ -211,7 +211,8 @@ void main() {
   test('header regex, invalid trace and parent IDs', () {
     const traceParentHeader =
         '00-00000000000000000000000000000000-0000000000000000-00';
-    final parentHeaderMatch = W3CTraceContextPropagator.traceParentHeaderRegEx
+    final parentHeaderMatch = api
+        .W3CTraceContextPropagator.traceParentHeaderRegEx
         .firstMatch(traceParentHeader);
     final parentHeaderFields = Map<String, String>.fromIterable(
         parentHeaderMatch.groupNames,
@@ -230,7 +231,8 @@ void main() {
   test('header regex, malformed trace and parent IDs', () {
     const traceParentHeader =
         '00-4bf92^3577b34da6q3ce929d0e0e4736-00f@67aa0bak02b7-01';
-    final parentHeaderMatch = W3CTraceContextPropagator.traceParentHeaderRegEx
+    final parentHeaderMatch = api
+        .W3CTraceContextPropagator.traceParentHeaderRegEx
         .firstMatch(traceParentHeader);
 
     expect(parentHeaderMatch, isNull);

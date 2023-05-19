@@ -43,7 +43,7 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
-    final testPropagator = sdk.W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 
@@ -78,7 +78,7 @@ void main() {
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationLibrary('library_name', 'library_version'));
-    final testPropagator = sdk.W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 
@@ -115,7 +115,7 @@ void main() {
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     final tracer = sdk.TracerProviderBase(processors: [])
         .getTracer('appName', version: '1.0.0');
-    final testPropagator = sdk.W3CTraceContextPropagator();
+    final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
 
     // Inject and extract a test Span from a Context, as when an outbound
