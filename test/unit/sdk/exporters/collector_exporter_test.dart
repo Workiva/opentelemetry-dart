@@ -157,4 +157,52 @@ void main() {
     verifyNever(mockClient.post(uri,
         body: anything, headers: {'Content-Type': 'application/x-protobuf'}));
   });
+
+  test('supplies HTTP headers', () {
+    final span = Span(
+        'foo',
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource([]),
+        sdk.InstrumentationLibrary('library_name', 'library_version'))
+      ..end();
+
+    final suppliedHeaders = {
+      'header-param-key-1': 'header-param-value-1',
+      'header-param-key-2': 'header-param-value-2',
+    };
+    final expectedHeaders = {
+      'Content-Type': 'application/x-protobuf',
+      ...suppliedHeaders,
+    };
+
+    sdk.CollectorExporter(uri, httpClient: mockClient, headers: suppliedHeaders)
+        .export([span]);
+
+    verify(mockClient.post(uri, body: anything, headers: expectedHeaders))
+        .called(1);
+  });
+
+  test('does not supply HTTP headers', () {
+    final span = Span(
+        'foo',
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource([]),
+        sdk.InstrumentationLibrary('library_name', 'library_version'))
+      ..end();
+
+    final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
+
+    sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+
+    verify(mockClient.post(uri, body: anything, headers: expectedHeaders))
+        .called(1);
+  });
 }
