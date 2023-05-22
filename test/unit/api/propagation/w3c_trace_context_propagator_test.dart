@@ -7,8 +7,6 @@ import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/instrumentation_library.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_context.dart';
-import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
 import 'package:test/test.dart';
 
 class TestingInjector implements api.TextMapSetter<Map> {
@@ -131,8 +129,7 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
-    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
-        equals(api.TraceFlags.sampled));
+    expect(resultSpan.spanContext.traceFlags, equals(api.TraceFlags.sampled));
     // Extract should not allow a TraceState with malformed IDs to be attached to
     // a Context.  Thus, there should be an empty TraceState on this context.
     expect(resultSpan.spanContext.traceState.toString(), equals(''));
@@ -141,11 +138,11 @@ void main() {
   test('inject trace parent', () {
     final testSpan = Span(
         'TestSpan',
-        SpanContext(
+        api.SpanContext(
             api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             api.SpanId.fromString('0000000000c0ffee'),
             api.TraceFlags.sampled,
-            TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
+            api.TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
         sdk.DateTimeTimeProvider(),
@@ -166,11 +163,11 @@ void main() {
   test('inject invalid trace parent', () {
     final testSpan = Span(
         'TestSpan',
-        SpanContext(
+        api.SpanContext(
             api.TraceId.fromString('00000000000000000000000000000000'),
             api.SpanId.fromString('0000000000000000'),
             api.TraceFlags.none,
-            TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
+            api.TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('0000000000c0ffee'),
         [],
         sdk.DateTimeTimeProvider(),

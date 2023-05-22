@@ -32,11 +32,11 @@ void main() {
   test('inject and extract trace context', () {
     final testSpan = Span(
         'TestSpan',
-        sdk.SpanContext(
+        api.SpanContext(
             api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             api.SpanId.fromString('0000000000c0ffee'),
             api.TraceFlags.sampled,
-            sdk.TraceState.fromString(
+            api.TraceState.fromString(
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
@@ -58,8 +58,7 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('4bf92f3577b34da6a3ce929d0e0e4736'));
-    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
-        equals(api.TraceFlags.sampled));
+    expect(resultSpan.spanContext.traceFlags, equals(api.TraceFlags.sampled));
     expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
@@ -67,11 +66,11 @@ void main() {
   test('inject and extract invalid trace parent', () {
     final testSpan = Span(
         'TestSpan',
-        sdk.SpanContext(
+        api.SpanContext(
             api.TraceId.fromString('00000000000000000000000000000000'),
             api.SpanId.fromString('0000000000c0ffee'),
             api.TraceFlags.none,
-            sdk.TraceState.fromString(
+            api.TraceState.fromString(
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('0000000000000000'),
         [],
@@ -93,8 +92,7 @@ void main() {
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
     expect(resultSpan.spanContext.traceId.toString(),
         equals('00000000000000000000000000000000'));
-    expect((resultSpan.spanContext as sdk.SpanContext).traceFlags,
-        equals(api.TraceFlags.none));
+    expect(resultSpan.spanContext.traceFlags, equals(api.TraceFlags.none));
     expect(resultSpan.spanContext.traceState.toString(),
         equals('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE'));
   });
@@ -102,11 +100,11 @@ void main() {
   test('extract and inject with child span', () {
     final testSpan = Span(
         'TestSpan',
-        sdk.SpanContext(
+        api.SpanContext(
             api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             api.SpanId.fromString('0000000000c0ffee'),
             api.TraceFlags.sampled,
-            sdk.TraceState.fromString(
+            api.TraceState.fromString(
                 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],

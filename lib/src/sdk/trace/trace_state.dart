@@ -6,6 +6,7 @@ import '../../../api.dart' as api;
 /// Representation of the state of a trace.
 ///
 /// See W3C documentation: https://www.w3.org/TR/trace-context/#tracestate-header
+@Deprecated('Use TraceState from API instead')
 class TraceState implements api.TraceState {
   static const int _MAX_KEY_VALUE_PAIRS = 32;
   static const int _KEY_MAX_SIZE = 256;
