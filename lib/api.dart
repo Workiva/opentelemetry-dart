@@ -18,6 +18,8 @@ export 'src/api/open_telemetry.dart'
 export 'src/api/propagation/extractors/text_map_getter.dart' show TextMapGetter;
 export 'src/api/propagation/injectors/text_map_setter.dart' show TextMapSetter;
 export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;
+export 'src/api/propagation/w3c_trace_context_propagator.dart'
+    show W3CTraceContextPropagator;
 export 'src/api/span_processors/span_processor.dart' show SpanProcessor;
 export 'src/api/trace/id_generator.dart' show IdGenerator;
 export 'src/api/trace/nonrecording_span.dart' show NonRecordingSpan;

@@ -4,7 +4,8 @@
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 
-/// Representation of the context of the context of an individual span.
+/// Representation of the context of an individual span.
+@Deprecated('Use SpanContext from API instead')
 class SpanContext implements api.SpanContext {
   final api.SpanId _spanId;
   final api.TraceId _traceId;

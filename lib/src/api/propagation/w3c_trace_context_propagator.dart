@@ -1,10 +1,8 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import '../../../../api.dart' as api;
-import '../../../../sdk.dart' as sdk;
+import '../../../api.dart' as api;
 
-@Deprecated('Use W3CTraceContextPropagator from API instead')
 class W3CTraceContextPropagator implements api.TextMapPropagator {
   static const String _traceVersion = '00';
   static const String _traceParentHeaderKey = 'traceparent';
@@ -54,11 +52,11 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
 
     final traceStateHeader = getter.get(carrier, _traceStateHeaderKey);
     final traceState = (traceStateHeader != null)
-        ? sdk.TraceState.fromString(traceStateHeader)
-        : sdk.TraceState.empty();
+        ? api.TraceState.fromString(traceStateHeader)
+        : api.TraceState.empty();
 
     return context.withSpan(api.NonRecordingSpan(
-        sdk.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
+        api.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
   }
 
   @override
