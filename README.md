@@ -14,7 +14,7 @@ The current options are:
 
 | Exporter | Description |
 | -------- | ----------- |
-| [CollectorExporter](#collectorxxporter) | Sends Spans to a configured opentelemetry-collector. |
+| [CollectorExporter](#collectorexporter) | Sends Spans to a configured opentelemetry-collector. |
 | [ConsoleExporter](#consoleexporter) | Prints Spans to the console. |
 
 ### Span Exporters
@@ -98,7 +98,6 @@ final provider = otel_sdk.TracerProviderBase(processors: [
   otel_sdk.SimpleSpanProcessor(otel_sdk.ConsoleExporter())
 ]);
 
-// Register the tracer provider as a global, so the MSDK middleware has access to it.
 registerGlobalTracerProvider(provider);
 
 final tracer = provider.getTracer('instrumentation-name');
@@ -136,7 +135,7 @@ final tracer = globalTracerProvider.getTracer('instrumentation-name');
 ```
 
 Important Note: Span timestamps resulting from use of this trace provider may be inaccurate if the executing system is suspended for sleep.
-See https://github.com/open-telemetry/opentelemetry-js/issues/852 for more information.
+See [https://github.com/open-telemetry/opentelemetry-js/issues/852](https://github.com/open-telemetry/opentelemetry-js/issues/852) for more information.
 
 ## Collecting Spans
 
