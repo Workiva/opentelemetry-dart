@@ -5,8 +5,8 @@
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/common/v1/common.proto
 //
-// @dart = 2.7
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// @dart = 2.12
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:core' as $core;
 
@@ -49,13 +49,13 @@ class AnyValue extends $pb.GeneratedMessage {
 
   AnyValue._() : super();
   factory AnyValue({
-    $core.String stringValue,
-    $core.bool boolValue,
-    $fixnum.Int64 intValue,
-    $core.double doubleValue,
-    ArrayValue arrayValue,
-    KeyValueList kvlistValue,
-    $core.List<$core.int> bytesValue,
+    $core.String? stringValue,
+    $core.bool? boolValue,
+    $fixnum.Int64? intValue,
+    $core.double? doubleValue,
+    ArrayValue? arrayValue,
+    KeyValueList? kvlistValue,
+    $core.List<$core.int>? bytesValue,
   }) {
     final _result = create();
     if (stringValue != null) {
@@ -100,9 +100,9 @@ class AnyValue extends $pb.GeneratedMessage {
   static $pb.PbList<AnyValue> createRepeated() => $pb.PbList<AnyValue>();
   @$core.pragma('dart2js:noInline')
   static AnyValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AnyValue>(create);
-  static AnyValue _defaultInstance;
+  static AnyValue? _defaultInstance;
 
-  AnyValue_Value whichValue() => _AnyValue_ValueByTag[$_whichOneof(0)];
+  AnyValue_Value whichValue() => _AnyValue_ValueByTag[$_whichOneof(0)]!;
   void clearValue() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -181,7 +181,7 @@ class ArrayValue extends $pb.GeneratedMessage {
 
   ArrayValue._() : super();
   factory ArrayValue({
-    $core.Iterable<AnyValue> values,
+    $core.Iterable<AnyValue>? values,
   }) {
     final _result = create();
     if (values != null) {
@@ -208,7 +208,7 @@ class ArrayValue extends $pb.GeneratedMessage {
   static $pb.PbList<ArrayValue> createRepeated() => $pb.PbList<ArrayValue>();
   @$core.pragma('dart2js:noInline')
   static ArrayValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ArrayValue>(create);
-  static ArrayValue _defaultInstance;
+  static ArrayValue? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<AnyValue> get values => $_getList(0);
@@ -222,7 +222,7 @@ class KeyValueList extends $pb.GeneratedMessage {
 
   KeyValueList._() : super();
   factory KeyValueList({
-    $core.Iterable<KeyValue> values,
+    $core.Iterable<KeyValue>? values,
   }) {
     final _result = create();
     if (values != null) {
@@ -249,7 +249,7 @@ class KeyValueList extends $pb.GeneratedMessage {
   static $pb.PbList<KeyValueList> createRepeated() => $pb.PbList<KeyValueList>();
   @$core.pragma('dart2js:noInline')
   static KeyValueList getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeyValueList>(create);
-  static KeyValueList _defaultInstance;
+  static KeyValueList? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<KeyValue> get values => $_getList(0);
@@ -264,8 +264,8 @@ class KeyValue extends $pb.GeneratedMessage {
 
   KeyValue._() : super();
   factory KeyValue({
-    $core.String key,
-    AnyValue value,
+    $core.String? key,
+    AnyValue? value,
   }) {
     final _result = create();
     if (key != null) {
@@ -295,7 +295,7 @@ class KeyValue extends $pb.GeneratedMessage {
   static $pb.PbList<KeyValue> createRepeated() => $pb.PbList<KeyValue>();
   @$core.pragma('dart2js:noInline')
   static KeyValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeyValue>(create);
-  static KeyValue _defaultInstance;
+  static KeyValue? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
@@ -327,8 +327,8 @@ class StringKeyValue extends $pb.GeneratedMessage {
 
   StringKeyValue._() : super();
   factory StringKeyValue({
-    $core.String key,
-    $core.String value,
+    $core.String? key,
+    $core.String? value,
   }) {
     final _result = create();
     if (key != null) {
@@ -358,7 +358,7 @@ class StringKeyValue extends $pb.GeneratedMessage {
   static $pb.PbList<StringKeyValue> createRepeated() => $pb.PbList<StringKeyValue>();
   @$core.pragma('dart2js:noInline')
   static StringKeyValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StringKeyValue>(create);
-  static StringKeyValue _defaultInstance;
+  static StringKeyValue? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
@@ -388,8 +388,8 @@ class InstrumentationLibrary extends $pb.GeneratedMessage {
 
   InstrumentationLibrary._() : super();
   factory InstrumentationLibrary({
-    $core.String name,
-    $core.String version,
+    $core.String? name,
+    $core.String? version,
   }) {
     final _result = create();
     if (name != null) {
@@ -419,7 +419,7 @@ class InstrumentationLibrary extends $pb.GeneratedMessage {
   static $pb.PbList<InstrumentationLibrary> createRepeated() => $pb.PbList<InstrumentationLibrary>();
   @$core.pragma('dart2js:noInline')
   static InstrumentationLibrary getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InstrumentationLibrary>(create);
-  static InstrumentationLibrary _defaultInstance;
+  static InstrumentationLibrary? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);

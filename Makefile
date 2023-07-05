@@ -1,13 +1,14 @@
 init:
+	git submodule init
+	git submodule update
 	dart pub get
-	dart pub global activate protoc_plugin 19.3.1
+	dart pub global activate protoc_plugin 20.0.1
 	cd lib/src/sdk/proto && \
-		protoc --proto_path opentelemetry-proto \
-		--dart_out . \
-		opentelemetry-proto/opentelemetry/proto/common/v1/common.proto \
-		opentelemetry-proto/opentelemetry/proto/collector/trace/v1/trace_service.proto \
-		opentelemetry-proto/opentelemetry/proto/trace/v1/trace.proto \
-		opentelemetry-proto/opentelemetry/proto/resource/v1/resource.proto
+		protoc --proto_path opentelemetry-proto --dart_out . \
+			opentelemetry-proto/opentelemetry/proto/common/v1/common.proto \
+			opentelemetry-proto/opentelemetry/proto/collector/trace/v1/trace_service.proto \
+			opentelemetry-proto/opentelemetry/proto/trace/v1/trace.proto \
+			opentelemetry-proto/opentelemetry/proto/resource/v1/resource.proto
 
 analyze:
 	@dart analyze

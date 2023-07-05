@@ -142,7 +142,8 @@ void main() {
             api.TraceId.fromString('4bf92f3577b34da6a3ce929d0e0e4736'),
             api.SpanId.fromString('0000000000c0ffee'),
             api.TraceFlags.sampled,
-            api.TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
+            api.TraceState.fromString(
+                'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('00f067aa0ba902b7'),
         [],
         sdk.DateTimeTimeProvider(),
@@ -167,7 +168,8 @@ void main() {
             api.TraceId.fromString('00000000000000000000000000000000'),
             api.SpanId.fromString('0000000000000000'),
             api.TraceFlags.none,
-            api.TraceState.fromString('rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
+            api.TraceState.fromString(
+                'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE')),
         api.SpanId.fromString('0000000000c0ffee'),
         [],
         sdk.DateTimeTimeProvider(),
