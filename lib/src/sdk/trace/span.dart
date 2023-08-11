@@ -70,12 +70,12 @@ class Span implements sdk.ReadWriteSpan {
   api.SpanId get parentSpanId => _parentSpanId;
 
   @override
-  void end() {
+  void end({Int64? endTime}) {
     if (!isRecording) {
       return;
     }
 
-    _endTime = _timeProvider.now;
+    _endTime ??= endTime ?? _timeProvider.now;
 
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onEnd(this);

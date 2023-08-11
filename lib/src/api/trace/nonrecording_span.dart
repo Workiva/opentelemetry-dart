@@ -25,7 +25,7 @@ class NonRecordingSpan implements api.Span {
   void setAttributes(List<api.Attribute> attributes) {}
 
   @override
-  void end() {}
+  void end({Int64? endTime}) {}
 
   @override
   void setName(String _name) {}
