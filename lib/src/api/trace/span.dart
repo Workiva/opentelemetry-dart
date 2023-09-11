@@ -51,9 +51,7 @@ abstract class Span {
   ///
   /// Only the value of the last call will be recorded, and implementations are
   /// free to ignore previous calls.
-  @Deprecated(
-      'This method will be updated to use positional optional parameters in v0.17.0.')
-  void setStatus(api.StatusCode status, {String description});
+  void setStatus(api.StatusCode status, [String description]);
 
   /// set single attribute
   void setAttribute(api.Attribute attribute);

@@ -25,8 +25,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'parent_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     final testContext = api.Context.current.withSpan(testSpan);
 
@@ -46,8 +51,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'parent_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     final result = testSampler.shouldSample(api.Context.root, traceId,
         testSpan.name, api.SpanKind.internal, null, []);
@@ -57,7 +67,7 @@ void main() {
     expect(result.traceState.isEmpty, isTrue);
   });
 
-  test('with sampled, remote sdk.Span', () {
+  test('with sampled, remote SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
@@ -68,8 +78,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'parent_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
@@ -80,7 +95,7 @@ void main() {
     expect(result.traceState, same(traceState));
   });
 
-  test('with non-sampled, remote sdk.Span', () {
+  test('with non-sampled, remote SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
@@ -91,8 +106,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'parent_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
@@ -103,7 +123,7 @@ void main() {
     expect(result.traceState, same(traceState));
   });
 
-  test('with sampled, local sdk.Span', () {
+  test('with sampled, local SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
@@ -114,8 +134,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'parent_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
@@ -126,7 +151,7 @@ void main() {
     expect(result.traceState, same(traceState));
   });
 
-  test('with non-sampled, local sdk.Span', () {
+  test('with non-sampled, local SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
@@ -137,8 +162,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'parent_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(

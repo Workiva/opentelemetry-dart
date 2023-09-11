@@ -18,7 +18,13 @@ void main() {
         [],
         WebTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        WebTimeProvider().now)
       ..end();
 
     expect(span.startTime, lessThanOrEqualTo(span.endTime));

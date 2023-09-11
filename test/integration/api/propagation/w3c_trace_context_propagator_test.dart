@@ -43,7 +43,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.client,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
@@ -77,7 +83,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.client,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
@@ -111,7 +123,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.client,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final tracer = sdk.TracerProviderBase(processors: [])
         .getTracer('appName', version: '1.0.0');
     final testPropagator = api.W3CTraceContextPropagator();

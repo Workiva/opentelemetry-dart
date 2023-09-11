@@ -17,7 +17,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
     Span span;
 
     api.traceSync('syncTrace', () {
@@ -36,7 +37,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
     final spans = <Span>[];
 
     for (var i = 0; i < 5; i++) {
@@ -57,7 +59,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
     Span span;
 
     expect(
@@ -81,7 +84,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
     Span span;
 
     await api.trace('asyncTrace', () async {
@@ -100,7 +104,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
     final spans = <Span>[];
 
     for (var i = 0; i < 5; i++) {
@@ -121,7 +126,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
     Span span;
 
     try {
@@ -147,7 +153,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
     Span span;
 
     try {
