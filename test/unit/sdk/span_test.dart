@@ -10,8 +10,8 @@ void main() {
   test('span change name', () {
     final span = sdk.Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),

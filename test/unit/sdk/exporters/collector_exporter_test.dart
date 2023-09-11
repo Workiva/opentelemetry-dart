@@ -39,8 +39,8 @@ void main() {
     final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
     final span1 = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -51,8 +51,8 @@ void main() {
       ..end();
     final span2 = Span(
         'baz',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -140,8 +140,8 @@ void main() {
   test('does not send spans when shutdown', () {
     final span = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -161,8 +161,8 @@ void main() {
   test('supplies HTTP headers', () {
     final span = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -189,8 +189,8 @@ void main() {
   test('does not supply HTTP headers', () {
     final span = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),

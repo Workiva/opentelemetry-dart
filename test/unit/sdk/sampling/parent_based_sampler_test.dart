@@ -20,7 +20,7 @@ void main() {
   test('Invalid parent span context', () {
     final testSpan = Span(
         'test',
-        sdk.SpanContext.invalid(),
+        api.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -41,7 +41,7 @@ void main() {
   test('Missing parent span context', () {
     final testSpan = Span(
         'test',
-        sdk.SpanContext.invalid(),
+        api.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -59,10 +59,10 @@ void main() {
 
   test('with sampled, remote sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = sdk.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
         'foo',
-        sdk.SpanContext.remote(
+        api.SpanContext.remote(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.sampled, traceState),
         api.SpanId([4, 5, 6]),
         [],
@@ -82,10 +82,10 @@ void main() {
 
   test('with non-sampled, remote sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = sdk.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
         'foo',
-        sdk.SpanContext.remote(
+        api.SpanContext.remote(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
@@ -105,10 +105,10 @@ void main() {
 
   test('with sampled, local sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = sdk.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
         'foo',
-        sdk.SpanContext(
+        api.SpanContext(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.sampled, traceState),
         api.SpanId([4, 5, 6]),
         [],
@@ -128,10 +128,10 @@ void main() {
 
   test('with non-sampled, local sdk.Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = sdk.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
         'foo',
-        sdk.SpanContext(
+        api.SpanContext(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],

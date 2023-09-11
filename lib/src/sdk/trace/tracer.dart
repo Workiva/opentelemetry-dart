@@ -48,7 +48,7 @@ class Tracer implements api.Tracer {
     } else {
       parentSpanId = api.SpanId.root();
       traceId = api.TraceId.fromIdGenerator(_idGenerator);
-      traceState = sdk.TraceState.empty();
+      traceState = api.TraceState.empty();
     }
 
     final samplerResult =
@@ -57,7 +57,7 @@ class Tracer implements api.Tracer {
         ? api.TraceFlags.sampled
         : api.TraceFlags.none;
     final spanContext =
-        sdk.SpanContext(traceId, spanId, traceFlags, traceState);
+        api.SpanContext(traceId, spanId, traceFlags, traceState);
 
     return Span(name, spanContext, parentSpanId, _processors, _timeProvider,
         _resource, _instrumentationLibrary,

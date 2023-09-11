@@ -12,6 +12,8 @@ import '../../../api.dart' as api;
 ///
 /// This class should not be exposed to consumers and is used internally to wrap
 /// [api.SpanContext] being injected or extracted for external calls.
+@Deprecated(
+    'This class will stop being exported in a future release.  Please migrate to use of Span instead')
 class NonRecordingSpan implements api.Span {
   final api.SpanStatus _status = api.SpanStatus()..code = api.StatusCode.ok;
   final api.SpanContext _spanContext;

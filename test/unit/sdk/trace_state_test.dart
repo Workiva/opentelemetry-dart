@@ -2,12 +2,12 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
-import 'package:opentelemetry/src/sdk/trace/trace_state.dart';
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:test/test.dart';
 
 void main() {
   test('create empty', () {
-    final testTraceState = TraceState.empty();
+    final testTraceState = sdk.TraceState.empty();
 
     expect(testTraceState.toString(), equals(''));
     expect(testTraceState.isEmpty, isTrue);
@@ -15,7 +15,8 @@ void main() {
   });
 
   test('create from string', () {
-    final testTraceState = TraceState.fromString('key1=value2,key@2=value1');
+    final testTraceState =
+        sdk.TraceState.fromString('key1=value2,key@2=value1');
 
     expect(testTraceState.get('key1'), equals('value2')); // Regular key.
     expect(testTraceState.get('key@2'), equals('value1')); // Vendor key.
@@ -25,7 +26,7 @@ void main() {
   });
 
   test('get default', () {
-    final testTraceState = TraceState.getDefault();
+    final testTraceState = sdk.TraceState.getDefault();
 
     expect(testTraceState.toString(), equals(''));
     expect(testTraceState.isEmpty, isTrue);
@@ -33,7 +34,7 @@ void main() {
   });
 
   test('put valid values', () {
-    final testTraceState = TraceState.empty()
+    final testTraceState = sdk.TraceState.empty()
       ..put('key_0-1', 'value@2')
       ..put('key_0-2', 'value@1')
       ..put('key_@vendor', 'value@3');
@@ -48,7 +49,7 @@ void main() {
   });
 
   test('create from string with invalid values', () {
-    final testTraceState = TraceState.fromString(
+    final testTraceState = sdk.TraceState.fromString(
         'key_0-1=0,value2,key&0-2=value@1,key_@thisisalotlongerthan13characters=value@3');
 
     expect(testTraceState.get('key_0-1'), isNull); // Invalid value, comma.
@@ -61,7 +62,7 @@ void main() {
   });
 
   test('put invalid values', () {
-    final testTraceState = TraceState.empty()
+    final testTraceState = sdk.TraceState.empty()
       ..put('key_0-1', '0,value=2') // Invalid value.
       ..put('key&0-2', 'value@1') // Invalid key.
       ..put('key_@thisisalotlongerthan13characters',
@@ -76,7 +77,7 @@ void main() {
   });
 
   test('remove valid value', () {
-    final testTraceState = TraceState.empty()
+    final testTraceState = sdk.TraceState.empty()
       ..put('key_0-1', 'value@2')
       ..put('key_0-2', 'value@1')
       ..put('key_@vendor', 'value@3')
@@ -92,41 +93,43 @@ void main() {
   });
 
   test('key regex, valid key', () {
-    final matchResult = TraceState.validKeyRegex.matchAsPrefix('key_0-1');
+    final matchResult = sdk.TraceState.validKeyRegex.matchAsPrefix('key_0-1');
 
     expect(matchResult, isNotNull);
     expect(matchResult.group(0), equals('key_0-1'));
   });
 
   test('key regex, valid vendor key', () {
-    final matchResult = TraceState.validKeyRegex.matchAsPrefix('key_@vendor');
+    final matchResult =
+        sdk.TraceState.validKeyRegex.matchAsPrefix('key_@vendor');
 
     expect(matchResult, isNotNull);
     expect(matchResult.group(0), equals('key_@vendor'));
   });
 
   test('value regex, valid value', () {
-    final matchResult = TraceState.validValueRegex.matchAsPrefix('value@2');
+    final matchResult = sdk.TraceState.validValueRegex.matchAsPrefix('value@2');
 
     expect(matchResult, isNotNull);
     expect(matchResult.group(0), equals('value@2'));
   });
 
   test('key regex, invalid key', () {
-    final matchResult = TraceState.validKeyRegex.matchAsPrefix('key&0-2');
+    final matchResult = sdk.TraceState.validKeyRegex.matchAsPrefix('key&0-2');
 
     expect(matchResult, isNull);
   });
 
   test('key regex, invalid vendor key', () {
-    final matchResult = TraceState.validKeyRegex
+    final matchResult = sdk.TraceState.validKeyRegex
         .matchAsPrefix('key_@thisisalotlongerthan13characters');
 
     expect(matchResult, isNull);
   });
 
   test('value regex, invalid value', () {
-    final matchResult = TraceState.validValueRegex.matchAsPrefix('0,value=2');
+    final matchResult =
+        sdk.TraceState.validValueRegex.matchAsPrefix('0,value=2');
 
     expect(matchResult, isNull);
   });

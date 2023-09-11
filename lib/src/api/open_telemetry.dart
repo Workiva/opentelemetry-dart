@@ -3,12 +3,15 @@
 
 import 'dart:async';
 
-import '../../api.dart' as api;
-import '../../sdk.dart' as sdk;
+import 'propagation/noop_text_map_propagator.dart';
+import 'trace/noop_tracer_provider.dart';
 
-final api.TracerProvider _noopTracerProvider = sdk.TracerProviderBase();
+import '../../api.dart' as api;
+
+final api.TracerProvider _noopTracerProvider = NoopTracerProvider();
+final api.TextMapPropagator _noopTextMapPropagator = NoopTextMapPropagator();
 api.TracerProvider _tracerProvider = _noopTracerProvider;
-api.TextMapPropagator _textMapPropagator;
+api.TextMapPropagator _textMapPropagator = _noopTextMapPropagator;
 
 api.TracerProvider get globalTracerProvider => _tracerProvider;
 
@@ -25,7 +28,7 @@ void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
 }
 
 void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
-  if (_textMapPropagator != null) {
+  if (_textMapPropagator != _noopTextMapPropagator) {
     throw StateError('A global TextMapPropagator has already been created. '
         'registerGlobalTextMapPropagator must be called only once before any '
         'calls to the getter globalTextMapPropagator.');
