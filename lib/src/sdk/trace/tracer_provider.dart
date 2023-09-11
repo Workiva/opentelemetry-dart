@@ -46,9 +46,14 @@ class TracerProviderBase implements api.TracerProvider {
     final key = '$name@$version';
     return tracers.putIfAbsent(
         key,
-        () => Tracer(processors, resource, sampler, sdk.DateTimeTimeProvider(),
-            idGenerator, sdk.InstrumentationLibrary(name, version),
-            spanLimits: spanLimits));
+        () => Tracer(
+            processors,
+            resource,
+            sampler,
+            sdk.DateTimeTimeProvider(),
+            idGenerator,
+            sdk.InstrumentationLibrary(name, version),
+            spanLimits));
   }
 
   @override

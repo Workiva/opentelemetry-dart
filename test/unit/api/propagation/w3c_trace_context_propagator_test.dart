@@ -149,7 +149,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         Resource([]),
-        InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.client,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 
@@ -175,7 +181,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         Resource([]),
-        InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.client,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testCarrier = {};
     final testContext = api.Context.current.withSpan(testSpan);
 

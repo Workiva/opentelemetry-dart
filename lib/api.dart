@@ -22,7 +22,6 @@ export 'src/api/propagation/w3c_trace_context_propagator.dart'
     show W3CTraceContextPropagator;
 export 'src/api/span_processors/span_processor.dart' show SpanProcessor;
 export 'src/api/trace/id_generator.dart' show IdGenerator;
-export 'src/api/trace/nonrecording_span.dart' show NonRecordingSpan;
 export 'src/api/trace/span_context.dart' show SpanContext;
 export 'src/api/trace/span_id.dart' show SpanId;
 export 'src/api/trace/span_link.dart' show SpanLink;

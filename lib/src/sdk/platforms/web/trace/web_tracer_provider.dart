@@ -40,7 +40,6 @@ class WebTracerProvider extends sdk.TracerProviderBase {
     return tracers.putIfAbsent(
         '$name@$version',
         () => Tracer(processors, resource, sampler, _timeProvider, idGenerator,
-            sdk.InstrumentationLibrary(name, version),
-            spanLimits: spanLimits));
+            sdk.InstrumentationLibrary(name, version), spanLimits));
   }
 }

@@ -46,8 +46,12 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
-        attributes: [api.Attribute.fromString('foo', 'bar')],
-        kind: api.SpanKind.client)
+        api.SpanKind.client,
+        [api.Attribute.fromString('foo', 'bar')],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
     final span2 = Span(
         'baz',
@@ -58,15 +62,17 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
-        limits: limits,
-        attributes: [api.Attribute.fromBoolean('bool', true)],
-        kind: api.SpanKind.internal,
-        links: [
+        api.SpanKind.internal,
+        [api.Attribute.fromBoolean('bool', true)],
+        [
           api.SpanLink(span1.spanContext, attributes: [
             api.Attribute.fromString('longKey',
                 'I am very long with maxNumAttributeLength: 5 limitation!')
-          ])
-        ])
+          ]),
+        ],
+        api.Context.root,
+        limits,
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -146,7 +152,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient)
@@ -167,7 +179,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     final suppliedHeaders = {
@@ -195,7 +213,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
