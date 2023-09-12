@@ -8,6 +8,8 @@ import '../../../sdk.dart' as sdk;
 import '../common/attributes.dart';
 
 /// A representation of a single operation within a trace.
+@Deprecated(
+    'This class will stop being exported and be marked protected in a future release.  Consumers should use [api.Span] instead.')
 class Span implements api.Span {
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
@@ -31,6 +33,8 @@ class Span implements api.Span {
   bool get isRecording => _endTime == null;
 
   /// Construct a [Span].
+  @Deprecated(
+      'This constructor will be marked protected in a future release.  Consumers should use [api.Span] instead.')
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
       this._timeProvider, this._resource, this._instrumentationLibrary,
       {api.SpanKind kind,
@@ -74,7 +78,25 @@ class Span implements api.Span {
   }
 
   @override
+  @Deprecated(
+      'This method will be removed in a future release.  Use [Span.setStatusCode] instead.')
   void setStatus(api.StatusCode status, {String description}) {
+    // A status cannot be Unset after being set, and cannot be set to any other
+    // status after being marked "Ok".
+    if (status == api.StatusCode.unset || _status.code == api.StatusCode.ok) {
+      return;
+    }
+
+    _status.code = status;
+
+    // Description is ignored for statuses other than "Error".
+    if (status == api.StatusCode.error && description != null) {
+      _status.description = description;
+    }
+  }
+
+  @override
+  void setStatusCode(api.StatusCode status, [String description]) {
     // A status cannot be Unset after being set, and cannot be set to any other
     // status after being marked "Ok".
     if (status == api.StatusCode.unset || _status.code == api.StatusCode.ok) {

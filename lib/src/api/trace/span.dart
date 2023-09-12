@@ -49,7 +49,7 @@ abstract class Span {
   String name;
 
   /// Whether this Span is recording information like events with the
-  /// addEvent operation, status with setStatus, etc.
+  /// addEvent operation, status with setStatusCode, etc.
   bool get isRecording;
 
   /// The kind of the span.
@@ -62,7 +62,18 @@ abstract class Span {
   ///
   /// Only the value of the last call will be recorded, and implementations are
   /// free to ignore previous calls.
+  @Deprecated(
+      'This method will be removed in a future release.  Use [Span.setStatusCode] instead.')
   void setStatus(api.StatusCode status, {String description});
+
+  /// Sets the status to the [Span].
+  ///
+  /// If used, this will override the default [Span] status. Default status code
+  /// is [api.StatusCode.unset].
+  ///
+  /// Only the value of the last call will be recorded, and implementations are
+  /// free to ignore previous calls.
+  void setStatusCode(api.StatusCode status, [String description]);
 
   /// Retrieve the status of the [Span].
   api.SpanStatus get status;
