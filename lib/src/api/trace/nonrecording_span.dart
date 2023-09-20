@@ -46,11 +46,8 @@ class NonRecordingSpan implements api.Span {
 
   @override
   @Deprecated(
-      'This method will be removed in a future release.  Use [NonRecordingSpan.setStatusCode] instead.')
+      'This method will be updated to use positional optional parameters in a future release.')
   void setStatus(api.StatusCode status, {String description}) {}
-
-  @override
-  void setStatusCode(api.StatusCode status, [String description]) {}
 
   @override
   api.SpanContext get spanContext => _spanContext;

@@ -79,24 +79,8 @@ class Span implements api.Span {
 
   @override
   @Deprecated(
-      'This method will be removed in a future release.  Use [Span.setStatusCode] instead.')
+      'This method will be updated to use positional optional parameters in a future release.')
   void setStatus(api.StatusCode status, {String description}) {
-    // A status cannot be Unset after being set, and cannot be set to any other
-    // status after being marked "Ok".
-    if (status == api.StatusCode.unset || _status.code == api.StatusCode.ok) {
-      return;
-    }
-
-    _status.code = status;
-
-    // Description is ignored for statuses other than "Error".
-    if (status == api.StatusCode.error && description != null) {
-      _status.description = description;
-    }
-  }
-
-  @override
-  void setStatusCode(api.StatusCode status, [String description]) {
     // A status cannot be Unset after being set, and cannot be set to any other
     // status after being marked "Ok".
     if (status == api.StatusCode.unset || _status.code == api.StatusCode.ok) {

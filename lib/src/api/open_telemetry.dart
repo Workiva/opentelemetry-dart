@@ -50,7 +50,7 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
     return await context.withSpan(span).execute(fn);
   } catch (e, s) {
     span
-      ..setStatusCode(api.StatusCode.error, e.toString())
+      ..setStatus(api.StatusCode.error, description: e.toString())
       ..recordException(e, stackTrace: s);
     rethrow;
   } finally {
@@ -77,7 +77,7 @@ R traceSync<R>(String name, R Function() fn,
     return r;
   } catch (e, s) {
     span
-      ..setStatusCode(api.StatusCode.error, e.toString())
+      ..setStatus(api.StatusCode.error, description: e.toString())
       ..recordException(e, stackTrace: s);
     rethrow;
   } finally {
