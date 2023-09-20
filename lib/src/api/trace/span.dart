@@ -51,7 +51,7 @@ abstract class Span {
   String name;
 
   /// Whether this Span is recording information like events with the
-  /// addEvent operation, status with setStatusCode, etc.
+  /// addEvent operation, status with setStatus, etc.
   bool get isRecording;
 
   /// The kind of the span.

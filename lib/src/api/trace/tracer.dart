@@ -9,6 +9,8 @@ import '../../../api.dart' as api;
 ///
 /// Users may choose to use manual or automatic Context propagation. Because of
 /// that, this class offers APIs to facilitate both usages.
+///
+/// Warning: methods may be added to this interface in minor releases.
 abstract class Tracer {
   /// Starts a new [api.Span] without setting it as the current span in this
   /// tracer's context.
