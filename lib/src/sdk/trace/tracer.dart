@@ -18,7 +18,7 @@ class Tracer implements api.Tracer {
   final sdk.SpanLimits _spanLimits;
 
   @Deprecated(
-      'This constructor will be marked protected in a future release.  Consumers should use [api.Tracer] instead.')
+      'This constructor will be marked protected in v0.18.0.  Consumers should use [api.Tracer] instead.')
   Tracer(this._processors, this._resource, this._sampler, this._timeProvider,
       this._idGenerator, this._instrumentationLibrary,
       {sdk.SpanLimits spanLimits})
