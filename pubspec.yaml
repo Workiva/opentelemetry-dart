@@ -15,9 +15,9 @@ dependencies:
   quiver: '>=2.1.5 <4.0.0'
 
 dev_dependencies:
-  mockito: ^5.0.7
+  mockito: ^5.3.2
   remove_from_coverage: ^2.0.0
-  test: ^1.16.5
+  test: ^1.21.1
   workiva_analysis_options: ^1.2.2
 
 dependency_validator:
