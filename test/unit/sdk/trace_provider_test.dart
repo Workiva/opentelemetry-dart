@@ -3,7 +3,7 @@
 
 @TestOn('vm')
 import 'package:mockito/mockito.dart';
-import 'package:opentelemetry/src/api/span_processors/span_processor.dart';
+import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
 import 'package:test/test.dart';
 

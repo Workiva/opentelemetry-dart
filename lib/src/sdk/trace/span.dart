@@ -10,12 +10,12 @@ import '../common/attributes.dart';
 /// A representation of a single operation within a trace.
 @Deprecated(
     'This class will stop being exported and be marked protected in v0.17.0.  Consumers should use [api.Span] instead.')
-class Span implements api.Span {
+class Span implements sdk.ReadWriteSpan {
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
   final api.SpanKind _kind;
   final api.SpanStatus _status = api.SpanStatus();
-  final List<api.SpanProcessor> _processors;
+  final List<sdk.SpanProcessor> _processors;
   final List<api.SpanLink> _links;
   final sdk.TimeProvider _timeProvider;
   final sdk.Resource _resource;
@@ -23,19 +23,24 @@ class Span implements api.Span {
   final api.InstrumentationLibrary _instrumentationLibrary;
   final Int64 _startTime;
   final Attributes _attributes = Attributes.empty();
+  String _name;
   Int64 _endTime;
   int _droppedSpanAttributes = 0;
 
   @override
-  String name;
+  void setName(String name) {
+    _name = name;
+  }
 
   @override
+  String get name => _name;
+
   bool get isRecording => _endTime == null;
 
   /// Construct a [Span].
   @Deprecated(
       'This constructor will be marked protected in v0.17.0.  Consumers should use [api.Span] instead.')
-  Span(this.name, this._spanContext, this._parentSpanId, this._processors,
+  Span(this._name, this._spanContext, this._parentSpanId, this._processors,
       this._timeProvider, this._resource, this._instrumentationLibrary,
       {api.SpanKind kind,
       List<api.Attribute> attributes,
@@ -98,6 +103,7 @@ class Span implements api.Span {
   @override
   api.SpanStatus get status => _status;
 
+  @override
   sdk.Resource get resource => _resource;
 
   @override
@@ -223,8 +229,10 @@ class Span implements api.Span {
     return spanLink;
   }
 
-  List<api.SpanLink> get links => _links;
+  @override
+  List<api.SpanLink> get links => List.unmodifiable(_links);
 
+  @override
   Attributes get attributes => _attributes;
 
   //Truncate just strings which length is longer than configuration.

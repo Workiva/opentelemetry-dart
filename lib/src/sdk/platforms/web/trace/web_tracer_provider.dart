@@ -19,7 +19,7 @@ class WebTracerProvider extends sdk.TracerProviderBase {
   final sdk.TimeProvider _timeProvider;
 
   WebTracerProvider(
-      {List<api.SpanProcessor> processors,
+      {List<sdk.SpanProcessor> processors,
       sdk.Resource resource,
       sdk.Sampler sampler,
       sdk.TimeProvider timeProvider,
@@ -36,7 +36,7 @@ class WebTracerProvider extends sdk.TracerProviderBase {
             spanLimits: spanLimits ?? sdk.SpanLimits());
 
   @override
-  api.Tracer getTracer(String name, {String version = ''}) {
+  Tracer getTracer(String name, {String version = ''}) {
     return tracers.putIfAbsent(
         '$name@$version',
         () => Tracer(processors, resource, sampler, _timeProvider, idGenerator,

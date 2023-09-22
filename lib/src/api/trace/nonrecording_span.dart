@@ -15,7 +15,7 @@ import '../../../api.dart' as api;
 @Deprecated(
     'This class will stop being exported in v0.17.0.  Please use [api.Span] instead.')
 class NonRecordingSpan implements api.Span {
-  final api.SpanStatus _status = api.SpanStatus()..code = api.StatusCode.ok;
+  final api.SpanId _parentSpanId = api.SpanId.invalid();
   final api.SpanContext _spanContext;
 
   NonRecordingSpan(this._spanContext);
@@ -30,19 +30,10 @@ class NonRecordingSpan implements api.Span {
   void end() {}
 
   @override
-  Int64 get endTime => null;
+  void setName(String _name) {}
 
   @override
-  String get name => 'NON_RECORDING';
-
-  @override
-  set name(String _name) {}
-
-  @override
-  bool get isRecording => false;
-
-  @override
-  api.SpanId get parentSpanId => api.SpanId.invalid();
+  api.SpanId get parentSpanId => _parentSpanId;
 
   @override
   @Deprecated(
@@ -53,21 +44,9 @@ class NonRecordingSpan implements api.Span {
   api.SpanContext get spanContext => _spanContext;
 
   @override
-  Int64 get startTime => null;
-
-  @override
-  api.SpanStatus get status => _status;
-
-  @override
-  api.InstrumentationLibrary get instrumentationLibrary => null;
-
-  @override
   void recordException(dynamic exception, {StackTrace stackTrace}) {}
 
   @override
   void addEvent(String name, Int64 timestamp,
       {List<api.Attribute> attributes}) {}
-
-  @override
-  api.SpanKind get kind => api.SpanKind.internal;
 }
