@@ -4,6 +4,7 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/api/trace/nonrecording_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
@@ -125,7 +126,7 @@ void main() {
         .span;
 
     // Use the transmitted Span as a receiver.
-    api.Span resultSpan;
+    Span resultSpan;
     api.Context.current.withSpan(parentSpan).execute(() {
       resultSpan = tracer.startSpan('doWork')..end();
     });

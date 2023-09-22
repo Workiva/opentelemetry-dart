@@ -12,7 +12,7 @@ import '../../proto/opentelemetry/proto/resource/v1/resource.pb.dart'
     as pb_resource;
 import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 
-class CollectorExporter implements api.SpanExporter {
+class CollectorExporter implements sdk.SpanExporter {
   Uri uri;
   http.Client client;
   Map<String, String> headers;
@@ -23,7 +23,7 @@ class CollectorExporter implements api.SpanExporter {
   }
 
   @override
-  void export(List<api.Span> spans) {
+  void export(List<sdk.ReadOnlySpan> spans) {
     if (_isShutdown) {
       return;
     }
@@ -47,17 +47,18 @@ class CollectorExporter implements api.SpanExporter {
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
   /// Spans are grouped by a trace provider's [sdk.Resource] and a tracer's
   /// [api.InstrumentationLibrary].
-  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
+  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(
+      List<sdk.ReadOnlySpan> spans) {
     // use a map of maps to group spans by resource and instrumentation library
     final rsm =
         <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
     for (final span in spans) {
-      final il = rsm[(span as sdk.Span).resource] ??
+      final il = rsm[span.resource] ??
           <api.InstrumentationLibrary, List<pb_trace.Span>>{};
       il[span.instrumentationLibrary] =
           il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
-            ..add(_spanToProtobuf(span as sdk.Span));
-      rsm[(span as sdk.Span).resource] = il;
+            ..add(_spanToProtobuf(span));
+      rsm[span.resource] = il;
     }
 
     final rss = <pb_trace.ResourceSpans>[];
@@ -101,7 +102,7 @@ class CollectorExporter implements api.SpanExporter {
     return pbLinks;
   }
 
-  pb_trace.Span _spanToProtobuf(sdk.Span span) {
+  pb_trace.Span _spanToProtobuf(sdk.ReadOnlySpan span) {
     pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
       case api.StatusCode.unset:
