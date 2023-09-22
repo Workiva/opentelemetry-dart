@@ -1,14 +1,13 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import '../../../api/trace/span.dart';
-
 import '../../../api/exporters/span_exporter.dart';
+import '../../../api/trace/readable_span.dart';
 
 class ConsoleExporter implements SpanExporter {
   var _isShutdown = false;
 
-  void _printSpans(List<Span> spans) {
+  void _printSpans(List<ReadableSpan> spans) {
     for (var i = 0; i < spans.length; i++) {
       final span = spans[i];
       print({
@@ -27,7 +26,7 @@ class ConsoleExporter implements SpanExporter {
   }
 
   @override
-  void export(List<Span> spans) {
+  void export(List<ReadableSpan> spans) {
     if (_isShutdown) {
       return;
     }

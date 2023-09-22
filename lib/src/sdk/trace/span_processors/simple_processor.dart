@@ -1,6 +1,8 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import '../../../api/trace/readable_span.dart';
+
 import '../../../../api.dart' as api;
 
 class SimpleSpanProcessor implements api.SpanProcessor {
@@ -15,7 +17,7 @@ class SimpleSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onEnd(api.Span span) {
+  void onEnd(ReadableSpan span) {
     if (_isShutdown) {
       return;
     }

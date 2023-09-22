@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
+import '../../../api/trace/readable_span.dart';
 import '../../proto/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
     as pb_trace_service;
 import '../../proto/opentelemetry/proto/common/v1/common.pb.dart' as pb_common;
@@ -23,7 +24,7 @@ class CollectorExporter implements api.SpanExporter {
   }
 
   @override
-  void export(List<api.Span> spans) {
+  void export(List<ReadableSpan> spans) {
     if (_isShutdown) {
       return;
     }
@@ -47,7 +48,7 @@ class CollectorExporter implements api.SpanExporter {
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
   /// Spans are grouped by a trace provider's [sdk.Resource] and a tracer's
   /// [api.InstrumentationLibrary].
-  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
+  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<ReadableSpan> spans) {
     // use a map of maps to group spans by resource and instrumentation library
     final rsm =
         <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};

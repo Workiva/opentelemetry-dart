@@ -4,6 +4,7 @@
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
+import 'readable_span.dart';
 
 enum SpanKind {
   /// Server-side handling of a synchronous RPC or other remote request.
@@ -30,32 +31,13 @@ enum SpanKind {
 /// children.
 ///
 /// Warning: methods may be added to this interface in minor releases.
-abstract class Span {
-  /// The context associated with this span.
-  ///
-  /// This context is an immutable, serializable identifier for this span that
-  /// can be used to create new child spans and remains usable even after this
-  /// span ends.
-  api.SpanContext get spanContext;
-
-  /// Get the time when the span was closed, or null if still open.
-  Int64 get endTime;
-
-  /// Get the time when the span was started.
-  Int64 get startTime;
-
-  /// The parent span id.
-  api.SpanId get parentSpanId;
-
-  /// The name of the span.
+abstract class Span extends ReadableSpan {
+  @override
   String name;
 
   /// Whether this Span is recording information like events with the
   /// addEvent operation, status with setStatus, etc.
   bool get isRecording;
-
-  /// The kind of the span.
-  SpanKind get kind;
 
   /// Sets the status to the [Span].
   ///
@@ -68,17 +50,11 @@ abstract class Span {
       'This method will be updated to use positional optional parameters in v0.17.0.')
   void setStatus(api.StatusCode status, {String description});
 
-  /// Retrieve the status of the [Span].
-  api.SpanStatus get status;
-
   /// set single attribute
   void setAttribute(api.Attribute attribute);
 
   /// set multiple attributes
   void setAttributes(List<api.Attribute> attributes);
-
-  /// Retrieve the instrumentation library on this span.
-  api.InstrumentationLibrary get instrumentationLibrary;
 
   /// Record metadata about an event occurring during this span.
   void addEvent(String name, Int64 timestamp, {List<api.Attribute> attributes});

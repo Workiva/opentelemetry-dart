@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:logging/logging.dart';
+import '../../../api/trace/readable_span.dart';
 
 import '../../../../api.dart' as api;
 
@@ -13,7 +14,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
 
   final api.SpanExporter _exporter;
   bool _isShutdown = false;
-  final List<api.Span> _spanBuffer = [];
+  final List<ReadableSpan> _spanBuffer = [];
   Timer _timer;
 
   int _maxExportBatchSize = 512;
@@ -42,7 +43,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onEnd(api.Span span) {
+  void onEnd(ReadableSpan span) {
     if (_isShutdown) {
       return;
     }
@@ -60,7 +61,7 @@ class BatchSpanProcessor implements api.SpanProcessor {
     _exporter.shutdown();
   }
 
-  void _addToBuffer(api.Span span) {
+  void _addToBuffer(ReadableSpan span) {
     if (_spanBuffer.length >= _maxQueueSize) {
       // Buffer is full, drop span.
       _log.warning(

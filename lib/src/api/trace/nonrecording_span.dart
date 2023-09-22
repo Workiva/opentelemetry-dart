@@ -15,6 +15,7 @@ import '../../../api.dart' as api;
 @Deprecated(
     'This class will stop being exported in v0.17.0.  Please use [api.Span] instead.')
 class NonRecordingSpan implements api.Span {
+  final api.SpanId _parentSpanId = api.SpanId.invalid();
   final api.SpanStatus _status = api.SpanStatus()..code = api.StatusCode.ok;
   final api.SpanContext _spanContext;
 
@@ -42,7 +43,7 @@ class NonRecordingSpan implements api.Span {
   bool get isRecording => false;
 
   @override
-  api.SpanId get parentSpanId => api.SpanId.invalid();
+  api.SpanId get parentSpanId => _parentSpanId;
 
   @override
   @Deprecated(
