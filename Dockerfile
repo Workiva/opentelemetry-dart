@@ -1,4 +1,4 @@
-FROM dart:2.13
+FROM dart:2.18
 WORKDIR /build
 
 RUN apt update && apt install -y make protobuf-compiler gnupg wget
