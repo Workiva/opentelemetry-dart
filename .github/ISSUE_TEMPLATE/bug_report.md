@@ -25,7 +25,7 @@ Version: (e.g., `v0.4.0`, `1eb551b`, etc)
 How did you reference these artifacts? (excerpt from your `pubspec.lock`, `pubspec.yaml`, etc)
 
 **Environment**
-Dart Version: (e.g., "2.13.0)
+Dart Version: (e.g., "2.18.0)
 OS: (e.g., "Ubuntu 20.04")
 
 
