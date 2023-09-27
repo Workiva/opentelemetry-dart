@@ -3,7 +3,7 @@
 
 @TestOn('vm')
 
-import 'package:opentelemetry/api.dart';
+import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:test/test.dart';
 
@@ -12,32 +12,33 @@ void main() {
   const maxAttributeLength = 5;
   const maxLinks = 3;
   const maxAttributesPerLink = 3;
-  final attrShort = Attribute.fromString('shortkey', '55555');
-  final dupShort = Attribute.fromString('shortkey', '66666');
-  final attrLong = Attribute.fromString('longkey', '5555555');
-  final dupLong = Attribute.fromString('longkey', '666666666');
-  final dupShort2 = Attribute.fromString('shortkey', '77777');
-  final dupLong2 = Attribute.fromString('longkey', '77777777');
-  final attrInt = Attribute.fromInt('intKey', 12);
-  final attrBool = Attribute.fromBoolean('boolKey', true);
-  final attrDoubleArray = Attribute.fromDoubleList('doubleList', [0.1, 0.2]);
+  final attrShort = api.Attribute.fromString('shortkey', '55555');
+  final dupShort = api.Attribute.fromString('shortkey', '66666');
+  final attrLong = api.Attribute.fromString('longkey', '5555555');
+  final dupLong = api.Attribute.fromString('longkey', '666666666');
+  final dupShort2 = api.Attribute.fromString('shortkey', '77777');
+  final dupLong2 = api.Attribute.fromString('longkey', '77777777');
+  final attrInt = api.Attribute.fromInt('intKey', 12);
+  final attrBool = api.Attribute.fromBoolean('boolKey', true);
+  final attrDoubleArray =
+      api.Attribute.fromDoubleList('doubleList', [0.1, 0.2]);
   final attrStringArray =
-      Attribute.fromStringList('stringList', ['1111', '1111111']);
+      api.Attribute.fromStringList('stringList', ['1111', '1111111']);
   final limits = sdk.SpanLimits(
       maxNumAttributes: maxAttributes,
       maxNumAttributeLength: maxAttributeLength,
       maxNumLink: maxLinks,
       maxNumAttributesPerLink: maxAttributesPerLink);
-  final context = sdk.SpanContext(TraceId([1, 2, 3]), SpanId([7, 8, 9]),
-      TraceFlags.none, sdk.TraceState.empty());
-  final spanLink1 = SpanLink(context, attributes: [attrShort]);
-  final spanLink2 = SpanLink(context, attributes: [attrShort, attrLong]);
-  final spanLink3 =
-      SpanLink(context, attributes: [attrShort, dupShort, attrInt, attrBool]);
-  final spanLink4 = SpanLink(context, attributes: []);
-  final spanLinkStrs = SpanLink(context,
+  final context = api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+      api.TraceFlags.none, api.TraceState.empty());
+  final spanLink1 = api.SpanLink(context, attributes: [attrShort]);
+  final spanLink2 = api.SpanLink(context, attributes: [attrShort, attrLong]);
+  final spanLink3 = api.SpanLink(context,
+      attributes: [attrShort, dupShort, attrInt, attrBool]);
+  final spanLink4 = api.SpanLink(context, attributes: []);
+  final spanLinkStrs = api.SpanLink(context,
       attributes: [attrShort, attrLong, attrStringArray, dupShort]);
-  final spanLinkDup = SpanLink(context, attributes: [
+  final spanLinkDup = api.SpanLink(context, attributes: [
     attrShort,
     dupShort,
     attrLong,
@@ -45,10 +46,10 @@ void main() {
     dupShort2,
     dupLong2
   ]);
-  final spanLinkNoAttr = SpanLink(context);
+  final spanLinkNoAttr = api.SpanLink(context);
 
   test('test default spanLimits', () {
-    final span = sdk.Span('limitTest', null, SpanId([4, 5, 6]), [],
+    final span = sdk.Span('limitTest', null, api.SpanId([4, 5, 6]), [],
         sdk.DateTimeTimeProvider(), null, null,
         attributes: [attrShort, attrDoubleArray, attrStringArray],
         limits: sdk.SpanLimits());
@@ -60,7 +61,7 @@ void main() {
   });
 
   test('test spanLimits maxNumAttributes', () {
-    final span = sdk.Span('foo', null, SpanId([4, 5, 6]), [],
+    final span = sdk.Span('foo', null, api.SpanId([4, 5, 6]), [],
         sdk.DateTimeTimeProvider(), null, null,
         attributes: [attrShort, attrLong, attrInt, attrBool], limits: limits);
     expect(span.attributes.length, equals(maxAttributes));
@@ -68,7 +69,7 @@ void main() {
   });
 
   test('test spanLimits maxNumAttributeLength', () {
-    final span = sdk.Span('foo', null, SpanId([4, 5, 6]), [],
+    final span = sdk.Span('foo', null, api.SpanId([4, 5, 6]), [],
         sdk.DateTimeTimeProvider(), null, null,
         attributes: [attrShort, attrLong], limits: limits);
     expect(span.attributes.get('shortkey'),

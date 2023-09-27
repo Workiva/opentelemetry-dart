@@ -17,8 +17,8 @@ void main() {
     final parentSpanId = api.SpanId([4, 5, 6]);
     final span = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         parentSpanId,
         [mockProcessor1, mockProcessor2],
         sdk.DateTimeTimeProvider(),
@@ -47,8 +47,8 @@ void main() {
   test('span status', () {
     final span = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -113,8 +113,8 @@ void main() {
     };
     final span = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -137,8 +137,8 @@ void main() {
   test('span record error', () {
     final span = Span(
         'foo',
-        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
-            api.TraceFlags.none, sdk.TraceState.empty()),
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),

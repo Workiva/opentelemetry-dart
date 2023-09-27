@@ -4,6 +4,8 @@
 import '../../../api.dart' as api;
 
 /// A registry for creating named [api.Tracer]s.
+///
+/// Warning: methods may be added to this interface in minor releases.
 abstract class TracerProvider {
   /// Returns a Tracer, creating one if one with the given [name] and [version]
   /// is not already created.

@@ -10,10 +10,10 @@ import 'package:test/test.dart';
 void main() {
   test('Context contains a Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = sdk.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=onetwo');
     final testSpan = Span(
         'foo',
-        sdk.SpanContext(
+        api.SpanContext(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
@@ -38,8 +38,8 @@ void main() {
     ];
     final testSpan = Span(
         'foo',
-        sdk.SpanContext(traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none,
-            sdk.TraceState.empty()),
+        api.SpanContext(traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none,
+            api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),

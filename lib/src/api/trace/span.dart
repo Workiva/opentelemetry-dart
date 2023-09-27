@@ -28,6 +28,8 @@ enum SpanKind {
 /// function calls to sub-components. A trace has a single, top-level "root"
 /// span that in turn may haze zero or more child Spans, which in turn may have
 /// children.
+///
+/// Warning: methods may be added to this interface in minor releases.
 abstract class Span {
   /// The context associated with this span.
   ///
@@ -62,6 +64,8 @@ abstract class Span {
   ///
   /// Only the value of the last call will be recorded, and implementations are
   /// free to ignore previous calls.
+  @Deprecated(
+      'This method will be updated to use positional optional parameters in v0.18.0.')
   void setStatus(api.StatusCode status, {String description});
 
   /// Retrieve the status of the [Span].

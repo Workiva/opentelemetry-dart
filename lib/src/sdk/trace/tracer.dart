@@ -17,6 +17,8 @@ class Tracer implements api.Tracer {
   final api.InstrumentationLibrary _instrumentationLibrary;
   final sdk.SpanLimits _spanLimits;
 
+  @Deprecated(
+      'This constructor will be marked protected in v0.18.0.  Consumers should use [api.Tracer] instead.')
   Tracer(this._processors, this._resource, this._sampler, this._timeProvider,
       this._idGenerator, this._instrumentationLibrary,
       {sdk.SpanLimits spanLimits})
@@ -48,7 +50,7 @@ class Tracer implements api.Tracer {
     } else {
       parentSpanId = api.SpanId.root();
       traceId = api.TraceId.fromIdGenerator(_idGenerator);
-      traceState = sdk.TraceState.empty();
+      traceState = api.TraceState.empty();
     }
 
     final samplerResult =
@@ -57,7 +59,7 @@ class Tracer implements api.Tracer {
         ? api.TraceFlags.sampled
         : api.TraceFlags.none;
     final spanContext =
-        sdk.SpanContext(traceId, spanId, traceFlags, traceState);
+        api.SpanContext(traceId, spanId, traceFlags, traceState);
 
     return Span(name, spanContext, parentSpanId, _processors, _timeProvider,
         _resource, _instrumentationLibrary,
