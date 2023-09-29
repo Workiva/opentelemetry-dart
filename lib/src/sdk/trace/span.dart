@@ -9,7 +9,7 @@ import '../common/attributes.dart';
 
 /// A representation of a single operation within a trace.
 @Deprecated(
-    'This class will stop being exported and be marked protected in v0.18.0.  Consumers should use [api.Span] instead.')
+    'This class will stop being exported and be marked protected in v0.17.0.  Consumers should use [api.Span] instead.')
 class Span implements api.Span {
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
@@ -34,7 +34,7 @@ class Span implements api.Span {
 
   /// Construct a [Span].
   @Deprecated(
-      'This constructor will be marked protected in v0.18.0.  Consumers should use [api.Span] instead.')
+      'This constructor will be marked protected in v0.17.0.  Consumers should use [api.Span] instead.')
   Span(this.name, this._spanContext, this._parentSpanId, this._processors,
       this._timeProvider, this._resource, this._instrumentationLibrary,
       {api.SpanKind kind,
@@ -79,7 +79,7 @@ class Span implements api.Span {
 
   @override
   @Deprecated(
-      'This method will be updated to use positional optional parameters in v0.18.0.')
+      'This method will be updated to use positional optional parameters in v0.17.0.')
   void setStatus(api.StatusCode status, {String description}) {
     // A status cannot be Unset after being set, and cannot be set to any other
     // status after being marked "Ok".
