@@ -1,0 +1,28 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  publish:
+    permissions:
+      id-token: write # Required for authentication using OIDC
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 2.18.7
+      - name: Install protobuf-compiler
+        run: sudo apt install -y protobuf-compiler
+      - name: Install Dart dependencies
+        run: dart pub get
+      - name: Initialize protobuf
+        run: make init
+      - name: Package Artifacts
+        run: ./package.sh
+      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
