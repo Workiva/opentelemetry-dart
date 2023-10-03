@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
+import 'package:fixnum/fixnum.dart';
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
@@ -38,6 +39,40 @@ void main() {
     span.end();
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNotNull);
+    expect(span.endTime, greaterThan(span.startTime));
+
+    verify(mockProcessor1.onEnd(span)).called(1);
+    verify(mockProcessor2.onEnd(span)).called(1);
+  });
+
+  test('start and end span with custom timestamps', () {
+    final mockProcessor1 = MockSpanProcessor();
+    final mockProcessor2 = MockSpanProcessor();
+    final parentSpanId = api.SpanId([4, 5, 6]);
+    final span = Span(
+        'foo',
+        sdk.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, sdk.TraceState.empty()),
+        parentSpanId,
+        [mockProcessor1, mockProcessor2],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource([]),
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        startTime: Int64(1000000000000));
+
+    expect(span.startTime, Int64(1000000000000));
+    expect(span.endTime, isNull);
+    expect(span.parentSpanId, same(parentSpanId));
+    expect(span.name, 'foo');
+
+    verify(mockProcessor1.onStart(span, null)).called(1);
+    verify(mockProcessor2.onStart(span, null)).called(1);
+    verifyNever(mockProcessor1.onEnd(span));
+    verifyNever(mockProcessor2.onEnd(span));
+
+    span.end(endTime: Int64(1000000020000));
+    expect(span.startTime, Int64(1000000000000));
+    expect(span.endTime, Int64(1000000020000));
     expect(span.endTime, greaterThan(span.startTime));
 
     verify(mockProcessor1.onEnd(span)).called(1);
