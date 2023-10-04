@@ -3,6 +3,7 @@
 
 import '../../../api.dart' as api;
 
+@Deprecated('This class will be moved to the SDK package in v0.17.0.')
 abstract class SpanExporter {
   void export(List<api.Span> spans);
 
