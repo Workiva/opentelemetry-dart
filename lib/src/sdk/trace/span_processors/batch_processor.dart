@@ -10,26 +10,27 @@ import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
 
 class BatchSpanProcessor implements sdk.SpanProcessor {
-  final _log = Logger('opentelemetry.BatchSpanProcessor');
+  static const int _DEFAULT_MAXIMUM_BATCH_SIZE = 512;
+  static const int _DEFAULT_MAXIMUM_QUEUE_SIZE = 2048;
+  static const int _DEFAULT_EXPORT_DELAY = 5000;
 
   final sdk.SpanExporter _exporter;
-  bool _isShutdown = false;
+  final Logger _log = Logger('opentelemetry.BatchSpanProcessor');
+  final int _maxExportBatchSize;
+  final int _maxQueueSize;
+  final int _scheduledDelayMillis;
   final List<sdk.ReadOnlySpan> _spanBuffer = [];
-  Timer _timer;
 
-  int _maxExportBatchSize = 512;
-  final int _maxQueueSize = 2048;
-  int _scheduledDelayMillis = 5000;
+  bool _isShutdown = false;
+
+  Timer? _timer;
 
   BatchSpanProcessor(this._exporter,
-      {int maxExportBatchSize, int scheduledDelayMillis}) {
-    if (maxExportBatchSize != null) {
-      _maxExportBatchSize = maxExportBatchSize;
-    }
-    if (scheduledDelayMillis != null) {
-      _scheduledDelayMillis = scheduledDelayMillis;
-    }
-  }
+      {int maxExportBatchSize = _DEFAULT_MAXIMUM_BATCH_SIZE,
+      int scheduledDelayMillis = _DEFAULT_EXPORT_DELAY})
+      : _maxExportBatchSize = maxExportBatchSize,
+        _maxQueueSize = _DEFAULT_MAXIMUM_QUEUE_SIZE,
+        _scheduledDelayMillis = scheduledDelayMillis;
 
   @override
   void forceFlush() {
@@ -89,13 +90,10 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
   }
 
   void _clearTimer() {
-    if (_timer == null) {
-      // _timer not set.
-      return;
+    if (_timer != null) {
+      _timer?.cancel();
+      _timer = null;
     }
-
-    _timer.cancel();
-    _timer = null;
   }
 
   void _flushBatch() {

@@ -23,8 +23,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
@@ -53,11 +51,10 @@ void main() {
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        attributesList,
         [],
-        api.Context.root,
         sdk.SpanLimits(),
-        sdk.DateTimeTimeProvider().now);
+        sdk.DateTimeTimeProvider().now)
+      ..setAttributes(attributesList);
 
     final result = sdk.AlwaysOffSampler().shouldSample(api.Context.root,
         traceId, testSpan.name, api.SpanKind.internal, attributesList, []);

@@ -51,10 +51,10 @@ void main() {
     final testTraceState = TraceState.fromString(
         'key_0-1=0,value2,key&0-2=value@1,key_@thisisalotlongerthan13characters=value@3');
 
-    expect(testTraceState.get('key_0-1'), isNull); // Invalid value, comma.
-    expect(testTraceState.get('key&0-2'), isNull); // Invalid key.
+    expect(testTraceState.get('key_0-1'), isEmpty); // Invalid value, comma.
+    expect(testTraceState.get('key&0-2'), isEmpty); // Invalid key.
     expect(testTraceState.get('key_@thisisalotlongerthan13characters'),
-        isNull); // Invalid vendor key.
+        isEmpty); // Invalid vendor key.
     expect(testTraceState.toString(), equals(''));
     expect(testTraceState.isEmpty, isTrue);
     expect(testTraceState.size, equals(0));
@@ -67,9 +67,10 @@ void main() {
       ..put('key_@thisisalotlongerthan13characters',
           'value@3'); // Invalid vendor key.
 
-    expect(testTraceState.get('key_0-1'), isNull);
-    expect(testTraceState.get('key_0-2'), isNull);
-    expect(testTraceState.get('key_@thisisalotlongerthan13characters'), isNull);
+    expect(testTraceState.get('key_0-1'), isEmpty);
+    expect(testTraceState.get('key_0-2'), isEmpty);
+    expect(
+        testTraceState.get('key_@thisisalotlongerthan13characters'), isEmpty);
     expect(testTraceState.toString(), equals(''));
     expect(testTraceState.isEmpty, isTrue);
     expect(testTraceState.size, equals(0));
@@ -84,7 +85,7 @@ void main() {
 
     expect(testTraceState.get('key_0-1'), equals('value@2'));
     expect(testTraceState.get('key_0-2'), equals('value@1'));
-    expect(testTraceState.get('key_@vendor'), isNull);
+    expect(testTraceState.get('key_@vendor'), isEmpty);
     expect(
         testTraceState.toString(), equals('key_0-1=value@2,key_0-2=value@1'));
     expect(testTraceState.isEmpty, isFalse);
@@ -95,21 +96,21 @@ void main() {
     final matchResult = TraceState.validKeyRegex.matchAsPrefix('key_0-1');
 
     expect(matchResult, isNotNull);
-    expect(matchResult.group(0), equals('key_0-1'));
+    expect(matchResult!.group(0), equals('key_0-1'));
   });
 
   test('key regex, valid vendor key', () {
     final matchResult = TraceState.validKeyRegex.matchAsPrefix('key_@vendor');
 
     expect(matchResult, isNotNull);
-    expect(matchResult.group(0), equals('key_@vendor'));
+    expect(matchResult!.group(0), equals('key_@vendor'));
   });
 
   test('value regex, valid value', () {
     final matchResult = TraceState.validValueRegex.matchAsPrefix('value@2');
 
     expect(matchResult, isNotNull);
-    expect(matchResult.group(0), equals('value@2'));
+    expect(matchResult!.group(0), equals('value@2'));
   });
 
   test('key regex, invalid key', () {

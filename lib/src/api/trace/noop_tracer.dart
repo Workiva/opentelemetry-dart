@@ -11,16 +11,11 @@ import 'nonrecording_span.dart';
 class NoopTracer implements api.Tracer {
   @override
   api.Span startSpan(String name,
-      {api.Context context,
-      api.SpanKind kind,
-      List<api.Attribute> attributes,
-      List<api.SpanLink> links,
-      Int64 startTime}) {
-    final parentContext =
-        (context.spanContext != null && context.spanContext.isValid)
-            ? context.spanContext
-            : api.SpanContext.invalid();
-
-    return NonRecordingSpan(parentContext);
+      {api.Context? context,
+      api.SpanKind? kind,
+      List<api.Attribute>? attributes,
+      List<api.SpanLink>? links,
+      Int64? startTime}) {
+    return NonRecordingSpan(context?.spanContext ?? api.SpanContext.invalid());
   }
 }

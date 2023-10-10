@@ -15,7 +15,6 @@ void main() {
     final mockProcessor1 = MockSpanProcessor();
     final mockProcessor2 = MockSpanProcessor();
     final parentSpanId = api.SpanId([4, 5, 6]);
-    final parentSpanContext = api.Context.root;
     final span = Span(
         'foo',
         api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
@@ -28,8 +27,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        parentSpanContext,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
@@ -38,8 +35,6 @@ void main() {
     expect(span.parentSpanId, same(parentSpanId));
     expect(span.name, 'foo');
 
-    verify(mockProcessor1.onStart(span, parentSpanContext)).called(1);
-    verify(mockProcessor2.onStart(span, parentSpanContext)).called(1);
     verifyNever(mockProcessor1.onEnd(span));
     verifyNever(mockProcessor2.onEnd(span));
 
@@ -65,14 +60,12 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
     // Verify span status' defaults.
     expect(span.status.code, equals(api.StatusCode.unset));
-    expect(span.status.description, equals(null));
+    expect(span.status.description, equals(''));
 
     // Verify that span status can be set to "Error".
     span.setStatus(api.StatusCode.error, 'Something s\'ploded.');
@@ -135,8 +128,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
@@ -166,8 +157,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 

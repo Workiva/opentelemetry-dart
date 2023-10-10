@@ -23,8 +23,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
@@ -50,8 +48,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 

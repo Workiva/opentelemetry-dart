@@ -5,7 +5,7 @@ class SpanLimits {
   static const _DEFAULT_MAXNUM_ATTRIBUTES = 128;
   static const _DEFAULT_MAXNUM_EVENTS = 128;
   static const _DEFAULT_MAXNUM_LINKS = 128;
-  static const _DEFAULT_MAXNUM_ATTRIBUTE_PER_EVENT = 128;
+  static const _DEFAULT_MAXNUM_ATTRIBUTES_PER_EVENT = 128;
   static const _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK = 128;
   static const _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH = -1;
 
@@ -86,23 +86,17 @@ class SpanLimits {
   ///default is unlimited.
   int get maxNumAttributeLength => _maxNumAttributeLength;
 
-  ///constructor
-  ///https://docs.newrelic.com/docs/data-apis/manage-data/view-system-limits/
-  ///https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk/trace/src/main/java/io/opentelemetry/sdk/trace/SpanLimitsBuilder.java
   const SpanLimits(
-      {int maxNumAttributes,
-      int maxNumEvents,
-      int maxNumLink,
-      int maxNumAttributesPerEvent,
-      int maxNumAttributesPerLink,
-      int maxNumAttributeLength})
-      : _maxNumAttributes = maxNumAttributes ?? _DEFAULT_MAXNUM_ATTRIBUTES,
-        _maxNumEvents = maxNumEvents ?? _DEFAULT_MAXNUM_EVENTS,
-        _maxNumLink = maxNumLink ?? _DEFAULT_MAXNUM_LINKS,
-        _maxNumAttributesPerEvent =
-            maxNumAttributesPerEvent ?? _DEFAULT_MAXNUM_ATTRIBUTE_PER_EVENT,
-        _maxNumAttributesPerLink =
-            maxNumAttributesPerLink ?? _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK,
-        _maxNumAttributeLength =
-            maxNumAttributeLength ?? _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH;
+      {int maxNumAttributes = _DEFAULT_MAXNUM_ATTRIBUTES,
+      int maxNumEvents = _DEFAULT_MAXNUM_EVENTS,
+      int maxNumLink = _DEFAULT_MAXNUM_LINKS,
+      int maxNumAttributesPerEvent = _DEFAULT_MAXNUM_ATTRIBUTES_PER_EVENT,
+      int maxNumAttributesPerLink = _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK,
+      int maxNumAttributeLength = _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH})
+      : _maxNumAttributes = maxNumAttributes,
+        _maxNumEvents = maxNumEvents,
+        _maxNumLink = maxNumLink,
+        _maxNumAttributesPerEvent = maxNumAttributesPerEvent,
+        _maxNumAttributesPerLink = maxNumAttributesPerLink,
+        _maxNumAttributeLength = maxNumAttributeLength;
 }

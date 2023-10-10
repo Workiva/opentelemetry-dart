@@ -59,11 +59,12 @@ void main() {
 
   test('browserTracerProvider creates a tracer which can create valid spans',
       () async {
-    final Span span = WebTracerProvider(processors: [MockSpanProcessor()])
+    final span = WebTracerProvider(processors: [MockSpanProcessor()])
         .getTracer('testTracer')
-        .startSpan('testSpan', context: Context.root)
+        .startSpan('testSpan', context: Context.root) as Span
       ..end();
 
-    expect(span.startTime, lessThanOrEqualTo(span.endTime));
+    expect(span.endTime, isNotNull);
+    expect(span.startTime, lessThanOrEqualTo(span.endTime!));
   });
 }

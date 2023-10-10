@@ -19,12 +19,13 @@ void main() {
         sdk.IdGenerator(),
         sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
-    Span span;
+    late Span span;
 
     api.traceSync('syncTrace', () {
-      span = api.Context.current.span;
+      span = api.Context.current.span as Span;
     }, tracer: tracer);
 
+    expect(span, isNotNull);
     expect(
         span.endTime,
         lessThan(DateTime.now().microsecondsSinceEpoch *
@@ -43,13 +44,14 @@ void main() {
 
     for (var i = 0; i < 5; i++) {
       api.traceSync('syncTrace', () {
-        spans.add(api.Context.current.span);
+        spans.add(api.Context.current.span as Span);
       }, tracer: tracer);
     }
 
     for (var i = 1; i < spans.length; i++) {
+      expect(spans[i].endTime, isNotNull);
       expect(spans[i].startTime, greaterThan(spans[i - 1].startTime));
-      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime));
+      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime!));
     }
   });
 
@@ -61,11 +63,11 @@ void main() {
         sdk.IdGenerator(),
         sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
-    Span span;
+    late Span span;
 
     expect(
         () => api.traceSync('syncTrace', () {
-              span = api.Context.current.span;
+              span = api.Context.current.span as Span;
               throw Exception('Oh noes!');
             }, tracer: tracer),
         throwsException);
@@ -86,10 +88,10 @@ void main() {
         sdk.IdGenerator(),
         sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
-    Span span;
+    late Span span;
 
     await api.trace('asyncTrace', () async {
-      span = api.Context.current.span;
+      span = api.Context.current.span as Span;
     }, tracer: tracer);
 
     expect(
@@ -110,13 +112,14 @@ void main() {
 
     for (var i = 0; i < 5; i++) {
       await api.trace('asyncTrace', () async {
-        spans.add(api.Context.current.span);
+        spans.add(api.Context.current.span as Span);
       }, tracer: tracer);
     }
 
     for (var i = 1; i < spans.length; i++) {
+      expect(spans[1].endTime, isNotNull);
       expect(spans[i].startTime, greaterThan(spans[i - 1].startTime));
-      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime));
+      expect(spans[i].endTime, greaterThan(spans[i - 1].endTime!));
     }
   });
 
@@ -128,16 +131,17 @@ void main() {
         sdk.IdGenerator(),
         sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
-    Span span;
+    late Span span;
 
     try {
       await api.trace('asyncTrace', () async {
-        span = api.Context.current.span;
+        span = api.Context.current.span as Span;
         throw Exception('Oh noes!');
       }, tracer: tracer);
     } catch (e) {
       expect(e.toString(), equals('Exception: Oh noes!'));
     }
+    expect(span, isNotNull);
     expect(span.endTime, isNotNull);
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Exception: Oh noes!'));
@@ -155,17 +159,17 @@ void main() {
         sdk.IdGenerator(),
         sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
-    Span span;
+    late Span span;
 
     try {
       await api.trace('asyncTrace', () async {
-        span = api.Context.current.span;
+        span = api.Context.current.span as Span;
         return Future.error(Exception('Oh noes!'));
       }, tracer: tracer);
     } catch (e) {
       expect(e.toString(), equals('Exception: Oh noes!'));
     }
-
+    expect(span, isNotNull);
     expect(span.endTime, isNotNull);
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Exception: Oh noes!'));

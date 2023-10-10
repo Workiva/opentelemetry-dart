@@ -11,17 +11,15 @@ class ParentBasedSampler implements sdk.Sampler {
   final sdk.Sampler _localParentSampled;
   final sdk.Sampler _localParentNotSampled;
 
-  ParentBasedSampler(this._root,
-      {remoteParentSampled,
-      remoteParentNotSampled,
-      localParentSampled,
-      localParentNotSampled})
-      : _remoteParentSampled = remoteParentSampled ?? sdk.AlwaysOnSampler(),
-        _remoteParentNotSampled =
-            remoteParentNotSampled ?? sdk.AlwaysOffSampler(),
-        _localParentSampled = localParentSampled ?? sdk.AlwaysOnSampler(),
-        _localParentNotSampled =
-            localParentNotSampled ?? sdk.AlwaysOffSampler();
+  const ParentBasedSampler(this._root,
+      {sdk.Sampler remoteParentSampled = const sdk.AlwaysOnSampler(),
+      sdk.Sampler remoteParentNotSampled = const sdk.AlwaysOffSampler(),
+      sdk.Sampler localParentSampled = const sdk.AlwaysOnSampler(),
+      sdk.Sampler localParentNotSampled = const sdk.AlwaysOffSampler()})
+      : _remoteParentSampled = remoteParentSampled,
+        _remoteParentNotSampled = remoteParentNotSampled,
+        _localParentSampled = localParentSampled,
+        _localParentNotSampled = localParentNotSampled;
 
   @override
   String get description => 'ParentBasedSampler{root=${_root.description}}';
@@ -36,7 +34,7 @@ class ParentBasedSampler implements sdk.Sampler {
       List<api.SpanLink> spanLinks) {
     final parentSpanContext = context.spanContext;
 
-    if (parentSpanContext == null || !parentSpanContext.isValid) {
+    if (!parentSpanContext.isValid) {
       return _root.shouldSample(
           context, traceId, spanName, spanKind, spanAttributes, spanLinks);
     }

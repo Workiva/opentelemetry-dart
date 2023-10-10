@@ -5,6 +5,7 @@
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/common/limits.dart';
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
     as pb_trace_service;
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/common/v1/common.pb.dart'
@@ -19,12 +20,12 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  MockHTTPClient mockClient;
+  late MockHttpClient mockClient;
   final uri =
       Uri.parse('https://h.wdesk.org/s/opentelemetry-collector/v1/traces');
 
   setUp(() {
-    mockClient = MockHTTPClient();
+    mockClient = MockHttpClient();
   });
 
   tearDown(() {
@@ -47,11 +48,10 @@ void main() {
         resource,
         instrumentationLibrary,
         api.SpanKind.client,
-        [api.Attribute.fromString('foo', 'bar')],
         [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now)
+      ..setAttributes([api.Attribute.fromString('foo', 'bar')])
       ..end();
     final span2 = Span(
         'baz',
@@ -63,16 +63,15 @@ void main() {
         resource,
         instrumentationLibrary,
         api.SpanKind.internal,
-        [api.Attribute.fromBoolean('bool', true)],
-        [
+        applyLinkLimits([
           api.SpanLink(span1.spanContext, attributes: [
             api.Attribute.fromString('longKey',
                 'I am very long with maxNumAttributeLength: 5 limitation!')
           ]),
-        ],
-        api.Context.root,
+        ], limits),
         limits,
         sdk.DateTimeTimeProvider().now)
+      ..setAttributes([api.Attribute.fromBoolean('bool', true)])
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -102,7 +101,7 @@ void main() {
                       ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
-                          message: null),
+                          message: ''),
                       kind: pb.Span_SpanKind.SPAN_KIND_CLIENT),
                   pb.Span(
                       traceId: [1, 2, 3],
@@ -118,7 +117,7 @@ void main() {
                       ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
-                          message: null),
+                          message: ''),
                       kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL,
                       links: [
                         pb.Span_Link(
@@ -156,8 +155,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now)
       ..end();
@@ -184,8 +181,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now)
       ..end();
@@ -219,8 +214,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now)
       ..end();

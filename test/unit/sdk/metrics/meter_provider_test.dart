@@ -6,7 +6,6 @@
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
-import 'package:opentelemetry/src/sdk/metrics/meter_provider.dart';
 
 //The following requirements were used to determine what should be tested.
 //[https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#meterprovider]
@@ -23,30 +22,9 @@ void main() {
       });
     });
 
-    test(
-        'failing to provide a name when getting a meter results in a functional'
-        'meter and logs a message', () {
-      expect(
-          Logger.root.onRecord,
-          emits(isA<LogRecord>()
-              .having(
-                (r) => r.message,
-                'message',
-                equals(invalidMeterNameMessage),
-              )
-              .having(
-                (r) => r.level,
-                'level',
-                equals(Level.WARNING),
-              )));
-
-      final meter = sdk.MeterProvider().get(null)..createCounter('test');
-      expect(meter, isNotNull);
-    });
-
     test('getting a meter by same name will return the same instance', () {
       const meterName = 'meterA';
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA = meterProvider.get(meterName);
       final meterB = meterProvider.get(meterName);
 
@@ -57,7 +35,7 @@ void main() {
         () {
       const meterNameA = 'meterA';
       const meterNameB = 'meterB';
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA = meterProvider.get(meterNameA);
       final meterB = meterProvider.get(meterNameB);
 
@@ -67,7 +45,7 @@ void main() {
     test('getting by name and version will return the same meter', () {
       const meterName = 'meterA';
       const version = 'v2';
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA = meterProvider.get(meterName, version: version);
       final meterB = meterProvider.get(meterName, version: version);
 
@@ -80,7 +58,7 @@ void main() {
       const meterName = 'meterA';
       const versionA = 'v1';
       const versionB = 'v2';
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA = meterProvider.get(meterName, version: versionA);
       final meterB = meterProvider.get(meterName, version: versionB);
 
@@ -93,7 +71,7 @@ void main() {
       const meterName = 'meterA';
       const version = 'v2';
       const url = 'http:schemas.com';
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA =
           meterProvider.get(meterName, version: version, schemaUrl: url);
       final meterB =
@@ -109,7 +87,7 @@ void main() {
       const version = 'v2';
       const urlA = 'http:schemas.com';
       const urlB = 'https:schemas.com';
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA =
           meterProvider.get(meterName, version: version, schemaUrl: urlA);
       final meterB =
@@ -128,7 +106,7 @@ void main() {
         api.Attribute.fromString('keyA', 'valueA'),
         api.Attribute.fromString('KeyB', 'valueBBB')
       ];
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA = meterProvider.get(meterName,
           version: version, schemaUrl: url, attributes: attributes);
       final meterB = meterProvider.get(meterName,
@@ -151,7 +129,7 @@ void main() {
         api.Attribute.fromString('keyA', 'valueA'),
         api.Attribute.fromString('KeyB', 'valueB')
       ];
-      final meterProvider = sdk.MeterProvider();
+      final meterProvider = sdk.MeterProvider(sdk.Resource([]));
       final meterA = meterProvider.get(meterName,
           version: version, schemaUrl: url, attributes: attributesA);
       final meterB = meterProvider.get(meterName,
@@ -162,7 +140,7 @@ void main() {
 
     test('resource can be set', () {
       final resource = sdk.Resource([api.Attribute.fromString('foo', 'bar')]);
-      final provider = sdk.MeterProvider(resource: resource);
+      final provider = sdk.MeterProvider(resource);
       expect(identical(resource, provider.resource), true);
     });
 

@@ -34,15 +34,15 @@ class NonRecordingSpan implements api.Span {
   api.SpanId get parentSpanId => _parentSpanId;
 
   @override
-  void setStatus(api.StatusCode status, [String description]) {}
+  void setStatus(api.StatusCode status, [String? description]) {}
 
   @override
   api.SpanContext get spanContext => _spanContext;
 
   @override
-  void recordException(dynamic exception, {StackTrace stackTrace}) {}
+  void recordException(dynamic exception, {StackTrace? stackTrace}) {}
 
   @override
   void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute> attributes}) {}
+      {List<api.Attribute>? attributes}) {}
 }

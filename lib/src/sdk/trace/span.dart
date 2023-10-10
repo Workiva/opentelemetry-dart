@@ -7,8 +7,10 @@ import 'package:meta/meta.dart';
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 import '../common/attributes.dart';
+import '../common/limits.dart' show applyAttributeLimits;
 
 /// A representation of a single operation within a trace.
+@protected
 class Span implements sdk.ReadWriteSpan {
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
@@ -22,9 +24,11 @@ class Span implements sdk.ReadWriteSpan {
   final sdk.InstrumentationScope _instrumentationScope;
   final Int64 _startTime;
   final Attributes _attributes = Attributes.empty();
+
   String _name;
-  Int64 _endTime;
   int _droppedSpanAttributes = 0;
+
+  Int64? _endTime;
 
   @override
   void setName(String name) {
@@ -46,30 +50,16 @@ class Span implements sdk.ReadWriteSpan {
       this._timeProvider,
       this._resource,
       this._instrumentationScope,
-      api.SpanKind kind,
-      List<api.Attribute> attributes,
-      List<api.SpanLink> links,
-      api.Context parentContext,
-      sdk.SpanLimits limits,
-      Int64 startTime)
-      : _links = _applyLinkLimits(links, limits ?? sdk.SpanLimits()),
-        _kind = kind ?? api.SpanKind.internal,
-        _startTime = startTime ?? _timeProvider.now,
-        _limits = limits ?? sdk.SpanLimits() {
-    if (attributes != null) {
-      setAttributes(attributes);
-    }
-
-    for (var i = 0; i < _processors.length; i++) {
-      _processors[i].onStart(this, parentContext);
-    }
-  }
+      this._kind,
+      this._links,
+      this._limits,
+      this._startTime);
 
   @override
   api.SpanContext get spanContext => _spanContext;
 
   @override
-  Int64 get endTime => _endTime;
+  Int64? get endTime => _endTime;
 
   @override
   Int64 get startTime => _startTime;
@@ -79,7 +69,11 @@ class Span implements sdk.ReadWriteSpan {
 
   @override
   void end() {
-    _endTime ??= _timeProvider.now;
+    if (!isRecording) {
+      return;
+    }
+
+    _endTime = _timeProvider.now;
 
     for (var i = 0; i < _processors.length; i++) {
       _processors[i].onEnd(this);
@@ -87,7 +81,7 @@ class Span implements sdk.ReadWriteSpan {
   }
 
   @override
-  void setStatus(api.StatusCode status, [String description]) {
+  void setStatus(api.StatusCode status, [String? description]) {
     // A status cannot be Unset after being set, and cannot be set to any other
     // status after being marked "Ok".
     if (status == api.StatusCode.unset || _status.code == api.StatusCode.ok) {
@@ -137,29 +131,12 @@ class Span implements sdk.ReadWriteSpan {
       _droppedSpanAttributes++;
       return;
     }
-    _attributes
-        .add(_rebuildAttribute(attribute, _limits.maxNumAttributeLength));
-  }
-
-  static api.Attribute _rebuildAttribute(api.Attribute attr, int maxLength) {
-    // if maxNumAttributeLength is less than zero, then it has unlimited length.
-    if (maxLength < 0) return attr;
-
-    if (attr.value is String) {
-      attr = api.Attribute.fromString(
-          attr.key, _applyAttributeLengthLimit(attr.value, maxLength));
-    } else if (attr.value is List<String>) {
-      final listString = attr.value as List<String>;
-      for (var j = 0; j < listString.length; j++) {
-        listString[j] = _applyAttributeLengthLimit(listString[j], maxLength);
-      }
-      attr = api.Attribute.fromStringList(attr.key, listString);
-    }
-    return attr;
+    _attributes.add(applyAttributeLimits(attribute, _limits));
   }
 
   @override
-  void recordException(dynamic exception, {StackTrace stackTrace}) {
+  void recordException(dynamic exception,
+      {StackTrace stackTrace = StackTrace.empty}) {
     // ignore: todo
     // TODO: O11Y-1531: Consider integration of Events here.
     setAttributes([
@@ -177,57 +154,9 @@ class Span implements sdk.ReadWriteSpan {
 
   @override
   void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute> attributes}) {
+      {List<api.Attribute> attributes = const []}) {
     // TODO: O11Y-1531
     throw UnimplementedError();
-  }
-
-  // This method just can be called once during construction.
-  static List<api.SpanLink> _applyLinkLimits(
-      List<api.SpanLink> links, sdk.SpanLimits limits) {
-    if (links == null) return [];
-    final spanLink = <api.SpanLink>[];
-
-    for (final link in links) {
-      if (spanLink.length >= limits.maxNumLink) {
-        break;
-      }
-
-      if (!link.context.isValid) continue;
-
-      final linkAttributes = <api.Attribute>[];
-
-      // make sure override duplicated attributes in the list
-      final attributeMap = <String, int>{};
-
-      for (final attr in link.attributes) {
-        // if attributes num is already greater than maxNumAttributesPerLink
-        // and this key doesn't exist in the list, drop it.
-        if (attributeMap.length >= limits.maxNumAttributesPerLink &&
-            !attributeMap.containsKey(attr.key)) {
-          continue;
-        }
-
-        // apply maxNumAttributeLength limit.
-        final trimedAttr =
-            _rebuildAttribute(attr, limits.maxNumAttributeLength);
-
-        // if this key has been added before, found its index,
-        // and replace it with new value.
-        if (attributeMap.containsKey(attr.key)) {
-          final idx = attributeMap[attr.key];
-          linkAttributes[idx] = trimedAttr;
-        } else {
-          // record this new key's index with linkAttributes length,
-          // and add this new attr in linkAttributes.
-          attributeMap[attr.key] = linkAttributes.length;
-          linkAttributes.add(trimedAttr);
-        }
-      }
-
-      spanLink.add(api.SpanLink(link.context, attributes: linkAttributes));
-    }
-    return spanLink;
   }
 
   @override
@@ -235,12 +164,6 @@ class Span implements sdk.ReadWriteSpan {
 
   @override
   Attributes get attributes => _attributes;
-
-  //Truncate just strings which length is longer than configuration.
-  //Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
-  static String _applyAttributeLengthLimit(String value, int lengthLimit) {
-    return value.length > lengthLimit ? value.substring(0, lengthLimit) : value;
-  }
 
   int get droppedAttributes => _droppedSpanAttributes;
 }

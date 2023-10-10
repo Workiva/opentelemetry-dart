@@ -12,11 +12,9 @@ class SpanId {
   List<int> _id;
 
   SpanId(this._id);
-  SpanId.fromIdGenerator(api.IdGenerator generator) {
-    _id = generator.generateSpanId();
-  }
-  SpanId.fromString(String id) {
-    _id = [];
+  SpanId.fromIdGenerator(api.IdGenerator generator)
+      : _id = generator.generateSpanId();
+  SpanId.fromString(String id) : _id = [] {
     id = id.padLeft(api.SpanId.sizeBits, '0');
 
     for (var i = 0; i < id.length; i += 2) {

@@ -32,7 +32,7 @@ abstract class ReadOnlySpan {
   Int64 get startTime;
 
   /// The time when the span was closed, or null if still open.
-  Int64 get endTime;
+  Int64? get endTime;
 
   /// The status of the span.
   api.SpanStatus get status;
