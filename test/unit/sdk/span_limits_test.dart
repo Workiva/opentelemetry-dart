@@ -5,6 +5,7 @@
 
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/common/limits.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
@@ -52,7 +53,7 @@ void main() {
   test('test default spanLimits', () {
     final span = Span(
         'limitTest',
-        null,
+        api.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -60,11 +61,10 @@ void main() {
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [attrShort, attrDoubleArray, attrStringArray],
         [],
-        api.Context.root,
         sdk.SpanLimits(),
-        sdk.DateTimeTimeProvider().now);
+        sdk.DateTimeTimeProvider().now)
+      ..setAttributes([attrShort, attrDoubleArray, attrStringArray]);
     expect(span.attributes.length, equals(3));
     expect(span.attributes.get('shortkey'),
         equals((attrShort.value as String).substring(0, maxAttributeLength)));
@@ -75,7 +75,7 @@ void main() {
   test('test spanLimits maxNumAttributes', () {
     final span = Span(
         'foo',
-        null,
+        api.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -83,11 +83,10 @@ void main() {
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [attrShort, attrLong, attrInt, attrBool],
         [],
-        api.Context.root,
         limits,
-        sdk.DateTimeTimeProvider().now);
+        sdk.DateTimeTimeProvider().now)
+      ..setAttributes([attrShort, attrLong, attrInt, attrBool]);
     expect(span.attributes.length, equals(maxAttributes));
     expect(span.attributes.get('boolean'), equals(null));
   });
@@ -95,7 +94,7 @@ void main() {
   test('test spanLimits maxNumAttributeLength', () {
     final span = Span(
         'foo',
-        null,
+        api.SpanContext.invalid(),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
@@ -103,11 +102,10 @@ void main() {
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [attrShort, attrLong],
         [],
-        api.Context.root,
         limits,
-        sdk.DateTimeTimeProvider().now);
+        sdk.DateTimeTimeProvider().now)
+      ..setAttributes([attrShort, attrLong]);
     expect(span.attributes.get('shortkey'),
         equals((attrShort.value as String).substring(0, maxAttributeLength)));
     expect(span.attributes.get('longkey'),
@@ -117,8 +115,8 @@ void main() {
   test('test spanLimits from span constructor', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
@@ -126,8 +124,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttributes([attrShort, attrInt, attrDoubleArray]);
@@ -141,8 +137,8 @@ void main() {
   test('test spanLimits maxNumAttributes from span constructor', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
@@ -150,8 +146,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttributes(
@@ -164,8 +158,8 @@ void main() {
   test('test spanLimits maxNumAttributeLength with setAttributes', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
@@ -173,8 +167,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttributes([attrShort, attrLong]);
@@ -187,8 +179,8 @@ void main() {
   test('test spanLimits from span, then add more', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
@@ -196,8 +188,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttribute(attrShort);
@@ -219,8 +209,8 @@ void main() {
   test('test add same key twice', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
@@ -228,8 +218,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttributes([attrShort, dupShort]);
@@ -246,8 +234,8 @@ void main() {
   test('test add same key multitimes from constructor', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
@@ -255,8 +243,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttributes(
@@ -271,8 +257,8 @@ void main() {
   test('test add oversized string list', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
@@ -280,8 +266,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttributes([attrShort, dupShort, attrLong, dupLong]);
@@ -296,17 +280,15 @@ void main() {
   test('test spanlink unlimited', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [],
         [spanLink1, spanLink2],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
@@ -320,17 +302,15 @@ void main() {
   test('test add spanlinks greater than maxLinks', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [],
-        [spanLink1, spanLink2, spanLink3, spanLink4],
-        api.Context.root,
+        applyLinkLimits([spanLink1, spanLink2, spanLink3, spanLink4], limits),
         limits,
         sdk.DateTimeTimeProvider().now);
     assert(span.links.length <= maxLinks);
@@ -340,17 +320,15 @@ void main() {
       () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [],
-        [spanLink3],
-        api.Context.root,
+        applyLinkLimits([spanLink3], limits),
         limits,
         sdk.DateTimeTimeProvider().now);
     for (var i = 0; i < span.links.length; i++) {
@@ -363,17 +341,15 @@ void main() {
   test('test spanlinks with string and string list attributes', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [],
-        [spanLinkStrs],
-        api.Context.root,
+        applyLinkLimits([spanLinkStrs], limits),
         limits,
         sdk.DateTimeTimeProvider().now);
     for (var i = 0; i < span.links.length; i++) {
@@ -384,7 +360,7 @@ void main() {
         if (attribute.value is String) {
           assert((attribute.value as String).length <= maxAttributeLength);
         } else if (attribute.value is List<String>) {
-          for (final value in attribute.value) {
+          for (final value in attribute.value as List<String>) {
             assert(value.length <= maxAttributeLength);
           }
         }
@@ -395,17 +371,15 @@ void main() {
   test('test spanlink has duplicated attributes', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [],
-        [spanLinkDup],
-        api.Context.root,
+        applyLinkLimits([spanLinkDup], limits),
         limits,
         sdk.DateTimeTimeProvider().now);
 
@@ -424,17 +398,15 @@ void main() {
   test('test spanlink has no attributes', () {
     final span = Span(
         'test',
-        null,
-        null,
+        api.SpanContext.invalid(),
+        api.SpanId.root(),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
         sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
-        [],
         [spanLinkNoAttr],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 

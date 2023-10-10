@@ -27,6 +27,7 @@
 import 'dart:async';
 
 import '../../../api.dart' as api;
+import '../trace/nonrecording_span.dart';
 
 /// [ContextKey] used to store spans in a [Context].
 final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
@@ -57,7 +58,7 @@ class Context {
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
-  T getValue<T>(ContextKey key) => _zone[key];
+  T? getValue<T>(ContextKey key) => _zone[key];
 
   /// Returns a new context created from this one with the given key/value pair
   /// set.
@@ -74,13 +75,16 @@ class Context {
   /// Execute a function [fn] within this [Context] and return its result.
   R execute<R>(R Function() fn) => _zone.run(fn);
 
-  /// Get the [api.Span] attached to this [Context], or null if no such
+  /// Get the [api.Span] attached to this [Context], or an invalid, [api.Span] if no such
   /// [api.Span] exists.
-  api.Span get span => getValue(spanKey);
+  api.Span get span =>
+      getValue(spanKey) ?? NonRecordingSpan(api.SpanContext.invalid());
 
-  /// Get the [api.SpanContext] from this [Context], or null if no such
+  /// Get the [api.SpanContext] from this [Context], or an invalid [api.SpanContext] if no such
   /// [api.SpanContext] exists.
-  api.SpanContext get spanContext => getValue(spanKey)?.spanContext;
+  api.SpanContext get spanContext =>
+      (getValue(spanKey) ?? NonRecordingSpan(api.SpanContext.invalid()))
+          .spanContext;
 }
 
 class ContextKey {

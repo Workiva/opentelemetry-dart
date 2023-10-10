@@ -17,5 +17,5 @@ enum StatusCode {
 /// A representation of the status of a Span.
 class SpanStatus {
   StatusCode code = StatusCode.unset;
-  String description;
+  String description = '';
 }

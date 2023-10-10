@@ -5,15 +5,13 @@ import '../../../api.dart';
 
 /// A representation of a collection of metadata attached to a trace span.
 class Attributes {
-  Map<String, Object> _attributes = {};
+  final Map<String, Object> _attributes = {};
 
   /// Instantiate an empty Attributes.
-  Attributes.empty() {
-    _attributes = {};
-  }
+  Attributes.empty();
 
   /// Retrieve the value associated with the Attribute with key [key].
-  Object get(String key) => _attributes[key];
+  Object? get(String key) => _attributes[key];
 
   ///
   int get length => _attributes.length;

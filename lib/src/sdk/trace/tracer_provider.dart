@@ -28,16 +28,13 @@ class TracerProviderBase implements api.TracerProvider {
   final sdk.SpanLimits spanLimits;
 
   TracerProviderBase(
-      {List<sdk.SpanProcessor> processors,
-      sdk.Resource resource,
-      sdk.Sampler sampler,
-      api.IdGenerator idGenerator,
-      sdk.SpanLimits spanLimits})
-      : processors = processors ?? [], // Default to a no-op TracerProvider.
-        resource = resource ?? sdk.Resource([]),
-        sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
-        idGenerator = idGenerator ?? sdk.IdGenerator(),
-        spanLimits = spanLimits ?? sdk.SpanLimits();
+      {this.processors =
+          const [], // Default to a TracerProvider which does not emit traces.
+      resource,
+      this.sampler = const sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
+      this.idGenerator = const sdk.IdGenerator(),
+      this.spanLimits = const sdk.SpanLimits()})
+      : resource = resource ?? sdk.Resource([]);
 
   List<sdk.SpanProcessor> get spanProcessors => processors;
 

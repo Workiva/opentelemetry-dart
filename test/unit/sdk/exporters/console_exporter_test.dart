@@ -37,8 +37,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now)
       ..end();
@@ -64,8 +62,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
