@@ -5,6 +5,7 @@ init:
 	# and commit the result.
 	git submodule update
 	dart pub get
+	dart run build_runner build  # Generate mocks for unit tests.  For config, see build.yaml.
 	dart pub global activate protoc_plugin 21.1.2
 	cd lib/src/sdk/proto && \
 		protoc --proto_path opentelemetry-proto --dart_out . \

@@ -7,23 +7,21 @@ import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
-class TestingInjector implements api.TextMapSetter<Map> {
+class TestingInjector implements api.TextMapSetter<Map<String, String>> {
   @override
-  void set(Map carrier, String key, String value) {
-    if (carrier != null) {
-      carrier[key] = value;
-    }
+  void set(Map<String, String> carrier, String key, String value) {
+    carrier[key] = value;
   }
 }
 
-class TestingExtractor implements api.TextMapGetter<Map> {
+class TestingExtractor implements api.TextMapGetter<Map<String, String>> {
   @override
-  String get(Map carrier, String key) {
-    return (carrier == null) ? null : carrier[key];
+  String? get(Map<String, String> carrier, String key) {
+    return carrier[key];
   }
 
   @override
-  Iterable<String> keys(Map carrier) {
+  Iterable<String> keys(Map<String, String> carrier) {
     return carrier.keys;
   }
 }
@@ -46,12 +44,10 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
     final testContext = api.Context.current.withSpan(testSpan);
 
     testPropagator.inject(testContext, testCarrier, TestingInjector());
@@ -59,7 +55,8 @@ void main() {
         .extract(testContext, testCarrier, TestingExtractor())
         .span;
 
-    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
+    expect(resultSpan, isNotNull);
+    expect(resultSpan!.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
@@ -87,12 +84,10 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
     final testContext = api.Context.current.withSpan(testSpan);
 
     testPropagator.inject(testContext, testCarrier, TestingInjector());
@@ -100,7 +95,8 @@ void main() {
         .extract(testContext, testCarrier, TestingExtractor())
         .span;
 
-    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
+    expect(resultSpan, isNotNull);
+    expect(resultSpan!.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isFalse);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('0000000000c0ffee'));
@@ -128,14 +124,12 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final tracer = sdk.TracerProviderBase(processors: [])
         .getTracer('appName', version: '1.0.0');
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
 
     // Inject and extract a test Span from a Context, as when an outbound
     // call is made and received by another service.
@@ -145,20 +139,22 @@ void main() {
         .extract(testContext, testCarrier, TestingExtractor())
         .span;
 
-    // Use the transmitted Span as a receiver.
-    Span resultSpan;
-    api.Context.current.withSpan(parentSpan).execute(() {
-      resultSpan = tracer.startSpan('doWork')..end();
-    });
+    expect(parentSpan, isNotNull);
 
-    // Verify that data from the original Span propagates to the child.
-    expect(resultSpan.parentSpanId.toString(),
-        testSpan.spanContext.spanId.toString());
-    expect(resultSpan.spanContext.traceId.toString(),
-        equals(testSpan.spanContext.traceId.toString()));
-    expect(resultSpan.spanContext.traceState.toString(),
-        equals(testSpan.spanContext.traceState.toString()));
-    expect(resultSpan.spanContext.traceFlags.toString(),
-        equals(testSpan.spanContext.traceFlags.toString()));
+    // Use the transmitted Span as a receiver.
+    api.Context.current.withSpan(parentSpan!).execute(() {
+      final resultSpan = tracer.startSpan('doWork')..end();
+
+      // Verify that data from the original Span propagates to the child.
+      expect(resultSpan, isNotNull);
+      expect(resultSpan.parentSpanId.toString(),
+          testSpan.spanContext.spanId.toString());
+      expect(resultSpan.spanContext.traceId.toString(),
+          equals(testSpan.spanContext.traceId.toString()));
+      expect(resultSpan.spanContext.traceState.toString(),
+          equals(testSpan.spanContext.traceState.toString()));
+      expect(resultSpan.spanContext.traceFlags.toString(),
+          equals(testSpan.spanContext.traceFlags.toString()));
+    });
   });
 }

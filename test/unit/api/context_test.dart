@@ -21,8 +21,6 @@ void main() {
           'library_name', 'library_version', 'url://schema', []),
       api.SpanKind.client,
       [],
-      [],
-      api.Context.root,
       sdk.SpanLimits(),
       sdk.DateTimeTimeProvider().now);
 

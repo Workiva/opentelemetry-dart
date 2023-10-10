@@ -3,7 +3,7 @@ version: 0.16.2
 description: A framework for collecting traces from applications.
 homepage: https://github.com/Workiva/opentelemetry-dart
 environment:
-  sdk: ">=2.11.0 <3.0.0"
+  sdk: ">=2.15.0 <4.0.0"
 
 dependencies:
   collection: ^1.0.0
@@ -15,7 +15,10 @@ dependencies:
   quiver: '>=2.1.5 <4.0.0'
 
 dev_dependencies:
-  mockito: ^5.3.2
+  build_runner: ^2.3.3
+  build_test: ^2.2.1
+  build_web_compilers: ^3.2.7
+  mockito: ^5.4.0
   remove_from_coverage: ^2.0.0
   test: ^1.24.2
   workiva_analysis_options: ^1.2.2

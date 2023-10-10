@@ -8,23 +8,21 @@ import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
-class TestingInjector implements api.TextMapSetter<Map> {
+class TestingInjector implements api.TextMapSetter<Map<String, String>> {
   @override
-  void set(Map carrier, String key, String value) {
-    if (carrier != null) {
-      carrier[key] = value;
-    }
+  void set(Map<String, String> carrier, String key, String value) {
+    carrier[key] = value;
   }
 }
 
-class TestingExtractor implements api.TextMapGetter<Map> {
+class TestingExtractor implements api.TextMapGetter<Map<String, String>> {
   @override
-  String get(Map carrier, String key) {
-    return (carrier == null) ? null : carrier[key];
+  String? get(Map<String, String> carrier, String key) {
+    return carrier[key];
   }
 
   @override
-  Iterable<String> keys(Map carrier) {
+  Iterable<String> keys(Map<String, String> carrier) {
     return carrier.keys;
   }
 }
@@ -32,7 +30,7 @@ class TestingExtractor implements api.TextMapGetter<Map> {
 void main() {
   test('extract trace context', () {
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
 
     TestingInjector()
       ..set(testCarrier, 'traceparent',
@@ -43,7 +41,8 @@ void main() {
         api.Context.current, testCarrier, TestingExtractor());
     final resultSpan = resultContext.span;
 
-    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
+    expect(resultSpan, isNotNull);
+    expect(resultSpan!.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
@@ -57,7 +56,7 @@ void main() {
 
   test('extract invalid trace parent', () {
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
 
     TestingInjector()
       ..set(testCarrier, 'traceparent',
@@ -68,7 +67,8 @@ void main() {
         api.Context.current, testCarrier, TestingExtractor());
     final resultSpan = resultContext.span;
 
-    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
+    expect(resultSpan, isNotNull);
+    expect(resultSpan!.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isFalse);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('0000000000000000'));
@@ -82,7 +82,7 @@ void main() {
 
   test('extract missing trace parent', () {
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
 
     final resultContext = testPropagator.extract(
         api.Context.current, testCarrier, TestingExtractor());
@@ -93,7 +93,7 @@ void main() {
 
   test('extract malformed trace parent', () {
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
 
     TestingInjector()
       ..set(testCarrier, 'traceparent',
@@ -111,7 +111,7 @@ void main() {
 
   test('extract malformed trace state', () {
     final testPropagator = api.W3CTraceContextPropagator();
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
 
     TestingInjector()
       ..set(testCarrier, 'traceparent',
@@ -122,7 +122,8 @@ void main() {
         .extract(api.Context.current, testCarrier, TestingExtractor())
         .span;
 
-    expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
+    expect(resultSpan, isNotNull);
+    expect(resultSpan!.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
     expect(
         resultSpan.spanContext.spanId.toString(), equals('00f067aa0ba902b7'));
@@ -151,11 +152,9 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
     final testContext = api.Context.current.withSpan(testSpan);
 
     api.W3CTraceContextPropagator()
@@ -184,11 +183,9 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testCarrier = {};
+    final testCarrier = <String, String>{};
     final testContext = api.Context.current.withSpan(testSpan);
 
     api.W3CTraceContextPropagator()
@@ -206,10 +203,14 @@ void main() {
     final parentHeaderMatch = api
         .W3CTraceContextPropagator.traceParentHeaderRegEx
         .firstMatch(traceParentHeader);
-    final parentHeaderFields = Map<String, String>.fromIterable(
-        parentHeaderMatch.groupNames,
-        key: (element) => element.toString(),
-        value: (element) => parentHeaderMatch.namedGroup(element));
+    expect(parentHeaderMatch, isNotNull);
+    final parentHeaderFields =
+        Map<String, String>.fromIterable(parentHeaderMatch!.groupNames,
+            key: (element) => element.toString(),
+            value: (element) {
+              expect(parentHeaderMatch.namedGroup(element), isNotNull);
+              return parentHeaderMatch.namedGroup(element)!;
+            });
 
     expect(
         parentHeaderFields,
@@ -226,10 +227,14 @@ void main() {
     final parentHeaderMatch = api
         .W3CTraceContextPropagator.traceParentHeaderRegEx
         .firstMatch(traceParentHeader);
-    final parentHeaderFields = Map<String, String>.fromIterable(
-        parentHeaderMatch.groupNames,
-        key: (element) => element.toString(),
-        value: (element) => parentHeaderMatch.namedGroup(element));
+    expect(parentHeaderMatch, isNotNull);
+    final parentHeaderFields =
+        Map<String, String>.fromIterable(parentHeaderMatch!.groupNames,
+            key: (element) => element.toString(),
+            value: (element) {
+              expect(parentHeaderMatch.namedGroup(element), isNotNull);
+              return parentHeaderMatch.namedGroup(element)!;
+            });
 
     expect(
         parentHeaderFields,

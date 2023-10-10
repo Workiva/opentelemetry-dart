@@ -57,7 +57,7 @@ class Context {
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
-  T getValue<T>(ContextKey key) => _zone[key];
+  T? getValue<T>(ContextKey key) => _zone[key];
 
   /// Returns a new context created from this one with the given key/value pair
   /// set.
@@ -76,11 +76,11 @@ class Context {
 
   /// Get the [api.Span] attached to this [Context], or null if no such
   /// [api.Span] exists.
-  api.Span get span => getValue(spanKey);
+  api.Span? get span => getValue(spanKey);
 
   /// Get the [api.SpanContext] from this [Context], or null if no such
   /// [api.SpanContext] exists.
-  api.SpanContext get spanContext => getValue(spanKey)?.spanContext;
+  api.SpanContext? get spanContext => getValue(spanKey)?.spanContext;
 }
 
 class ContextKey {

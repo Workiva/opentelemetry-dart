@@ -9,7 +9,7 @@ class SpanId {
   static const sizeBits = 16;
   static const sizeBytes = 8;
 
-  List<int> _id;
+  late List<int> _id;
 
   SpanId(this._id);
   SpanId.fromIdGenerator(api.IdGenerator generator) {

@@ -10,7 +10,9 @@ class NoopTracerProvider implements api.TracerProvider {
 
   @override
   api.Tracer getTracer(String name,
-      {String version, String schemaUrl, List<api.Attribute> attributes}) {
+      {String version = '',
+      String schemaUrl = '',
+      List<api.Attribute> attributes = const []}) {
     return NoopTracer();
   }
 

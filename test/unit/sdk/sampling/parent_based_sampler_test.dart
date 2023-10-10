@@ -29,18 +29,16 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
-        testContext, traceId, testSpan.name, api.SpanKind.internal, null, []);
+        testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
-    expect(result.spanAttributes, equals(null));
+    expect(result.spanAttributes, equals([]));
     expect(result.traceState.isEmpty, isTrue);
   });
 
@@ -56,16 +54,14 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
     final result = testSampler.shouldSample(api.Context.root, traceId,
-        testSpan.name, api.SpanKind.internal, null, []);
+        testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
-    expect(result.spanAttributes, equals(null));
+    expect(result.spanAttributes, equals([]));
     expect(result.traceState.isEmpty, isTrue);
   });
 
@@ -84,17 +80,15 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
-        testContext, traceId, testSpan.name, api.SpanKind.internal, null, []);
+        testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
-    expect(result.spanAttributes, equals(null));
+    expect(result.spanAttributes, equals([]));
     expect(result.traceState, same(traceState));
   });
 
@@ -113,8 +107,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
@@ -142,8 +134,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
@@ -171,8 +161,6 @@ void main() {
             'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
-        [],
-        api.Context.root,
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);

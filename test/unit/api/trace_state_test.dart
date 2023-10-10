@@ -95,21 +95,21 @@ void main() {
     final matchResult = TraceState.validKeyRegex.matchAsPrefix('key_0-1');
 
     expect(matchResult, isNotNull);
-    expect(matchResult.group(0), equals('key_0-1'));
+    expect(matchResult!.group(0), equals('key_0-1'));
   });
 
   test('key regex, valid vendor key', () {
     final matchResult = TraceState.validKeyRegex.matchAsPrefix('key_@vendor');
 
     expect(matchResult, isNotNull);
-    expect(matchResult.group(0), equals('key_@vendor'));
+    expect(matchResult!.group(0), equals('key_@vendor'));
   });
 
   test('value regex, valid value', () {
     final matchResult = TraceState.validValueRegex.matchAsPrefix('value@2');
 
     expect(matchResult, isNotNull);
-    expect(matchResult.group(0), equals('value@2'));
+    expect(matchResult!.group(0), equals('value@2'));
   });
 
   test('key regex, invalid key', () {

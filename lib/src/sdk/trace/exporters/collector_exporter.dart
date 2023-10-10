@@ -1,6 +1,7 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../api.dart' as api;
@@ -13,14 +14,15 @@ import '../../proto/opentelemetry/proto/resource/v1/resource.pb.dart'
 import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 
 class CollectorExporter implements sdk.SpanExporter {
-  Uri uri;
-  http.Client client;
-  Map<String, String> headers;
+  final Uri uri;
+  final http.Client client;
+  final Map<String, String> headers;
   var _isShutdown = false;
 
-  CollectorExporter(this.uri, {http.Client httpClient, this.headers}) {
-    client = httpClient ?? http.Client();
-  }
+  CollectorExporter(this.uri,
+      {http.Client? httpClient, Map<String, String>? headers})
+      : client = httpClient ?? http.Client(),
+        headers = headers ?? {};
 
   @override
   void export(List<sdk.ReadOnlySpan> spans) {
@@ -34,12 +36,8 @@ class CollectorExporter implements sdk.SpanExporter {
 
     final body = pb_trace_service.ExportTraceServiceRequest(
         resourceSpans: _spansToProtobuf(spans));
-
-    final headers = {'Content-Type': 'application/x-protobuf'};
-
-    if (this.headers != null) {
-      headers.addAll(this.headers);
-    }
+    final headers = {'Content-Type': 'application/x-protobuf'}
+      ..addAll(this.headers);
 
     client.post(uri, body: body.writeToBuffer(), headers: headers);
   }
@@ -68,7 +66,8 @@ class CollectorExporter implements sdk.SpanExporter {
       for (final attr in il.key.attributes.keys) {
         attrs.add(pb_common.KeyValue(
             key: attr,
-            value: _attributeValueToProtobuf(il.key.attributes.get(attr))));
+            value:
+                _attributeValueToProtobuf(il.key.attributes.get(attr) ?? '')));
       }
       final rs = pb_trace.ResourceSpans(
           resource: pb_resource.Resource(attributes: attrs), scopeSpans: []);
@@ -139,13 +138,13 @@ class CollectorExporter implements sdk.SpanExporter {
     return pb_trace.Span(
         traceId: span.spanContext.traceId.get(),
         spanId: span.spanContext.spanId.get(),
-        parentSpanId: span.parentSpanId?.get(),
+        parentSpanId: span.parentSpanId.get(),
         name: span.name,
         startTimeUnixNano: span.startTime,
         endTimeUnixNano: span.endTime,
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
             key: key,
-            value: _attributeValueToProtobuf(span.attributes.get(key)))),
+            value: _attributeValueToProtobuf(span.attributes.get(key) ?? ''))),
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),
         kind: spanKind,
@@ -155,13 +154,13 @@ class CollectorExporter implements sdk.SpanExporter {
   pb_common.AnyValue _attributeValueToProtobuf(Object value) {
     switch (value.runtimeType) {
       case String:
-        return pb_common.AnyValue(stringValue: value);
+        return pb_common.AnyValue(stringValue: value as String);
       case bool:
-        return pb_common.AnyValue(boolValue: value);
+        return pb_common.AnyValue(boolValue: value as bool);
       case double:
-        return pb_common.AnyValue(doubleValue: value);
+        return pb_common.AnyValue(doubleValue: value as double);
       case int:
-        return pb_common.AnyValue(intValue: value);
+        return pb_common.AnyValue(intValue: Int64(value as int));
       case List:
         final list = value as List;
         if (list.isNotEmpty) {

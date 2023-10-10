@@ -5,6 +5,8 @@ import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
 
 class AlwaysOnSampler implements sdk.Sampler {
+  const AlwaysOnSampler();
+
   @override
   String get description => 'AlwaysOnSampler';
 

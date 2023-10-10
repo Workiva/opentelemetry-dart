@@ -90,12 +90,12 @@ class SpanLimits {
   ///https://docs.newrelic.com/docs/data-apis/manage-data/view-system-limits/
   ///https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk/trace/src/main/java/io/opentelemetry/sdk/trace/SpanLimitsBuilder.java
   const SpanLimits(
-      {int maxNumAttributes,
-      int maxNumEvents,
-      int maxNumLink,
-      int maxNumAttributesPerEvent,
-      int maxNumAttributesPerLink,
-      int maxNumAttributeLength})
+      {int? maxNumAttributes,
+      int? maxNumEvents,
+      int? maxNumLink,
+      int? maxNumAttributesPerEvent,
+      int? maxNumAttributesPerLink,
+      int? maxNumAttributeLength})
       : _maxNumAttributes = maxNumAttributes ?? _DEFAULT_MAXNUM_ATTRIBUTES,
         _maxNumEvents = maxNumEvents ?? _DEFAULT_MAXNUM_EVENTS,
         _maxNumLink = maxNumLink ?? _DEFAULT_MAXNUM_LINKS,

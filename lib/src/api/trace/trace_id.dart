@@ -9,7 +9,7 @@ class TraceId {
   static const sizeBits = 32;
   static const sizeBytes = 16;
 
-  List<int> _id;
+  late List<int> _id;
 
   TraceId(this._id);
   TraceId.fromIdGenerator(api.IdGenerator generator) {
