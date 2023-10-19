@@ -10,6 +10,7 @@ jobs:
     permissions:
       id-token: write # Required for authentication using OIDC
     runs-on: ubuntu-latest
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
     steps:
       - uses: actions/checkout@v3
         with:
@@ -25,4 +26,3 @@ jobs:
         run: make init
       - name: Package Artifacts
         run: ./package.sh
-      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
