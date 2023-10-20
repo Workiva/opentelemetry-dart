@@ -25,7 +25,7 @@ class Tracer implements api.Tracer {
       : _spanLimits = spanLimits ?? sdk.SpanLimits();
 
   @override
-  Span startSpan(String name,
+  api.Span startSpan(String name,
       {api.Context context,
       api.SpanKind kind,
       List<api.Attribute> attributes,
