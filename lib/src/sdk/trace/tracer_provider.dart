@@ -42,7 +42,7 @@ class TracerProviderBase implements api.TracerProvider {
   List<sdk.SpanProcessor> get spanProcessors => processors;
 
   @override
-  Tracer getTracer(String name, {String version = ''}) {
+  api.Tracer getTracer(String name, {String version = ''}) {
     final key = '$name@$version';
     return tracers.putIfAbsent(
         key,
