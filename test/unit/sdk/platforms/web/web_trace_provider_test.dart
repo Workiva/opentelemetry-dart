@@ -59,7 +59,7 @@ void main() {
 
   test('browserTracerProvider creates a tracer which can create valid spans',
       () async {
-    final span = WebTracerProvider(processors: [MockSpanProcessor()])
+    final Span span = WebTracerProvider(processors: [MockSpanProcessor()])
         .getTracer('testTracer')
         .startSpan('testSpan', context: Context.root)
       ..end();
