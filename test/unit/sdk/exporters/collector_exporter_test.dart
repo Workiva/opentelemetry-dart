@@ -34,8 +34,8 @@ void main() {
   test('sends spans', () {
     final resource =
         sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
-    final instrumentationLibrary =
-        sdk.InstrumentationLibrary('library_name', 'library_version');
+    final instrumentationLibrary = sdk.InstrumentationScope(
+        'library_name', 'library_version', 'url://schema', []);
     final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
     final span1 = Span(
         'foo',
@@ -152,7 +152,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -179,7 +180,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -213,7 +215,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],

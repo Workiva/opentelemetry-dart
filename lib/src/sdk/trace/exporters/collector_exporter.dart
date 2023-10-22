@@ -46,17 +46,17 @@ class CollectorExporter implements sdk.SpanExporter {
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
   /// Spans are grouped by a trace provider's [sdk.Resource] and a tracer's
-  /// [api.InstrumentationLibrary].
+  /// [sdk.InstrumentationScope].
   Iterable<pb_trace.ResourceSpans> _spansToProtobuf(
       List<sdk.ReadOnlySpan> spans) {
     // use a map of maps to group spans by resource and instrumentation library
     final rsm =
-        <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
+        <sdk.Resource, Map<sdk.InstrumentationScope, List<pb_trace.Span>>>{};
     for (final span in spans) {
       final il = rsm[span.resource] ??
-          <api.InstrumentationLibrary, List<pb_trace.Span>>{};
-      il[span.instrumentationLibrary] =
-          il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
+          <sdk.InstrumentationScope, List<pb_trace.Span>>{};
+      il[span.instrumentationScope] =
+          il[span.instrumentationScope] ?? <pb_trace.Span>[]
             ..add(_spanToProtobuf(span));
       rsm[span.resource] = il;
     }

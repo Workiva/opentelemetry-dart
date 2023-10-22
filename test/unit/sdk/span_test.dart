@@ -17,7 +17,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([api.Attribute.fromString('service-name', 'foo')]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],

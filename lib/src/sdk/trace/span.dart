@@ -19,7 +19,7 @@ class Span implements sdk.ReadWriteSpan {
   final sdk.TimeProvider _timeProvider;
   final sdk.Resource _resource;
   final sdk.SpanLimits _limits;
-  final api.InstrumentationLibrary _instrumentationLibrary;
+  final sdk.InstrumentationScope _instrumentationScope;
   final Int64 _startTime;
   final Attributes _attributes = Attributes.empty();
   String _name;
@@ -45,7 +45,7 @@ class Span implements sdk.ReadWriteSpan {
       this._processors,
       this._timeProvider,
       this._resource,
-      this._instrumentationLibrary,
+      this._instrumentationScope,
       api.SpanKind kind,
       List<api.Attribute> attributes,
       List<api.SpanLink> links,
@@ -109,8 +109,7 @@ class Span implements sdk.ReadWriteSpan {
   sdk.Resource get resource => _resource;
 
   @override
-  api.InstrumentationLibrary get instrumentationLibrary =>
-      _instrumentationLibrary;
+  sdk.InstrumentationScope get instrumentationScope => _instrumentationScope;
 
   @override
   void setAttributes(List<api.Attribute> attributes) {

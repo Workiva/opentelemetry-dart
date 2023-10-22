@@ -57,7 +57,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [attrShort, attrDoubleArray, attrStringArray],
         [],
@@ -79,7 +80,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [attrShort, attrLong, attrInt, attrBool],
         [],
@@ -98,7 +100,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [attrShort, attrLong],
         [],
@@ -119,7 +122,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -142,7 +146,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -164,7 +169,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -186,7 +192,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -217,7 +224,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -243,7 +251,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -267,7 +276,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -291,7 +301,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [spanLink1, spanLink2],
@@ -314,7 +325,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [spanLink1, spanLink2, spanLink3, spanLink4],
@@ -333,7 +345,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [spanLink3],
@@ -355,7 +368,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [spanLinkStrs],
@@ -386,7 +400,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [spanLinkDup],
@@ -414,7 +429,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [spanLinkNoAttr],

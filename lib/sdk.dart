@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 export 'src/sdk/instrumentation_library.dart' show InstrumentationLibrary;
+export 'src/sdk/common/instrumentation_scope.dart' show InstrumentationScope;
 export 'src/sdk/resource/resource.dart' show Resource;
 export 'src/sdk/time_providers/datetime_time_provider.dart'
     show DateTimeTimeProvider;
