@@ -15,7 +15,7 @@ class Tracer implements api.Tracer {
   final sdk.Sampler _sampler;
   final sdk.TimeProvider _timeProvider;
   final api.IdGenerator _idGenerator;
-  final api.InstrumentationLibrary _instrumentationLibrary;
+  final sdk.InstrumentationScope _instrumentationScope;
   final sdk.SpanLimits _spanLimits;
 
   @protected
@@ -25,7 +25,7 @@ class Tracer implements api.Tracer {
       this._sampler,
       this._timeProvider,
       this._idGenerator,
-      this._instrumentationLibrary,
+      this._instrumentationScope,
       this._spanLimits);
 
   @override
@@ -71,7 +71,7 @@ class Tracer implements api.Tracer {
         _processors,
         _timeProvider,
         _resource,
-        _instrumentationLibrary,
+        _instrumentationScope,
         kind,
         attributes,
         links,

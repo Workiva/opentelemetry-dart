@@ -40,7 +40,7 @@ abstract class ReadOnlySpan {
   // TODO: O11Y-1531: SpanEvents here.
 
   /// The instrumentation library for the span.
-  api.InstrumentationLibrary get instrumentationLibrary;
+  sdk.InstrumentationScope get instrumentationScope;
 
   List<api.SpanLink> get links;
 

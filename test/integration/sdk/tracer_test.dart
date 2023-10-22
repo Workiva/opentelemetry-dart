@@ -10,12 +10,14 @@ import 'package:test/test.dart';
 
 void main() {
   test('startSpan new trace', () {
-    final tracer = Tracer([],
+    final tracer = Tracer(
+        [],
         sdk.Resource([]),
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         sdk.SpanLimits());
 
     final span = tracer.startSpan('foo') as Span;
@@ -27,12 +29,14 @@ void main() {
   });
 
   test('startSpan child span', () {
-    final tracer = Tracer([],
+    final tracer = Tracer(
+        [],
         sdk.Resource([]),
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         sdk.SpanLimits());
 
     final parentSpan = tracer.startSpan('foo');
