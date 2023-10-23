@@ -4,6 +4,7 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
 
@@ -16,7 +17,7 @@ void main() {
         sdk.IdGenerator(),
         sdk.InstrumentationLibrary('name', 'version'));
 
-    final span = tracer.startSpan('foo');
+    final span = tracer.startSpan('foo') as Span;
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
@@ -35,7 +36,7 @@ void main() {
     final parentSpan = tracer.startSpan('foo');
     final context = api.Context.current.withSpan(parentSpan);
 
-    final childSpan = tracer.startSpan('bar', context: context);
+    final childSpan = tracer.startSpan('bar', context: context) as Span;
 
     expect(childSpan.startTime, isNotNull);
     expect(childSpan.endTime, isNull);

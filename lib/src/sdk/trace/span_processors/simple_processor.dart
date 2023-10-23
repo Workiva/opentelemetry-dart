@@ -2,9 +2,10 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import '../../../../api.dart' as api;
+import '../../../../sdk.dart' as sdk;
 
-class SimpleSpanProcessor implements api.SpanProcessor {
-  final api.SpanExporter _exporter;
+class SimpleSpanProcessor implements sdk.SpanProcessor {
+  final sdk.SpanExporter _exporter;
   bool _isShutdown = false;
 
   SimpleSpanProcessor(this._exporter);
@@ -15,7 +16,7 @@ class SimpleSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onEnd(api.Span span) {
+  void onEnd(sdk.ReadOnlySpan span) {
     if (_isShutdown) {
       return;
     }
@@ -24,7 +25,7 @@ class SimpleSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onStart(api.Span span, api.Context parentContext) {}
+  void onStart(sdk.ReadWriteSpan span, api.Context parentContext) {}
 
   @override
   void shutdown() {

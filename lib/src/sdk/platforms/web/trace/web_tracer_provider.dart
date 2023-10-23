@@ -19,7 +19,7 @@ class WebTracerProvider extends sdk.TracerProviderBase {
   final sdk.TimeProvider _timeProvider;
 
   WebTracerProvider(
-      {List<api.SpanProcessor> processors,
+      {List<sdk.SpanProcessor> processors,
       sdk.Resource resource,
       sdk.Sampler sampler,
       sdk.TimeProvider timeProvider,

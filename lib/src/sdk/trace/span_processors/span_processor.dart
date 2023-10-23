@@ -1,14 +1,13 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import '../../../api.dart' as api;
+import '../../../../api.dart' as api;
+import '../../../../sdk.dart' as sdk;
 
-@Deprecated(
-    'This class will be moved to the SDK package in v0.18.0.  Use [SpanExporter] from SDK instead.')
 abstract class SpanProcessor {
-  void onStart(api.Span span, api.Context parentContext);
+  void onStart(sdk.ReadWriteSpan span, api.Context parentContext);
 
-  void onEnd(api.Span span);
+  void onEnd(sdk.ReadOnlySpan span);
 
   void shutdown();
 

@@ -9,7 +9,7 @@ import 'span.dart';
 
 /// An interface for creating [api.Span]s and propagating context in-process.
 class Tracer implements api.Tracer {
-  final List<api.SpanProcessor> _processors;
+  final List<sdk.SpanProcessor> _processors;
   final sdk.Resource _resource;
   final sdk.Sampler _sampler;
   final sdk.TimeProvider _timeProvider;
@@ -37,16 +37,15 @@ class Tracer implements api.Tracer {
     // parent.  If the Context does not contain an active parent Span, create
     // a root Span with a new Trace ID and default state.
     // See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#determining-the-parent-span-from-a-context
-    final parent = context.span;
     final spanId = api.SpanId.fromIdGenerator(_idGenerator);
     api.TraceId traceId;
     api.TraceState traceState;
     api.SpanId parentSpanId;
 
-    if (parent != null) {
-      parentSpanId = parent.spanContext.spanId;
-      traceId = parent.spanContext.traceId;
-      traceState = parent.spanContext.traceState;
+    if (context.span != null) {
+      parentSpanId = context.spanContext.spanId;
+      traceId = context.spanContext.traceId;
+      traceState = context.spanContext.traceState;
     } else {
       parentSpanId = api.SpanId.root();
       traceId = api.TraceId.fromIdGenerator(_idGenerator);

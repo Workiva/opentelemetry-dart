@@ -10,10 +10,10 @@ import '../../../sdk.dart' as sdk;
 /// A registry for creating named [api.Tracer]s.
 class TracerProviderBase implements api.TracerProvider {
   @protected
-  final Map<String, api.Tracer> tracers = {};
+  final Map<String, Tracer> tracers = {};
 
   @protected
-  final List<api.SpanProcessor> processors;
+  final List<sdk.SpanProcessor> processors;
 
   @protected
   final sdk.Resource resource;
@@ -28,7 +28,7 @@ class TracerProviderBase implements api.TracerProvider {
   final sdk.SpanLimits spanLimits;
 
   TracerProviderBase(
-      {List<api.SpanProcessor> processors,
+      {List<sdk.SpanProcessor> processors,
       sdk.Resource resource,
       sdk.Sampler sampler,
       api.IdGenerator idGenerator,
@@ -39,7 +39,7 @@ class TracerProviderBase implements api.TracerProvider {
         idGenerator = idGenerator ?? sdk.IdGenerator(),
         spanLimits = spanLimits ?? sdk.SpanLimits();
 
-  List<api.SpanProcessor> get spanProcessors => processors;
+  List<sdk.SpanProcessor> get spanProcessors => processors;
 
   @override
   api.Tracer getTracer(String name, {String version = ''}) {

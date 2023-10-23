@@ -19,7 +19,7 @@ void main() {
         sdk.InstrumentationLibrary('library_name', 'library_version'));
     expect(span.name, equals('foo'));
 
-    span.name = 'bar';
+    span.setName('bar');
     expect(span.name, equals('bar'));
     expect(span.resource.attributes.get('service-name'), equals('foo'));
   });
