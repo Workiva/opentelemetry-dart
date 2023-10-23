@@ -33,7 +33,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     sdk.ConsoleExporter().export([span]);
@@ -53,7 +59,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     sdk.ConsoleExporter()
       ..shutdown()

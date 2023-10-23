@@ -2,14 +2,13 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:fixnum/fixnum.dart';
+import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 import '../common/attributes.dart';
 
 /// A representation of a single operation within a trace.
-@Deprecated(
-    'This class will stop being exported and be marked protected in v0.17.0.  Consumers should use [api.Span] instead.')
 class Span implements sdk.ReadWriteSpan {
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
@@ -38,16 +37,21 @@ class Span implements sdk.ReadWriteSpan {
   bool get isRecording => _endTime == null;
 
   /// Construct a [Span].
-  @Deprecated(
-      'This constructor will be marked protected in v0.17.0.  Consumers should use [api.Span] instead.')
-  Span(this._name, this._spanContext, this._parentSpanId, this._processors,
-      this._timeProvider, this._resource, this._instrumentationLibrary,
-      {api.SpanKind kind,
+  @protected
+  Span(
+      this._name,
+      this._spanContext,
+      this._parentSpanId,
+      this._processors,
+      this._timeProvider,
+      this._resource,
+      this._instrumentationLibrary,
+      api.SpanKind kind,
       List<api.Attribute> attributes,
       List<api.SpanLink> links,
       api.Context parentContext,
       sdk.SpanLimits limits,
-      Int64 startTime})
+      Int64 startTime)
       : _links = _applyLinkLimits(links, limits ?? sdk.SpanLimits()),
         _kind = kind ?? api.SpanKind.internal,
         _startTime = startTime ?? _timeProvider.now,
@@ -83,9 +87,7 @@ class Span implements sdk.ReadWriteSpan {
   }
 
   @override
-  @Deprecated(
-      'This method will be updated to use positional optional parameters in v0.17.0.')
-  void setStatus(api.StatusCode status, {String description}) {
+  void setStatus(api.StatusCode status, [String description]) {
     // A status cannot be Unset after being set, and cannot be set to any other
     // status after being marked "Ok".
     if (status == api.StatusCode.unset || _status.code == api.StatusCode.ok) {

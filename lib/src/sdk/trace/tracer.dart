@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:fixnum/fixnum.dart';
+import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
@@ -17,12 +18,15 @@ class Tracer implements api.Tracer {
   final api.InstrumentationLibrary _instrumentationLibrary;
   final sdk.SpanLimits _spanLimits;
 
-  @Deprecated(
-      'This constructor will be marked protected in v0.17.0.  Consumers should use [api.Tracer] instead.')
-  Tracer(this._processors, this._resource, this._sampler, this._timeProvider,
-      this._idGenerator, this._instrumentationLibrary,
-      {sdk.SpanLimits spanLimits})
-      : _spanLimits = spanLimits ?? sdk.SpanLimits();
+  @protected
+  const Tracer(
+      this._processors,
+      this._resource,
+      this._sampler,
+      this._timeProvider,
+      this._idGenerator,
+      this._instrumentationLibrary,
+      this._spanLimits);
 
   @override
   api.Span startSpan(String name,
@@ -60,13 +64,19 @@ class Tracer implements api.Tracer {
     final spanContext =
         api.SpanContext(traceId, spanId, traceFlags, traceState);
 
-    return Span(name, spanContext, parentSpanId, _processors, _timeProvider,
-        _resource, _instrumentationLibrary,
-        kind: kind,
-        attributes: attributes,
-        links: links,
-        parentContext: context,
-        limits: _spanLimits,
-        startTime: startTime);
+    return Span(
+        name,
+        spanContext,
+        parentSpanId,
+        _processors,
+        _timeProvider,
+        _resource,
+        _instrumentationLibrary,
+        kind,
+        attributes,
+        links,
+        context,
+        _spanLimits,
+        startTime);
   }
 }

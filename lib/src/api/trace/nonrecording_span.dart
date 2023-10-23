@@ -12,8 +12,6 @@ import '../../../api.dart' as api;
 ///
 /// This class should not be exposed to consumers and is used internally to wrap
 /// [api.SpanContext] being injected or extracted for external calls.
-@Deprecated(
-    'This class will stop being exported in v0.17.0.  Please use [api.Span] instead.')
 class NonRecordingSpan implements api.Span {
   final api.SpanId _parentSpanId = api.SpanId.invalid();
   final api.SpanContext _spanContext;
@@ -36,9 +34,7 @@ class NonRecordingSpan implements api.Span {
   api.SpanId get parentSpanId => _parentSpanId;
 
   @override
-  @Deprecated(
-      'This method will be updated to use positional optional parameters in v0.17.0.')
-  void setStatus(api.StatusCode status, {String description}) {}
+  void setStatus(api.StatusCode status, [String description]) {}
 
   @override
   api.SpanContext get spanContext => _spanContext;

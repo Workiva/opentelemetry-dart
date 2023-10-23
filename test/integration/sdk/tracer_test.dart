@@ -15,7 +15,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
 
     final span = tracer.startSpan('foo') as Span;
 
@@ -31,7 +32,8 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.SpanLimits());
 
     final parentSpan = tracer.startSpan('foo');
     final context = api.Context.current.withSpan(parentSpan);

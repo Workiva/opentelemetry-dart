@@ -4,11 +4,12 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('span change name', () {
-    final span = sdk.Span(
+    final span = Span(
         'foo',
         api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
             api.TraceFlags.none, api.TraceState.empty()),
@@ -16,7 +17,13 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([api.Attribute.fromString('service-name', 'foo')]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        api.SpanKind.internal,
+        [],
+        [],
+        api.Context.root,
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     expect(span.name, equals('foo'));
 
     span.setName('bar');
