@@ -83,32 +83,21 @@ final $typed_data.Uint8List keyValueDescriptor = $convert.base64Decode(
     'CghLZXlWYWx1ZRIQCgNrZXkYASABKAlSA2tleRI9CgV2YWx1ZRgCIAEoCzInLm9wZW50ZWxlbW'
     'V0cnkucHJvdG8uY29tbW9uLnYxLkFueVZhbHVlUgV2YWx1ZQ==');
 
-@$core.Deprecated('Use stringKeyValueDescriptor instead')
-const StringKeyValue$json = {
-  '1': 'StringKeyValue',
-  '2': [
-    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
-  ],
-  '7': {'3': true},
-};
-
-/// Descriptor for `StringKeyValue`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List stringKeyValueDescriptor = $convert.base64Decode(
-    'Cg5TdHJpbmdLZXlWYWx1ZRIQCgNrZXkYASABKAlSA2tleRIUCgV2YWx1ZRgCIAEoCVIFdmFsdW'
-    'U6AhgB');
-
-@$core.Deprecated('Use instrumentationLibraryDescriptor instead')
-const InstrumentationLibrary$json = {
-  '1': 'InstrumentationLibrary',
+@$core.Deprecated('Use instrumentationScopeDescriptor instead')
+const InstrumentationScope$json = {
+  '1': 'InstrumentationScope',
   '2': [
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
     {'1': 'version', '3': 2, '4': 1, '5': 9, '10': 'version'},
+    {'1': 'attributes', '3': 3, '4': 3, '5': 11, '6': '.opentelemetry.proto.common.v1.KeyValue', '10': 'attributes'},
+    {'1': 'dropped_attributes_count', '3': 4, '4': 1, '5': 13, '10': 'droppedAttributesCount'},
   ],
 };
 
-/// Descriptor for `InstrumentationLibrary`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List instrumentationLibraryDescriptor = $convert.base64Decode(
-    'ChZJbnN0cnVtZW50YXRpb25MaWJyYXJ5EhIKBG5hbWUYASABKAlSBG5hbWUSGAoHdmVyc2lvbh'
-    'gCIAEoCVIHdmVyc2lvbg==');
+/// Descriptor for `InstrumentationScope`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List instrumentationScopeDescriptor = $convert.base64Decode(
+    'ChRJbnN0cnVtZW50YXRpb25TY29wZRISCgRuYW1lGAEgASgJUgRuYW1lEhgKB3ZlcnNpb24YAi'
+    'ABKAlSB3ZlcnNpb24SRwoKYXR0cmlidXRlcxgDIAMoCzInLm9wZW50ZWxlbWV0cnkucHJvdG8u'
+    'Y29tbW9uLnYxLktleVZhbHVlUgphdHRyaWJ1dGVzEjgKGGRyb3BwZWRfYXR0cmlidXRlc19jb3'
+    'VudBgEIAEoDVIWZHJvcHBlZEF0dHJpYnV0ZXNDb3VudA==');
 

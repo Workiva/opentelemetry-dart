@@ -64,7 +64,9 @@ class Resource extends $pb.GeneratedMessage {
   static Resource getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Resource>(create);
   static Resource? _defaultInstance;
 
-  /// Set of labels that describe the resource.
+  /// Set of attributes that describe the resource.
+  /// Attribute keys MUST be unique (it is not allowed to have more than one
+  /// attribute with the same key).
   @$pb.TagNumber(1)
   $core.List<$0.KeyValue> get attributes => $_getList(0);
 

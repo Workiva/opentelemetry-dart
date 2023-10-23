@@ -1,5 +1,8 @@
 init:
 	git submodule init
+	# Pull opentelemetry-proto at the stored commit.
+	# To upgrade, execute `git submodule update --remote --merge`
+	# and commit the result.
 	git submodule update
 	dart pub get
 	dart pub global activate protoc_plugin 21.1.2
