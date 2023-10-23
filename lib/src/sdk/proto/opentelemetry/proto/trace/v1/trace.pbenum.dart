@@ -16,6 +16,35 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+///  SpanFlags represents constants used to interpret the
+///  Span.flags field, which is protobuf 'fixed32' type and is to
+///  be used as bit-fields. Each non-zero value defined in this enum is
+///  a bit-mask.  To extract the bit-field, for example, use an
+///  expression like:
+///
+///    (span.flags & SPAN_FLAGS_TRACE_FLAGS_MASK)
+///
+///  See https://www.w3.org/TR/trace-context-2/#trace-flags for the flag definitions.
+///
+///  Note that Span flags were introduced in version 1.1 of the
+///  OpenTelemetry protocol.  Older Span producers do not set this
+///  field, consequently consumers should not rely on the absence of a
+///  particular flag bit to indicate the presence of a particular feature.
+class SpanFlags extends $pb.ProtobufEnum {
+  static const SpanFlags SPAN_FLAGS_DO_NOT_USE = SpanFlags._(0, _omitEnumNames ? '' : 'SPAN_FLAGS_DO_NOT_USE');
+  static const SpanFlags SPAN_FLAGS_TRACE_FLAGS_MASK = SpanFlags._(255, _omitEnumNames ? '' : 'SPAN_FLAGS_TRACE_FLAGS_MASK');
+
+  static const $core.List<SpanFlags> values = <SpanFlags> [
+    SPAN_FLAGS_DO_NOT_USE,
+    SPAN_FLAGS_TRACE_FLAGS_MASK,
+  ];
+
+  static final $core.Map<$core.int, SpanFlags> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static SpanFlags? valueOf($core.int value) => _byValue[value];
+
+  const SpanFlags._($core.int v, $core.String n) : super(v, n);
+}
+
 /// SpanKind is the type of span. Can be used to specify additional relationships between spans
 /// in addition to a parent/child relationship.
 class Span_SpanKind extends $pb.ProtobufEnum {
@@ -39,51 +68,6 @@ class Span_SpanKind extends $pb.ProtobufEnum {
   static Span_SpanKind? valueOf($core.int value) => _byValue[value];
 
   const Span_SpanKind._($core.int v, $core.String n) : super(v, n);
-}
-
-class Status_DeprecatedStatusCode extends $pb.ProtobufEnum {
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_OK = Status_DeprecatedStatusCode._(0, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_OK');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_CANCELLED = Status_DeprecatedStatusCode._(1, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_CANCELLED');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_UNKNOWN_ERROR = Status_DeprecatedStatusCode._(2, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_UNKNOWN_ERROR');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_INVALID_ARGUMENT = Status_DeprecatedStatusCode._(3, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_INVALID_ARGUMENT');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_DEADLINE_EXCEEDED = Status_DeprecatedStatusCode._(4, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_DEADLINE_EXCEEDED');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_NOT_FOUND = Status_DeprecatedStatusCode._(5, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_NOT_FOUND');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_ALREADY_EXISTS = Status_DeprecatedStatusCode._(6, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_ALREADY_EXISTS');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_PERMISSION_DENIED = Status_DeprecatedStatusCode._(7, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_PERMISSION_DENIED');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_RESOURCE_EXHAUSTED = Status_DeprecatedStatusCode._(8, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_RESOURCE_EXHAUSTED');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_FAILED_PRECONDITION = Status_DeprecatedStatusCode._(9, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_FAILED_PRECONDITION');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_ABORTED = Status_DeprecatedStatusCode._(10, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_ABORTED');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_OUT_OF_RANGE = Status_DeprecatedStatusCode._(11, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_OUT_OF_RANGE');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_UNIMPLEMENTED = Status_DeprecatedStatusCode._(12, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_UNIMPLEMENTED');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_INTERNAL_ERROR = Status_DeprecatedStatusCode._(13, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_INTERNAL_ERROR');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_UNAVAILABLE = Status_DeprecatedStatusCode._(14, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_UNAVAILABLE');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_DATA_LOSS = Status_DeprecatedStatusCode._(15, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_DATA_LOSS');
-  static const Status_DeprecatedStatusCode DEPRECATED_STATUS_CODE_UNAUTHENTICATED = Status_DeprecatedStatusCode._(16, _omitEnumNames ? '' : 'DEPRECATED_STATUS_CODE_UNAUTHENTICATED');
-
-  static const $core.List<Status_DeprecatedStatusCode> values = <Status_DeprecatedStatusCode> [
-    DEPRECATED_STATUS_CODE_OK,
-    DEPRECATED_STATUS_CODE_CANCELLED,
-    DEPRECATED_STATUS_CODE_UNKNOWN_ERROR,
-    DEPRECATED_STATUS_CODE_INVALID_ARGUMENT,
-    DEPRECATED_STATUS_CODE_DEADLINE_EXCEEDED,
-    DEPRECATED_STATUS_CODE_NOT_FOUND,
-    DEPRECATED_STATUS_CODE_ALREADY_EXISTS,
-    DEPRECATED_STATUS_CODE_PERMISSION_DENIED,
-    DEPRECATED_STATUS_CODE_RESOURCE_EXHAUSTED,
-    DEPRECATED_STATUS_CODE_FAILED_PRECONDITION,
-    DEPRECATED_STATUS_CODE_ABORTED,
-    DEPRECATED_STATUS_CODE_OUT_OF_RANGE,
-    DEPRECATED_STATUS_CODE_UNIMPLEMENTED,
-    DEPRECATED_STATUS_CODE_INTERNAL_ERROR,
-    DEPRECATED_STATUS_CODE_UNAVAILABLE,
-    DEPRECATED_STATUS_CODE_DATA_LOSS,
-    DEPRECATED_STATUS_CODE_UNAUTHENTICATED,
-  ];
-
-  static final $core.Map<$core.int, Status_DeprecatedStatusCode> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static Status_DeprecatedStatusCode? valueOf($core.int value) => _byValue[value];
-
-  const Status_DeprecatedStatusCode._($core.int v, $core.String n) : super(v, n);
 }
 
 /// For the semantics of status codes see

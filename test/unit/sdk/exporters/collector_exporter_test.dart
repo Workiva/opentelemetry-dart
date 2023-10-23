@@ -85,8 +85,8 @@ void main() {
                 key: 'service.name',
                 value: pb_common.AnyValue(stringValue: 'bar'))
           ]),
-          instrumentationLibrarySpans: [
-            pb.InstrumentationLibrarySpans(
+          scopeSpans: [
+            pb.ScopeSpans(
                 spans: [
                   pb.Span(
                       traceId: [1, 2, 3],
@@ -133,7 +133,7 @@ void main() {
                             ])
                       ])
                 ],
-                instrumentationLibrary: pb_common.InstrumentationLibrary(
+                scope: pb_common.InstrumentationScope(
                     name: 'library_name', version: 'library_version'))
           ])
     ]);

@@ -71,13 +71,12 @@ class CollectorExporter implements sdk.SpanExporter {
             value: _attributeValueToProtobuf(il.key.attributes.get(attr))));
       }
       final rs = pb_trace.ResourceSpans(
-          resource: pb_resource.Resource(attributes: attrs),
-          instrumentationLibrarySpans: []);
+          resource: pb_resource.Resource(attributes: attrs), scopeSpans: []);
       // for each distinct instrumentation library, construct the protobuf equivalent
       for (final ils in il.value.entries) {
-        rs.instrumentationLibrarySpans.add(pb_trace.InstrumentationLibrarySpans(
+        rs.scopeSpans.add(pb_trace.ScopeSpans(
             spans: ils.value,
-            instrumentationLibrary: pb_common.InstrumentationLibrary(
+            scope: pb_common.InstrumentationScope(
                 name: ils.key.name, version: ils.key.version)));
       }
       rss.add(rs);

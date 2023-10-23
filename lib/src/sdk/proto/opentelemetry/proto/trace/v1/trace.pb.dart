@@ -23,19 +23,78 @@ import 'trace.pbenum.dart';
 
 export 'trace.pbenum.dart';
 
-/// A collection of InstrumentationLibrarySpans from a Resource.
+///  TracesData represents the traces data that can be stored in a persistent storage,
+///  OR can be embedded by other protocols that transfer OTLP traces data but do
+///  not implement the OTLP protocol.
+///
+///  The main difference between this message and collector protocol is that
+///  in this message there will not be any "control" or "metadata" specific to
+///  OTLP protocol.
+///
+///  When new fields are added into this message, the OTLP request MUST be updated
+///  as well.
+class TracesData extends $pb.GeneratedMessage {
+  factory TracesData({
+    $core.Iterable<ResourceSpans>? resourceSpans,
+  }) {
+    final $result = create();
+    if (resourceSpans != null) {
+      $result.resourceSpans.addAll(resourceSpans);
+    }
+    return $result;
+  }
+  TracesData._() : super();
+  factory TracesData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TracesData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TracesData', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
+    ..pc<ResourceSpans>(1, _omitFieldNames ? '' : 'resourceSpans', $pb.PbFieldType.PM, subBuilder: ResourceSpans.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  TracesData clone() => TracesData()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  TracesData copyWith(void Function(TracesData) updates) => super.copyWith((message) => updates(message as TracesData)) as TracesData;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static TracesData create() => TracesData._();
+  TracesData createEmptyInstance() => create();
+  static $pb.PbList<TracesData> createRepeated() => $pb.PbList<TracesData>();
+  @$core.pragma('dart2js:noInline')
+  static TracesData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TracesData>(create);
+  static TracesData? _defaultInstance;
+
+  /// An array of ResourceSpans.
+  /// For data coming from a single resource this array will typically contain
+  /// one element. Intermediary nodes that receive data from multiple origins
+  /// typically batch the data before forwarding further and in that case this
+  /// array will contain multiple elements.
+  @$pb.TagNumber(1)
+  $core.List<ResourceSpans> get resourceSpans => $_getList(0);
+}
+
+/// A collection of ScopeSpans from a Resource.
 class ResourceSpans extends $pb.GeneratedMessage {
   factory ResourceSpans({
     $1.Resource? resource,
-    $core.Iterable<InstrumentationLibrarySpans>? instrumentationLibrarySpans,
+    $core.Iterable<ScopeSpans>? scopeSpans,
     $core.String? schemaUrl,
   }) {
     final $result = create();
     if (resource != null) {
       $result.resource = resource;
     }
-    if (instrumentationLibrarySpans != null) {
-      $result.instrumentationLibrarySpans.addAll(instrumentationLibrarySpans);
+    if (scopeSpans != null) {
+      $result.scopeSpans.addAll(scopeSpans);
     }
     if (schemaUrl != null) {
       $result.schemaUrl = schemaUrl;
@@ -48,7 +107,7 @@ class ResourceSpans extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ResourceSpans', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
     ..aOM<$1.Resource>(1, _omitFieldNames ? '' : 'resource', subBuilder: $1.Resource.create)
-    ..pc<InstrumentationLibrarySpans>(2, _omitFieldNames ? '' : 'instrumentationLibrarySpans', $pb.PbFieldType.PM, subBuilder: InstrumentationLibrarySpans.create)
+    ..pc<ScopeSpans>(2, _omitFieldNames ? '' : 'scopeSpans', $pb.PbFieldType.PM, subBuilder: ScopeSpans.create)
     ..aOS(3, _omitFieldNames ? '' : 'schemaUrl')
     ..hasRequiredFields = false
   ;
@@ -87,13 +146,15 @@ class ResourceSpans extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $1.Resource ensureResource() => $_ensure(0);
 
-  /// A list of InstrumentationLibrarySpans that originate from a resource.
+  /// A list of ScopeSpans that originate from a resource.
   @$pb.TagNumber(2)
-  $core.List<InstrumentationLibrarySpans> get instrumentationLibrarySpans => $_getList(1);
+  $core.List<ScopeSpans> get scopeSpans => $_getList(1);
 
+  /// The Schema URL, if known. This is the identifier of the Schema that the resource data
+  /// is recorded in. To learn more about Schema URL see
+  /// https://opentelemetry.io/docs/specs/otel/schemas/#schema-url
   /// This schema_url applies to the data in the "resource" field. It does not apply
-  /// to the data in the "instrumentation_library_spans" field which have their own
-  /// schema_url field.
+  /// to the data in the "scope_spans" field which have their own schema_url field.
   @$pb.TagNumber(3)
   $core.String get schemaUrl => $_getSZ(2);
   @$pb.TagNumber(3)
@@ -104,16 +165,16 @@ class ResourceSpans extends $pb.GeneratedMessage {
   void clearSchemaUrl() => clearField(3);
 }
 
-/// A collection of Spans produced by an InstrumentationLibrary.
-class InstrumentationLibrarySpans extends $pb.GeneratedMessage {
-  factory InstrumentationLibrarySpans({
-    $0.InstrumentationLibrary? instrumentationLibrary,
+/// A collection of Spans produced by an InstrumentationScope.
+class ScopeSpans extends $pb.GeneratedMessage {
+  factory ScopeSpans({
+    $0.InstrumentationScope? scope,
     $core.Iterable<Span>? spans,
     $core.String? schemaUrl,
   }) {
     final $result = create();
-    if (instrumentationLibrary != null) {
-      $result.instrumentationLibrary = instrumentationLibrary;
+    if (scope != null) {
+      $result.scope = scope;
     }
     if (spans != null) {
       $result.spans.addAll(spans);
@@ -123,12 +184,12 @@ class InstrumentationLibrarySpans extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  InstrumentationLibrarySpans._() : super();
-  factory InstrumentationLibrarySpans.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory InstrumentationLibrarySpans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  ScopeSpans._() : super();
+  factory ScopeSpans.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ScopeSpans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'InstrumentationLibrarySpans', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..aOM<$0.InstrumentationLibrary>(1, _omitFieldNames ? '' : 'instrumentationLibrary', subBuilder: $0.InstrumentationLibrary.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ScopeSpans', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
+    ..aOM<$0.InstrumentationScope>(1, _omitFieldNames ? '' : 'scope', subBuilder: $0.InstrumentationScope.create)
     ..pc<Span>(2, _omitFieldNames ? '' : 'spans', $pb.PbFieldType.PM, subBuilder: Span.create)
     ..aOS(3, _omitFieldNames ? '' : 'schemaUrl')
     ..hasRequiredFields = false
@@ -138,41 +199,44 @@ class InstrumentationLibrarySpans extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  InstrumentationLibrarySpans clone() => InstrumentationLibrarySpans()..mergeFromMessage(this);
+  ScopeSpans clone() => ScopeSpans()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  InstrumentationLibrarySpans copyWith(void Function(InstrumentationLibrarySpans) updates) => super.copyWith((message) => updates(message as InstrumentationLibrarySpans)) as InstrumentationLibrarySpans;
+  ScopeSpans copyWith(void Function(ScopeSpans) updates) => super.copyWith((message) => updates(message as ScopeSpans)) as ScopeSpans;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static InstrumentationLibrarySpans create() => InstrumentationLibrarySpans._();
-  InstrumentationLibrarySpans createEmptyInstance() => create();
-  static $pb.PbList<InstrumentationLibrarySpans> createRepeated() => $pb.PbList<InstrumentationLibrarySpans>();
+  static ScopeSpans create() => ScopeSpans._();
+  ScopeSpans createEmptyInstance() => create();
+  static $pb.PbList<ScopeSpans> createRepeated() => $pb.PbList<ScopeSpans>();
   @$core.pragma('dart2js:noInline')
-  static InstrumentationLibrarySpans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InstrumentationLibrarySpans>(create);
-  static InstrumentationLibrarySpans? _defaultInstance;
+  static ScopeSpans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ScopeSpans>(create);
+  static ScopeSpans? _defaultInstance;
 
-  /// The instrumentation library information for the spans in this message.
-  /// Semantically when InstrumentationLibrary isn't set, it is equivalent with
-  /// an empty instrumentation library name (unknown).
+  /// The instrumentation scope information for the spans in this message.
+  /// Semantically when InstrumentationScope isn't set, it is equivalent with
+  /// an empty instrumentation scope name (unknown).
   @$pb.TagNumber(1)
-  $0.InstrumentationLibrary get instrumentationLibrary => $_getN(0);
+  $0.InstrumentationScope get scope => $_getN(0);
   @$pb.TagNumber(1)
-  set instrumentationLibrary($0.InstrumentationLibrary v) { setField(1, v); }
+  set scope($0.InstrumentationScope v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasInstrumentationLibrary() => $_has(0);
+  $core.bool hasScope() => $_has(0);
   @$pb.TagNumber(1)
-  void clearInstrumentationLibrary() => clearField(1);
+  void clearScope() => clearField(1);
   @$pb.TagNumber(1)
-  $0.InstrumentationLibrary ensureInstrumentationLibrary() => $_ensure(0);
+  $0.InstrumentationScope ensureScope() => $_ensure(0);
 
-  /// A list of Spans that originate from an instrumentation library.
+  /// A list of Spans that originate from an instrumentation scope.
   @$pb.TagNumber(2)
   $core.List<Span> get spans => $_getList(1);
 
+  /// The Schema URL, if known. This is the identifier of the Schema that the span data
+  /// is recorded in. To learn more about Schema URL see
+  /// https://opentelemetry.io/docs/specs/otel/schemas/#schema-url
   /// This schema_url applies to all spans and span events in the "spans" field.
   @$pb.TagNumber(3)
   $core.String get schemaUrl => $_getSZ(2);
@@ -263,6 +327,8 @@ class Span_Event extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   /// attributes is a collection of attribute key/value pairs on the event.
+  /// Attribute keys MUST be unique (it is not allowed to have more than one
+  /// attribute with the same key).
   @$pb.TagNumber(3)
   $core.List<$0.KeyValue> get attributes => $_getList(2);
 
@@ -289,6 +355,7 @@ class Span_Link extends $pb.GeneratedMessage {
     $core.String? traceState,
     $core.Iterable<$0.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
+    $core.int? flags,
   }) {
     final $result = create();
     if (traceId != null) {
@@ -306,6 +373,9 @@ class Span_Link extends $pb.GeneratedMessage {
     if (droppedAttributesCount != null) {
       $result.droppedAttributesCount = droppedAttributesCount;
     }
+    if (flags != null) {
+      $result.flags = flags;
+    }
     return $result;
   }
   Span_Link._() : super();
@@ -318,6 +388,7 @@ class Span_Link extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'traceState')
     ..pc<$0.KeyValue>(4, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
     ..a<$core.int>(5, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'flags', $pb.PbFieldType.OF3)
     ..hasRequiredFields = false
   ;
 
@@ -374,6 +445,8 @@ class Span_Link extends $pb.GeneratedMessage {
   void clearTraceState() => clearField(3);
 
   /// attributes is a collection of attribute key/value pairs on the link.
+  /// Attribute keys MUST be unique (it is not allowed to have more than one
+  /// attribute with the same key).
   @$pb.TagNumber(4)
   $core.List<$0.KeyValue> get attributes => $_getList(3);
 
@@ -387,15 +460,26 @@ class Span_Link extends $pb.GeneratedMessage {
   $core.bool hasDroppedAttributesCount() => $_has(4);
   @$pb.TagNumber(5)
   void clearDroppedAttributesCount() => clearField(5);
+
+  ///  Flags, a bit field. 8 least significant bits are the trace
+  ///  flags as defined in W3C Trace Context specification. Readers
+  ///  MUST not assume that 24 most significant bits will be zero.
+  ///  When creating new spans, the most-significant 24-bits MUST be
+  ///  zero.  To read the 8-bit W3C trace flag (use flags &
+  ///  SPAN_FLAGS_TRACE_FLAGS_MASK).  [Optional].
+  ///
+  ///  See https://www.w3.org/TR/trace-context-2/#trace-flags for the flag definitions.
+  @$pb.TagNumber(6)
+  $core.int get flags => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set flags($core.int v) { $_setUnsignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasFlags() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearFlags() => clearField(6);
 }
 
-///  Span represents a single operation within a trace. Spans can be
-///  nested to form a trace tree. Spans may also be linked to other spans
-///  from the same or different trace and form graphs. Often, a trace
-///  contains a root span that describes the end-to-end latency, and one
-///  or more subspans for its sub-operations. A trace can also contain
-///  multiple root spans, or none at all. Spans do not need to be
-///  contiguous - there may be gaps or overlaps between spans in a trace.
+///  A Span represents a single operation performed by a single component of the system.
 ///
 ///  The next available field id is 17.
 class Span extends $pb.GeneratedMessage {
@@ -415,6 +499,7 @@ class Span extends $pb.GeneratedMessage {
     $core.Iterable<Span_Link>? links,
     $core.int? droppedLinksCount,
     Status? status,
+    $core.int? flags,
   }) {
     final $result = create();
     if (traceId != null) {
@@ -462,6 +547,9 @@ class Span extends $pb.GeneratedMessage {
     if (status != null) {
       $result.status = status;
     }
+    if (flags != null) {
+      $result.flags = flags;
+    }
     return $result;
   }
   Span._() : super();
@@ -484,6 +572,7 @@ class Span extends $pb.GeneratedMessage {
     ..pc<Span_Link>(13, _omitFieldNames ? '' : 'links', $pb.PbFieldType.PM, subBuilder: Span_Link.create)
     ..a<$core.int>(14, _omitFieldNames ? '' : 'droppedLinksCount', $pb.PbFieldType.OU3)
     ..aOM<Status>(15, _omitFieldNames ? '' : 'status', subBuilder: Status.create)
+    ..a<$core.int>(16, _omitFieldNames ? '' : 'flags', $pb.PbFieldType.OF3)
     ..hasRequiredFields = false
   ;
 
@@ -509,11 +598,9 @@ class Span extends $pb.GeneratedMessage {
   static Span? _defaultInstance;
 
   ///  A unique identifier for a trace. All spans from the same trace share
-  ///  the same `trace_id`. The ID is a 16-byte array. An ID with all zeroes
-  ///  is considered invalid.
-  ///
-  ///  This field is semantically required. Receiver should generate new
-  ///  random trace_id if empty or invalid trace_id was received.
+  ///  the same `trace_id`. The ID is a 16-byte array. An ID with all zeroes OR
+  ///  of length other than 16 bytes is considered invalid (empty string in OTLP/JSON
+  ///  is zero-length and thus is also invalid).
   ///
   ///  This field is required.
   @$pb.TagNumber(1)
@@ -526,11 +613,9 @@ class Span extends $pb.GeneratedMessage {
   void clearTraceId() => clearField(1);
 
   ///  A unique identifier for a span within a trace, assigned when the span
-  ///  is created. The ID is an 8-byte array. An ID with all zeroes is considered
-  ///  invalid.
-  ///
-  ///  This field is semantically required. Receiver should generate new
-  ///  random span_id if empty or invalid span_id was received.
+  ///  is created. The ID is an 8-byte array. An ID with all zeroes OR of length
+  ///  other than 8 bytes is considered invalid (empty string in OTLP/JSON
+  ///  is zero-length and thus is also invalid).
   ///
   ///  This field is required.
   @$pb.TagNumber(2)
@@ -573,9 +658,7 @@ class Span extends $pb.GeneratedMessage {
   ///  This makes it easier to correlate spans in different traces.
   ///
   ///  This field is semantically required to be set to non-empty string.
-  ///  When null or empty string received - receiver may use string "name"
-  ///  as a replacement. There might be smarted algorithms implemented by
-  ///  receiver to fix the empty span name.
+  ///  Empty value is equivalent to an unknown span name.
   ///
   ///  This field is required.
   @$pb.TagNumber(5)
@@ -629,14 +712,18 @@ class Span extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   void clearEndTimeUnixNano() => clearField(8);
 
-  ///  attributes is a collection of key/value pairs. The value can be a string,
-  ///  an integer, a double or the Boolean values `true` or `false`. Note, global attributes
+  ///  attributes is a collection of key/value pairs. Note, global attributes
   ///  like server name can be set using the resource API. Examples of attributes:
   ///
   ///      "/http/user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
   ///      "/http/server_latency": 300
-  ///      "abc.com/myattribute": true
-  ///      "abc.com/score": 10.239
+  ///      "example.com/myattribute": true
+  ///      "example.com/score": 10.239
+  ///
+  ///  The OpenTelemetry API specification further restricts the allowed value types:
+  ///  https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute
+  ///  Attribute keys MUST be unique (it is not allowed to have more than one
+  ///  attribute with the same key).
   @$pb.TagNumber(9)
   $core.List<$0.KeyValue> get attributes => $_getList(8);
 
@@ -695,22 +782,39 @@ class Span extends $pb.GeneratedMessage {
   void clearStatus() => clearField(15);
   @$pb.TagNumber(15)
   Status ensureStatus() => $_ensure(14);
+
+  ///  Flags, a bit field. 8 least significant bits are the trace
+  ///  flags as defined in W3C Trace Context specification. Readers
+  ///  MUST not assume that 24 most significant bits will be zero.
+  ///  To read the 8-bit W3C trace flag, use `flags & SPAN_FLAGS_TRACE_FLAGS_MASK`.
+  ///
+  ///  When creating span messages, if the message is logically forwarded from another source
+  ///  with an equivalent flags fields (i.e., usually another OTLP span message), the field SHOULD
+  ///  be copied as-is. If creating from a source that does not have an equivalent flags field
+  ///  (such as a runtime representation of an OpenTelemetry span), the high 24 bits MUST
+  ///  be set to zero.
+  ///
+  ///  [Optional].
+  ///
+  ///  See https://www.w3.org/TR/trace-context-2/#trace-flags for the flag definitions.
+  @$pb.TagNumber(16)
+  $core.int get flags => $_getIZ(15);
+  @$pb.TagNumber(16)
+  set flags($core.int v) { $_setUnsignedInt32(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasFlags() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearFlags() => clearField(16);
 }
 
 /// The Status type defines a logical error model that is suitable for different
 /// programming environments, including REST APIs and RPC APIs.
 class Status extends $pb.GeneratedMessage {
   factory Status({
-  @$core.Deprecated('This field is deprecated.')
-    Status_DeprecatedStatusCode? deprecatedCode,
     $core.String? message,
     Status_StatusCode? code,
   }) {
     final $result = create();
-    if (deprecatedCode != null) {
-      // ignore: deprecated_member_use_from_same_package
-      $result.deprecatedCode = deprecatedCode;
-    }
     if (message != null) {
       $result.message = message;
     }
@@ -724,7 +828,6 @@ class Status extends $pb.GeneratedMessage {
   factory Status.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Status', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..e<Status_DeprecatedStatusCode>(1, _omitFieldNames ? '' : 'deprecatedCode', $pb.PbFieldType.OE, defaultOrMaker: Status_DeprecatedStatusCode.DEPRECATED_STATUS_CODE_OK, valueOf: Status_DeprecatedStatusCode.valueOf, enumValues: Status_DeprecatedStatusCode.values)
     ..aOS(2, _omitFieldNames ? '' : 'message')
     ..e<Status_StatusCode>(3, _omitFieldNames ? '' : 'code', $pb.PbFieldType.OE, defaultOrMaker: Status_StatusCode.STATUS_CODE_UNSET, valueOf: Status_StatusCode.valueOf, enumValues: Status_StatusCode.values)
     ..hasRequiredFields = false
@@ -751,42 +854,23 @@ class Status extends $pb.GeneratedMessage {
   static Status getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Status>(create);
   static Status? _defaultInstance;
 
-  ///  The deprecated status code. This is an optional field.
-  ///
-  ///  This field is deprecated and is replaced by the `code` field below. See backward
-  ///  compatibility notes below. According to our stability guarantees this field
-  ///  will be removed in 12 months, on Oct 22, 2021. All usage of old senders and
-  ///  receivers that do not understand the `code` field MUST be phased out by then.
-  @$core.Deprecated('This field is deprecated.')
-  @$pb.TagNumber(1)
-  Status_DeprecatedStatusCode get deprecatedCode => $_getN(0);
-  @$core.Deprecated('This field is deprecated.')
-  @$pb.TagNumber(1)
-  set deprecatedCode(Status_DeprecatedStatusCode v) { setField(1, v); }
-  @$core.Deprecated('This field is deprecated.')
-  @$pb.TagNumber(1)
-  $core.bool hasDeprecatedCode() => $_has(0);
-  @$core.Deprecated('This field is deprecated.')
-  @$pb.TagNumber(1)
-  void clearDeprecatedCode() => clearField(1);
-
   /// A developer-facing human readable error message.
   @$pb.TagNumber(2)
-  $core.String get message => $_getSZ(1);
+  $core.String get message => $_getSZ(0);
   @$pb.TagNumber(2)
-  set message($core.String v) { $_setString(1, v); }
+  set message($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(2)
-  $core.bool hasMessage() => $_has(1);
+  $core.bool hasMessage() => $_has(0);
   @$pb.TagNumber(2)
   void clearMessage() => clearField(2);
 
   /// The status code.
   @$pb.TagNumber(3)
-  Status_StatusCode get code => $_getN(2);
+  Status_StatusCode get code => $_getN(1);
   @$pb.TagNumber(3)
   set code(Status_StatusCode v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasCode() => $_has(2);
+  $core.bool hasCode() => $_has(1);
   @$pb.TagNumber(3)
   void clearCode() => clearField(3);
 }
