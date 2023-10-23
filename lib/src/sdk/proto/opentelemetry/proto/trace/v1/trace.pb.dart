@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 ///
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/trace/v1/trace.proto
@@ -17,51 +20,10 @@ import 'trace.pbenum.dart';
 
 export 'trace.pbenum.dart';
 
-class TracesData extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'TracesData', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..pc<ResourceSpans>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'resourceSpans', $pb.PbFieldType.PM, subBuilder: ResourceSpans.create)
-    ..hasRequiredFields = false
-  ;
-
-  TracesData._() : super();
-  factory TracesData({
-    $core.Iterable<ResourceSpans>? resourceSpans,
-  }) {
-    final _result = create();
-    if (resourceSpans != null) {
-      _result.resourceSpans.addAll(resourceSpans);
-    }
-    return _result;
-  }
-  factory TracesData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory TracesData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  TracesData clone() => TracesData()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  TracesData copyWith(void Function(TracesData) updates) => super.copyWith((message) => updates(message as TracesData)) as TracesData; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static TracesData create() => TracesData._();
-  TracesData createEmptyInstance() => create();
-  static $pb.PbList<TracesData> createRepeated() => $pb.PbList<TracesData>();
-  @$core.pragma('dart2js:noInline')
-  static TracesData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TracesData>(create);
-  static TracesData? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<ResourceSpans> get resourceSpans => $_getList(0);
-}
-
 class ResourceSpans extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ResourceSpans', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
     ..aOM<$1.Resource>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'resource', subBuilder: $1.Resource.create)
-    ..pc<ScopeSpans>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'scopeSpans', $pb.PbFieldType.PM, subBuilder: ScopeSpans.create)
+    ..pc<InstrumentationLibrarySpans>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'instrumentationLibrarySpans', $pb.PbFieldType.PM, subBuilder: InstrumentationLibrarySpans.create)
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'schemaUrl')
     ..hasRequiredFields = false
   ;
@@ -69,15 +31,15 @@ class ResourceSpans extends $pb.GeneratedMessage {
   ResourceSpans._() : super();
   factory ResourceSpans({
     $1.Resource? resource,
-    $core.Iterable<ScopeSpans>? scopeSpans,
+    $core.Iterable<InstrumentationLibrarySpans>? instrumentationLibrarySpans,
     $core.String? schemaUrl,
   }) {
     final _result = create();
     if (resource != null) {
       _result.resource = resource;
     }
-    if (scopeSpans != null) {
-      _result.scopeSpans.addAll(scopeSpans);
+    if (instrumentationLibrarySpans != null) {
+      _result.instrumentationLibrarySpans.addAll(instrumentationLibrarySpans);
     }
     if (schemaUrl != null) {
       _result.schemaUrl = schemaUrl;
@@ -117,7 +79,7 @@ class ResourceSpans extends $pb.GeneratedMessage {
   $1.Resource ensureResource() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.List<ScopeSpans> get scopeSpans => $_getList(1);
+  $core.List<InstrumentationLibrarySpans> get instrumentationLibrarySpans => $_getList(1);
 
   @$pb.TagNumber(3)
   $core.String get schemaUrl => $_getSZ(2);
@@ -129,23 +91,23 @@ class ResourceSpans extends $pb.GeneratedMessage {
   void clearSchemaUrl() => clearField(3);
 }
 
-class ScopeSpans extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ScopeSpans', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..aOM<$0.InstrumentationScope>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'scope', subBuilder: $0.InstrumentationScope.create)
+class InstrumentationLibrarySpans extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InstrumentationLibrarySpans', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
+    ..aOM<$0.InstrumentationLibrary>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'instrumentationLibrary', subBuilder: $0.InstrumentationLibrary.create)
     ..pc<Span>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'spans', $pb.PbFieldType.PM, subBuilder: Span.create)
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'schemaUrl')
     ..hasRequiredFields = false
   ;
 
-  ScopeSpans._() : super();
-  factory ScopeSpans({
-    $0.InstrumentationScope? scope,
+  InstrumentationLibrarySpans._() : super();
+  factory InstrumentationLibrarySpans({
+    $0.InstrumentationLibrary? instrumentationLibrary,
     $core.Iterable<Span>? spans,
     $core.String? schemaUrl,
   }) {
     final _result = create();
-    if (scope != null) {
-      _result.scope = scope;
+    if (instrumentationLibrary != null) {
+      _result.instrumentationLibrary = instrumentationLibrary;
     }
     if (spans != null) {
       _result.spans.addAll(spans);
@@ -155,37 +117,37 @@ class ScopeSpans extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory ScopeSpans.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ScopeSpans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory InstrumentationLibrarySpans.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory InstrumentationLibrarySpans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ScopeSpans clone() => ScopeSpans()..mergeFromMessage(this);
+  InstrumentationLibrarySpans clone() => InstrumentationLibrarySpans()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ScopeSpans copyWith(void Function(ScopeSpans) updates) => super.copyWith((message) => updates(message as ScopeSpans)) as ScopeSpans; // ignore: deprecated_member_use
+  InstrumentationLibrarySpans copyWith(void Function(InstrumentationLibrarySpans) updates) => super.copyWith((message) => updates(message as InstrumentationLibrarySpans)) as InstrumentationLibrarySpans; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static ScopeSpans create() => ScopeSpans._();
-  ScopeSpans createEmptyInstance() => create();
-  static $pb.PbList<ScopeSpans> createRepeated() => $pb.PbList<ScopeSpans>();
+  static InstrumentationLibrarySpans create() => InstrumentationLibrarySpans._();
+  InstrumentationLibrarySpans createEmptyInstance() => create();
+  static $pb.PbList<InstrumentationLibrarySpans> createRepeated() => $pb.PbList<InstrumentationLibrarySpans>();
   @$core.pragma('dart2js:noInline')
-  static ScopeSpans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ScopeSpans>(create);
-  static ScopeSpans? _defaultInstance;
+  static InstrumentationLibrarySpans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InstrumentationLibrarySpans>(create);
+  static InstrumentationLibrarySpans? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $0.InstrumentationScope get scope => $_getN(0);
+  $0.InstrumentationLibrary get instrumentationLibrary => $_getN(0);
   @$pb.TagNumber(1)
-  set scope($0.InstrumentationScope v) { setField(1, v); }
+  set instrumentationLibrary($0.InstrumentationLibrary v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasScope() => $_has(0);
+  $core.bool hasInstrumentationLibrary() => $_has(0);
   @$pb.TagNumber(1)
-  void clearScope() => clearField(1);
+  void clearInstrumentationLibrary() => clearField(1);
   @$pb.TagNumber(1)
-  $0.InstrumentationScope ensureScope() => $_ensure(0);
+  $0.InstrumentationLibrary ensureInstrumentationLibrary() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $core.List<Span> get spans => $_getList(1);
@@ -290,7 +252,6 @@ class Span_Link extends $pb.GeneratedMessage {
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'traceState')
     ..pc<$0.KeyValue>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
     ..a<$core.int>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
-    ..a<$core.int>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'flags', $pb.PbFieldType.OF3)
     ..hasRequiredFields = false
   ;
 
@@ -301,7 +262,6 @@ class Span_Link extends $pb.GeneratedMessage {
     $core.String? traceState,
     $core.Iterable<$0.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
-    $core.int? flags,
   }) {
     final _result = create();
     if (traceId != null) {
@@ -318,9 +278,6 @@ class Span_Link extends $pb.GeneratedMessage {
     }
     if (droppedAttributesCount != null) {
       _result.droppedAttributesCount = droppedAttributesCount;
-    }
-    if (flags != null) {
-      _result.flags = flags;
     }
     return _result;
   }
@@ -383,15 +340,6 @@ class Span_Link extends $pb.GeneratedMessage {
   $core.bool hasDroppedAttributesCount() => $_has(4);
   @$pb.TagNumber(5)
   void clearDroppedAttributesCount() => clearField(5);
-
-  @$pb.TagNumber(6)
-  $core.int get flags => $_getIZ(5);
-  @$pb.TagNumber(6)
-  set flags($core.int v) { $_setUnsignedInt32(5, v); }
-  @$pb.TagNumber(6)
-  $core.bool hasFlags() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearFlags() => clearField(6);
 }
 
 class Span extends $pb.GeneratedMessage {
@@ -411,7 +359,6 @@ class Span extends $pb.GeneratedMessage {
     ..pc<Span_Link>(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'links', $pb.PbFieldType.PM, subBuilder: Span_Link.create)
     ..a<$core.int>(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'droppedLinksCount', $pb.PbFieldType.OU3)
     ..aOM<Status>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', subBuilder: Status.create)
-    ..a<$core.int>(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'flags', $pb.PbFieldType.OF3)
     ..hasRequiredFields = false
   ;
 
@@ -432,7 +379,6 @@ class Span extends $pb.GeneratedMessage {
     $core.Iterable<Span_Link>? links,
     $core.int? droppedLinksCount,
     Status? status,
-    $core.int? flags,
   }) {
     final _result = create();
     if (traceId != null) {
@@ -479,9 +425,6 @@ class Span extends $pb.GeneratedMessage {
     }
     if (status != null) {
       _result.status = status;
-    }
-    if (flags != null) {
-      _result.flags = flags;
     }
     return _result;
   }
@@ -624,19 +567,11 @@ class Span extends $pb.GeneratedMessage {
   void clearStatus() => clearField(15);
   @$pb.TagNumber(15)
   Status ensureStatus() => $_ensure(14);
-
-  @$pb.TagNumber(16)
-  $core.int get flags => $_getIZ(15);
-  @$pb.TagNumber(16)
-  set flags($core.int v) { $_setUnsignedInt32(15, v); }
-  @$pb.TagNumber(16)
-  $core.bool hasFlags() => $_has(15);
-  @$pb.TagNumber(16)
-  void clearFlags() => clearField(16);
 }
 
 class Status extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Status', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
+    ..e<Status_DeprecatedStatusCode>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'deprecatedCode', $pb.PbFieldType.OE, defaultOrMaker: Status_DeprecatedStatusCode.DEPRECATED_STATUS_CODE_OK, valueOf: Status_DeprecatedStatusCode.valueOf, enumValues: Status_DeprecatedStatusCode.values)
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message')
     ..e<Status_StatusCode>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'code', $pb.PbFieldType.OE, defaultOrMaker: Status_StatusCode.STATUS_CODE_UNSET, valueOf: Status_StatusCode.valueOf, enumValues: Status_StatusCode.values)
     ..hasRequiredFields = false
@@ -644,10 +579,16 @@ class Status extends $pb.GeneratedMessage {
 
   Status._() : super();
   factory Status({
+  @$core.Deprecated('This field is deprecated.')
+    Status_DeprecatedStatusCode? deprecatedCode,
     $core.String? message,
     Status_StatusCode? code,
   }) {
     final _result = create();
+    if (deprecatedCode != null) {
+      // ignore: deprecated_member_use_from_same_package
+      _result.deprecatedCode = deprecatedCode;
+    }
     if (message != null) {
       _result.message = message;
     }
@@ -677,21 +618,34 @@ class Status extends $pb.GeneratedMessage {
   static Status getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Status>(create);
   static Status? _defaultInstance;
 
+  @$core.Deprecated('This field is deprecated.')
+  @$pb.TagNumber(1)
+  Status_DeprecatedStatusCode get deprecatedCode => $_getN(0);
+  @$core.Deprecated('This field is deprecated.')
+  @$pb.TagNumber(1)
+  set deprecatedCode(Status_DeprecatedStatusCode v) { setField(1, v); }
+  @$core.Deprecated('This field is deprecated.')
+  @$pb.TagNumber(1)
+  $core.bool hasDeprecatedCode() => $_has(0);
+  @$core.Deprecated('This field is deprecated.')
+  @$pb.TagNumber(1)
+  void clearDeprecatedCode() => clearField(1);
+
   @$pb.TagNumber(2)
-  $core.String get message => $_getSZ(0);
+  $core.String get message => $_getSZ(1);
   @$pb.TagNumber(2)
-  set message($core.String v) { $_setString(0, v); }
+  set message($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasMessage() => $_has(0);
+  $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
   void clearMessage() => clearField(2);
 
   @$pb.TagNumber(3)
-  Status_StatusCode get code => $_getN(1);
+  Status_StatusCode get code => $_getN(2);
   @$pb.TagNumber(3)
   set code(Status_StatusCode v) { setField(3, v); }
   @$pb.TagNumber(3)
-  $core.bool hasCode() => $_has(1);
+  $core.bool hasCode() => $_has(2);
   @$pb.TagNumber(3)
   void clearCode() => clearField(3);
 }

@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 ///
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/collector/trace/v1/trace_service.proto
@@ -25,24 +28,10 @@ final $typed_data.Uint8List exportTraceServiceRequestDescriptor = $convert.base6
 @$core.Deprecated('Use exportTraceServiceResponseDescriptor instead')
 const ExportTraceServiceResponse$json = const {
   '1': 'ExportTraceServiceResponse',
-  '2': const [
-    const {'1': 'partial_success', '3': 1, '4': 1, '5': 11, '6': '.opentelemetry.proto.collector.trace.v1.ExportTracePartialSuccess', '10': 'partialSuccess'},
-  ],
 };
 
 /// Descriptor for `ExportTraceServiceResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List exportTraceServiceResponseDescriptor = $convert.base64Decode('ChpFeHBvcnRUcmFjZVNlcnZpY2VSZXNwb25zZRJqCg9wYXJ0aWFsX3N1Y2Nlc3MYASABKAsyQS5vcGVudGVsZW1ldHJ5LnByb3RvLmNvbGxlY3Rvci50cmFjZS52MS5FeHBvcnRUcmFjZVBhcnRpYWxTdWNjZXNzUg5wYXJ0aWFsU3VjY2Vzcw==');
-@$core.Deprecated('Use exportTracePartialSuccessDescriptor instead')
-const ExportTracePartialSuccess$json = const {
-  '1': 'ExportTracePartialSuccess',
-  '2': const [
-    const {'1': 'rejected_spans', '3': 1, '4': 1, '5': 3, '10': 'rejectedSpans'},
-    const {'1': 'error_message', '3': 2, '4': 1, '5': 9, '10': 'errorMessage'},
-  ],
-};
-
-/// Descriptor for `ExportTracePartialSuccess`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List exportTracePartialSuccessDescriptor = $convert.base64Decode('ChlFeHBvcnRUcmFjZVBhcnRpYWxTdWNjZXNzEiUKDnJlamVjdGVkX3NwYW5zGAEgASgDUg1yZWplY3RlZFNwYW5zEiMKDWVycm9yX21lc3NhZ2UYAiABKAlSDGVycm9yTWVzc2FnZQ==');
+final $typed_data.Uint8List exportTraceServiceResponseDescriptor = $convert.base64Decode('ChpFeHBvcnRUcmFjZVNlcnZpY2VSZXNwb25zZQ==');
 const $core.Map<$core.String, $core.dynamic> TraceServiceBase$json = const {
   '1': 'TraceService',
   '2': const [
@@ -59,14 +48,13 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> TraceServi
   '.opentelemetry.proto.common.v1.AnyValue': $0.AnyValue$json,
   '.opentelemetry.proto.common.v1.ArrayValue': $0.ArrayValue$json,
   '.opentelemetry.proto.common.v1.KeyValueList': $0.KeyValueList$json,
-  '.opentelemetry.proto.trace.v1.ScopeSpans': $2.ScopeSpans$json,
-  '.opentelemetry.proto.common.v1.InstrumentationScope': $0.InstrumentationScope$json,
+  '.opentelemetry.proto.trace.v1.InstrumentationLibrarySpans': $2.InstrumentationLibrarySpans$json,
+  '.opentelemetry.proto.common.v1.InstrumentationLibrary': $0.InstrumentationLibrary$json,
   '.opentelemetry.proto.trace.v1.Span': $2.Span$json,
   '.opentelemetry.proto.trace.v1.Span.Event': $2.Span_Event$json,
   '.opentelemetry.proto.trace.v1.Span.Link': $2.Span_Link$json,
   '.opentelemetry.proto.trace.v1.Status': $2.Status$json,
   '.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse': ExportTraceServiceResponse$json,
-  '.opentelemetry.proto.collector.trace.v1.ExportTracePartialSuccess': ExportTracePartialSuccess$json,
 };
 
 /// Descriptor for `TraceService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
