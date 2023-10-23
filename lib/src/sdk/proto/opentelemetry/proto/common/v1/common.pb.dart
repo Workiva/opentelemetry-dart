@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 ///
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/common/v1/common.proto
@@ -315,21 +318,78 @@ class KeyValue extends $pb.GeneratedMessage {
   AnyValue ensureValue() => $_ensure(1);
 }
 
-class InstrumentationScope extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InstrumentationScope', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.common.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'version')
-    ..pc<KeyValue>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: KeyValue.create)
-    ..a<$core.int>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
+class StringKeyValue extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StringKeyValue', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.common.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value')
     ..hasRequiredFields = false
   ;
 
-  InstrumentationScope._() : super();
-  factory InstrumentationScope({
+  StringKeyValue._() : super();
+  factory StringKeyValue({
+    $core.String? key,
+    $core.String? value,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    if (value != null) {
+      _result.value = value;
+    }
+    return _result;
+  }
+  factory StringKeyValue.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StringKeyValue.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  StringKeyValue clone() => StringKeyValue()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  StringKeyValue copyWith(void Function(StringKeyValue) updates) => super.copyWith((message) => updates(message as StringKeyValue)) as StringKeyValue; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static StringKeyValue create() => StringKeyValue._();
+  StringKeyValue createEmptyInstance() => create();
+  static $pb.PbList<StringKeyValue> createRepeated() => $pb.PbList<StringKeyValue>();
+  @$core.pragma('dart2js:noInline')
+  static StringKeyValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StringKeyValue>(create);
+  static StringKeyValue? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get value => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set value($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasValue() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearValue() => clearField(2);
+}
+
+class InstrumentationLibrary extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'InstrumentationLibrary', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'opentelemetry.proto.common.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'version')
+    ..hasRequiredFields = false
+  ;
+
+  InstrumentationLibrary._() : super();
+  factory InstrumentationLibrary({
     $core.String? name,
     $core.String? version,
-    $core.Iterable<KeyValue>? attributes,
-    $core.int? droppedAttributesCount,
   }) {
     final _result = create();
     if (name != null) {
@@ -338,34 +398,28 @@ class InstrumentationScope extends $pb.GeneratedMessage {
     if (version != null) {
       _result.version = version;
     }
-    if (attributes != null) {
-      _result.attributes.addAll(attributes);
-    }
-    if (droppedAttributesCount != null) {
-      _result.droppedAttributesCount = droppedAttributesCount;
-    }
     return _result;
   }
-  factory InstrumentationScope.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory InstrumentationScope.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory InstrumentationLibrary.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory InstrumentationLibrary.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  InstrumentationScope clone() => InstrumentationScope()..mergeFromMessage(this);
+  InstrumentationLibrary clone() => InstrumentationLibrary()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  InstrumentationScope copyWith(void Function(InstrumentationScope) updates) => super.copyWith((message) => updates(message as InstrumentationScope)) as InstrumentationScope; // ignore: deprecated_member_use
+  InstrumentationLibrary copyWith(void Function(InstrumentationLibrary) updates) => super.copyWith((message) => updates(message as InstrumentationLibrary)) as InstrumentationLibrary; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static InstrumentationScope create() => InstrumentationScope._();
-  InstrumentationScope createEmptyInstance() => create();
-  static $pb.PbList<InstrumentationScope> createRepeated() => $pb.PbList<InstrumentationScope>();
+  static InstrumentationLibrary create() => InstrumentationLibrary._();
+  InstrumentationLibrary createEmptyInstance() => create();
+  static $pb.PbList<InstrumentationLibrary> createRepeated() => $pb.PbList<InstrumentationLibrary>();
   @$core.pragma('dart2js:noInline')
-  static InstrumentationScope getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InstrumentationScope>(create);
-  static InstrumentationScope? _defaultInstance;
+  static InstrumentationLibrary getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<InstrumentationLibrary>(create);
+  static InstrumentationLibrary? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
@@ -384,17 +438,5 @@ class InstrumentationScope extends $pb.GeneratedMessage {
   $core.bool hasVersion() => $_has(1);
   @$pb.TagNumber(2)
   void clearVersion() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.List<KeyValue> get attributes => $_getList(2);
-
-  @$pb.TagNumber(4)
-  $core.int get droppedAttributesCount => $_getIZ(3);
-  @$pb.TagNumber(4)
-  set droppedAttributesCount($core.int v) { $_setUnsignedInt32(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasDroppedAttributesCount() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearDroppedAttributesCount() => clearField(4);
 }
 
