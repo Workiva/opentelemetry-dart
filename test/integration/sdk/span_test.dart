@@ -24,7 +24,8 @@ void main() {
         [mockProcessor1, mockProcessor2],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.internal,
         [],
         [],
@@ -60,7 +61,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
         [],
@@ -129,7 +131,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
         [],
@@ -159,7 +162,8 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
         api.SpanKind.client,
         [],
         [],

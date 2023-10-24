@@ -17,7 +17,7 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     Span span;
 
@@ -37,7 +37,7 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     final spans = <Span>[];
 
@@ -59,7 +59,7 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     Span span;
 
@@ -84,7 +84,7 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     Span span;
 
@@ -104,7 +104,7 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     final spans = <Span>[];
 
@@ -126,7 +126,7 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     Span span;
 
@@ -153,7 +153,7 @@ void main() {
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'),
+        sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     Span span;
 

@@ -4,6 +4,8 @@
 import '../../api.dart' as api;
 
 // Represents the instrumentation library.
+@Deprecated(
+    'This class will be removed in 0.18.0.  Use InstrumentationScope from SDK intead.')
 class InstrumentationLibrary implements api.InstrumentationLibrary {
   final String _name;
   final String _version;

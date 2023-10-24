@@ -42,7 +42,10 @@ class TracerProviderBase implements api.TracerProvider {
   List<sdk.SpanProcessor> get spanProcessors => processors;
 
   @override
-  api.Tracer getTracer(String name, {String version = ''}) {
+  api.Tracer getTracer(String name,
+      {String version = '',
+      String schemaUrl = '',
+      List<api.Attribute> attributes = const []}) {
     final key = '$name@$version';
     return tracers.putIfAbsent(
         key,
@@ -52,7 +55,7 @@ class TracerProviderBase implements api.TracerProvider {
             sampler,
             sdk.DateTimeTimeProvider(),
             idGenerator,
-            sdk.InstrumentationLibrary(name, version),
+            sdk.InstrumentationScope(name, version, schemaUrl, attributes),
             spanLimits));
   }
 
