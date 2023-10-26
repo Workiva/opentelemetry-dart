@@ -5,8 +5,6 @@ export 'src/api/common/attribute.dart' show Attribute;
 export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
 export 'src/api/context/context.dart' show Context;
-export 'src/api/exporters/span_exporter.dart' show SpanExporter;
-export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/open_telemetry.dart'
     show
         globalTextMapPropagator,
@@ -20,7 +18,6 @@ export 'src/api/propagation/injectors/text_map_setter.dart' show TextMapSetter;
 export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;
 export 'src/api/propagation/w3c_trace_context_propagator.dart'
     show W3CTraceContextPropagator;
-export 'src/api/span_processors/span_processor.dart' show SpanProcessor;
 export 'src/api/trace/id_generator.dart' show IdGenerator;
 export 'src/api/trace/span_context.dart' show SpanContext;
 export 'src/api/trace/span_id.dart' show SpanId;
