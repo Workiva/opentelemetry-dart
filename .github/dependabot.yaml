@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: "pub"
+    directory: /
+    groups:
+      pub:
+        patterns:
+          - "*"
+    schedule:
+      interval: weekly
+  - package-ecosystem: "github-actions"
+    directory: /
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    schedule:
+      interval: weekly

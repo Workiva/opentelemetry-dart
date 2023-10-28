@@ -43,4 +43,5 @@ jobs:
       - name: Activate RemoveFromCoverage Package
         run: dart pub global activate remove_from_coverage
       - name: Ignore Files For Coverage
-        run: dart pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
+        run: dart pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'      - name: Package Artifacts
+        run: ./package.sh
