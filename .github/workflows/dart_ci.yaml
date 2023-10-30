@@ -25,7 +25,7 @@ jobs:
           submodules: true
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: 2.18.7
+          sdk: 2.19.6
       - name: Install protobuf-compiler
         run: sudo apt install -y protobuf-compiler
       - name: Install Dart dependencies
@@ -35,7 +35,7 @@ jobs:
       - name: Format, analyze, and run tests
         run: make test
       - name: Generate Coverage
-        run: dart run test --coverage=./coverage
+        run: dart test --coverage=./coverage
       - name: Activate Coverage Package
         run: dart pub global activate coverage
       - name: Format Coverage
