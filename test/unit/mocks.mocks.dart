@@ -30,8 +30,8 @@ import 'package:opentelemetry/src/sdk/common/attributes.dart' as _i6;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeContext_0 extends _i1.SmartFake implements _i2.Context {
-  _FakeContext_0(
+class _FakeSpan_0 extends _i1.SmartFake implements _i2.Span {
+  _FakeSpan_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -40,8 +40,8 @@ class _FakeContext_0 extends _i1.SmartFake implements _i2.Context {
         );
 }
 
-class _FakeResponse_1 extends _i1.SmartFake implements _i3.Response {
-  _FakeResponse_1(
+class _FakeSpanContext_1 extends _i1.SmartFake implements _i2.SpanContext {
+  _FakeSpanContext_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -50,9 +50,29 @@ class _FakeResponse_1 extends _i1.SmartFake implements _i3.Response {
         );
 }
 
-class _FakeStreamedResponse_2 extends _i1.SmartFake
+class _FakeContext_2 extends _i1.SmartFake implements _i2.Context {
+  _FakeContext_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeResponse_3 extends _i1.SmartFake implements _i3.Response {
+  _FakeResponse_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeStreamedResponse_4 extends _i1.SmartFake
     implements _i3.StreamedResponse {
-  _FakeStreamedResponse_2(
+  _FakeStreamedResponse_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -61,8 +81,8 @@ class _FakeStreamedResponse_2 extends _i1.SmartFake
         );
 }
 
-class _FakeSpanContext_3 extends _i1.SmartFake implements _i2.SpanContext {
-  _FakeSpanContext_3(
+class _FakeSpanId_5 extends _i1.SmartFake implements _i2.SpanId {
+  _FakeSpanId_5(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -71,8 +91,8 @@ class _FakeSpanContext_3 extends _i1.SmartFake implements _i2.SpanContext {
         );
 }
 
-class _FakeSpanId_4 extends _i1.SmartFake implements _i2.SpanId {
-  _FakeSpanId_4(
+class _FakeInt64_6 extends _i1.SmartFake implements _i4.Int64 {
+  _FakeInt64_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -81,8 +101,8 @@ class _FakeSpanId_4 extends _i1.SmartFake implements _i2.SpanId {
         );
 }
 
-class _FakeInt64_5 extends _i1.SmartFake implements _i4.Int64 {
-  _FakeInt64_5(
+class _FakeSpanStatus_7 extends _i1.SmartFake implements _i2.SpanStatus {
+  _FakeSpanStatus_7(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -91,19 +111,9 @@ class _FakeInt64_5 extends _i1.SmartFake implements _i4.Int64 {
         );
 }
 
-class _FakeSpanStatus_6 extends _i1.SmartFake implements _i2.SpanStatus {
-  _FakeSpanStatus_6(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeInstrumentationScope_7 extends _i1.SmartFake
+class _FakeInstrumentationScope_8 extends _i1.SmartFake
     implements _i5.InstrumentationScope {
-  _FakeInstrumentationScope_7(
+  _FakeInstrumentationScope_8(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -112,8 +122,8 @@ class _FakeInstrumentationScope_7 extends _i1.SmartFake
         );
 }
 
-class _FakeAttributes_8 extends _i1.SmartFake implements _i6.Attributes {
-  _FakeAttributes_8(
+class _FakeAttributes_9 extends _i1.SmartFake implements _i6.Attributes {
+  _FakeAttributes_9(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -122,8 +132,8 @@ class _FakeAttributes_8 extends _i1.SmartFake implements _i6.Attributes {
         );
 }
 
-class _FakeResource_9 extends _i1.SmartFake implements _i5.Resource {
-  _FakeResource_9(
+class _FakeResource_10 extends _i1.SmartFake implements _i5.Resource {
+  _FakeResource_10(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -136,6 +146,32 @@ class _FakeResource_9 extends _i1.SmartFake implements _i5.Resource {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockContext extends _i1.Mock implements _i2.Context {
+  @override
+  _i2.Span get span => (super.noSuchMethod(
+        Invocation.getter(#span),
+        returnValue: _FakeSpan_0(
+          this,
+          Invocation.getter(#span),
+        ),
+        returnValueForMissingStub: _FakeSpan_0(
+          this,
+          Invocation.getter(#span),
+        ),
+      ) as _i2.Span);
+
+  @override
+  _i2.SpanContext get spanContext => (super.noSuchMethod(
+        Invocation.getter(#spanContext),
+        returnValue: _FakeSpanContext_1(
+          this,
+          Invocation.getter(#spanContext),
+        ),
+        returnValueForMissingStub: _FakeSpanContext_1(
+          this,
+          Invocation.getter(#spanContext),
+        ),
+      ) as _i2.SpanContext);
+
   @override
   T? getValue<T>(_i7.ContextKey? key) => (super.noSuchMethod(
         Invocation.method(
@@ -158,7 +194,7 @@ class MockContext extends _i1.Mock implements _i2.Context {
             value,
           ],
         ),
-        returnValue: _FakeContext_0(
+        returnValue: _FakeContext_2(
           this,
           Invocation.method(
             #setValue,
@@ -168,7 +204,7 @@ class MockContext extends _i1.Mock implements _i2.Context {
             ],
           ),
         ),
-        returnValueForMissingStub: _FakeContext_0(
+        returnValueForMissingStub: _FakeContext_2(
           this,
           Invocation.method(
             #setValue,
@@ -186,14 +222,14 @@ class MockContext extends _i1.Mock implements _i2.Context {
           #withSpan,
           [span],
         ),
-        returnValue: _FakeContext_0(
+        returnValue: _FakeContext_2(
           this,
           Invocation.method(
             #withSpan,
             [span],
           ),
         ),
-        returnValueForMissingStub: _FakeContext_0(
+        returnValueForMissingStub: _FakeContext_2(
           this,
           Invocation.method(
             #withSpan,
@@ -240,7 +276,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_1(
+        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #head,
@@ -249,7 +285,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i9.Future<_i3.Response>.value(_FakeResponse_1(
+            _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #head,
@@ -270,7 +306,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_1(
+        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #get,
@@ -279,7 +315,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i9.Future<_i3.Response>.value(_FakeResponse_1(
+            _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #get,
@@ -306,7 +342,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_1(
+        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #post,
@@ -319,7 +355,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i9.Future<_i3.Response>.value(_FakeResponse_1(
+            _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #post,
@@ -350,7 +386,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_1(
+        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #put,
@@ -363,7 +399,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i9.Future<_i3.Response>.value(_FakeResponse_1(
+            _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #put,
@@ -394,7 +430,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_1(
+        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #patch,
@@ -407,7 +443,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i9.Future<_i3.Response>.value(_FakeResponse_1(
+            _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #patch,
@@ -438,7 +474,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_1(
+        returnValue: _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #delete,
@@ -451,7 +487,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i9.Future<_i3.Response>.value(_FakeResponse_1(
+            _i9.Future<_i3.Response>.value(_FakeResponse_3(
           this,
           Invocation.method(
             #delete,
@@ -504,7 +540,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           [request],
         ),
         returnValue:
-            _i9.Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_2(
+            _i9.Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_4(
           this,
           Invocation.method(
             #send,
@@ -512,7 +548,7 @@ class MockHttpClient extends _i1.Mock implements _i3.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i9.Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_2(
+            _i9.Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_4(
           this,
           Invocation.method(
             #send,
@@ -538,11 +574,11 @@ class MockSpan extends _i1.Mock implements _i2.Span {
   @override
   _i2.SpanContext get spanContext => (super.noSuchMethod(
         Invocation.getter(#spanContext),
-        returnValue: _FakeSpanContext_3(
+        returnValue: _FakeSpanContext_1(
           this,
           Invocation.getter(#spanContext),
         ),
-        returnValueForMissingStub: _FakeSpanContext_3(
+        returnValueForMissingStub: _FakeSpanContext_1(
           this,
           Invocation.getter(#spanContext),
         ),
@@ -551,11 +587,11 @@ class MockSpan extends _i1.Mock implements _i2.Span {
   @override
   _i2.SpanId get parentSpanId => (super.noSuchMethod(
         Invocation.getter(#parentSpanId),
-        returnValue: _FakeSpanId_4(
+        returnValue: _FakeSpanId_5(
           this,
           Invocation.getter(#parentSpanId),
         ),
-        returnValueForMissingStub: _FakeSpanId_4(
+        returnValueForMissingStub: _FakeSpanId_5(
           this,
           Invocation.getter(#parentSpanId),
         ),
@@ -667,11 +703,11 @@ class MockReadOnlySpan extends _i1.Mock implements _i5.ReadOnlySpan {
   @override
   _i2.SpanContext get spanContext => (super.noSuchMethod(
         Invocation.getter(#spanContext),
-        returnValue: _FakeSpanContext_3(
+        returnValue: _FakeSpanContext_1(
           this,
           Invocation.getter(#spanContext),
         ),
-        returnValueForMissingStub: _FakeSpanContext_3(
+        returnValueForMissingStub: _FakeSpanContext_1(
           this,
           Invocation.getter(#spanContext),
         ),
@@ -680,11 +716,11 @@ class MockReadOnlySpan extends _i1.Mock implements _i5.ReadOnlySpan {
   @override
   _i2.SpanId get parentSpanId => (super.noSuchMethod(
         Invocation.getter(#parentSpanId),
-        returnValue: _FakeSpanId_4(
+        returnValue: _FakeSpanId_5(
           this,
           Invocation.getter(#parentSpanId),
         ),
-        returnValueForMissingStub: _FakeSpanId_4(
+        returnValueForMissingStub: _FakeSpanId_5(
           this,
           Invocation.getter(#parentSpanId),
         ),
@@ -693,11 +729,11 @@ class MockReadOnlySpan extends _i1.Mock implements _i5.ReadOnlySpan {
   @override
   _i4.Int64 get startTime => (super.noSuchMethod(
         Invocation.getter(#startTime),
-        returnValue: _FakeInt64_5(
+        returnValue: _FakeInt64_6(
           this,
           Invocation.getter(#startTime),
         ),
-        returnValueForMissingStub: _FakeInt64_5(
+        returnValueForMissingStub: _FakeInt64_6(
           this,
           Invocation.getter(#startTime),
         ),
@@ -706,11 +742,11 @@ class MockReadOnlySpan extends _i1.Mock implements _i5.ReadOnlySpan {
   @override
   _i2.SpanStatus get status => (super.noSuchMethod(
         Invocation.getter(#status),
-        returnValue: _FakeSpanStatus_6(
+        returnValue: _FakeSpanStatus_7(
           this,
           Invocation.getter(#status),
         ),
-        returnValueForMissingStub: _FakeSpanStatus_6(
+        returnValueForMissingStub: _FakeSpanStatus_7(
           this,
           Invocation.getter(#status),
         ),
@@ -719,11 +755,11 @@ class MockReadOnlySpan extends _i1.Mock implements _i5.ReadOnlySpan {
   @override
   _i5.InstrumentationScope get instrumentationScope => (super.noSuchMethod(
         Invocation.getter(#instrumentationScope),
-        returnValue: _FakeInstrumentationScope_7(
+        returnValue: _FakeInstrumentationScope_8(
           this,
           Invocation.getter(#instrumentationScope),
         ),
-        returnValueForMissingStub: _FakeInstrumentationScope_7(
+        returnValueForMissingStub: _FakeInstrumentationScope_8(
           this,
           Invocation.getter(#instrumentationScope),
         ),
@@ -739,11 +775,11 @@ class MockReadOnlySpan extends _i1.Mock implements _i5.ReadOnlySpan {
   @override
   _i6.Attributes get attributes => (super.noSuchMethod(
         Invocation.getter(#attributes),
-        returnValue: _FakeAttributes_8(
+        returnValue: _FakeAttributes_9(
           this,
           Invocation.getter(#attributes),
         ),
-        returnValueForMissingStub: _FakeAttributes_8(
+        returnValueForMissingStub: _FakeAttributes_9(
           this,
           Invocation.getter(#attributes),
         ),
@@ -752,11 +788,11 @@ class MockReadOnlySpan extends _i1.Mock implements _i5.ReadOnlySpan {
   @override
   _i5.Resource get resource => (super.noSuchMethod(
         Invocation.getter(#resource),
-        returnValue: _FakeResource_9(
+        returnValue: _FakeResource_10(
           this,
           Invocation.getter(#resource),
         ),
-        returnValueForMissingStub: _FakeResource_9(
+        returnValueForMissingStub: _FakeResource_10(
           this,
           Invocation.getter(#resource),
         ),

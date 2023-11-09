@@ -65,8 +65,7 @@ class CollectorExporter implements sdk.SpanExporter {
       for (final attr in il.key.attributes.keys) {
         attrs.add(pb_common.KeyValue(
             key: attr,
-            value:
-                _attributeValueToProtobuf(il.key.attributes.get(attr)!)));
+            value: _attributeValueToProtobuf(il.key.attributes.get(attr)!)));
       }
       final rs = pb_trace.ResourceSpans(
           resource: pb_resource.Resource(attributes: attrs), scopeSpans: []);
