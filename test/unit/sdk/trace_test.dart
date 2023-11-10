@@ -19,7 +19,7 @@ void main() {
 
   test('traceSync wants you to use trace instead', () {
     expect(() => traceSync('foo', () async => ''), throwsArgumentError);
-    expect(() => traceSync('foo', () => Future.value()), throwsArgumentError);
+    expect(() => traceSync('foo', Future.value), throwsArgumentError);
   });
 
   test('trace returns future value', () async {

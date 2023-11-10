@@ -5,6 +5,7 @@
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/common/limits.dart';
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
     as pb_trace_service;
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/common/v1/common.pb.dart'
@@ -19,12 +20,12 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  MockHTTPClient mockClient;
+  late MockHttpClient mockClient;
   final uri =
       Uri.parse('https://h.wdesk.org/s/opentelemetry-collector/v1/traces');
 
   setUp(() {
-    mockClient = MockHTTPClient();
+    mockClient = MockHttpClient();
   });
 
   tearDown(() {
@@ -34,8 +35,8 @@ void main() {
   test('sends spans', () {
     final resource =
         sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
-    final instrumentationLibrary =
-        sdk.InstrumentationLibrary('library_name', 'library_version');
+    final instrumentationLibrary = sdk.InstrumentationScope(
+        'library_name', 'library_version', 'url://schema', []);
     final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
     final span1 = Span(
         'foo',
@@ -46,8 +47,11 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
-        attributes: [api.Attribute.fromString('foo', 'bar')],
-        kind: api.SpanKind.client)
+        api.SpanKind.client,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
+      ..setAttributes([api.Attribute.fromString('foo', 'bar')])
       ..end();
     final span2 = Span(
         'baz',
@@ -58,15 +62,16 @@ void main() {
         sdk.DateTimeTimeProvider(),
         resource,
         instrumentationLibrary,
-        limits: limits,
-        attributes: [api.Attribute.fromBoolean('bool', true)],
-        kind: api.SpanKind.internal,
-        links: [
+        api.SpanKind.internal,
+        applyLinkLimits([
           api.SpanLink(span1.spanContext, attributes: [
             api.Attribute.fromString('longKey',
                 'I am very long with maxNumAttributeLength: 5 limitation!')
-          ])
-        ])
+          ]),
+        ], limits),
+        limits,
+        sdk.DateTimeTimeProvider().now)
+      ..setAttributes([api.Attribute.fromBoolean('bool', true)])
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -79,8 +84,8 @@ void main() {
                 key: 'service.name',
                 value: pb_common.AnyValue(stringValue: 'bar'))
           ]),
-          instrumentationLibrarySpans: [
-            pb.InstrumentationLibrarySpans(
+          scopeSpans: [
+            pb.ScopeSpans(
                 spans: [
                   pb.Span(
                       traceId: [1, 2, 3],
@@ -96,7 +101,7 @@ void main() {
                       ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
-                          message: null),
+                          message: ''),
                       kind: pb.Span_SpanKind.SPAN_KIND_CLIENT),
                   pb.Span(
                       traceId: [1, 2, 3],
@@ -112,7 +117,7 @@ void main() {
                       ],
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
-                          message: null),
+                          message: ''),
                       kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL,
                       links: [
                         pb.Span_Link(
@@ -127,7 +132,7 @@ void main() {
                             ])
                       ])
                 ],
-                instrumentationLibrary: pb_common.InstrumentationLibrary(
+                scope: pb_common.InstrumentationScope(
                     name: 'library_name', version: 'library_version'))
           ])
     ]);
@@ -146,7 +151,12 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient)
@@ -167,7 +177,12 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     final suppliedHeaders = {
@@ -195,7 +210,12 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'))
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
       ..end();
 
     final expectedHeaders = {'Content-Type': 'application/x-protobuf'};

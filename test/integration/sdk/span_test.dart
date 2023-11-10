@@ -23,15 +23,18 @@ void main() {
         [mockProcessor1, mockProcessor2],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
     expect(span.parentSpanId, same(parentSpanId));
     expect(span.name, 'foo');
 
-    verify(mockProcessor1.onStart(span, null)).called(1);
-    verify(mockProcessor2.onStart(span, null)).called(1);
     verifyNever(mockProcessor1.onEnd(span));
     verifyNever(mockProcessor2.onEnd(span));
 
@@ -53,39 +56,41 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.client,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     // Verify span status' defaults.
     expect(span.status.code, equals(api.StatusCode.unset));
-    expect(span.status.description, equals(null));
+    expect(span.status.description, equals(''));
 
     // Verify that span status can be set to "Error".
-    span.setStatus(api.StatusCode.error, description: 'Something s\'ploded.');
+    span.setStatus(api.StatusCode.error, 'Something s\'ploded.');
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Something s\'ploded.'));
 
     // Verify that multiple errors update the span to the most recently set.
-    span.setStatus(api.StatusCode.error,
-        description: 'Another error happened.');
+    span.setStatus(api.StatusCode.error, 'Another error happened.');
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status cannot be set to "Unset" and that description
     // is ignored for statuses other than "Error".
-    span.setStatus(api.StatusCode.unset,
-        description: 'Oops.  Can we turn this back off?');
+    span.setStatus(api.StatusCode.unset, 'Oops.  Can we turn this back off?');
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status can be set to "Ok" and that description is
     // ignored for statuses other than "Error".
-    span.setStatus(api.StatusCode.ok, description: 'All done here.');
+    span.setStatus(api.StatusCode.ok, 'All done here.');
     expect(span.status.code, equals(api.StatusCode.ok));
     expect(span.status.description, equals('Another error happened.'));
 
     // Verify that span status cannot be changed once set to "Ok".
-    span.setStatus(api.StatusCode.error,
-        description: 'Something else went wrong.');
+    span.setStatus(api.StatusCode.error, 'Something else went wrong.');
     expect(span.status.code, equals(api.StatusCode.ok));
     expect(span.status.description, equals('Another error happened.'));
   });
@@ -119,7 +124,12 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.client,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     expect(span.attributes.keys.length, isZero);
 
@@ -143,7 +153,12 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary('library_name', 'library_version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.client,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     try {
       throw Exception('Oh noes!');

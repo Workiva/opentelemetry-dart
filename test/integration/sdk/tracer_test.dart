@@ -4,19 +4,23 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('startSpan new trace', () {
-    final tracer = Tracer([],
+    final tracer = Tracer(
+        [],
         sdk.Resource([]),
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        sdk.SpanLimits());
 
-    final span = tracer.startSpan('foo');
+    final span = tracer.startSpan('foo') as Span;
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNull);
@@ -25,17 +29,20 @@ void main() {
   });
 
   test('startSpan child span', () {
-    final tracer = Tracer([],
+    final tracer = Tracer(
+        [],
         sdk.Resource([]),
         sdk.AlwaysOnSampler(),
         sdk.DateTimeTimeProvider(),
         sdk.IdGenerator(),
-        sdk.InstrumentationLibrary('name', 'version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        sdk.SpanLimits());
 
     final parentSpan = tracer.startSpan('foo');
     final context = api.Context.current.withSpan(parentSpan);
 
-    final childSpan = tracer.startSpan('bar', context: context);
+    final childSpan = tracer.startSpan('bar', context: context) as Span;
 
     expect(childSpan.startTime, isNotNull);
     expect(childSpan.endTime, isNull);

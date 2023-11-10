@@ -17,16 +17,15 @@ class MeterProvider implements api.MeterProvider {
 
   sdk.Resource get resource => _sharedState.resource;
 
-  MeterProvider({sdk.Resource resource})
-      : _sharedState = MeterProviderSharedState(resource);
+  MeterProvider({sdk.Resource? resource})
+      : _sharedState = MeterProviderSharedState(resource ?? sdk.Resource([]));
 
   @override
   api.Meter get(String name,
       {String version = '',
       String schemaUrl = '',
       List<api.Attribute> attributes = const []}) {
-    if (name == null || name == '') {
-      name = '';
+    if (name.isEmpty) {
       _logger.warning(invalidMeterNameMessage, '', StackTrace.current);
     }
 

@@ -1,6 +1,7 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../api.dart' as api;
@@ -12,18 +13,18 @@ import '../../proto/opentelemetry/proto/resource/v1/resource.pb.dart'
     as pb_resource;
 import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 
-class CollectorExporter implements api.SpanExporter {
-  Uri uri;
-  http.Client client;
-  Map<String, String> headers;
+class CollectorExporter implements sdk.SpanExporter {
+  final Uri uri;
+  final http.Client client;
+  final Map<String, String> headers;
   var _isShutdown = false;
 
-  CollectorExporter(this.uri, {http.Client httpClient, this.headers}) {
-    client = httpClient ?? http.Client();
-  }
+  CollectorExporter(this.uri,
+      {http.Client? httpClient, this.headers = const {}})
+      : client = httpClient ?? http.Client();
 
   @override
-  void export(List<api.Span> spans) {
+  void export(List<sdk.ReadOnlySpan> spans) {
     if (_isShutdown) {
       return;
     }
@@ -34,30 +35,27 @@ class CollectorExporter implements api.SpanExporter {
 
     final body = pb_trace_service.ExportTraceServiceRequest(
         resourceSpans: _spansToProtobuf(spans));
-
-    final headers = {'Content-Type': 'application/x-protobuf'};
-
-    if (this.headers != null) {
-      headers.addAll(this.headers);
-    }
+    final headers = {'Content-Type': 'application/x-protobuf'}
+      ..addAll(this.headers);
 
     client.post(uri, body: body.writeToBuffer(), headers: headers);
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
   /// Spans are grouped by a trace provider's [sdk.Resource] and a tracer's
-  /// [api.InstrumentationLibrary].
-  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(List<api.Span> spans) {
+  /// [sdk.InstrumentationScope].
+  Iterable<pb_trace.ResourceSpans> _spansToProtobuf(
+      List<sdk.ReadOnlySpan> spans) {
     // use a map of maps to group spans by resource and instrumentation library
     final rsm =
-        <sdk.Resource, Map<api.InstrumentationLibrary, List<pb_trace.Span>>>{};
+        <sdk.Resource, Map<sdk.InstrumentationScope, List<pb_trace.Span>>>{};
     for (final span in spans) {
-      final il = rsm[(span as sdk.Span).resource] ??
-          <api.InstrumentationLibrary, List<pb_trace.Span>>{};
-      il[span.instrumentationLibrary] =
-          il[span.instrumentationLibrary] ?? <pb_trace.Span>[]
-            ..add(_spanToProtobuf(span as sdk.Span));
-      rsm[(span as sdk.Span).resource] = il;
+      final il = rsm[span.resource] ??
+          <sdk.InstrumentationScope, List<pb_trace.Span>>{};
+      il[span.instrumentationScope] =
+          il[span.instrumentationScope] ?? <pb_trace.Span>[]
+            ..add(_spanToProtobuf(span));
+      rsm[span.resource] = il;
     }
 
     final rss = <pb_trace.ResourceSpans>[];
@@ -67,16 +65,15 @@ class CollectorExporter implements api.SpanExporter {
       for (final attr in il.key.attributes.keys) {
         attrs.add(pb_common.KeyValue(
             key: attr,
-            value: _attributeValueToProtobuf(il.key.attributes.get(attr))));
+            value: _attributeValueToProtobuf(il.key.attributes.get(attr)!)));
       }
       final rs = pb_trace.ResourceSpans(
-          resource: pb_resource.Resource(attributes: attrs),
-          instrumentationLibrarySpans: []);
+          resource: pb_resource.Resource(attributes: attrs), scopeSpans: []);
       // for each distinct instrumentation library, construct the protobuf equivalent
       for (final ils in il.value.entries) {
-        rs.instrumentationLibrarySpans.add(pb_trace.InstrumentationLibrarySpans(
+        rs.scopeSpans.add(pb_trace.ScopeSpans(
             spans: ils.value,
-            instrumentationLibrary: pb_common.InstrumentationLibrary(
+            scope: pb_common.InstrumentationScope(
                 name: ils.key.name, version: ils.key.version)));
       }
       rss.add(rs);
@@ -101,7 +98,7 @@ class CollectorExporter implements api.SpanExporter {
     return pbLinks;
   }
 
-  pb_trace.Span _spanToProtobuf(sdk.Span span) {
+  pb_trace.Span _spanToProtobuf(sdk.ReadOnlySpan span) {
     pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
       case api.StatusCode.unset:
@@ -139,13 +136,13 @@ class CollectorExporter implements api.SpanExporter {
     return pb_trace.Span(
         traceId: span.spanContext.traceId.get(),
         spanId: span.spanContext.spanId.get(),
-        parentSpanId: span.parentSpanId?.get(),
+        parentSpanId: span.parentSpanId.get(),
         name: span.name,
         startTimeUnixNano: span.startTime,
         endTimeUnixNano: span.endTime,
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
             key: key,
-            value: _attributeValueToProtobuf(span.attributes.get(key)))),
+            value: _attributeValueToProtobuf(span.attributes.get(key)!))),
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),
         kind: spanKind,
@@ -155,13 +152,13 @@ class CollectorExporter implements api.SpanExporter {
   pb_common.AnyValue _attributeValueToProtobuf(Object value) {
     switch (value.runtimeType) {
       case String:
-        return pb_common.AnyValue(stringValue: value);
+        return pb_common.AnyValue(stringValue: value as String);
       case bool:
-        return pb_common.AnyValue(boolValue: value);
+        return pb_common.AnyValue(boolValue: value as bool);
       case double:
-        return pb_common.AnyValue(doubleValue: value);
+        return pb_common.AnyValue(doubleValue: value as double);
       case int:
-        return pb_common.AnyValue(intValue: value);
+        return pb_common.AnyValue(intValue: Int64(value as int));
       case List:
         final list = value as List;
         if (list.isNotEmpty) {

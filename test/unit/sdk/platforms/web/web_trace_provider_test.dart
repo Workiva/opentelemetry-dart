@@ -4,7 +4,8 @@
 @TestOn('chrome')
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/span_processors/span_processor.dart';
+import 'package:opentelemetry/src/sdk/trace/span.dart';
+import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
 import 'package:opentelemetry/src/sdk/platforms/web/trace/web_tracer_provider.dart';
 import 'package:test/test.dart';
 
@@ -60,9 +61,10 @@ void main() {
       () async {
     final span = WebTracerProvider(processors: [MockSpanProcessor()])
         .getTracer('testTracer')
-        .startSpan('testSpan', context: Context.root)
+        .startSpan('testSpan', context: Context.root) as Span
       ..end();
 
-    expect(span.startTime, lessThanOrEqualTo(span.endTime));
+    expect(span.endTime, isNotNull);
+    expect(span.startTime, lessThanOrEqualTo(span.endTime!));
   });
 }

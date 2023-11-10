@@ -3,22 +3,20 @@
 
 @TestOn('vm')
 import 'package:mockito/mockito.dart';
-import 'package:opentelemetry/src/api/exporters/span_exporter.dart';
-import 'package:opentelemetry/src/api/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_processors/simple_processor.dart';
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
 
 void main() {
-  SpanExporter exporter;
-  SimpleSpanProcessor processor;
-  Span span;
+  late sdk.SpanExporter exporter;
+  late sdk.SimpleSpanProcessor processor;
+  late sdk.ReadOnlySpan span;
 
   setUp(() {
     exporter = MockSpanExporter();
-    processor = SimpleSpanProcessor(exporter);
-    span = MockSpan();
+    processor = sdk.SimpleSpanProcessor(exporter);
+    span = MockReadOnlySpan();
   });
 
   test('executes export', () {

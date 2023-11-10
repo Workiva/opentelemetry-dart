@@ -10,10 +10,10 @@ import '../../../sdk.dart' as sdk;
 /// A registry for creating named [api.Tracer]s.
 class TracerProviderBase implements api.TracerProvider {
   @protected
-  final Map<String, api.Tracer> tracers = {};
+  final Map<String, Tracer> tracers = {};
 
   @protected
-  final List<api.SpanProcessor> processors;
+  final List<sdk.SpanProcessor> processors;
 
   @protected
   final sdk.Resource resource;
@@ -28,27 +28,32 @@ class TracerProviderBase implements api.TracerProvider {
   final sdk.SpanLimits spanLimits;
 
   TracerProviderBase(
-      {List<api.SpanProcessor> processors,
-      sdk.Resource resource,
-      sdk.Sampler sampler,
-      api.IdGenerator idGenerator,
-      sdk.SpanLimits spanLimits})
-      : processors = processors ?? [], // Default to a no-op TracerProvider.
-        resource = resource ?? sdk.Resource([]),
-        sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
-        idGenerator = idGenerator ?? sdk.IdGenerator(),
-        spanLimits = spanLimits ?? sdk.SpanLimits();
+      {this.processors =
+          const [], // Default to a TracerProvider which does not emit traces.
+      resource,
+      this.sampler = const sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
+      this.idGenerator = const sdk.IdGenerator(),
+      this.spanLimits = const sdk.SpanLimits()})
+      : resource = resource ?? sdk.Resource([]);
 
-  List<api.SpanProcessor> get spanProcessors => processors;
+  List<sdk.SpanProcessor> get spanProcessors => processors;
 
   @override
-  api.Tracer getTracer(String name, {String version = ''}) {
+  api.Tracer getTracer(String name,
+      {String version = '',
+      String schemaUrl = '',
+      List<api.Attribute> attributes = const []}) {
     final key = '$name@$version';
     return tracers.putIfAbsent(
         key,
-        () => Tracer(processors, resource, sampler, sdk.DateTimeTimeProvider(),
-            idGenerator, sdk.InstrumentationLibrary(name, version),
-            spanLimits: spanLimits));
+        () => Tracer(
+            processors,
+            resource,
+            sampler,
+            sdk.DateTimeTimeProvider(),
+            idGenerator,
+            sdk.InstrumentationScope(name, version, schemaUrl, attributes),
+            spanLimits));
   }
 
   @override

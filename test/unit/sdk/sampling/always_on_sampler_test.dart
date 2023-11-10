@@ -19,8 +19,12 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'always_on_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
     final testContext = api.Context.current.withSpan(testSpan);
 
     final result = sdk.AlwaysOnSampler().shouldSample(
@@ -40,8 +44,12 @@ void main() {
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'always_on_sampler_test', 'sampler_test_version'));
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
 
     final result = sdk.AlwaysOnSampler().shouldSample(api.Context.root, traceId,
         testSpan.name, api.SpanKind.internal, [], []);

@@ -4,6 +4,7 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/api/trace/nonrecording_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
@@ -17,7 +18,12 @@ void main() {
       [],
       sdk.DateTimeTimeProvider(),
       sdk.Resource([]),
-      sdk.InstrumentationLibrary('library_name', 'library_version'));
+      sdk.InstrumentationScope(
+          'library_name', 'library_version', 'url://schema', []),
+      api.SpanKind.client,
+      [],
+      sdk.SpanLimits(),
+      sdk.DateTimeTimeProvider().now);
 
   group('get Span', () {
     test('returns Span when exists', () {
@@ -26,10 +32,12 @@ void main() {
       expect(childContext.span, same(testSpan));
     });
 
-    test('returns null when not exists', () {
+    test('returns an invalid Span when a Span does not exist in the Context',
+        () {
       final context = api.Context.current;
 
-      expect(context.span, isNull);
+      expect(context.span, isA<NonRecordingSpan>());
+      expect(context.span.spanContext.isValid, isFalse);
     });
   });
 
@@ -40,10 +48,12 @@ void main() {
       expect(testContext.spanContext, same(testSpanContext));
     });
 
-    test('returns null when Span not exists', () {
+    test(
+        'returns an invalid SpanContext when a Span does not exist in the Context',
+        () {
       final testContext = api.Context.current;
 
-      expect(testContext.spanContext, isNull);
+      expect(testContext.spanContext.isValid, isFalse);
     });
   });
 }

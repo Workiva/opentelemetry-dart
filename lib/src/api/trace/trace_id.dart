@@ -12,11 +12,9 @@ class TraceId {
   List<int> _id;
 
   TraceId(this._id);
-  TraceId.fromIdGenerator(api.IdGenerator generator) {
-    _id = generator.generateTraceId();
-  }
-  TraceId.fromString(String id) {
-    _id = [];
+  TraceId.fromIdGenerator(api.IdGenerator generator)
+      : _id = generator.generateTraceId();
+  TraceId.fromString(String id) : _id = [] {
     id = id.padLeft(TraceId.sizeBits, '0');
 
     for (var i = 0; i < id.length; i += 2) {
