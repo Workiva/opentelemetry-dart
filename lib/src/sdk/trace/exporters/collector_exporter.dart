@@ -98,6 +98,18 @@ class CollectorExporter implements sdk.SpanExporter {
     return pbLinks;
   }
 
+  Iterable<pb_trace.Span_Event> _spanEventsToProtobuf(
+      Iterable<api.SpanEvent> events) {
+    return events.map((event) => pb_trace.Span_Event(
+          timeUnixNano: event.timestamp,
+          name: event.name,
+          attributes: event.attributes.map((attribute) => pb_common.KeyValue(
+              key: attribute.key,
+              value: _attributeValueToProtobuf(attribute.value))),
+          droppedAttributesCount: event.droppedAttributesCount,
+        ));
+  }
+
   pb_trace.Span _spanToProtobuf(sdk.ReadOnlySpan span) {
     pb_trace.Status_StatusCode statusCode;
     switch (span.status.code) {
@@ -143,6 +155,9 @@ class CollectorExporter implements sdk.SpanExporter {
         attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
             key: key,
             value: _attributeValueToProtobuf(span.attributes.get(key)!))),
+        events: _spanEventsToProtobuf(span.events),
+        droppedEventsCount:
+            span.events.isNotEmpty ? span.droppedEventsCount : null,
         status:
             pb_trace.Status(code: statusCode, message: span.status.description),
         kind: spanKind,

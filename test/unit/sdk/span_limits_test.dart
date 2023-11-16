@@ -14,6 +14,8 @@ void main() {
   const maxAttributeLength = 5;
   const maxLinks = 3;
   const maxAttributesPerLink = 3;
+  const maxEvents = 3;
+  const maxAttributesPerEvent = 3;
   final attrShort = api.Attribute.fromString('shortkey', '55555');
   final dupShort = api.Attribute.fromString('shortkey', '66666');
   final attrLong = api.Attribute.fromString('longkey', '5555555');
@@ -30,7 +32,9 @@ void main() {
       maxNumAttributes: maxAttributes,
       maxNumAttributeLength: maxAttributeLength,
       maxNumLink: maxLinks,
-      maxNumAttributesPerLink: maxAttributesPerLink);
+      maxNumAttributesPerLink: maxAttributesPerLink,
+      maxNumEvents: maxEvents,
+      maxNumAttributesPerEvent: maxAttributesPerEvent);
   final context = api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
       api.TraceFlags.none, api.TraceState.empty());
   final spanLink1 = api.SpanLink(context, attributes: [attrShort]);
@@ -416,5 +420,105 @@ void main() {
       expect(link.context, equals(context));
       assert(link.attributes.isEmpty);
     }
+  });
+
+  group('SpanEvent', () {
+    late Span span;
+
+    setUp(() {
+      span = Span(
+          'test',
+          api.SpanContext.invalid(),
+          api.SpanId.root(),
+          [],
+          sdk.DateTimeTimeProvider(),
+          sdk.Resource([]),
+          sdk.InstrumentationScope(
+              'library_name', 'library_version', 'url://schema', []),
+          api.SpanKind.internal,
+          [],
+          limits,
+          sdk.DateTimeTimeProvider().now);
+    });
+
+    test('allows adding all events up to the limit', () {
+      span
+        ..addEvent('firstEvent')
+        ..addEvent('secondEvent');
+
+      expect(span.events, hasLength(2));
+    });
+
+    test('does not allow adding more events than maxEvent limit', () {
+      span
+        ..addEvent('first')
+        ..addEvent('second')
+        ..addEvent('third')
+        ..addEvent('fourth')
+        ..addEvent('fifth');
+
+      expect(maxEvents, lessThan(5));
+      expect(span.events, hasLength(maxEvents));
+    });
+
+    test('does not allow more attributes than maxNumAttributesPerEvent', () {
+      final attributes = [attrShort, dupShort, attrInt, attrBool];
+      span.addEvent('first', attributes: attributes);
+
+      expect(span.events, hasLength(1));
+      expect(maxAttributesPerEvent, lessThan(attributes.length));
+      expect(span.events[0].attributes, hasLength(maxAttributesPerEvent));
+    });
+
+    test('does not allow too long string and string list attributes', () {
+      final attributes = [
+        attrShort,
+        attrLong,
+        attrStringArray,
+        dupShort,
+        dupLong
+      ];
+      span.addEvent('first', attributes: attributes);
+
+      expect(span.events, hasLength(1));
+      final event = span.events[0];
+      expect(event.attributes, hasLength(3));
+
+      for (final attribute in event.attributes) {
+        if (attribute.value is String) {
+          assert((attribute.value as String).length <= maxAttributeLength);
+        } else if (attribute.value is List<String>) {
+          for (final value in attribute.value as List<String>) {
+            assert(value.length <= maxAttributeLength);
+          }
+        }
+      }
+    });
+
+    test('test spanEvent with duplicated attributes', () {
+      final attributes = [
+        attrShort,
+        dupShort,
+        attrLong,
+        dupLong,
+        dupShort2,
+        dupLong2
+      ];
+      span.addEvent('first', attributes: attributes);
+
+      expect(span.events, hasLength(1));
+      final event = span.events.first;
+      expect(event.attributes, hasLength(2));
+      for (final attribute in event.attributes) {
+        expect(attribute.value, '77777');
+      }
+    });
+
+    test('test spanEvent has no attributes', () {
+      span.addEvent('first');
+
+      expect(span.events, hasLength(1));
+      expect(span.events.first.attributes, isEmpty);
+    });
   });
 }

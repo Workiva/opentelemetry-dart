@@ -179,6 +179,25 @@ doWork() {
 }
 ```
 
+### Span Events
+
+A Span Event is a human-readable message on an Span that represents a discrete event with no duration that can be tracked by a single timestamp. You can think of it like a primitive log.
+
+```dart
+span.addEvent('Doing something');
+
+const result = doWork();
+```
+
+You can also create Span Events with additional Attributes:
+```dart
+span.addEvent('some log', attributes: {
+  'log.severity': 'error',
+  'log.message': 'Data not found',
+  'request.id': requestId,
+});
+```
+
 ## Development
 
 In order to generate protobuf definitions, you must have [protoc](https://github.com/protocolbuffers/protobuf/releases) installed and available in your path.

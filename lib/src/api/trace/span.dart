@@ -60,7 +60,8 @@ abstract class Span {
   void setAttributes(List<api.Attribute> attributes);
 
   /// Record metadata about an event occurring during this span.
-  void addEvent(String name, Int64 timestamp, {List<api.Attribute> attributes});
+  void addEvent(String name,
+      {Int64? timestamp, List<api.Attribute> attributes});
 
   /// Marks the end of this span's execution.
   void end();
