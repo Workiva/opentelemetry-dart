@@ -1,6 +1,8 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'package:meta/meta.dart';
+
 import '../../../sdk.dart' as sdk;
 import '../../experimental_sdk.dart' as sdk;
 import '../../experimental_api.dart' as api;
@@ -9,6 +11,7 @@ class Meter implements api.Meter {
   final sdk.Resource _resource; // ignore: unused_field
   final sdk.InstrumentationScope _instrumentationScope; // ignore: unused_field
 
+  @protected
   Meter(this._resource, this._instrumentationScope);
 
   @override
