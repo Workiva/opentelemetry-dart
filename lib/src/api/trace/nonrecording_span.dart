@@ -43,6 +43,6 @@ class NonRecordingSpan implements api.Span {
   void recordException(dynamic exception, {StackTrace? stackTrace}) {}
 
   @override
-  void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute>? attributes}) {}
+  void addEvent(String name,
+      {Int64? timestamp, List<api.Attribute>? attributes}) {}
 }

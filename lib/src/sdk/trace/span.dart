@@ -24,9 +24,11 @@ class Span implements sdk.ReadWriteSpan {
   final sdk.InstrumentationScope _instrumentationScope;
   final Int64 _startTime;
   final Attributes _attributes = Attributes.empty();
+  final List<api.SpanEvent> _events = [];
 
   String _name;
   int _droppedSpanAttributes = 0;
+  int _droppedSpanEvents = 0;
 
   Int64? _endTime;
 
@@ -153,10 +155,41 @@ class Span implements sdk.ReadWriteSpan {
   api.SpanKind get kind => _kind;
 
   @override
-  void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute> attributes = const []}) {
-    // TODO: O11Y-1531
-    throw UnimplementedError();
+  void addEvent(String name,
+      {Int64? timestamp, List<api.Attribute> attributes = const []}) {
+    timestamp ??= _timeProvider.now;
+
+    // Don't want to have any events
+    if (_limits.maxNumEvents == 0) {
+      _droppedSpanEvents++;
+      return;
+    }
+
+    if (events.length >= _limits.maxNumEvents) {
+      _droppedSpanEvents++;
+      return;
+    }
+
+    // Filter attributes and make sure that not more than limit are provided
+    var droppedEventAttributes = 0;
+    final filteredAttributes = <String, api.Attribute>{};
+    for (final attribute in attributes) {
+      final obj = filteredAttributes[attribute.key];
+      if (filteredAttributes.length >= _limits.maxNumAttributesPerEvent &&
+          obj == null) {
+        droppedEventAttributes++;
+      } else {
+        filteredAttributes[attribute.key] =
+            applyAttributeLimits(attribute, _limits);
+      }
+    }
+
+    _events.add(api.SpanEvent(
+      timestamp: timestamp,
+      name: name,
+      attributes: filteredAttributes.values,
+      droppedAttributesCount: droppedEventAttributes,
+    ));
   }
 
   @override
@@ -166,4 +199,10 @@ class Span implements sdk.ReadWriteSpan {
   Attributes get attributes => _attributes;
 
   int get droppedAttributes => _droppedSpanAttributes;
+
+  @override
+  List<api.SpanEvent> get events => List.unmodifiable(_events);
+
+  @override
+  int get droppedEventsCount => _droppedSpanEvents;
 }

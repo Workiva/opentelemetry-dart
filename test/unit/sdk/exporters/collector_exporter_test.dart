@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
+import 'dart:typed_data';
+
 import 'package:mockito/mockito.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
@@ -72,6 +74,9 @@ void main() {
         limits,
         sdk.DateTimeTimeProvider().now)
       ..setAttributes([api.Attribute.fromBoolean('bool', true)])
+      ..addEvent('testEvent',
+          timestamp: sdk.DateTimeTimeProvider().now,
+          attributes: [api.Attribute.fromString('foo', 'bar')])
       ..end();
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
@@ -115,6 +120,19 @@ void main() {
                             key: 'bool',
                             value: pb_common.AnyValue(boolValue: true))
                       ],
+                      events: [
+                        pb.Span_Event(
+                          timeUnixNano: span2.events.first.timestamp,
+                          name: 'testEvent',
+                          attributes: [
+                            pb_common.KeyValue(
+                                key: 'foo',
+                                value: pb_common.AnyValue(stringValue: 'bar'))
+                          ],
+                          droppedAttributesCount: 0,
+                        )
+                      ],
+                      droppedEventsCount: 0,
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
                           message: ''),
@@ -137,9 +155,15 @@ void main() {
           ])
     ]);
 
-    verify(mockClient.post(uri,
-        body: expectedBody.writeToBuffer(),
-        headers: {'Content-Type': 'application/x-protobuf'})).called(1);
+    final verifyResult = verify(mockClient.post(uri,
+        body: captureAnyNamed('body'),
+        headers: {'Content-Type': 'application/x-protobuf'}))
+      ..called(1);
+    final captured = verifyResult.captured;
+
+    final traceRequest = pb_trace_service.ExportTraceServiceRequest.fromBuffer(
+        captured[0] as Uint8List);
+    expect(traceRequest, equals(expectedBody));
   });
 
   test('does not send spans when shutdown', () {

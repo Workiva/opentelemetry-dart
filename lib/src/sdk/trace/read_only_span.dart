@@ -3,9 +3,9 @@
 
 import 'package:fixnum/fixnum.dart';
 
-import '../../sdk/common/attributes.dart';
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
+import '../../sdk/common/attributes.dart';
 
 /// A representation of the readable portions of a single operation
 /// within a trace.
@@ -37,7 +37,9 @@ abstract class ReadOnlySpan {
   /// The status of the span.
   api.SpanStatus get status;
 
-  // TODO: O11Y-1531: SpanEvents here.
+  List<api.SpanEvent> get events;
+
+  int get droppedEventsCount;
 
   /// The instrumentation library for the span.
   sdk.InstrumentationScope get instrumentationScope;
