@@ -18,19 +18,20 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
   final Logger _log = Logger('opentelemetry.BatchSpanProcessor');
   final int _maxExportBatchSize;
   final int _maxQueueSize;
-  final int _scheduledDelayMillis;
   final List<sdk.ReadOnlySpan> _spanBuffer = [];
 
-  bool _isShutdown = false;
+  late final Timer _timer;
 
-  Timer? _timer;
+  bool _isShutdown = false;
 
   BatchSpanProcessor(this._exporter,
       {int maxExportBatchSize = _DEFAULT_MAXIMUM_BATCH_SIZE,
       int scheduledDelayMillis = _DEFAULT_EXPORT_DELAY})
       : _maxExportBatchSize = maxExportBatchSize,
-        _maxQueueSize = _DEFAULT_MAXIMUM_QUEUE_SIZE,
-        _scheduledDelayMillis = scheduledDelayMillis;
+        _maxQueueSize = _DEFAULT_MAXIMUM_QUEUE_SIZE {
+    _timer = Timer.periodic(
+        Duration(milliseconds: scheduledDelayMillis), _exportBatch);
+  }
 
   @override
   void forceFlush() {
@@ -38,7 +39,7 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
       return;
     }
     while (_spanBuffer.isNotEmpty) {
-      _flushBatch();
+      _exportBatch(_timer);
     }
     _exporter.forceFlush();
   }
@@ -58,7 +59,7 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
   void shutdown() {
     forceFlush();
     _isShutdown = true;
-    _clearTimer();
+    _timer.cancel();
     _exporter.shutdown();
   }
 
@@ -71,33 +72,9 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
     }
 
     _spanBuffer.add(span);
-    _startTimer();
   }
 
-  void _startTimer() {
-    if (_timer != null) {
-      // _timer already defined.
-      return;
-    }
-
-    _timer = Timer(Duration(milliseconds: _scheduledDelayMillis), () {
-      _flushBatch();
-      if (_spanBuffer.isNotEmpty) {
-        _clearTimer();
-        _startTimer();
-      }
-    });
-  }
-
-  void _clearTimer() {
-    if (_timer != null) {
-      _timer?.cancel();
-      _timer = null;
-    }
-  }
-
-  void _flushBatch() {
-    _clearTimer();
+  void _exportBatch(Timer timer) {
     if (_spanBuffer.isEmpty) {
       return;
     }
