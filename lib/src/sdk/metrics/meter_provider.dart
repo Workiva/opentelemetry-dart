@@ -16,7 +16,7 @@ class MeterProvider implements api.MeterProvider {
   @protected
   final Map<int, sdk.Meter> meters = {};
 
-  @protected
+  @visibleForTesting
   final sdk.Resource resource;
 
   MeterProvider({sdk.Resource? resource})

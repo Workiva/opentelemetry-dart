@@ -17,7 +17,7 @@ permissions:
   pull-requests: write
   
 jobs:
-  test:
+  test-dartv2:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
       - name: Initialize protobuf
         run: make init
       - name: Format, analyze, and run tests
-        run: make test
+        run: make format analyze test
       - name: Generate Coverage
         run: dart test --coverage=./coverage
       - name: Activate Coverage Package
@@ -46,3 +46,22 @@ jobs:
         run: dart pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
       - name: Package Artifacts
         run: ./package.sh
+
+  test-dartv3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.2.0
+      - name: Install protobuf-compiler
+        run: sudo apt install -y protobuf-compiler
+      - name: Install Dart dependencies
+        run: dart pub get
+      - name: Initialize protobuf
+        run: make init
+      - name: Format, analyze, and run tests
+        run: |
+            make format analyze test
