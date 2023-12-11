@@ -63,4 +63,4 @@ jobs:
       - name: Initialize protobuf
         run: make init
       - name: Run tests
-        run: make test
+        run: make format analyze test
