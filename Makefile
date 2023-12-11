@@ -16,7 +16,7 @@ init:
 			opentelemetry-proto/opentelemetry/proto/resource/v1/resource.proto
 
 analyze:
-	@dart analyze --no-fatal-warnings
+	@dart analyze
 
 format:
 	@find ./lib -name '*.dart' -not -path './lib/src/sdk/proto/opentelemetry/*' | xargs dart format --fix

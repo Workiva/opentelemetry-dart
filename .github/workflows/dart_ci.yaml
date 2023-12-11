@@ -63,4 +63,6 @@ jobs:
       - name: Initialize protobuf
         run: make init
       - name: Run tests
-        run: make format analyze test
+        run: |
+            dart analyze --no-fatal-warnings
+            make format test
