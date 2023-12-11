@@ -62,7 +62,6 @@ jobs:
         run: dart pub get
       - name: Initialize protobuf
         run: make init
-      - name: Run tests
+      - name: Format, analyze, and run tests
         run: |
-            dart analyze --no-fatal-warnings
-            make format test
+            make format analyze test
