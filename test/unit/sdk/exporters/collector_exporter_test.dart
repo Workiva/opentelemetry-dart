@@ -5,6 +5,7 @@
 import 'dart:typed_data';
 
 import 'package:mockito/mockito.dart';
+import 'package:logging/logging.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/common/limits.dart';
@@ -164,6 +165,41 @@ void main() {
     final traceRequest = pb_trace_service.ExportTraceServiceRequest.fromBuffer(
         captured[0] as Uint8List);
     expect(traceRequest, equals(expectedBody));
+  });
+
+  test('shows a warning log when export failed', () {
+    final span = Span(
+        'foo',
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource([]),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
+      ..end();
+
+    when(mockClient.post(uri,
+            body: anyNamed('body'),
+            headers: {'Content-Type': 'application/x-protobuf'}))
+        .thenThrow(Exception('Failed to connect'));
+
+    final records = <LogRecord>[];
+    final sub = Logger.root.onRecord.listen(records.add);
+    sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+    sub.cancel();
+
+    verify(mockClient.post(uri,
+        body: anything, headers: {'Content-Type': 'application/x-protobuf'}))
+        .called(1);
+
+    expect(records, hasLength(1));
+    expect(records[0].level, equals(Level.WARNING));
   });
 
   test('does not send spans when shutdown', () {
