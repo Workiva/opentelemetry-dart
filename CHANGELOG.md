@@ -1,3 +1,8 @@
+## 0.18.1
+
+- Update `http` dependency.
+- Log error on export failure instead of exiting.
+
 ## 0.18.0
 
 - Dart 3 support, primarily through dependency version ranges
