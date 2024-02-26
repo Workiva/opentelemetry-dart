@@ -1,8 +1,11 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'dart:async';
+
 import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
@@ -14,6 +17,8 @@ import '../../proto/opentelemetry/proto/resource/v1/resource.pb.dart'
 import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
 
 class CollectorExporter implements sdk.SpanExporter {
+  final Logger _log = Logger('opentelemetry.CollectorExporter');
+
   final Uri uri;
   final http.Client client;
   final Map<String, String> headers;
@@ -33,12 +38,23 @@ class CollectorExporter implements sdk.SpanExporter {
       return;
     }
 
-    final body = pb_trace_service.ExportTraceServiceRequest(
-        resourceSpans: _spansToProtobuf(spans));
-    final headers = {'Content-Type': 'application/x-protobuf'}
-      ..addAll(this.headers);
+    unawaited(_send(uri, spans));
+  }
 
-    client.post(uri, body: body.writeToBuffer(), headers: headers);
+  Future<void> _send(
+      Uri uri,
+      List<sdk.ReadOnlySpan> spans,
+    ) async {
+      try {
+        final body = pb_trace_service.ExportTraceServiceRequest(
+            resourceSpans: _spansToProtobuf(spans));
+        final headers = {'Content-Type': 'application/x-protobuf'}
+          ..addAll(this.headers);
+
+        await client.post(uri, body: body.writeToBuffer(), headers: headers);
+      } catch (e) {
+        _log.warning('Failed to export ${spans.length} spans.', e);
+      }
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
