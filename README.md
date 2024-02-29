@@ -201,3 +201,8 @@ span.addEvent('some log', attributes: {
 ## Development
 
 In order to generate protobuf definitions, you must have [protoc](https://github.com/protocolbuffers/protobuf/releases) installed and available in your path.
+
+### Publishing New Versions
+See https://github.com/Workiva/Observability/blob/master/doc/publishing_opentelemetry_dart.md
+
+Only Workiva maintainers can publish new versions of opentelemetry-dart.
