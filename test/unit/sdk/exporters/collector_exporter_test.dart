@@ -195,8 +195,8 @@ void main() {
     sub.cancel();
 
     verify(mockClient.post(uri,
-        body: anything, headers: {'Content-Type': 'application/x-protobuf'}))
-        .called(1);
+        body: anything,
+        headers: {'Content-Type': 'application/x-protobuf'})).called(1);
 
     expect(records, hasLength(1));
     expect(records[0].level, equals(Level.WARNING));
