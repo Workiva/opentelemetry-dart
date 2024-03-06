@@ -42,19 +42,19 @@ class CollectorExporter implements sdk.SpanExporter {
   }
 
   Future<void> _send(
-      Uri uri,
-      List<sdk.ReadOnlySpan> spans,
-    ) async {
-      try {
-        final body = pb_trace_service.ExportTraceServiceRequest(
-            resourceSpans: _spansToProtobuf(spans));
-        final headers = {'Content-Type': 'application/x-protobuf'}
-          ..addAll(this.headers);
+    Uri uri,
+    List<sdk.ReadOnlySpan> spans,
+  ) async {
+    try {
+      final body = pb_trace_service.ExportTraceServiceRequest(
+          resourceSpans: _spansToProtobuf(spans));
+      final headers = {'Content-Type': 'application/x-protobuf'}
+        ..addAll(this.headers);
 
-        await client.post(uri, body: body.writeToBuffer(), headers: headers);
-      } catch (e) {
-        _log.warning('Failed to export ${spans.length} spans.', e);
-      }
+      await client.post(uri, body: body.writeToBuffer(), headers: headers);
+    } catch (e) {
+      _log.warning('Failed to export ${spans.length} spans.', e);
+    }
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
