@@ -27,14 +27,19 @@ class TracerProviderBase implements api.TracerProvider {
   @protected
   final sdk.SpanLimits spanLimits;
 
+  @protected
+  final sdk.TimeProvider _timeProvider;
+
   TracerProviderBase(
       {this.processors =
           const [], // Default to a TracerProvider which does not emit traces.
       resource,
+      sdk.TimeProvider? timeProvider,
       this.sampler = const sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
       this.idGenerator = const sdk.IdGenerator(),
       this.spanLimits = const sdk.SpanLimits()})
-      : resource = resource ?? sdk.Resource([]);
+      : resource = resource ?? sdk.Resource([]),
+        _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider();
 
   List<sdk.SpanProcessor> get spanProcessors => processors;
 
@@ -50,7 +55,7 @@ class TracerProviderBase implements api.TracerProvider {
             processors,
             resource,
             sampler,
-            sdk.DateTimeTimeProvider(),
+            _timeProvider,
             idGenerator,
             sdk.InstrumentationScope(name, version, schemaUrl, attributes),
             spanLimits));
