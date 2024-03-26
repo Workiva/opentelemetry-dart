@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/api/trace/span_event.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
@@ -193,7 +194,7 @@ void main() {
 }
 
 Matcher hasExceptionEvent(Map<String, Object> attributes) =>
-    isA<api.SpanEvent>().having(
+    isA<SpanEvent>().having(
         (e) => e.attributes,
         'attributes',
         isA<Iterable<api.Attribute>>().having(
