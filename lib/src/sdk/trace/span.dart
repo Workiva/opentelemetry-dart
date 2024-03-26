@@ -138,16 +138,19 @@ class Span implements sdk.ReadWriteSpan {
 
   @override
   void recordException(dynamic exception,
-      {StackTrace stackTrace = StackTrace.empty}) {
-    // ignore: todo
-    // TODO: O11Y-1531: Consider integration of Events here.
-    setAttributes([
+      {bool escaped = true,
+      StackTrace stackTrace = StackTrace.empty,
+      List<api.Attribute> attributes = const []}) {
+    addEvent('exception', attributes: [
       api.Attribute.fromString(api.SemanticAttributes.exceptionType,
           exception.runtimeType.toString()),
       api.Attribute.fromString(
           api.SemanticAttributes.exceptionMessage, exception.toString()),
       api.Attribute.fromString(
           api.SemanticAttributes.exceptionStacktrace, stackTrace.toString()),
+      api.Attribute.fromBoolean(
+          api.SemanticAttributes.exceptionEscaped, escaped),
+      ...attributes
     ]);
   }
 

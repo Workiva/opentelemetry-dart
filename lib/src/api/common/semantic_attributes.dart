@@ -16,6 +16,10 @@ class SemanticAttributes {
   /// representation is to be determined and documented by each language SIG.
   static const String exceptionStacktrace = 'exception.stacktrace';
 
+  /// Set to true if the exception event is recorded at a point where it is
+  /// known that the exception is escaping the scope of the span.
+  static const String exceptionEscaped = 'exception.escaped';
+
   /// HTTP request method.
   static const String httpMethod = 'http.method';
 
