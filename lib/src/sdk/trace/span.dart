@@ -3,7 +3,6 @@
 
 import 'package:fixnum/fixnum.dart';
 import 'package:meta/meta.dart';
-import 'package:opentelemetry/api.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
@@ -143,13 +142,14 @@ class Span implements sdk.ReadWriteSpan {
       StackTrace stackTrace = StackTrace.empty,
       List<api.Attribute> attributes = const []}) {
     addEvent('exception', attributes: [
-      Attribute.fromString(api.SemanticAttributes.exceptionType,
+      api.Attribute.fromString(api.SemanticAttributes.exceptionType,
           exception.runtimeType.toString()),
-      Attribute.fromString(
+      api.Attribute.fromString(
           api.SemanticAttributes.exceptionMessage, exception.toString()),
-      Attribute.fromString(
+      api.Attribute.fromString(
           api.SemanticAttributes.exceptionStacktrace, stackTrace.toString()),
-      Attribute.fromBoolean(api.SemanticAttributes.exceptionEscaped, escaped),
+      api.Attribute.fromBoolean(
+          api.SemanticAttributes.exceptionEscaped, escaped),
       ...attributes
     ]);
   }
