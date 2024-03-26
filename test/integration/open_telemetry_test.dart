@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/api/trace/span_event.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:test/test.dart';
@@ -74,10 +75,14 @@ void main() {
     expect(span.endTime, isNotNull);
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Exception: Oh noes!'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionType),
-        equals('_Exception'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionMessage),
-        equals('Exception: Oh noes!'));
+    expect(span.events, [
+      hasExceptionEvent({
+        api.SemanticAttributes.exceptionType: '_Exception',
+        api.SemanticAttributes.exceptionMessage: 'Exception: Oh noes!',
+        api.SemanticAttributes.exceptionStacktrace: anything,
+        api.SemanticAttributes.exceptionEscaped: true,
+      })
+    ]);
   });
 
   test('trace asynchronous execution', () async {
@@ -145,10 +150,14 @@ void main() {
     expect(span.endTime, isNotNull);
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Exception: Oh noes!'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionType),
-        equals('_Exception'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionMessage),
-        equals('Exception: Oh noes!'));
+    expect(span.events, [
+      hasExceptionEvent({
+        api.SemanticAttributes.exceptionType: '_Exception',
+        api.SemanticAttributes.exceptionMessage: 'Exception: Oh noes!',
+        api.SemanticAttributes.exceptionStacktrace: anything,
+        api.SemanticAttributes.exceptionEscaped: true,
+      })
+    ]);
   });
 
   test('trace asynchronous execution completes with error', () async {
@@ -173,9 +182,22 @@ void main() {
     expect(span.endTime, isNotNull);
     expect(span.status.code, equals(api.StatusCode.error));
     expect(span.status.description, equals('Exception: Oh noes!'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionType),
-        equals('_Exception'));
-    expect(span.attributes.get(api.SemanticAttributes.exceptionMessage),
-        equals('Exception: Oh noes!'));
+    expect(span.events, [
+      hasExceptionEvent({
+        api.SemanticAttributes.exceptionType: '_Exception',
+        api.SemanticAttributes.exceptionMessage: 'Exception: Oh noes!',
+        api.SemanticAttributes.exceptionStacktrace: anything,
+        api.SemanticAttributes.exceptionEscaped: true,
+      })
+    ]);
   });
 }
+
+Matcher hasExceptionEvent(Map<String, Object> attributes) =>
+    isA<SpanEvent>().having(
+        (e) => e.attributes,
+        'attributes',
+        isA<Iterable<api.Attribute>>().having(
+            (a) => a.map((e) => [e.key, e.value]),
+            'attributes',
+            containsAll(attributes.entries.map((e) => [e.key, e.value]))));
