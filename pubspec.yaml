@@ -1,19 +1,20 @@
 name: opentelemetry
-version: 0.18.1
+version: 0.18.1-grpc
 description: A framework for collecting traces from applications.
 homepage: https://github.com/Workiva/opentelemetry-dart
 environment:
   sdk: ">=2.19.0 <4.0.0"
 
 dependencies:
-  async: '>=2.5.0 <3.0.0'
+  async: ">=2.5.0 <3.0.0"
   collection: ^1.15.0
-  fixnum: '>=1.0.0 <2.0.0'
+  fixnum: ">=1.0.0 <2.0.0"
+  grpc: ^3.2.4
   http: ">=0.13.0 <2.0.0"
   logging: ^1.0.0
-  meta: '>=1.6.0 <2.0.0'
+  meta: ">=1.6.0 <2.0.0"
   protobuf: ">=2.0.0 <4.0.0"
-  quiver: '>=3.0.0 <4.0.0'
+  quiver: ">=3.0.0 <4.0.0"
 
 dev_dependencies:
   build_runner: ^2.3.3
