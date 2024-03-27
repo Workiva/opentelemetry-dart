@@ -29,6 +29,8 @@ import 'package:opentelemetry/sdk.dart' as otel_sdk;
 final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
 ```
 
+The CollectorExporter supports transport protocols including `http/protobuf` and `grpc`. The default protocol is `http/protobuf`.
+
 #### ConsoleExporter
 
 The ConsoleExporter has no requirements, and has no configuration options.
@@ -190,6 +192,7 @@ const result = doWork();
 ```
 
 You can also create Span Events with additional Attributes:
+
 ```dart
 span.addEvent('some log', attributes: {
   'log.severity': 'error',
@@ -203,6 +206,7 @@ span.addEvent('some log', attributes: {
 In order to generate protobuf definitions, you must have [protoc](https://github.com/protocolbuffers/protobuf/releases) installed and available in your path.
 
 ### Publishing New Versions
-See https://github.com/Workiva/Observability/blob/master/doc/publishing_opentelemetry_dart.md
+
+See <https://github.com/Workiva/Observability/blob/master/doc/publishing_opentelemetry_dart.md>
 
 Only Workiva maintainers can publish new versions of opentelemetry-dart.
