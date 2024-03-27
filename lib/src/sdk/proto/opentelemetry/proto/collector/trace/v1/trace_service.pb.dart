@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 //
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/collector/trace/v1/trace_service.proto
@@ -12,17 +9,16 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../trace/v1/trace.pb.dart' as $2;
+import '../../../trace/v1/trace.pb.dart' as $6;
 
 class ExportTraceServiceRequest extends $pb.GeneratedMessage {
   factory ExportTraceServiceRequest({
-    $core.Iterable<$2.ResourceSpans>? resourceSpans,
+    $core.Iterable<$6.ResourceSpans>? resourceSpans,
   }) {
     final $result = create();
     if (resourceSpans != null) {
@@ -35,7 +31,7 @@ class ExportTraceServiceRequest extends $pb.GeneratedMessage {
   factory ExportTraceServiceRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ExportTraceServiceRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.collector.trace.v1'), createEmptyInstance: create)
-    ..pc<$2.ResourceSpans>(1, _omitFieldNames ? '' : 'resourceSpans', $pb.PbFieldType.PM, subBuilder: $2.ResourceSpans.create)
+    ..pc<$6.ResourceSpans>(1, _omitFieldNames ? '' : 'resourceSpans', $pb.PbFieldType.PM, subBuilder: $6.ResourceSpans.create)
     ..hasRequiredFields = false
   ;
 
@@ -66,7 +62,7 @@ class ExportTraceServiceRequest extends $pb.GeneratedMessage {
   /// data from multiple origins typically batch the data before forwarding further and
   /// in that case this array will contain multiple elements.
   @$pb.TagNumber(1)
-  $core.List<$2.ResourceSpans> get resourceSpans => $_getList(0);
+  $core.List<$6.ResourceSpans> get resourceSpans => $_getList(0);
 }
 
 class ExportTraceServiceResponse extends $pb.GeneratedMessage {
@@ -209,15 +205,6 @@ class ExportTracePartialSuccess extends $pb.GeneratedMessage {
   $core.bool hasErrorMessage() => $_has(1);
   @$pb.TagNumber(2)
   void clearErrorMessage() => clearField(2);
-}
-
-class TraceServiceApi {
-  $pb.RpcClient _client;
-  TraceServiceApi(this._client);
-
-  $async.Future<ExportTraceServiceResponse> export($pb.ClientContext? ctx, ExportTraceServiceRequest request) =>
-    _client.invoke<ExportTraceServiceResponse>(ctx, 'TraceService', 'Export', request, ExportTraceServiceResponse())
-  ;
 }
 
 

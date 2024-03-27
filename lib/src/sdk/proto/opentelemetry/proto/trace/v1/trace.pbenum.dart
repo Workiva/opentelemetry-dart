@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 //
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/trace/v1/trace.proto
@@ -33,10 +30,14 @@ import 'package:protobuf/protobuf.dart' as $pb;
 class SpanFlags extends $pb.ProtobufEnum {
   static const SpanFlags SPAN_FLAGS_DO_NOT_USE = SpanFlags._(0, _omitEnumNames ? '' : 'SPAN_FLAGS_DO_NOT_USE');
   static const SpanFlags SPAN_FLAGS_TRACE_FLAGS_MASK = SpanFlags._(255, _omitEnumNames ? '' : 'SPAN_FLAGS_TRACE_FLAGS_MASK');
+  static const SpanFlags SPAN_FLAGS_CONTEXT_HAS_IS_REMOTE_MASK = SpanFlags._(256, _omitEnumNames ? '' : 'SPAN_FLAGS_CONTEXT_HAS_IS_REMOTE_MASK');
+  static const SpanFlags SPAN_FLAGS_CONTEXT_IS_REMOTE_MASK = SpanFlags._(512, _omitEnumNames ? '' : 'SPAN_FLAGS_CONTEXT_IS_REMOTE_MASK');
 
   static const $core.List<SpanFlags> values = <SpanFlags> [
     SPAN_FLAGS_DO_NOT_USE,
     SPAN_FLAGS_TRACE_FLAGS_MASK,
+    SPAN_FLAGS_CONTEXT_HAS_IS_REMOTE_MASK,
+    SPAN_FLAGS_CONTEXT_IS_REMOTE_MASK,
   ];
 
   static final $core.Map<$core.int, SpanFlags> _byValue = $pb.ProtobufEnum.initByValue(values);
