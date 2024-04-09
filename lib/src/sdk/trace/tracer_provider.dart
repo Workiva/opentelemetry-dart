@@ -27,7 +27,6 @@ class TracerProviderBase implements api.TracerProvider {
   @protected
   final sdk.SpanLimits spanLimits;
 
-  @protected
   final sdk.TimeProvider _timeProvider;
 
   TracerProviderBase(
