@@ -9,7 +9,7 @@ init:
 	dart run build_runner build --delete-conflicting-outputs
 	dart pub global activate protoc_plugin 21.1.2
 	cd lib/src/sdk/proto && \
-		protoc --proto_path opentelemetry-proto --dart_out . \
+		protoc --proto_path opentelemetry-proto --dart_out grpc:. \
 			opentelemetry-proto/opentelemetry/proto/common/v1/common.proto \
 			opentelemetry-proto/opentelemetry/proto/collector/trace/v1/trace_service.proto \
 			opentelemetry-proto/opentelemetry/proto/trace/v1/trace.proto \

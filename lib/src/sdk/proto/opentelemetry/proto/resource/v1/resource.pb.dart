@@ -16,12 +16,12 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../common/v1/common.pb.dart' as $3;
+import '../../common/v1/common.pb.dart' as $1;
 
 /// Resource information.
 class Resource extends $pb.GeneratedMessage {
   factory Resource({
-    $core.Iterable<$3.KeyValue>? attributes,
+    $core.Iterable<$1.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
   }) {
     final $result = create();
@@ -38,7 +38,7 @@ class Resource extends $pb.GeneratedMessage {
   factory Resource.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Resource', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.resource.v1'), createEmptyInstance: create)
-    ..pc<$3.KeyValue>(1, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $3.KeyValue.create)
+    ..pc<$1.KeyValue>(1, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $1.KeyValue.create)
     ..a<$core.int>(2, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
@@ -68,7 +68,7 @@ class Resource extends $pb.GeneratedMessage {
   /// Attribute keys MUST be unique (it is not allowed to have more than one
   /// attribute with the same key).
   @$pb.TagNumber(1)
-  $core.List<$3.KeyValue> get attributes => $_getList(0);
+  $core.List<$1.KeyValue> get attributes => $_getList(0);
 
   /// dropped_attributes_count is the number of dropped attributes. If the value is 0, then
   /// no attributes were dropped.

@@ -18,16 +18,16 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'trace_service.pb.dart' as $1;
+import 'trace_service.pb.dart' as $0;
 
 export 'trace_service.pb.dart';
 
 @$pb.GrpcServiceName('opentelemetry.proto.collector.trace.v1.TraceService')
 class TraceServiceClient extends $grpc.Client {
-  static final _$export = $grpc.ClientMethod<$1.ExportTraceServiceRequest, $1.ExportTraceServiceResponse>(
+  static final _$export = $grpc.ClientMethod<$0.ExportTraceServiceRequest, $0.ExportTraceServiceResponse>(
       '/opentelemetry.proto.collector.trace.v1.TraceService/Export',
-      ($1.ExportTraceServiceRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.ExportTraceServiceResponse.fromBuffer(value));
+      ($0.ExportTraceServiceRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.ExportTraceServiceResponse.fromBuffer(value));
 
   TraceServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -35,7 +35,7 @@ class TraceServiceClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$1.ExportTraceServiceResponse> export($1.ExportTraceServiceRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.ExportTraceServiceResponse> export($0.ExportTraceServiceRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$export, request, options: options);
   }
 }
@@ -45,18 +45,18 @@ abstract class TraceServiceBase extends $grpc.Service {
   $core.String get $name => 'opentelemetry.proto.collector.trace.v1.TraceService';
 
   TraceServiceBase() {
-    $addMethod($grpc.ServiceMethod<$1.ExportTraceServiceRequest, $1.ExportTraceServiceResponse>(
+    $addMethod($grpc.ServiceMethod<$0.ExportTraceServiceRequest, $0.ExportTraceServiceResponse>(
         'Export',
         export_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $1.ExportTraceServiceRequest.fromBuffer(value),
-        ($1.ExportTraceServiceResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $0.ExportTraceServiceRequest.fromBuffer(value),
+        ($0.ExportTraceServiceResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$1.ExportTraceServiceResponse> export_Pre($grpc.ServiceCall call, $async.Future<$1.ExportTraceServiceRequest> request) async {
+  $async.Future<$0.ExportTraceServiceResponse> export_Pre($grpc.ServiceCall call, $async.Future<$0.ExportTraceServiceRequest> request) async {
     return export(call, await request);
   }
 
-  $async.Future<$1.ExportTraceServiceResponse> export($grpc.ServiceCall call, $1.ExportTraceServiceRequest request);
+  $async.Future<$0.ExportTraceServiceResponse> export($grpc.ServiceCall call, $0.ExportTraceServiceRequest request);
 }

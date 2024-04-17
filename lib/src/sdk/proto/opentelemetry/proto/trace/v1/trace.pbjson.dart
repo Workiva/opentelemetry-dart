@@ -22,16 +22,13 @@ const SpanFlags$json = {
   '2': [
     {'1': 'SPAN_FLAGS_DO_NOT_USE', '2': 0},
     {'1': 'SPAN_FLAGS_TRACE_FLAGS_MASK', '2': 255},
-    {'1': 'SPAN_FLAGS_CONTEXT_HAS_IS_REMOTE_MASK', '2': 256},
-    {'1': 'SPAN_FLAGS_CONTEXT_IS_REMOTE_MASK', '2': 512},
   ],
 };
 
 /// Descriptor for `SpanFlags`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List spanFlagsDescriptor = $convert.base64Decode(
     'CglTcGFuRmxhZ3MSGQoVU1BBTl9GTEFHU19ET19OT1RfVVNFEAASIAobU1BBTl9GTEFHU19UUk'
-    'FDRV9GTEFHU19NQVNLEP8BEioKJVNQQU5fRkxBR1NfQ09OVEVYVF9IQVNfSVNfUkVNT1RFX01B'
-    'U0sQgAISJgohU1BBTl9GTEFHU19DT05URVhUX0lTX1JFTU9URV9NQVNLEIAE');
+    'FDRV9GTEFHU19NQVNLEP8B');
 
 @$core.Deprecated('Use tracesDataDescriptor instead')
 const TracesData$json = {
