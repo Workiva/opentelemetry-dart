@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:js';
 
 import 'package:js/js.dart';
 import 'package:opentelemetry/api.dart';
@@ -25,14 +26,24 @@ class JsSymbol {
 }
 
 @JS()
-abstract class JsSpan {
+class JsSpan {
   @JS('_spanContext')
   external JsSpanContext spanContext();
 }
 
-@JS('_spanContext')
+@JS()
+@anonymous
 class JsSpanContext {
   external String traceId;
   external String spanId;
   external int traceFlags;
+
+  external factory JsSpanContext(
+      {String traceId, String spanId, int traceFlags});
+}
+
+@JS('window.otel_trace_api')
+class JsTraceAPI {
+  external static JsContext setSpanContext(
+      JsContext context, JsSpanContext spanContext);
 }

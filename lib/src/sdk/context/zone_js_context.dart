@@ -1,5 +1,7 @@
+import 'dart:js';
+
 import '../../../api.dart';
-import 'dart:js' as js;
+import 'package:js/js.dart' as js;
 
 import '../../api/context/context.dart';
 import 'zone_js_interop.dart';
@@ -20,7 +22,7 @@ class ZoneJsContext implements Context {
   // This could be an issue if the function is expecting to be executed within a Dart zone.
   @override
   R execute<R>(R Function() fn) {
-    return JsContextAPI.execute(JsContextAPI.active(), js.allowInterop(fn));
+    return JsContextAPI.execute(_context, js.allowInterop(fn));
   }
 
   @override
@@ -38,16 +40,12 @@ class ZoneJsContext implements Context {
 // Will need to convert JS span to Dart span.
 // This is going to be a lot of interop mapping classes.
   @override
-  Span get span => throw UnimplementedError(); 
+  Span get span => throw UnimplementedError();
 
   SpanContext getSpanContext() {
     var span = getValue(spanKey);
     if (span == null) {
       return SpanContext.invalid();
-    }
-
-    if(span is Span){
-      return span.spanContext;
     }
 
     return SpanContext(
@@ -67,7 +65,13 @@ class ZoneJsContext implements Context {
 // This will need to be fixed by updating the dart context API to convert the Dart span to a JS span.
   @override
   Context withSpan(Span span) {
+    final jsCtx = JsTraceAPI.setSpanContext(
+        _context,
+        JsSpanContext(
+            traceId: span.spanContext.traceId.toString(),
+            spanId: span.spanContext.spanId.toString(),
+            traceFlags: span.spanContext.traceFlags));
     
-    return setValue(spanKey, span);
+    return ZoneJsContext(jsCtx);
   }
 }
