@@ -3,7 +3,7 @@
 
 @TestOn('vm')
 import 'package:fixnum/src/int64.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/src/sdk/time_providers/time_provider.dart';
 import 'package:opentelemetry/src/sdk/trace/read_only_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
@@ -52,8 +52,8 @@ void main() {
     TracerProviderBase(processors: [mockProcessor1, mockProcessor2])
         .forceFlush();
 
-    verify(mockProcessor1.forceFlush()).called(1);
-    verify(mockProcessor2.forceFlush()).called(1);
+    verify(() => mockProcessor1.forceFlush()).called(1);
+    verify(() => mockProcessor2.forceFlush()).called(1);
   });
 
   test('tracerProvider shuts down all processors', () {
@@ -61,8 +61,8 @@ void main() {
     final mockProcessor2 = MockSpanProcessor();
     TracerProviderBase(processors: [mockProcessor1, mockProcessor2]).shutdown();
 
-    verify(mockProcessor1.shutdown()).called(1);
-    verify(mockProcessor2.shutdown()).called(1);
+    verify(() => mockProcessor1.shutdown()).called(1);
+    verify(() => mockProcessor2.shutdown()).called(1);
   });
 }
 

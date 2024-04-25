@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/src/sdk/trace/exporters/span_exporter.dart';
 import 'package:opentelemetry/src/sdk/trace/read_only_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/batch_processor.dart';
@@ -37,15 +37,15 @@ void main() {
       ..onEnd(mockSpan3)
       ..forceFlush();
 
-    verify(mockExporter.export([mockSpan1, mockSpan2])).called(1);
-    verify(mockExporter.export([mockSpan3])).called(1);
-    verify(mockExporter.forceFlush()).called(1);
+    verify(() => mockExporter.export([mockSpan1, mockSpan2])).called(1);
+    verify(() => mockExporter.export([mockSpan3])).called(1);
+    verify(() => mockExporter.forceFlush()).called(1);
   });
 
   test('shutdown shuts exporter down', () {
     processor.shutdown();
 
-    verify(mockExporter.shutdown()).called(1);
-    verify(mockExporter.forceFlush()).called(1);
+    verify(() => mockExporter.shutdown()).called(1);
+    verify(() => mockExporter.forceFlush()).called(1);
   });
 }

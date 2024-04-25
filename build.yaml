@@ -1,8 +1,6 @@
 targets:
   $default:
     builders:
-      mockito:mockBuilder:
-        enabled: true
         generate_for:
           include:
             - test/unit/mocks.dart

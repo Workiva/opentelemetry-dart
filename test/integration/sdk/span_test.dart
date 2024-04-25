@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/trace/span.dart';
@@ -41,16 +41,16 @@ void main() {
     expect(span.parentSpanId, same(parentSpanId));
     expect(span.name, 'foo');
 
-    verifyNever(mockProcessor1.onEnd(span));
-    verifyNever(mockProcessor2.onEnd(span));
+    verifyNever(() => mockProcessor1.onEnd(span));
+    verifyNever(() => mockProcessor2.onEnd(span));
 
     span.end();
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNotNull);
     expect(span.endTime, greaterThan(span.startTime));
 
-    verify(mockProcessor1.onEnd(span)).called(1);
-    verify(mockProcessor2.onEnd(span)).called(1);
+    verify(() => mockProcessor1.onEnd(span)).called(1);
+    verify(() => mockProcessor2.onEnd(span)).called(1);
   });
 
   test('span status', () {
