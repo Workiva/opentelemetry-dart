@@ -9,10 +9,13 @@ import 'package:opentelemetry/api.dart';
 class JsContextAPI {
   external static JsContext active();
   @JS('with')
-  external static execute(dynamic context, Function() fn);
+  external static execute(JsContext context, Function() fn);
+  @JS('bind')
+  external static bind(JsContext context, Function() fn);
 }
 
-@JS()
+
+@JS('window.rootSpanContext')
 class JsContext {
   external getValue(JsSymbol key);
   external JsContext setValue(JsSymbol key, value);

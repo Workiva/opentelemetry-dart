@@ -29,3 +29,4 @@ export 'src/sdk/trace/span_processors/simple_processor.dart'
     show SimpleSpanProcessor;
 export 'src/sdk/trace/tracer_provider.dart' show TracerProviderBase;
 export 'src/sdk/context/zone_js_context_manager.dart' show ZoneJsContextManager;
+export 'src/sdk/context/zone_js_parent_context_manager.dart' show ZoneJsParentContextManager;

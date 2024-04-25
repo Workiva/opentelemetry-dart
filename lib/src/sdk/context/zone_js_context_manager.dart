@@ -7,5 +7,5 @@ class ZoneJsContextManager implements ContextManager{
   Context get active => ZoneJsContext.current;
 
   @override
-  Context get root => ZoneJsContext.current;
+  Context get root => ZoneJsContext.root;
 }

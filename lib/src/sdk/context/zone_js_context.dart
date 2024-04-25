@@ -14,6 +14,8 @@ class ZoneJsContext implements Context {
 
   static ZoneJsContext get current => active();
 
+  static ZoneJsContext get root => ZoneJsContext(JsContext());
+
   static ZoneJsContext active() {
     return ZoneJsContext(JsContextAPI.active());
   }
@@ -22,7 +24,7 @@ class ZoneJsContext implements Context {
   // This could be an issue if the function is expecting to be executed within a Dart zone.
   @override
   R execute<R>(R Function() fn) {
-    return JsContextAPI.execute(_context, js.allowInterop(fn));
+    return JsContextAPI.execute(_context, allowInterop(fn));
   }
 
   @override
