@@ -44,8 +44,8 @@ void main() {
     WebTracerProvider(processors: [mockProcessor1, mockProcessor2])
         .forceFlush();
 
-    verify(() => mockProcessor1.forceFlush()).called(1);
-    verify(() => mockProcessor2.forceFlush()).called(1);
+    verify(mockProcessor1.forceFlush).called(1);
+    verify(mockProcessor2.forceFlush).called(1);
   });
 
   test('browserTracerProvider shuts down all processors', () {
@@ -53,8 +53,8 @@ void main() {
     final mockProcessor2 = MockSpanProcessor();
     WebTracerProvider(processors: [mockProcessor1, mockProcessor2]).shutdown();
 
-    verify(() => mockProcessor1.shutdown()).called(1);
-    verify(() => mockProcessor2.shutdown()).called(1);
+    verify(mockProcessor1.shutdown).called(1);
+    verify(mockProcessor2.shutdown).called(1);
   });
 
   test('browserTracerProvider creates a tracer which can create valid spans',
