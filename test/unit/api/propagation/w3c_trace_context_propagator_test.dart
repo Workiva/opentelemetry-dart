@@ -4,7 +4,6 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/api/trace/nonrecording_span.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
@@ -87,7 +86,7 @@ void main() {
         api.Context.current, testCarrier, TestingExtractor());
     final resultSpan = resultContext.span;
 
-    expect(resultSpan, isA<NonRecordingSpan>());
+    expect(resultSpan, isA<api.NonRecordingSpan>());
     expect(resultSpan.spanContext.isValid, isFalse);
   });
 
@@ -106,7 +105,7 @@ void main() {
 
     // Extract should not allow a Span with malformed IDs to be attached to
     // a Context.  Thus, there should be no Span on this context.
-    expect(resultSpan, isA<NonRecordingSpan>());
+    expect(resultSpan, isA<api.NonRecordingSpan>());
     expect(resultSpan.spanContext.isValid, isFalse);
   });
 
