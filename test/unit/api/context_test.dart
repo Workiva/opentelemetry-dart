@@ -4,7 +4,6 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/api/trace/nonrecording_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
@@ -36,7 +35,7 @@ void main() {
         () {
       final context = api.Context.current;
 
-      expect(context.span, isA<NonRecordingSpan>());
+      expect(context.span, isA<api.NonRecordingSpan>());
       expect(context.span.spanContext.isValid, isFalse);
     });
   });
@@ -54,17 +53,6 @@ void main() {
       final testContext = api.Context.current;
 
       expect(testContext.spanContext.isValid, isFalse);
-    });
-  });
-
-  group('Context', () {
-    test('current returns the active context', () {
-      api.SpanContext contextManagerFunction() => testSpanContext;
-      api.Context.RegisterContextManagerFunction(contextManagerFunction);
-      final context = api.Context.current;
-
-      expect(context, isA<api.Context>());
-      expect(context.spanContext, same(testSpanContext));
     });
   });
 }

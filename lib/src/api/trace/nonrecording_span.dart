@@ -10,8 +10,6 @@ import '../../../api.dart' as api;
 /// See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#wrapping-a-spancontext-in-a-span
 /// for more information.
 ///
-/// This class should not be exposed to consumers and is used internally to wrap
-/// [api.SpanContext] being injected or extracted for external calls.
 class NonRecordingSpan implements api.Span {
   final api.SpanId _parentSpanId = api.SpanId.invalid();
   final api.SpanContext _spanContext;

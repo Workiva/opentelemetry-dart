@@ -20,43 +20,34 @@
 ///
 /// This library provides a simple abstraction over [Zone] for the purpose of
 /// implementing the rest of the Context specification. OpenTelemetry SDKs and
-/// instrumentation libraries should use this [Context] API instead of a [Zone]
+/// instrumentation libraries should use this [ZoneContext] API instead of a [Zone]
 /// directly. Other users should usually not interact with Context at all and
 /// should instead manipulate it through cross-cutting concerns APIs provided by
 /// OpenTelemetry SDKs.
 import 'dart:async';
 
-import 'package:logging/logging.dart';
-import 'package:opentelemetry/src/sdk/context/zone_context_manager.dart';
+import '../../../api.dart';
 
-import '../../../api.dart' as api;
-import 'context_manager.dart';
+/// [ContextKey] used to store spans in a [ZoneContext].
+final ContextKey spanKey =
+    ZoneContext.createKey('OpenTelemetry Context Key SPAN');
 
-/// [ContextKey] used to store spans in a [Context].
-final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
+class ZoneContext implements Context {
+  final Zone _zone;
 
-/// The [ContextManager] is responsible for managing the current [Context].
-/// Different implementations of [ContextManager] can be registered to use different underlying storage mechanisms.
-/// The default implementation is [ZoneContextManager], which uses Dart zones to store the current [Context].
-ContextManager _contextManager = ZoneContextManager();
-
-abstract class Context {
-  static void RegisterContextManager(ContextManager contextManager) {
-    Logger('Context').info('Registering ContextManager: $contextManager');
-    _contextManager = contextManager;
-  }
+  ZoneContext._(this._zone);
 
   /// The active context.
-  static Context get current => _contextManager.active;
+  static ZoneContext get current => ZoneContext._(Zone.current);
 
   /// The root context which all other contexts are derived from.
   ///
-  /// It should generally not be required to use the root [Context] directly -
-  /// instead, use [Context.current] to operate on the current [Context].
+  /// It should generally not be required to use the root [ZoneContext] directly -
+  /// instead, use [ZoneContext.current] to operate on the current [ZoneContext].
   /// Only use this context if you are certain you need to disregard the
-  /// current [Context].  For example, when instrumenting an asynchronous
-  /// event handler which may fire while an unrelated [Context] is "current".
-  static Context get root => _contextManager.root;
+  /// current [ZoneContext].  For example, when instrumenting an asynchronous
+  /// event handler which may fire while an unrelated [ZoneContext] is "current".
+  static ZoneContext get root => ZoneContext._(Zone.root);
 
   /// Returns a key to be used to read and/or write values to a context.
   ///
@@ -67,35 +58,36 @@ abstract class Context {
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
-  T? getValue<T>(ContextKey key);
+  @override
+  T? getValue<T>(ContextKey key) => _zone[key];
 
   /// Returns a new context created from this one with the given key/value pair
   /// set.
   ///
   /// If [key] was already set in this context, it will be overridden. The rest
   /// of the context values will be inherited.
-  Context setValue(ContextKey key, Object value);
+  @override
+  ZoneContext setValue(ContextKey key, Object value) =>
+      ZoneContext._(_zone.fork(zoneValues: {key: value}));
 
-  /// Returns a new [Context] created from this one with the given [api.Span]
+  /// Returns a new [ZoneContext] created from this one with the given [Span]
   /// set.
-  Context withSpan(api.Span span);
+  @override
+  ZoneContext withSpan(Span span) => setValue(spanKey, span);
 
-  /// Execute a function [fn] within this [Context] and return its result.
-  R execute<R>(R Function() fn);
+  /// Execute a function [fn] within this [ZoneContext] and return its result.
+  @override
+  R execute<R>(R Function() fn) => _zone.run(fn);
 
-  /// Get the [api.Span] attached to this [Context], or an invalid, [api.Span] if no such
-  /// [api.Span] exists.
-  api.Span get span;
+  /// Get the [Span] attached to this [ZoneContext], or an invalid, [Span] if no such
+  /// [Span] exists.
+  @override
+  Span get span => getValue(spanKey) ?? NonRecordingSpan(SpanContext.invalid());
 
-  /// Get the [api.SpanContext] from this [Context], or an invalid [api.SpanContext] if no such
-  /// [api.SpanContext] exists.
-  api.SpanContext get spanContext;
-}
-
-class ContextKey {
-  /// Name of the context key.
-  final String name;
-
-  /// Construct a [ContextKey] with a given [name].
-  ContextKey(this.name);
+  /// Get the [SpanContext] from this [ZoneContext], or an invalid [SpanContext] if no such
+  /// [SpanContext] exists.
+  @override
+  SpanContext get spanContext =>
+      (getValue(spanKey) ?? NonRecordingSpan(SpanContext.invalid()))
+          .spanContext;
 }

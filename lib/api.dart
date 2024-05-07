@@ -4,7 +4,8 @@
 export 'src/api/common/attribute.dart' show Attribute;
 export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
-export 'src/api/context/context.dart' show Context;
+export 'src/api/context/context.dart' show Context, ContextKey;
+export 'src/api/context/context_manager.dart' show ContextManager;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/open_telemetry.dart'
@@ -22,6 +23,7 @@ export 'src/api/propagation/w3c_trace_context_propagator.dart'
     show W3CTraceContextPropagator;
 export 'src/api/span_processors/span_processor.dart' show SpanProcessor;
 export 'src/api/trace/id_generator.dart' show IdGenerator;
+export 'src/api/trace/nonrecording_span.dart' show NonRecordingSpan;
 export 'src/api/trace/span.dart' show Span, SpanKind;
 export 'src/api/trace/span_context.dart' show SpanContext;
 export 'src/api/trace/span_event.dart' show SpanEvent;
