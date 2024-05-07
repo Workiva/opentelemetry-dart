@@ -31,14 +31,38 @@ import '../trace/nonrecording_span.dart';
 
 /// [ContextKey] used to store spans in a [Context].
 final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
+typedef ContextManagerFunction = api.SpanContext? Function();
 
 class Context {
   final Zone _zone;
 
   Context._(this._zone);
 
+  /// The [ContextManagerFunction] is responsible for managing the current [Context].
+  /// Different implementations of [ContextManagerFunction] can be registered to use different underlying storage mechanisms.
+  /// The default implementation uses Dart zones to store the current [Context].
+  static ContextManagerFunction? _contextManagerFunction;
+
+  static void RegisterContextManagerFunction(
+      ContextManagerFunction contextManagerFunction) {
+    _contextManagerFunction = contextManagerFunction;
+  }
+
   /// The active context.
-  static Context get current => Context._(Zone.current);
+  static Context get current => _getActive();
+
+  static Context _getActive() {
+    final v = Zone.current[spanKey];
+    // If no span is found on the dart side, check the context manager's side.
+    if (v == null && _contextManagerFunction != null) {
+      final sc = _contextManagerFunction?.call();
+      if (sc != null) {
+        final s = NonRecordingSpan(sc);
+        return Context._(Zone.current.fork(zoneValues: {spanKey: s}));
+      }
+    }
+    return Context._(Zone.current);
+  }
 
   /// The root context which all other contexts are derived from.
   ///

@@ -56,4 +56,15 @@ void main() {
       expect(testContext.spanContext.isValid, isFalse);
     });
   });
+
+  group('Context', () {
+    test('current returns the active context', () {
+      api.SpanContext contextManagerFunction() => testSpanContext;
+      api.Context.RegisterContextManagerFunction(contextManagerFunction);
+      final context = api.Context.current;
+
+      expect(context, isA<api.Context>());
+      expect(context.spanContext, same(testSpanContext));
+    });
+  });
 }
