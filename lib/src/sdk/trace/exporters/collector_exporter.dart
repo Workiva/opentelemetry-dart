@@ -68,9 +68,11 @@ class CollectorExporter implements sdk.SpanExporter {
     for (final span in spans) {
       final il = rsm[span.resource] ??
           <sdk.InstrumentationScope, List<pb_trace.Span>>{};
+      print("li =  ${il}");
       il[span.instrumentationScope] =
           il[span.instrumentationScope] ?? <pb_trace.Span>[]
             ..add(_spanToProtobuf(span));
+      print("li updated =  ${il}");
       rsm[span.resource] = il;
     }
 

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2c31f502-d1a8-49ab-8bb5-69fecb09dfe2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/default_logger.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/event_builder.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/log_record_builder.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/logg_tracer.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/logger.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/logger_builder.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/logger_provider.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/readable_log_record.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/api/Logs/severity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/component_registry.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/dataws.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_expoter.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_processor.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/simple_log_record_processor.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/log_limits.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/logg.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/logger_provider.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/logging_tracer.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/common/export_result.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1/logs_service.pb.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1/logs_service.pbenum.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1/logs_service.pbjson.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1/logs_service.pbserver.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pb.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pbenum.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pbjson.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pbserver.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/sdk.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/sdk.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2fu0PhVOFxfvrcwZzfVPEXSzoJn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "/Users/rushabhshah/Downloads/Flutter OTeL/opentelemetry-dart/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1" />
+      <recent name="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector" />
+      <recent name="$PROJECT_DIR$/lib/src/sdk/common" />
+      <recent name="$PROJECT_DIR$/lib/src/api" />
+      <recent name="$PROJECT_DIR$/lib/src/sdk" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="init" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="init" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Makefile Target.init" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2c31f502-d1a8-49ab-8bb5-69fecb09dfe2" name="Changes" comment="" />
+      <created>1714635632768</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1714635632768</updated>
+    </task>
+    <servers />
+  </component>
+</project>
