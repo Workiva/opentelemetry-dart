@@ -1,32 +1,5 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
-/// The OpenTelemetry SDKs require a mechanism for propagating context and the
-/// OpenTelemetry specification outlines the requirements for this context
-/// implementation: https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/context.md
-///
-/// The spec notes that "languages are expected to use the single, widely used
-/// Context implementation if one exists for them." Fortunately, the Dart SDK
-/// provides just that with [Zone] - a representation of "an environment that
-/// remains stable across asynchronous calls." [Zone] also meets the core
-/// requirements of immutability and being able to read and write values:
-///
-/// - Immutable: a Zone's values are set when the Zone is created and cannot be
-/// changed afterwards.
-/// - Reading and writing values: a Zone implements the `[]` operator, allowing
-/// values to be read directly from it like a [Map], and writing values is
-/// possible only by forking another Zone and providing values to add/override
-/// (the rest of the values will be inherited from the forked Zone).
-///
-/// This library provides a simple abstraction over [Zone] for the purpose of
-/// implementing the rest of the Context specification. OpenTelemetry SDKs and
-/// instrumentation libraries should use this [Context] API instead of a [Zone]
-/// directly. Other users should usually not interact with Context at all and
-/// should instead manipulate it through cross-cutting concerns APIs provided by
-/// OpenTelemetry SDKs.
-import 'dart:async';
-
-import 'package:logging/logging.dart';
 import 'package:opentelemetry/src/sdk/context/zone_context_manager.dart';
 
 import '../../../api.dart' as api;
@@ -42,7 +15,6 @@ ContextManager _contextManager = ZoneContextManager();
 
 abstract class Context {
   static void RegisterContextManager(ContextManager contextManager) {
-    Logger('Context').info('Registering ContextManager: $contextManager');
     _contextManager = contextManager;
   }
 
