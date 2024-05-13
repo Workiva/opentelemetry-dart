@@ -38,7 +38,7 @@ void main() {
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
+        api.ContextManager.current, testCarrier, TestingExtractor());
     final resultSpan = resultContext.span;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
@@ -63,7 +63,7 @@ void main() {
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
+        api.ContextManager.current, testCarrier, TestingExtractor());
     final resultSpan = resultContext.span;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
@@ -83,7 +83,7 @@ void main() {
     final testCarrier = <String, String>{};
 
     final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
+        api.ContextManager.current, testCarrier, TestingExtractor());
     final resultSpan = resultContext.span;
 
     expect(resultSpan, isA<api.NonRecordingSpan>());
@@ -100,7 +100,7 @@ void main() {
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
     final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
+        api.ContextManager.current, testCarrier, TestingExtractor());
     final resultSpan = resultContext.span;
 
     // Extract should not allow a Span with malformed IDs to be attached to
@@ -119,7 +119,7 @@ void main() {
       ..set(testCarrier, 'tracestate',
           'rojo=00f067aa,0ba902b7,con@go=t61rcWk=gMzE');
     final resultSpan = testPropagator
-        .extract(api.Context.current, testCarrier, TestingExtractor())
+        .extract(api.ContextManager.current, testCarrier, TestingExtractor())
         .span;
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
@@ -154,7 +154,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testCarrier = <String, String>{};
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.ContextManager.current.withSpan(testSpan);
 
     api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());
@@ -185,7 +185,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testCarrier = <String, String>{};
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.ContextManager.current.withSpan(testSpan);
 
     api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());

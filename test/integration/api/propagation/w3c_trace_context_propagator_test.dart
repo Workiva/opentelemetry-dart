@@ -48,7 +48,7 @@ void main() {
         sdk.DateTimeTimeProvider().now);
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = <String, String>{};
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.ContextManager.current.withSpan(testSpan);
 
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = testPropagator
@@ -87,7 +87,7 @@ void main() {
         sdk.DateTimeTimeProvider().now);
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = <String, String>{};
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.ContextManager.current.withSpan(testSpan);
 
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = testPropagator
@@ -131,7 +131,7 @@ void main() {
 
     // Inject and extract a test Span from a Context, as when an outbound
     // call is made and received by another service.
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.ContextManager.current.withSpan(testSpan);
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final parentSpan = testPropagator
         .extract(testContext, testCarrier, TestingExtractor())
@@ -140,7 +140,7 @@ void main() {
     expect(parentSpan, isNotNull);
 
     // Use the transmitted Span as a receiver.
-    api.Context.current.withSpan(parentSpan).execute(() {
+    api.ContextManager.current.withSpan(parentSpan).execute(() {
       final resultSpan = tracer.startSpan('doWork')..end();
 
       // Verify that data from the original Span propagates to the child.
