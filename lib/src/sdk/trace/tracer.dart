@@ -36,7 +36,7 @@ class Tracer implements api.Tracer {
       List<api.Attribute> attributes = const [],
       List<api.SpanLink> links = const [],
       Int64? startTime}) {
-    context ??= api.Context.current;
+    context ??= api.ContextManager.current;
     startTime ??= _timeProvider.now;
 
     // If a valid, active Span is present in the context, use it as this Span's

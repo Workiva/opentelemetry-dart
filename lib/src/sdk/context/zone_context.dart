@@ -43,11 +43,11 @@ class ZoneContext implements Context {
   /// The root context which all other contexts are derived from.
   ///
   /// It should generally not be required to use the root [ZoneContext] directly -
-  /// instead, use [ZoneContext.current] to operate on the current [ZoneContext].
+  /// instead, use [ZoneContext.currentContextß] to operate on the current [ZoneContext].
   /// Only use this context if you are certain you need to disregard the
   /// current [ZoneContext].  For example, when instrumenting an asynchronous
   /// event handler which may fire while an unrelated [ZoneContext] is "current".
-  static ZoneContext get root => ZoneContext._(Zone.root);
+  static ZoneContext get rootContext => ZoneContext._(Zone.root);
 
   /// Returns a key to be used to read and/or write values to a context.
   ///
