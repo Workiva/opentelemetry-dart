@@ -6,8 +6,8 @@ import 'zone_context.dart';
 
 class ZoneContextManager implements ContextManager {
   @override
-  Context get activeContext => ZoneContext.current;
+  Context get active => ZoneContext.current;
 
   @override
-  Context get rootContext => ZoneContext.rootContext;
+  Context get root => ZoneContext.root;
 }
