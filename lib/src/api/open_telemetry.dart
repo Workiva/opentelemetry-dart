@@ -41,7 +41,7 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
 /// [api.Tracer] and marks the span as errored if an exception occurs.
 Future<T> trace<T>(String name, Future<T> Function() fn,
     {api.Context? context, api.Tracer? tracer}) async {
-  context ??= api.ContextManager.current;
+  context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);
@@ -61,7 +61,7 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
 /// Use [traceSync] instead of [trace] when [fn] is not an async function.
 R traceSync<R>(String name, R Function() fn,
     {api.Context? context, api.Tracer? tracer}) {
-  context ??= api.ContextManager.current;
+  context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);

@@ -32,7 +32,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
-    final testContext = api.ContextManager.current.withSpan(testSpan);
+    final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -57,7 +57,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
-    final result = testSampler.shouldSample(api.ContextManager.root, traceId,
+    final result = testSampler.shouldSample(api.Context.root, traceId,
         testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
@@ -82,7 +82,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.ContextManager.current.withSpan(testSpan);
+    final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -109,7 +109,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.ContextManager.current.withSpan(testSpan);
+    final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -136,7 +136,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.ContextManager.current.withSpan(testSpan);
+    final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -163,7 +163,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.ContextManager.current.withSpan(testSpan);
+    final testContext = api.Context.current.withSpan(testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);

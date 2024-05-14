@@ -22,7 +22,7 @@ void main() {
     late Span span;
 
     api.traceSync('syncTrace', () {
-      span = api.ContextManager.current.span as Span;
+      span = api.Context.current.span as Span;
     }, tracer: tracer);
 
     expect(span, isNotNull);
@@ -44,7 +44,7 @@ void main() {
 
     for (var i = 0; i < 5; i++) {
       api.traceSync('syncTrace', () {
-        spans.add(api.ContextManager.current.span as Span);
+        spans.add(api.Context.current.span as Span);
       }, tracer: tracer);
     }
 
@@ -67,7 +67,7 @@ void main() {
 
     expect(
         () => api.traceSync('syncTrace', () {
-              span = api.ContextManager.current.span as Span;
+              span = api.Context.current.span as Span;
               throw Exception('Oh noes!');
             }, tracer: tracer),
         throwsException);
@@ -91,7 +91,7 @@ void main() {
     late Span span;
 
     await api.trace('asyncTrace', () async {
-      span = api.ContextManager.current.span as Span;
+      span = api.Context.current.span as Span;
     }, tracer: tracer);
 
     expect(
@@ -112,7 +112,7 @@ void main() {
 
     for (var i = 0; i < 5; i++) {
       await api.trace('asyncTrace', () async {
-        spans.add(api.ContextManager.current.span as Span);
+        spans.add(api.Context.current.span as Span);
       }, tracer: tracer);
     }
 
@@ -135,7 +135,7 @@ void main() {
 
     try {
       await api.trace('asyncTrace', () async {
-        span = api.ContextManager.current.span as Span;
+        span = api.Context.current.span as Span;
         throw Exception('Oh noes!');
       }, tracer: tracer);
     } catch (e) {
@@ -163,7 +163,7 @@ void main() {
 
     try {
       await api.trace('asyncTrace', () async {
-        span = api.ContextManager.current.span as Span;
+        span = api.Context.current.span as Span;
         return Future.error(Exception('Oh noes!'));
       }, tracer: tracer);
     } catch (e) {
