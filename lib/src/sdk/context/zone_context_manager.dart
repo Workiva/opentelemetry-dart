@@ -8,6 +8,8 @@ class ZoneContextManager implements ContextManager {
   @override
   Context get active => ZoneContext.current;
 
+  @Deprecated(
+      'We are planning to remove this in the future, please use Context.current instead.')
   @override
   Context get root => ZoneContext.root;
 }

@@ -4,6 +4,8 @@
 import 'package:opentelemetry/api.dart';
 
 abstract class ContextManager {
+  @Deprecated(
+      'We are planning to remove this in the future, please use Context.current instead.')
   Context get root;
 
   Context get active;
