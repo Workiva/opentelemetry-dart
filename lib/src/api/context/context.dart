@@ -28,6 +28,8 @@ abstract class Context {
   /// Only use this context if you are certain you need to disregard the
   /// current [Context].  For example, when instrumenting an asynchronous
   /// event handler which may fire while an unrelated [Context] is "current".
+  @Deprecated(
+      'We are planning to remove this in the future, please use Context.current instead.')
   static Context get root => _contextManager.root;
 
   /// Returns a key to be used to read and/or write values to a context.

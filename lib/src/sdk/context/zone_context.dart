@@ -47,6 +47,8 @@ class ZoneContext implements Context {
   /// Only use this context if you are certain you need to disregard the
   /// current [ZoneContext].  For example, when instrumenting an asynchronous
   /// event handler which may fire while an unrelated [ZoneContext] is "current".
+  @Deprecated(
+      'We are planning to remove this in the future, please use Context.current instead.')
   static ZoneContext get root => ZoneContext._(Zone.root);
 
   /// Returns a key to be used to read and/or write values to a context.
