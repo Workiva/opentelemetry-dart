@@ -4,7 +4,7 @@
 @TestOn('vm')
 import 'dart:typed_data';
 
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
@@ -156,8 +156,8 @@ void main() {
           ])
     ]);
 
-    final verifyResult = verify(mockClient.post(uri,
-        body: captureAnyNamed('body'),
+    final verifyResult = verify(() => mockClient.post(uri,
+        body: captureAny(named: 'body'),
         headers: {'Content-Type': 'application/x-protobuf'}))
       ..called(1);
     final captured = verifyResult.captured;
@@ -184,8 +184,8 @@ void main() {
         sdk.DateTimeTimeProvider().now)
       ..end();
 
-    when(mockClient.post(uri,
-            body: anyNamed('body'),
+    when(() => mockClient.post(uri,
+            body: any(named: 'body'),
             headers: {'Content-Type': 'application/x-protobuf'}))
         .thenThrow(Exception('Failed to connect'));
 
@@ -194,7 +194,7 @@ void main() {
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
     sub.cancel();
 
-    verify(mockClient.post(uri,
+    verify(() => mockClient.post(uri,
         body: anything,
         headers: {'Content-Type': 'application/x-protobuf'})).called(1);
 
@@ -223,8 +223,8 @@ void main() {
       ..shutdown()
       ..export([span]);
 
-    verify(mockClient.close()).called(1);
-    verifyNever(mockClient.post(uri,
+    verify(() => mockClient.close()).called(1);
+    verifyNever(() => mockClient.post(uri,
         body: anything, headers: {'Content-Type': 'application/x-protobuf'}));
   });
 
@@ -257,7 +257,7 @@ void main() {
     sdk.CollectorExporter(uri, httpClient: mockClient, headers: suppliedHeaders)
         .export([span]);
 
-    verify(mockClient.post(uri, body: anything, headers: expectedHeaders))
+    verify(() => mockClient.post(uri, body: anything, headers: expectedHeaders))
         .called(1);
   });
 
@@ -282,7 +282,7 @@ void main() {
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
 
-    verify(mockClient.post(uri, body: anything, headers: expectedHeaders))
+    verify(() => mockClient.post(uri, body: anything, headers: expectedHeaders))
         .called(1);
   });
 }

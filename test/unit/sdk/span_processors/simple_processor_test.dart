@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:test/test.dart';
 
@@ -22,13 +22,13 @@ void main() {
   test('executes export', () {
     processor.onEnd(span);
 
-    verify(exporter.export([span])).called(1);
+    verify(() => exporter.export([span])).called(1);
   });
 
   test('flushes exporter on forced flush', () {
     processor.forceFlush();
 
-    verify(exporter.forceFlush()).called(1);
+    verify(() => exporter.forceFlush()).called(1);
   });
 
   test('does not export if shut down', () {
@@ -36,8 +36,8 @@ void main() {
       ..shutdown()
       ..onEnd(span);
 
-    verify(exporter.shutdown()).called(1);
-    verify(exporter.forceFlush()).called(1);
-    verifyNever(exporter.export([span]));
+    verify(() => exporter.shutdown()).called(1);
+    verify(() => exporter.forceFlush()).called(1);
+    verifyNever(() => exporter.export([span]));
   });
 }
