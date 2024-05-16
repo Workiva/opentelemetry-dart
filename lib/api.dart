@@ -5,6 +5,8 @@ export 'src/api/common/attribute.dart' show Attribute;
 export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
 export 'src/api/context/context.dart' show Context, ContextKey;
+export 'src/api/context/noop_context_manager.dart'
+    show registerContextManager, getContextManager;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/open_telemetry.dart'
