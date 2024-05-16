@@ -1,6 +1,6 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-import 'package:opentelemetry/src/sdk/context/zone_context_manager.dart';
+import 'package:opentelemetry/src/api/context/noop_context_manager.dart';
 
 import '../../../api.dart' as api;
 import 'context_manager.dart';
@@ -8,16 +8,9 @@ import 'context_manager.dart';
 /// [ContextKey] used to store spans in a [Context].
 final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
 
-/// The [ContextManager] is responsible for managing the current [Context].
-/// Different implementations of [ContextManager] can be registered to use different underlying storage mechanisms.
-/// The default implementation is [ZoneContextManager], which uses Dart zones to store the current [Context].
-ContextManager _contextManager = ZoneContextManager();
+ContextManager _contextManager = getContextManager();
 
 abstract class Context {
-  static void RegisterContextManager(ContextManager contextManager) {
-    _contextManager = contextManager;
-  }
-
   /// The active context.
   static Context get current => _contextManager.active;
 

@@ -89,7 +89,5 @@ class ZoneContext implements Context {
   /// Get the [SpanContext] from this [ZoneContext], or an invalid [SpanContext] if no such
   /// [SpanContext] exists.
   @override
-  SpanContext get spanContext =>
-      (getValue(spanKey) ?? NonRecordingSpan(SpanContext.invalid()))
-          .spanContext;
+  SpanContext get spanContext => span.spanContext;
 }
