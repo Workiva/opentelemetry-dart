@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 import '../common/attributes.dart';
-import '../common/limits.dart' show applyAttributeLimits;
+import '../common/limits.dart' show applyAttributeLimitsForLog;
 
 /// A representation of a single operation within a trace.
 
@@ -20,26 +20,24 @@ class Logg implements api.ReadableLogRecord{
   final sdk.InstrumentationScope _instrumentationScope;
   final Attributes _attributes = Attributes.empty();
 
+  api.Attribute? _body;
+
   final String _name;
   int _droppedSpanAttributes = 0;
   int _droppedSpanEvents = 0;
 
-  @override
-  final api.Attribute body;
 
   @override
   final DateTime observedTimestamp;
   @override
   final DateTime recordTime;
   @override
-  final api.Severity severity;
+  api.Severity? severity;
 
 
   Logg(
-  this.body,
   this.recordTime,
   this.observedTimestamp,
-  this.severity,
   this._name,
   this._spanContext,
   this._parentSpanId,
@@ -70,19 +68,35 @@ class Logg implements api.ReadableLogRecord{
   sdk.Resource get resource => _resource;
 
   @override
-  set body(api.Attribute? _body) {
-    // TODO: implement body
+   get body {
+    if (this._body != null){
+      return this._body!;
+    }
+    return api.Attribute.empty("", "");
   }
 
+  @override
+  void setAttribute(api.Attribute attribute) {
+    //Don't want to have any attribute
+    if (_limits.maxAttributeCount == 0) {
+      _droppedSpanAttributes++;
+      return;
+    }
+
+    final obj = _attributes.get(attribute.key);
+    // If current attributes.length is equal or greater than maxNumAttributes and
+    // key is not in current map, drop it.
+    if (_attributes.length >= _limits.maxAttributeLength && obj == null) {
+      _droppedSpanAttributes++;
+      return;
+    }
+    _attributes.add(applyAttributeLimitsForLog(attribute, _limits));
+  }
   @override
   set observedTimestamp(DateTime? _observedTimestamp) {
     // TODO: implement observedTimestamp
   }
 
-  @override
-  set severity(api.Severity? _severity) {
-    // TODO: implement severity
-  }
 
   @override
   set spanContext(api.SpanContext? _spanContext) {
@@ -93,6 +107,20 @@ class Logg implements api.ReadableLogRecord{
   set recordTime(DateTime _recordTime) {
     this.recordTime = _recordTime;
   }
+  @override
+  void setBody(api.Attribute attribute){
+    this._body = attribute;
+  }
+  @override
+  void setSevarity(api.Severity severity){
+    this.severity = severity;
+  }
+  @override
+  void emit() {
 
+    for (var i = 0; i < _processors.length; i++) {
+      _processors[i].onEmit(this);
+    }
+  }
 
 }

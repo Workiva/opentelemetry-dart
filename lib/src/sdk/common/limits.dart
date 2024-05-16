@@ -74,6 +74,27 @@ api.Attribute applyAttributeLimits(api.Attribute attr, sdk.SpanLimits limits) {
   return attr;
 }
 
+@protected
+api.Attribute applyAttributeLimitsForLog(api.Attribute attr, sdk.LogLimits limits) {
+  // if maxNumAttributeLength is less than zero, then it has unlimited length.
+  if (limits.maxAttributeLength < 0) return attr;
+
+  if (attr.value is String) {
+    attr = api.Attribute.fromString(
+        attr.key,
+        applyAttributeLengthLimit(
+            attr.value as String, limits.maxAttributeLength));
+  } else if (attr.value is List<String>) {
+    final listString = attr.value as List<String>;
+    for (var j = 0; j < listString.length; j++) {
+      listString[j] = applyAttributeLengthLimit(
+          listString[j], limits.maxAttributeLength);
+    }
+    attr = api.Attribute.fromStringList(attr.key, listString);
+  }
+  return attr;
+}
+
 /// Truncate just strings which length is longer than configuration.
 /// Reference: https://github.com/open-telemetry/opentelemetry-java/blob/14ffacd1cdd22f5aa556eeda4a569c7f144eadf2/sdk/common/src/main/java/io/opentelemetry/sdk/internal/AttributeUtil.java#L80
 @protected

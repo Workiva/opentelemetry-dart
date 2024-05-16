@@ -6,6 +6,10 @@ class Attribute {
   final String key;
   final Object value;
 
+  String get id => key;
+  String get val => key;
+  Attribute.empty(this.key, String this.value);
+
   /// Create an Attribute from a String value.
   Attribute.fromString(this.key, String this.value);
 

@@ -123,11 +123,11 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
 
     return pb_logs.LogRecord(
         timeUnixNano: Int64(log.recordTime.microsecondsSinceEpoch),
-        severityNumber: pg_logs_enum.SeverityNumber.valueOf(log.severity.index),
-        body: _attributeONEValueToProtobuf(log.body),
+        severityNumber: pg_logs_enum.SeverityNumber.valueOf(log.severity!.index),
+        body: _attributeONEValueToProtobuf(log.body.val),
         attributes: log.attributes.keys.map((key) => pb_common.KeyValue(
-        key: key,
-        value: _attributeValueToProtobuf(log.attributes.get(key)!))),
+                       key: key,
+                       value: _attributeValueToProtobuf(log.attributes.get(key)!))),
         spanId: log.spanContext.spanId.get(),
         traceId: log.spanContext.traceId.get(),
         observedTimeUnixNano: Int64(log.observedTimestamp.microsecondsSinceEpoch)

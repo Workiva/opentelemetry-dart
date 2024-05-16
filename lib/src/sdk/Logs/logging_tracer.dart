@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
+import './logg.dart';
 import '../common/limits.dart' show applyLinkLimits;
 
 /// An interface for creating [api.Span]s and propagating context in-process.
@@ -17,10 +18,11 @@ class LoggTracer implements api.LogTracer {
    final sdk.LogLimits _limits;
    final api.IdGenerator _idGenerator;
    final sdk.Sampler _sampler;
+   Logg? logg;
 
 
    @protected
-  const LoggTracer(
+   LoggTracer(
       this._processors,
       this._resource,
       this._timeProvider,
@@ -30,16 +32,15 @@ class LoggTracer implements api.LogTracer {
        this._limits);
 
   @override
-  api.ReadableLogRecord setLogAndEmit(
-      api.Attribute body,
-      DateTime observedTimestamp,
-      api.Severity severity,
+   setLog(
+      DateTime? observedTimestamp,
       String name,
       {api.Context? context,
         api.SpanKind kind = api.SpanKind.internal,
         List<api.Attribute> attributes = const [],
         List<api.SpanLink> links = const [],
-        Int64? startTime}) {
+        Int64? startTime})
+  {
     context ??= api.Context.current;
     startTime ??= _timeProvider.now;
 
@@ -64,10 +65,9 @@ class LoggTracer implements api.LogTracer {
     final spanContext =
     api.SpanContext(traceId, spanId, traceFlags, traceState);
 
-    final logg = sdk.Logg(body,
-        observedTimestamp,
-        observedTimestamp,
-        severity,
+    logg = sdk.Logg(
+        observedTimestamp ?? DateTime.now(),
+        observedTimestamp ?? DateTime.now(),
         name,
         spanContext,
         parentSpanId,
@@ -77,17 +77,7 @@ class LoggTracer implements api.LogTracer {
         _instrumentationScope,
         _limits);
 
-    for (var i = 0; i < _processors.length; i++) {
-      _processors[i].onEmit(logg);
-    }
 
-    return logg;
-  }
-  @override
-  api.ReadableLogRecord setLogg(String name, api.Context context, List<api.Attribute> attributes, int startTime) {
-    // TODO: implement setLogg
-    context ??= api.Context.current;
-
-    throw UnimplementedError();
+    return logg!;
   }
 }
