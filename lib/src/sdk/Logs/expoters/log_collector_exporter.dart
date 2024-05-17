@@ -65,6 +65,7 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   }
   @override
   void forceFlush() {
+
     return;
   }
 
@@ -122,7 +123,7 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   pb_logs.LogRecord _spanToProtobuf(api.ReadableLogRecord log) {
 
     return pb_logs.LogRecord(
-        timeUnixNano: Int64(log.recordTime.microsecondsSinceEpoch),
+        timeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log.recordTime) ,
         severityNumber: pg_logs_enum.SeverityNumber.valueOf(log.severity!.index),
         body: _attributeONEValueToProtobuf(log.body.val),
         attributes: log.attributes.keys.map((key) => pb_common.KeyValue(
@@ -130,7 +131,7 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
                        value: _attributeValueToProtobuf(log.attributes.get(key)!))),
         spanId: log.spanContext.spanId.get(),
         traceId: log.spanContext.traceId.get(),
-        observedTimeUnixNano: Int64(log.observedTimestamp.microsecondsSinceEpoch)
+        observedTimeUnixNano:  sdk.DateTimeTimeProvider().getInt64Time(log.observedTimestamp)
     );
 
   }

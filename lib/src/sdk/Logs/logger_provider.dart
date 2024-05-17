@@ -29,7 +29,16 @@ class LoggerTraceProviderBase implements api.LoggerProvider{
   final sdk.LogLimits logLimits;
   @override
   void forceFlush() {
-    // TODO: implement forceFlush
+    for (var i = 0; i < processors.length; i++) {
+      processors[i].forceFlush();
+    }
+  }
+
+  @override
+  void shutdown() {
+    for (var i = 0; i < processors.length; i++) {
+      processors[i].shutdown();
+    }
   }
 
   LoggerTraceProviderBase(this.logLimits, { this.processors = const [],resource,
@@ -46,10 +55,5 @@ class LoggerTraceProviderBase implements api.LoggerProvider{
         sampler,
         logLimits);
 
-  }
-
-  @override
-  void shutdown() {
-    // TODO: implement shutdown
   }
 }

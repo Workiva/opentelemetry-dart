@@ -8,22 +8,28 @@ import 'package:opentelemetry/src/sdk/Logs/expoters/log_record_processor.dart';
 
 class SimpleLogRecordProcessor implements LogRecordProcessor {
   LogRecordExporter logRecordExporter;
+  bool _isShutdown = false;
+
 
   SimpleLogRecordProcessor({required this.logRecordExporter});
 
   @override
   void onEmit(ReadableLogRecord logRecord) {
+    if (_isShutdown) {
+      return;
+    }
     logRecordExporter.export([logRecord]);
   }
 
   @override
-  ExportResult forceFlush() {
-    return logRecordExporter.forceFlush();
+  void forceFlush() {
+    logRecordExporter.forceFlush();
   }
 
   @override
-  ExportResult shutdown() {
+  void shutdown() {
+    forceFlush();
     logRecordExporter.shutdown();
-    return ExportResult.success;
+    _isShutdown = true;
   }
 }

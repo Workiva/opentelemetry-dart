@@ -3,8 +3,11 @@
 
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
+import 'package:opentelemetry/src/api/Logs/readable_log_record.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/trace/span.dart';
+import 'package:opentelemetry/src/sdk/Logs/expoters/log_record_expoter.dart';
+import 'package:opentelemetry/src/sdk/Logs/expoters/log_record_processor.dart';
 import 'package:opentelemetry/src/sdk/trace/exporters/span_exporter.dart';
 import 'package:opentelemetry/src/sdk/trace/read_only_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
@@ -15,3 +18,8 @@ class MockSpan extends Mock implements Span{}
 class MockReadOnlySpan extends Mock implements ReadOnlySpan{}
 class MockSpanExporter extends Mock implements SpanExporter{}
 class MockSpanProcessor extends Mock implements SpanProcessor{}
+
+class MockReadableLog extends Mock implements ReadableLogRecord{}
+class MockLogRecordExpoter extends Mock implements LogRecordExporter{}
+class MockLogProcessop extends Mock implements LogRecordProcessor{}
+

@@ -7,8 +7,8 @@ import 'package:opentelemetry/src/sdk/common/export_result.dart';
 abstract class LogRecordProcessor {
 
   void onEmit(ReadableLogRecord logRecord);
-  ExportResult forceFlush();
-  ExportResult shutdown();
+  void forceFlush();
+  void shutdown();
 }
 extension LogRecordProcessorExtension on LogRecordProcessor {
   ExportResult forceFlush() => forceFlush();
