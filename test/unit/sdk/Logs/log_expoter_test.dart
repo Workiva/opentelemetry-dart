@@ -63,6 +63,7 @@ void main() {
                           instrumentationLibrary,
                           logLimit)
                           ..setAttribute(api.Attribute.fromString('foo', 'bar'))
+                          ..setBody(api.Attribute.fromString('body', 'bodyVal'))
                           ..setSevarity(api.Severity.debug3)
                           ..emit();
     final log2 = sdk.Logg(DateTime.now(),
@@ -78,6 +79,7 @@ void main() {
                           logLimit)
                         ..setAttribute(api.Attribute.fromString('foo', 'bar'))
                         ..setSevarity(api.Severity.debug3)
+                        ..setBody(api.Attribute.fromString('body', 'bodyVal'))
                         ..emit();
 
 
@@ -95,23 +97,23 @@ void main() {
                         pb_logs.LogRecord(
                                         timeUnixNano : sdk.DateTimeTimeProvider().getInt64Time(log1.recordTime)  ,
                                         severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severity!.index ),
-                                        severityText: "DEBUG2",
                                         attributes: [ pb_common.KeyValue(
                                                      key: 'foo',
                                                       value: pb_common.AnyValue(stringValue: 'bar'))],
                                         traceId : [1, 2, 3],
                                         spanId : [10, 11, 12],
+                                        body: pb_common.AnyValue(stringValue: 'body'),
                                         observedTimeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log1.observedTimestamp),
     ),pb_logs.LogRecord(
     timeUnixNano : sdk.DateTimeTimeProvider().getInt64Time(log2.recordTime) ,
     severityNumber: pg_logs_enum.SeverityNumber.valueOf(log2.severity!.index ),
-    severityText: "DEBUG2",
     attributes: [ pb_common.KeyValue(
     key: 'foo',
     value: pb_common.AnyValue(stringValue: 'bar'))],
     traceId : [1, 2, 3],
-    spanId : [10, 11, 12],
-    observedTimeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log2.observedTimestamp),
+    spanId : [10, 11, 12], body: pb_common.AnyValue(stringValue: 'body'),
+
+                          observedTimeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log2.observedTimestamp),
     )],
     scope: pb_common.InstrumentationScope(
     name: 'library_name', version: 'library_version'))
