@@ -3,16 +3,13 @@
 import 'package:opentelemetry/src/api/context/noop_context_manager.dart';
 
 import '../../../api.dart' as api;
-import 'context_manager.dart';
 
 /// [ContextKey] used to store spans in a [Context].
 final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
 
-ContextManager _contextManager = getContextManager();
-
 abstract class Context {
   /// The active context.
-  static Context get current => _contextManager.active;
+  static Context get current => getContextManager().active;
 
   /// The root context which all other contexts are derived from.
   ///
@@ -23,7 +20,7 @@ abstract class Context {
   /// event handler which may fire while an unrelated [Context] is "current".
   @Deprecated(
       'We are planning to remove this in the future, please use Context.current instead.')
-  static Context get root => _contextManager.root;
+  static Context get root => getContextManager().root;
 
   /// Returns a key to be used to read and/or write values to a context.
   ///
@@ -45,17 +42,24 @@ abstract class Context {
 
   /// Returns a new [Context] created from this one with the given [api.Span]
   /// set.
+  @Deprecated(
+      'This method will be removed in the future, new method will be added.')
   Context withSpan(api.Span span);
 
   /// Execute a function [fn] within this [Context] and return its result.
+  @Deprecated('This method will be removed in the future.')
   R execute<R>(R Function() fn);
 
   /// Get the [api.Span] attached to this [Context], or an invalid, [api.Span] if no such
   /// [api.Span] exists.
+  @Deprecated(
+      'This method will be removed in the future, new method will be added.')
   api.Span get span;
 
   /// Get the [api.SpanContext] from this [Context], or an invalid [api.SpanContext] if no such
   /// [api.SpanContext] exists.
+  @Deprecated(
+      'This method will be removed in the future, new method will be added.')
   api.SpanContext get spanContext;
 }
 
