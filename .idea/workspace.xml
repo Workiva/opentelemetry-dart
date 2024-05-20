@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2c31f502-d1a8-49ab-8bb5-69fecb09dfe2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/test/unit/sdk/Logs/log_expoter_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/unit/sdk/Logs/log_processor_test.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/unit/sdk/Logs/log_provider_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_processor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_processor.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/simple_log_record_processor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/simple_log_record_processor.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/logger_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/logger_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry-proto" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry-proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/time_providers/datetime_time_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/time_providers/datetime_time_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/unit/mocks.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/unit/mocks.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2fu0PhVOFxfvrcwZzfVPEXSzoJn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/rushabhshah/Downloads/Flutter OTeL/opentelemetry-dart/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector/logs/v1" />
+      <recent name="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry/proto/collector" />
+      <recent name="$PROJECT_DIR$/lib/src/sdk/common" />
+      <recent name="$PROJECT_DIR$/lib/src/api" />
+      <recent name="$PROJECT_DIR$/lib/src/sdk" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Dart Test.Tests in log_provider_test.dart">
+    <configuration name="Tests in log_provider_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/unit/sdk/Logs/log_provider_test.dart" />
+      <option name="testName" value="log_provider_test.dart" />
+      <method v="2" />
+    </configuration>
+    <configuration name="does not send log when shutdown in log_expoter_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/unit/sdk/Logs/log_expoter_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="does not send log when shutdown" />
+      <method v="2" />
+    </configuration>
+    <configuration name="supplies HTTP headers in collector_exporter_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/unit/sdk/exporters/collector_exporter_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="supplies HTTP headers" />
+      <method v="2" />
+    </configuration>
+    <configuration name="supplies HTTP headers in log_expoter_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/unit/sdk/Logs/log_expoter_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="supplies HTTP headers" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tracerProvider custom span processors in log_provider_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/unit/sdk/Logs/log_provider_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="tracerProvider custom span processors" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Dart Test.Tests in log_provider_test.dart" />
+        <item itemvalue="Dart Test.tracerProvider custom span processors in log_provider_test.dart" />
+        <item itemvalue="Dart Test.supplies HTTP headers in log_expoter_test.dart" />
+        <item itemvalue="Dart Test.supplies HTTP headers in collector_exporter_test.dart" />
+        <item itemvalue="Dart Test.does not send log when shutdown in log_expoter_test.dart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2c31f502-d1a8-49ab-8bb5-69fecb09dfe2" name="Changes" comment="" />
+      <created>1714635632768</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1714635632768</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/simple_log_record_processor.dart</url>
+          <line>25</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
+          <line>67</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/trace/span_processors/simple_processor.dart</url>
+          <line>31</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/trace/span_processors/simple_processor.dart</url>
+          <line>19</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
+          <line>73</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart</url>
+          <line>239</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart</url>
+          <line>240</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/unit/sdk/Logs/log_expoter_test.dart</url>
+          <line>128</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/unit/sdk/exporters/collector_exporter_test.dart</url>
+          <line>166</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
+          <line>51</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
+          <line>49</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/unit/sdk/Logs/log_expoter_test.dart</url>
+          <line>188</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/unit/sdk/Logs/log_expoter_test.dart</url>
+          <line>178</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/unit/sdk/Logs/log_expoter_test.dart</url>
+          <line>190</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
+          <line>33</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart</url>
+          <line>48</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

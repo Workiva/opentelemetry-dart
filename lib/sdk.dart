@@ -28,3 +28,11 @@ export 'src/sdk/trace/span_processors/batch_processor.dart'
 export 'src/sdk/trace/span_processors/simple_processor.dart'
     show SimpleSpanProcessor;
 export 'src/sdk/trace/tracer_provider.dart' show TracerProviderBase;
+export 'src/sdk/Logs/expoters/log_record_expoter.dart';
+export 'src/sdk/Logs/expoters/log_collector_exporter.dart';
+
+export 'src/sdk/Logs/expoters/log_record_processor.dart';
+export 'src/sdk/Logs/expoters/simple_log_record_processor.dart';
+export 'src/sdk/Logs/logger_provider.dart';
+export 'src/sdk/Logs/log_limits.dart';
+export 'src/sdk/Logs/logg.dart';

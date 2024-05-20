@@ -10,4 +10,9 @@ class DateTimeTimeProvider implements TimeProvider {
   Int64 get now =>
       Int64(DateTime.now().microsecondsSinceEpoch) *
       TimeProvider.nanosecondsPerMicrosecond;
+
+  Int64? getInt64Time(DateTime dateTime){
+    Int64(dateTime.microsecondsSinceEpoch) *
+        TimeProvider.nanosecondsPerMicrosecond;
+  }
 }
