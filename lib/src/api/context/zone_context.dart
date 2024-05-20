@@ -79,7 +79,7 @@ class ZoneContext implements Context {
 
   /// Execute a function [fn] within this [ZoneContext] and return its result.
   @override
-  R execute<R>(R Function() fn) => _zone.run(fn);
+  R execute<R>(R Function() fn) => _zone.run(() => fn());
 
   /// Get the [Span] attached to this [ZoneContext], or an invalid, [Span] if no such
   /// [Span] exists.
