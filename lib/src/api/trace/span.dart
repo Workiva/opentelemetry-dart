@@ -64,7 +64,7 @@ abstract class Span {
       {Int64? timestamp, List<api.Attribute> attributes});
 
   /// Marks the end of this span's execution.
-  void end();
+  void end({Int64 endTime});
 
   /// Record metadata about an exception occurring during this span.
   void recordException(dynamic exception, {StackTrace stackTrace});
