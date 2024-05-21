@@ -4,6 +4,7 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/experimental_api.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
@@ -35,7 +36,7 @@ void main() {
         () {
       final context = api.Context.current;
 
-      expect(context.span, isA<api.NonRecordingSpan>());
+      expect(context.span, isA<NonRecordingSpan>());
       expect(context.span.spanContext.isValid, isFalse);
     });
   });

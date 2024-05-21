@@ -27,6 +27,7 @@
 import 'dart:async';
 
 import '../../../api.dart';
+import '../../experimental_api.dart';
 
 /// [ContextKey] used to store spans in a [ZoneContext].
 final ContextKey spanKey =
@@ -56,7 +57,7 @@ class ZoneContext implements Context {
   /// [name] is for debug purposes only and does not uniquely identify the key.
   /// Multiple calls to this function with the same [name] will not return
   /// identical keys.
-  static ContextKey createKey(String name) => ContextKey(name);
+  static ContextKey createKey(String name) => name;
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.

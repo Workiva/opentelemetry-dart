@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/experimental_api.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 import 'package:opentelemetry/src/api/context/map_context.dart';
@@ -25,13 +26,13 @@ void main() {
   group('MapContext', () {
     test('getValue returns null if key is not set', () {
       final context = MapContext();
-      final key = api.ContextKey('testKey');
+      const key = 'testKey';
       expect(context.getValue(key), isNull);
     });
 
     test('setValue returns a new context with the value set', () {
       final context = MapContext();
-      final key = api.ContextKey('testKey');
+      const key = 'testKey';
       const value = 'testValue';
       final newContext = context.setValue(key, value);
       expect(newContext, isNot(same(context)));
@@ -56,7 +57,7 @@ void main() {
 
     test('span returns the span if set, or an invalid span if not', () {
       final context = MapContext();
-      expect(context.span, isA<api.NonRecordingSpan>());
+      expect(context.span, isA<NonRecordingSpan>());
       final newContext = context.withSpan(testSpan);
       expect(newContext.span, equals(testSpan));
     });
