@@ -147,11 +147,11 @@ final span = tracer.startSpan('doingWork');
 span.end();
 ```
 
-To create children spans, you must set the parent span as "current", and execute work within `withContext`.
+To create children spans, use `Context.withSpan` and `Context.execute()` to execute work with a given span.
 
 ```dart
 final checkoutSpan = tracer.startSpan('checkout');
-withContext(setSpan(Context.current, checkoutSpan), () {
+Context.current.withSpan(checkoutSpan).execute(() {
   final ringUpSpan = tracer.startSpan('ringUp');
   ...
   ringUpSpan.end();
