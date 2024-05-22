@@ -5,9 +5,6 @@ import 'context_manager.dart';
 
 typedef ContextKey = String;
 
-/// [ContextKey] used to store spans in a [Context].
-final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
-
 abstract class Context {
   /// The active context.
   @Deprecated('This method will be removed in the future.')
@@ -28,6 +25,8 @@ abstract class Context {
   /// [name] is for debug purposes only and does not uniquely identify the key.
   /// Multiple calls to this function with the same [name] will not return
   /// identical keys.
+  @Deprecated(
+      'This method will be removed in the future. Please use ContextKey as a type directly.')
   static ContextKey createKey(String name) => name;
 
   /// Returns the value from this context identified by [key], or null if no

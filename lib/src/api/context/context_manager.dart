@@ -9,7 +9,7 @@ import 'zone_context_manager.dart';
 /// Different implementations of [ContextManager] can be registered to use different underlying storage mechanisms.
 abstract class ContextManager {
   @Deprecated(
-      'We are planning to remove this in the future, please use Context.current instead.')
+      'We are planning to remove this in the future, please use globalContextManager.active instead.')
   Context get root;
 
   Context get active;
@@ -25,7 +25,7 @@ ContextManager get globalContextManager => _contextManager;
 void registerGlobalContextManager(ContextManager contextManager) {
   if (_contextManager != _noopcontextManager) {
     throw StateError(
-        'Global context manager is already registered, registerContextManager must be called only once before any calls to the getter globalContextManager.');
+        'Global context manager is already registered, registerContextManager must be called only once.');
   }
 
   _contextManager = contextManager;

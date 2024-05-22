@@ -26,17 +26,15 @@ void main() {
   group('MapContext', () {
     test('getValue returns null if key is not set', () {
       final context = MapContext();
-      const key = 'testKey';
-      expect(context.getValue(key), isNull);
+      expect(context.getValue('testKey'), isNull);
     });
 
     test('setValue returns a new context with the value set', () {
       final context = MapContext();
-      const key = 'testKey';
       const value = 'testValue';
-      final newContext = context.setValue(key, value);
+      final newContext = context.setValue('testKey', value);
       expect(newContext, isNot(same(context)));
-      expect(newContext.getValue(key), equals(value));
+      expect(newContext.getValue('testKey'), equals(value));
     });
 
     test('withSpan returns a new context with the span set', () {

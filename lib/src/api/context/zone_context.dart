@@ -30,8 +30,7 @@ import '../../../api.dart';
 import '../../experimental_api.dart';
 
 /// [ContextKey] used to store spans in a [ZoneContext].
-final ContextKey spanKey =
-    ZoneContext.createKey('OpenTelemetry Context Key SPAN');
+const ContextKey spanKey = 'OpenTelemetry Context Key SPAN';
 
 class ZoneContext implements Context {
   final Zone _zone;
@@ -48,16 +47,7 @@ class ZoneContext implements Context {
   /// Only use this context if you are certain you need to disregard the
   /// current [ZoneContext].  For example, when instrumenting an asynchronous
   /// event handler which may fire while an unrelated [ZoneContext] is "current".
-  @Deprecated(
-      'We are planning to remove this in the future, please use Context.current instead.')
   static ZoneContext get root => ZoneContext._(Zone.root);
-
-  /// Returns a key to be used to read and/or write values to a context.
-  ///
-  /// [name] is for debug purposes only and does not uniquely identify the key.
-  /// Multiple calls to this function with the same [name] will not return
-  /// identical keys.
-  static ContextKey createKey(String name) => name;
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
