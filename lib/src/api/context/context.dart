@@ -1,8 +1,7 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-import 'package:opentelemetry/src/api/context/noop_context_manager.dart';
-
 import '../../../api.dart' as api;
+import 'context_manager.dart';
 
 typedef ContextKey = String;
 
@@ -11,7 +10,8 @@ final ContextKey spanKey = Context.createKey('OpenTelemetry Context Key SPAN');
 
 abstract class Context {
   /// The active context.
-  static Context get current => getContextManager().active;
+  @Deprecated('This method will be removed in the future.')
+  static Context get current => globalContextManager.active;
 
   /// The root context which all other contexts are derived from.
   ///
@@ -20,9 +20,8 @@ abstract class Context {
   /// Only use this context if you are certain you need to disregard the
   /// current [Context].  For example, when instrumenting an asynchronous
   /// event handler which may fire while an unrelated [Context] is "current".
-  @Deprecated(
-      'We are planning to remove this in the future, please use Context.current instead.')
-  static Context get root => getContextManager().root;
+  @Deprecated('We are planning to remove this in the future.')
+  static Context get root => globalContextManager.root;
 
   /// Returns a key to be used to read and/or write values to a context.
   ///
@@ -60,7 +59,6 @@ abstract class Context {
 
   /// Get the [api.SpanContext] from this [Context], or an invalid [api.SpanContext] if no such
   /// [api.SpanContext] exists.
-  @Deprecated(
-      'This method will be removed in the future, new method will be added.')
+  @Deprecated('This method will be removed in the future.')
   api.SpanContext get spanContext;
 }
