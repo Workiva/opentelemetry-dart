@@ -3,7 +3,9 @@
 
 import '../../../api.dart';
 import '../../experimental_api.dart';
-import 'context.dart';
+
+/// [ContextKey] used to store spans in a [Context].
+const ContextKey spanKey = 'OpenTelemetry Context Key SPAN';
 
 class MapContext implements Context {
   final Map<ContextKey, Object> _contextMap = {};
