@@ -9,9 +9,14 @@ import 'package:opentelemetry/src/sdk/trace/exporters/span_exporter.dart';
 import 'package:opentelemetry/src/sdk/trace/read_only_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
 
-class MockContext extends Mock implements Context{}
-class MockHttpClient extends Mock implements http.Client{}
-class MockSpan extends Mock implements Span{}
-class MockReadOnlySpan extends Mock implements ReadOnlySpan{}
-class MockSpanExporter extends Mock implements SpanExporter{}
-class MockSpanProcessor extends Mock implements SpanProcessor{}
+class MockContext extends Mock implements Context {}
+
+class MockHttpClient extends Mock implements http.Client {}
+
+class MockSpan extends Mock implements Span {}
+
+class MockReadOnlySpan extends Mock implements ReadOnlySpan {}
+
+class MockSpanExporter extends Mock implements SpanExporter {}
+
+class MockSpanProcessor extends Mock implements SpanProcessor {}
