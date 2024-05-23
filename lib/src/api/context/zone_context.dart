@@ -30,7 +30,7 @@ import '../../../api.dart';
 import '../../experimental_api.dart';
 
 /// [ContextKey] used to store spans in a [ZoneContext].
-const ContextKey spanKey = 'OpenTelemetry Context Key SPAN';
+final ContextKey spanKey = ContextKey();
 
 class ZoneContext implements Context {
   final Zone _zone;

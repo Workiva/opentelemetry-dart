@@ -3,7 +3,7 @@
 import '../../../api.dart' as api;
 import 'context_manager.dart';
 
-typedef ContextKey = String;
+class ContextKey {}
 
 abstract class Context {
   /// The active context.
@@ -26,8 +26,8 @@ abstract class Context {
   /// Multiple calls to this function with the same [name] will not return
   /// identical keys.
   @Deprecated(
-      'This method will be removed in the future. Please use ContextKey as a type directly.')
-  static ContextKey createKey(String name) => name;
+      'This method will be removed in the future. Please use ContextKey() directly.')
+  static ContextKey createKey(String name) => ContextKey();
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
