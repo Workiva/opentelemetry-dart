@@ -12,7 +12,7 @@ import 'dart:typed_data' as _i11;
 
 import 'package:fixnum/fixnum.dart' as _i4;
 import 'package:http/http.dart' as _i3;
-import 'package:mocktail/mocktail.dart' as _i1;
+import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i8;
 import 'package:opentelemetry/api.dart' as _i2;
 import 'package:opentelemetry/sdk.dart' as _i5;
