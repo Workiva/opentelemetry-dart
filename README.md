@@ -1,208 +1,120 @@
 # OpenTelemetry for Dart
 
-This repo is intended to be the Dart implementation of the OpenTelemetry project, with a
-long-term goal of being open sourced.
+This repository is the Dart implementation of the [OpenTelemetry project](https://opentelemetry.io/). All contributions and designs should follow the [OpenTelemetry specification](https://github.com/open-telemetry/opentelemetry-specification).
 
-All contributions and designs should follow the
-[OpenTelemetry specification](https://github.com/open-telemetry/opentelemetry-specification)
-in an effort to be consistent with [all other languages](https://github.com/open-telemetry).
+## Project Status
+
+| Signal | Status |
+| - | - |
+| Traces | Beta |
+| Metrics | Alpha |
+| Logs | Unimplemented |
 
 ## Getting Started
 
-First, you will need to configure at least one exporter.  An exporter determines what happens to the spans you collect.
-The current options are:
+This section will show you how to initialize the OpenTelemetry SDK, capture a span, and propagate context.
 
-| Exporter | Description |
-| -------- | ----------- |
-| [CollectorExporter](#collectorexporter) | Sends Spans to a configured opentelemetry-collector. |
-| [ConsoleExporter](#consoleexporter) | Prints Spans to the console. |
-
-### Span Exporters
-
-#### CollectorExporter
-
-The CollectorExporter requires a Uri of the opentelemetry-collector instance's trace collector.
+### Initialize the OpenTelemetry SDK
 
 ```dart
-import 'package:opentelemetry/sdk.dart' as otel_sdk;
+import 'package:opentelemetry/sdk.dart'
+    show
+        BatchSpanProcessor,
+        CollectorExporter,
+        ConsoleExporter,
+        SimpleSpanProcessor,
+        TracerProviderBase;
+import 'package:opentelemetry/api.dart'
+    show registerGlobalTracerProvider, globalTracerProvider;
 
-final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
-```
+void main(List<String> args) {
+  final tracerProvider = TracerProviderBase(processors: [
+    BatchSpanProcessor(
+        CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'))),
+    SimpleSpanProcessor(ConsoleExporter())
+  ]);
 
-#### ConsoleExporter
-
-The ConsoleExporter has no requirements, and has no configuration options.
-
-```dart
-import 'package:opentelemetry/sdk.dart' as otel_sdk;
-
-final exporter = otel_sdk.ConsoleExporter();
-```
-
-### Span Processors
-
-Next, you will need at least one span processor.  A span processor is responsible for collecting the spans you create and feeding them to the exporter.
-The current options are:
-
-| SpanProcessor | Description |
-| -------- | ----------- |
-| [BatchSpanProcessor](#batchspanprocessor) | Batches spans to be exported on a configured time interval. |
-| [SimpleSpanProcessor](#simplespanprocessor) | Executes the provided exporter immediately upon closing the span. |
-
-#### BatchSpanProcessor
-
-BatchSpanProcessors collect up to 2048 spans per interval, and executes the provided exporter on a timer.
-| Option | Description | Default |
-| ------ | ----------- | ------- |
-| maxExportBatchSize | At most, how many spans are processed per batch. | 512 |
-| scheduledDelayMillis | How long to collect spans before processing them. | 5000 ms |
-
-```dart
-import 'package:opentelemetry/sdk.dart' as otel_sdk;
-
-final exporter = otel_sdk.ConsoleExporter();
-final processor = otel_sdk.BatchSpanProcessor(exporter, scheduledDelayMillis: 10000);
-```
-
-#### SimpleSpanProcessor
-
-A SimpleSpanProcessor has no configuration options, and executes the exporter when each span is closed.
-
-```dart
-import 'package:opentelemetry/sdk.dart' as otel_sdk;
-
-final exporter = otel_sdk.ConsoleExporter();
-final processor = otel_sdk.SimpleSpanProcessor(exporter);
-```
-
-### Tracer Provider
-
-A trace provider registers your span processors, and is responsible for managing any tracers.
-| Option | Description | Default |
-| ------ | ----------- | ------- |
-| processors | A list of SpanProcessors to register. | A [SimpleSpanProcessor](#simplespanprocessor) configured with a [ConsoleExporter](#consoleexporter). |
-
-```dart
-import 'package:opentelemetry/sdk.dart' as otel_sdk;
-import 'package:opentelemetry/api.dart';
-
-final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
-final processor = otel_sdk.BatchSpanProcessor(exporter);
-
-// Send spans to a collector every 5 seconds
-final provider = otel_sdk.TracerProviderBase(processors: [processor]);
-
-// Optionally, multiple processors can be registered
-final provider = otel_sdk.TracerProviderBase(processors: [
-  otel_sdk.BatchSpanProcessor(otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'))),
-  otel_sdk.SimpleSpanProcessor(otel_sdk.ConsoleExporter())
-]);
-
-registerGlobalTracerProvider(provider);
-
-final tracer = provider.getTracer('instrumentation-name');
-// or
-final tracer = globalTracerProvider.getTracer('instrumentation-name');
-```
-
-#### Tracer Provider with Browser Performance Features
-
-A web-specific trace provider is also available.  This trace provider makes available configurable options using the browser's performance API.
-
-```dart
-import 'package:opentelemetry/sdk.dart' as otel_sdk;
-import 'package:opentelemetry/web_sdk.dart' as web_sdk;
-import 'package:opentelemetry/api.dart';
-
-final exporter = otel_sdk.CollectorExporter(Uri.parse('https://my-collector.com/v1/traces'));
-final processor = otel_sdk.BatchSpanProcessor(exporter);
-
-// This provider is configured to create tracers which use the browser's
-// performance API instead of Dart's DateTime class when determining
-// timestamps for any spans they create.
-final provider = web_sdk.WebTracerProvider(
-  processors: [processor],
-  timeProvider: web_sdk.WebTimeProvider()
-);
-
-// This tracer has been configured to use the browser's performance API when
-// determining timestamps for any spans it creates.
-final tracer = provider.getTracer('instrumentation-name');
-
-// Or, these trace providers can also be registered globally.
-registerGlobalTracerProvider(provider);
-final tracer = globalTracerProvider.getTracer('instrumentation-name');
-```
-
-Important Note: Span timestamps resulting from use of this trace provider may be inaccurate if the executing system is suspended for sleep.
-See [https://github.com/open-telemetry/opentelemetry-js/issues/852](https://github.com/open-telemetry/opentelemetry-js/issues/852) for more information.
-
-## Collecting Spans
-
-To start a span, execute `startSpan` on the tracer with the name of what you are tracing.  When complete, call `end` on the span.
-
-```dart
-final span = tracer.startSpan('doingWork');
-...
-span.end();
-```
-
-To create children spans, use `Context.withSpan` and `Context.execute()` to execute work with a given span.
-
-```dart
-final checkoutSpan = tracer.startSpan('checkout');
-Context.current.withSpan(checkoutSpan).execute(() {
-  final ringUpSpan = tracer.startSpan('ringUp');
-  ...
-  ringUpSpan.end();
-  final receiveSpan = tracer.startSpan('receiveCash');
-  ...
-  receiveSpan.end();
-  final returnSpan = tracer.startSpan('returnChange');
-  ...
-  returnSpan.end();
-});
-checkoutSpan.end();
-```
-
-To avoid needing to pass spans around as arguments to other functions, you can get the current span with `Context.current.span`.
-
-```dart
-doWork() {
-  Span parentSpan = Context.current.span;
-
-  Context.current.withSpan(parentSpan).execute(() {
-    Span span = tracer.startSpan('doWork');
-    ...
-    span.end();
-  });
+  registerGlobalTracerProvider(tracerProvider);
+  final tracer = globalTracerProvider.getTracer('instrumentation-name');
 }
 ```
 
-### Span Events
-
-A Span Event is a human-readable message on an Span that represents a discrete event with no duration that can be tracked by a single timestamp. You can think of it like a primitive log.
+### Capture a Span
 
 ```dart
-span.addEvent('Doing something');
+import 'package:opentelemetry/api.dart' show StatusCode, globalTracerProvider;
 
-const result = doWork();
+void main(List<String> args) {
+  final tracer = globalTracerProvider.getTracer('instrumentation-name');
+
+  final span = tracer.startSpan('main');
+  try {
+    // do some work
+    span.addEvent('some work');
+  } catch (e, s) {
+    span
+      ..setStatus(StatusCode.error, e.toString())
+      ..recordException(e, stackTrace: s);
+    rethrow;
+  } finally {
+    span.end();
+  }
+}
 ```
 
-You can also create Span Events with additional Attributes:
+### Propagate Context
+
 ```dart
-span.addEvent('some log', attributes: {
-  'log.severity': 'error',
-  'log.message': 'Data not found',
-  'request.id': requestId,
-});
+import 'package:opentelemetry/api.dart'
+    show
+        Context,
+        StatusCode,
+        contextWithSpan,
+        globalTracerProvider,
+        spanFromContext;
+import 'package:opentelemetry/src/experimental_api.dart'
+    show globalContextManager;
+
+void main(List<String> args) {
+  final tracer = globalTracerProvider.getTracer('instrumentation-name');
+
+  final span = tracer.startSpan('work');
+  final context = contextWithSpan(globalContextManager.active, span);
+  try {
+    // do some work
+    asyncWork(context);
+  } catch (e, s) {
+    span
+      ..setStatus(StatusCode.error, e.toString())
+      ..recordException(e, stackTrace: s);
+    rethrow;
+  } finally {
+    span.end();
+  }
+}
+
+Future asyncWork(Context context) async {
+  spanFromContext(context).addEvent('some async work');
+}
 ```
 
-## Development
+#### High Resolution Timestamps
+
+A tracer provider can register a web-specific time provider that uses the browser's [performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now) instead of [DateTime](https://api.dart.dev/stable/dart-core/DateTime-class.html) when recording timestamps for a span's start timestamp, end timestamp, and span events.
+
+```dart
+import 'package:opentelemetry/web_sdk.dart' as web_sdk;
+
+final tracerProvider =
+    web_sdk.WebTracerProvider(timeProvider: web_sdk.WebTimeProvider());
+```
+
+Important Note: Span timestamps may be inaccurate if the executing system is suspended for sleep. See [https://github.com/open-telemetry/opentelemetry-js/issues/852](https://github.com/open-telemetry/opentelemetry-js/issues/852) for more information.
+
+## Contributing
 
 In order to generate protobuf definitions, you must have [protoc](https://github.com/protocolbuffers/protobuf/releases) installed and available in your path.
 
 ### Publishing New Versions
-See https://github.com/Workiva/Observability/blob/master/doc/publishing_opentelemetry_dart.md
 
-Only Workiva maintainers can publish new versions of opentelemetry-dart.
+Only Workiva maintainers can publish new versions of opentelemetry-dart. See [Publishing opentelemetry-dart](https://github.com/Workiva/Observability/blob/master/doc/publishing_opentelemetry_dart.md)

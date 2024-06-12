@@ -53,19 +53,19 @@ abstract class Span {
   /// free to ignore previous calls.
   void setStatus(api.StatusCode status, [String description]);
 
-  /// set single attribute
+  /// Sets a single attribute.
   void setAttribute(api.Attribute attribute);
 
-  /// set multiple attributes
+  /// Sets multiple attributes.
   void setAttributes(List<api.Attribute> attributes);
 
-  /// Record metadata about an event occurring during this span.
+  /// Records a [api.SpanEvent].
   void addEvent(String name,
       {Int64? timestamp, List<api.Attribute> attributes});
 
   /// Marks the end of this span's execution.
   void end({Int64 endTime});
 
-  /// Record metadata about an exception occurring during this span.
+  /// Records a [api.SpanEvent] about the given exception.
   void recordException(dynamic exception, {StackTrace stackTrace});
 }

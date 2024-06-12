@@ -29,6 +29,8 @@ class TestingExtractor implements api.TextMapGetter<Map<String, String>> {
 }
 
 void main() {
+  final cm = NoopContextManager();
+
   test('extract trace context', () {
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = <String, String>{};
@@ -38,9 +40,9 @@ void main() {
           '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01')
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
-    final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
-    final resultSpan = resultContext.span;
+    final resultContext =
+        testPropagator.extract(cm.active, testCarrier, TestingExtractor());
+    final resultSpan = api.spanFromContext(resultContext);
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
@@ -63,9 +65,9 @@ void main() {
           '00-00000000000000000000000000000000-0000000000000000-ff')
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
-    final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
-    final resultSpan = resultContext.span;
+    final resultContext =
+        testPropagator.extract(cm.active, testCarrier, TestingExtractor());
+    final resultSpan = api.spanFromContext(resultContext);
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isFalse);
@@ -83,9 +85,9 @@ void main() {
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = <String, String>{};
 
-    final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
-    final resultSpan = resultContext.span;
+    final resultContext =
+        testPropagator.extract(cm.active, testCarrier, TestingExtractor());
+    final resultSpan = api.spanFromContext(resultContext);
 
     expect(resultSpan, isA<NonRecordingSpan>());
     expect(resultSpan.spanContext.isValid, isFalse);
@@ -100,9 +102,9 @@ void main() {
           '00-4bf92^3577b34da6q3ce929d0e0e4736-00f@67aa0bak02b7-01')
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
-    final resultContext = testPropagator.extract(
-        api.Context.current, testCarrier, TestingExtractor());
-    final resultSpan = resultContext.span;
+    final resultContext =
+        testPropagator.extract(cm.active, testCarrier, TestingExtractor());
+    final resultSpan = api.spanFromContext(resultContext);
 
     // Extract should not allow a Span with malformed IDs to be attached to
     // a Context.  Thus, there should be no Span on this context.
@@ -119,9 +121,8 @@ void main() {
           '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01')
       ..set(testCarrier, 'tracestate',
           'rojo=00f067aa,0ba902b7,con@go=t61rcWk=gMzE');
-    final resultSpan = testPropagator
-        .extract(api.Context.current, testCarrier, TestingExtractor())
-        .span;
+    final resultSpan = api.spanFromContext(
+        testPropagator.extract(cm.active, testCarrier, TestingExtractor()));
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
@@ -155,7 +156,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testCarrier = <String, String>{};
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.contextWithSpan(cm.active, testSpan);
 
     api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());
@@ -186,7 +187,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testCarrier = <String, String>{};
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.contextWithSpan(cm.active, testSpan);
 
     api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());

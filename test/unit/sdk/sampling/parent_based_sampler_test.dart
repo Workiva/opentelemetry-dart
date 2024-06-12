@@ -4,10 +4,12 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/experimental_api.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 void main() {
+  final cm = NoopContextManager();
   final onSampler = sdk.AlwaysOnSampler();
   final offSampler = sdk.AlwaysOffSampler();
   final testSampler = sdk.ParentBasedSampler(onSampler,
@@ -32,7 +34,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.contextWithSpan(cm.active, testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -57,8 +59,8 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
 
-    final result = testSampler.shouldSample(api.Context.root, traceId,
-        testSpan.name, api.SpanKind.internal, [], []);
+    final result = testSampler.shouldSample(
+        cm.active, traceId, testSpan.name, api.SpanKind.internal, [], []);
 
     expect(result.decision, equals(sdk.Decision.recordAndSample));
     expect(result.spanAttributes, equals([]));
@@ -67,7 +69,7 @@ void main() {
 
   test('with sampled, remote SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = api.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=one,two');
     final testSpan = Span(
         'foo',
         api.SpanContext.remote(
@@ -82,7 +84,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.contextWithSpan(cm.active, testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -94,7 +96,7 @@ void main() {
 
   test('with non-sampled, remote SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = api.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=one,two');
     final testSpan = Span(
         'foo',
         api.SpanContext.remote(
@@ -109,7 +111,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.contextWithSpan(cm.active, testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -121,7 +123,7 @@ void main() {
 
   test('with sampled, local SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = api.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=one,two');
     final testSpan = Span(
         'foo',
         api.SpanContext(
@@ -136,7 +138,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.contextWithSpan(cm.active, testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -148,7 +150,7 @@ void main() {
 
   test('with non-sampled, local SDK Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = api.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=one,two');
     final testSpan = Span(
         'foo',
         api.SpanContext(
@@ -163,7 +165,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.Context.current.withSpan(testSpan);
+    final testContext = api.contextWithSpan(cm.active, testSpan);
 
     final result = testSampler.shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);

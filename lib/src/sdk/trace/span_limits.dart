@@ -53,7 +53,7 @@ class SpanLimits {
   }
 
   ///return the maximum allowed attribute value length.
-  ///This limits only applies to string and string list attribute valuse.
+  ///This limits only applies to string and string list attribute values.
   ///Any string longer than this value will be truncated to this length.
   ///
   ///default is unlimited.
@@ -80,7 +80,7 @@ class SpanLimits {
   int get maxNumAttributesPerLink => _maxNumAttributesPerLink;
 
   ///return the maximum allowed attribute value length.
-  ///This limits only applies to string and string list attribute valuse.
+  ///This limits only applies to string and string list attribute values.
   ///Any string longer than this value will be truncated to this length.
   ///
   ///default is unlimited.

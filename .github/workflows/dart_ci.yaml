@@ -15,7 +15,7 @@ permissions:
   contents: read
   issues: write
   pull-requests: write
-  
+
 jobs:
   test-dartv2:
     runs-on: ubuntu-latest
@@ -26,14 +26,8 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: 2.19.6
-      - name: Install protobuf-compiler
-        run: sudo apt install -y protobuf-compiler
-      - name: Install Dart dependencies
-        run: dart pub get
-      - name: Initialize protobuf
-        run: make init
-      - name: Format, analyze, and run tests
-        run: make format analyze test
+      - run: sudo apt install -y protobuf-compiler
+      - run: make init format analyze test
       - name: Generate Coverage
         run: dart test --coverage=./coverage
       - name: Activate Coverage Package
@@ -56,12 +50,5 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: 3.2.0
-      - name: Install protobuf-compiler
-        run: sudo apt install -y protobuf-compiler
-      - name: Install Dart dependencies
-        run: dart pub get
-      - name: Initialize protobuf
-        run: make init
-      - name: Format, analyze, and run tests
-        run: |
-            make format analyze test
+      - run: sudo apt install -y protobuf-compiler
+      - run: make init format analyze test
