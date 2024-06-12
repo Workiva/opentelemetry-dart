@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('setValue and getValue', () {
-    final testKey = Context.createKey('Set Key');
+    final testKey = ContextKey();
 
     final parentContext = Context.current;
     final childContext = parentContext.setValue(testKey, 'bar');

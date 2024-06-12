@@ -1,9 +1,7 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
-import '../trace/nonrecording_span.dart';
-
 import '../../../api.dart' as api;
+import '../../experimental_api.dart';
 
 class W3CTraceContextPropagator implements api.TextMapPropagator {
   static const String _traceVersion = '00';
