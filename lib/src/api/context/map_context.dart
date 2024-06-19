@@ -43,7 +43,6 @@ class MapContext implements Context {
   @override
   Span get span => spanFromContext(this);
 
-  @override
   R run<R>(R Function(Context context) fn) => fn(this);
 
   /// Get the [SpanContext] from this [MapContext], or an invalid [SpanContext] if no such
