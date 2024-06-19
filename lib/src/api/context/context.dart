@@ -74,8 +74,6 @@ abstract class Context {
       'This method will be removed in 0.19.0. Propagate [Context] as an argument to [fn].')
   R execute<R>(R Function() fn);
 
-  R run<R>(R Function(Context context) fn);
-
   /// Get the [Span] attached to this [Context], or an invalid, [Span] if no such
   /// [Span] exists.
   @Deprecated(

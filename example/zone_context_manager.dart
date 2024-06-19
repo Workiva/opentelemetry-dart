@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart'
     show ConsoleExporter, SimpleSpanProcessor, TracerProviderBase;
+import 'package:opentelemetry/src/api/context/zone_context.dart';
 import 'package:opentelemetry/src/experimental_api.dart'
     show globalContextManager, registerGlobalContextManager, ZoneContextManager;
 
@@ -15,7 +16,7 @@ void main(List<String> args) async {
   registerGlobalContextManager(cm);
 
   final span = tp.getTracer('instrumentation-name').startSpan('test-span-0');
-  await contextWithSpan(cm.active, span).run((_) => test());
+  await (contextWithSpan(cm.active, span) as ZoneContext).run((_) => test());
   span.end();
 }
 
