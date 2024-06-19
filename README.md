@@ -64,39 +64,17 @@ void main(List<String> args) {
 
 ### Propagate Context
 
-```dart
-import 'package:opentelemetry/api.dart'
-    show
-        Context,
-        StatusCode,
-        contextWithSpan,
-        globalTracerProvider,
-        spanFromContext;
-import 'package:opentelemetry/src/experimental_api.dart'
-    show globalContextManager;
+### Intra-process
 
-void main(List<String> args) {
-  final tracer = globalTracerProvider.getTracer('instrumentation-name');
+In order to parent spans, context must be propagated. Propagation can be achieved by manually passing an instance of `Context` or by using Dart [`Zones`](https://dart.dev/libraries/async/zones).
 
-  final span = tracer.startSpan('work');
-  final context = contextWithSpan(globalContextManager.active, span);
-  try {
-    // do some work
-    asyncWork(context);
-  } catch (e, s) {
-    span
-      ..setStatus(StatusCode.error, e.toString())
-      ..recordException(e, stackTrace: s);
-    rethrow;
-  } finally {
-    span.end();
-  }
-}
+See the [noop context manager example](./example/noop_context_manager.dart) and [zone context manager example](./example/zone_context_manager.dart) for more information.
 
-Future asyncWork(Context context) async {
-  spanFromContext(context).addEvent('some async work');
-}
-```
+### Inter-process
+
+In order to parent spans between processes, context can be serialized and deserialized using a `TextMapPropagator`, `TextMapSetter`, and `TextMapGetter`.
+
+See the [W3C context propagation example](./example/w3c_context_propagation.dart) for more information.
 
 #### High Resolution Timestamps
 
