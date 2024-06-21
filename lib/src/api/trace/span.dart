@@ -66,6 +66,7 @@ abstract class Span {
   /// Marks the end of this span's execution.
   void end({Int64 endTime});
 
-  /// Records a [api.SpanEvent] about the given exception.
-  void recordException(dynamic exception, {StackTrace stackTrace});
+  /// Record metadata about an exception occurring during this span.
+  void recordException(dynamic exception,
+      {bool escaped, StackTrace stackTrace, List<api.Attribute> attributes});
 }
