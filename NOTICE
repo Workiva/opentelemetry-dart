@@ -18,6 +18,5 @@ notices and/or license terms. Your use of the source code for the these
 software repositories is subject to the terms and conditions of the following
 licenses:
 
-opentelemetry-js: https://github.com/open-telemetry/opentelemetry-js
-
-Licensed under the Apache 2.0 license: https://github.com/open-telemetry/opentelemetry-js/blob/main/LICENSE
+opentelemetry-proto: https://github.com/open-telemetry/opentelemetry-proto
+Licensed under the Apache 2.0 license: https://github.com/open-telemetry/opentelemetry-proto/blob/main/LICENSE
