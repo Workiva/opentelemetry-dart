@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart'
     show ConsoleExporter, SimpleSpanProcessor, TracerProviderBase;
-import 'package:opentelemetry/src/api/context/zone_context.dart';
 import 'package:opentelemetry/src/experimental_api.dart'
-    show globalContextManager, registerGlobalContextManager, ZoneContextManager;
+    show
+        globalContextManager,
+        registerGlobalContextManager,
+        ZoneContext,
+        ZoneContextManager;
 
 void main(List<String> args) async {
   final tp =

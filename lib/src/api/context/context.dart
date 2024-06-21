@@ -71,7 +71,9 @@ abstract class Context {
 
   /// Execute a function [fn] within this [Context] and return its result.
   @Deprecated(
-      'This method will be removed in 0.19.0. Propagate [Context] as an argument to [fn].')
+      'This method will be removed in 0.19.0. Propagate [Context] as an '
+      'argument to [fn] and call [fn] directly or use '
+      '[(context as ZoneContext).run((_) => fn(this))] instead.')
   R execute<R>(R Function() fn);
 
   /// Get the [Span] attached to this [Context], or an invalid, [Span] if no such

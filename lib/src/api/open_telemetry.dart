@@ -9,7 +9,7 @@ import 'propagation/noop_text_map_propagator.dart';
 import 'trace/noop_tracer_provider.dart';
 
 import '../../api.dart' as api;
-import '../experimental_api.dart' show globalContextManager;
+import '../experimental_api.dart' show globalContextManager, ZoneContext;
 
 final api.TracerProvider _noopTracerProvider = NoopTracerProvider();
 final api.TextMapPropagator _noopTextMapPropagator = NoopTextMapPropagator();
@@ -79,8 +79,13 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
   }
 
   final span = tracer.startSpan(name, context: context);
+  context = api.contextWithSpan(context, span);
   try {
-    return await fn(api.contextWithSpan(context, span));
+    // TODO: remove this check once `run` exists on context interface
+    if (context is ZoneContext) {
+      return await context.run((context) => fn(context));
+    }
+    return await fn(context);
   } catch (e, s) {
     span
       ..setStatus(api.StatusCode.error, e.toString())
@@ -93,7 +98,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
 
 /// Use [traceSync] instead of [trace] when [fn] is not an async function.
 @Deprecated(
-    'This method will be removed in 0.19.0. Use [traceSyncContext] instead.')
+    'This method will be removed in 0.19.0. Use [traceContextSync] instead.')
 R traceSync<R>(String name, R Function() fn,
     {api.Context? context, api.Tracer? tracer}) {
   context ??= globalContextManager.active;
@@ -120,9 +125,9 @@ R traceSync<R>(String name, R Function() fn,
   }
 }
 
-/// Use [traceSyncContext] instead of [traceContext] when [fn] is not an async function.
+/// Use [traceContextSync] instead of [traceContext] when [fn] is not an async function.
 @experimental
-R traceSyncContext<R>(String name, R Function(api.Context) fn,
+R traceContextSync<R>(String name, R Function(api.Context) fn,
     {api.Context? context,
     api.Tracer? tracer,
     bool newRoot = false,
@@ -136,12 +141,19 @@ R traceSyncContext<R>(String name, R Function(api.Context) fn,
   }
 
   final span = tracer.startSpan(name, context: context);
+  context = api.contextWithSpan(context, span);
   try {
-    final r = fn(api.contextWithSpan(context, span));
+    var r;
+    // TODO: remove this check once `run` exists on context interface
+    if (context is ZoneContext) {
+      r = context.run((context) => fn(context));
+    } else {
+      r = fn(context);
+    }
 
     if (r is Future) {
       throw ArgumentError.value(fn, 'fn',
-          'Use traceSyncContext to trace functions that do not return a [Future].');
+          'Use traceContextSync to trace functions that do not return a [Future].');
     }
 
     return r;
