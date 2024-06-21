@@ -23,7 +23,7 @@ export 'src/api/open_telemetry.dart'
         trace,
         traceContext,
         traceSync,
-        traceSyncContext;
+        traceContextSync;
 export 'src/api/propagation/extractors/text_map_getter.dart' show TextMapGetter;
 export 'src/api/propagation/injectors/text_map_setter.dart' show TextMapSetter;
 export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;

@@ -7,39 +7,42 @@ import 'package:opentelemetry/src/api/open_telemetry.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('traceSync returns value', () {
-    final value = traceSync('foo', () => 'bar');
+  test('traceContextSync returns value', () {
+    final value = traceContextSync('foo', (_) => 'bar');
     expect(value, 'bar');
   });
 
-  test('traceSync throws exception', () {
+  test('traceContextSync throws exception', () {
     final bang = Exception('bang!');
-    expect(() => traceSync('foo', () => throw bang), throwsA(bang));
+    expect(() => traceContextSync('foo', (_) => throw bang), throwsA(bang));
   });
 
-  test('traceSync wants you to use trace instead', () {
-    expect(() => traceSync('foo', () async => ''), throwsArgumentError);
-    expect(() => traceSync('foo', Future.value), throwsArgumentError);
+  test('traceContextSync wants you to use trace instead', () {
+    expect(() => traceContextSync('foo', (_) async => ''), throwsArgumentError);
+    expect(() => traceContextSync('foo', Future.value), throwsArgumentError);
   });
 
   test('trace returns future value', () async {
-    await expectLater(trace('foo', () async => 'bar'), completion('bar'));
     await expectLater(
-        trace('foo', () => Future.value('bazz')), completion('bazz'));
+        traceContext('foo', (_) async => 'bar'), completion('bar'));
+    await expectLater(
+        traceContext('foo', (_) => Future.value('baz')), completion('baz'));
   });
 
   test('trace throws future error', () async {
     // Exception thrown from synchronous code in async function.
     final bang = Exception('bang!');
-    await expectLater(trace('foo', () async => throw bang), throwsA(bang));
+    await expectLater(
+        traceContext('foo', (_) async => throw bang), throwsA(bang));
 
     // Exception thrown from asynchronous code in async function.
     final buzz = Exception('buzz!!');
     await expectLater(
-        trace('foo', () async => Future.error(buzz)), throwsA(buzz));
+        traceContext('foo', (_) async => Future.error(buzz)), throwsA(buzz));
 
     // Exception thrown from asynchronous code in async function.
-    final bazz = Exception('bazz!!');
-    await expectLater(trace('foo', () => Future.error(bazz)), throwsA(bazz));
+    final baz = Exception('baz!!');
+    await expectLater(
+        traceContext('foo', (_) => Future.error(baz)), throwsA(baz));
   });
 }

@@ -5,11 +5,11 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
+import '../../api.dart' as api;
 import 'propagation/noop_text_map_propagator.dart';
 import 'trace/noop_tracer_provider.dart';
-
-import '../../api.dart' as api;
-import '../experimental_api.dart' show globalContextManager, ZoneContext;
+import 'context/context_manager.dart';
+import 'context/zone_context.dart';
 
 final api.TracerProvider _noopTracerProvider = NoopTracerProvider();
 final api.TextMapPropagator _noopTextMapPropagator = NoopTextMapPropagator();
