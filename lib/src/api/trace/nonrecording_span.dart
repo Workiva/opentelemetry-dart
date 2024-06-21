@@ -38,7 +38,10 @@ class NonRecordingSpan implements api.Span {
   api.SpanContext get spanContext => _spanContext;
 
   @override
-  void recordException(dynamic exception, {StackTrace? stackTrace}) {}
+  void recordException(dynamic exception,
+      {bool escaped = false,
+      StackTrace? stackTrace,
+      List<api.Attribute>? attributes}) {}
 
   @override
   void addEvent(String name,
