@@ -17,8 +17,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../common/v1/common.pb.dart' as $0;
-import '../../resource/v1/resource.pb.dart' as $1;
+import '../../common/v1/common.pb.dart' as $1;
+import '../../resource/v1/resource.pb.dart' as $2;
 import 'trace.pbenum.dart';
 
 export 'trace.pbenum.dart';
@@ -85,7 +85,7 @@ class TracesData extends $pb.GeneratedMessage {
 /// A collection of ScopeSpans from a Resource.
 class ResourceSpans extends $pb.GeneratedMessage {
   factory ResourceSpans({
-    $1.Resource? resource,
+    $2.Resource? resource,
     $core.Iterable<ScopeSpans>? scopeSpans,
     $core.String? schemaUrl,
   }) {
@@ -106,7 +106,7 @@ class ResourceSpans extends $pb.GeneratedMessage {
   factory ResourceSpans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ResourceSpans', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..aOM<$1.Resource>(1, _omitFieldNames ? '' : 'resource', subBuilder: $1.Resource.create)
+    ..aOM<$2.Resource>(1, _omitFieldNames ? '' : 'resource', subBuilder: $2.Resource.create)
     ..pc<ScopeSpans>(2, _omitFieldNames ? '' : 'scopeSpans', $pb.PbFieldType.PM, subBuilder: ScopeSpans.create)
     ..aOS(3, _omitFieldNames ? '' : 'schemaUrl')
     ..hasRequiredFields = false
@@ -136,15 +136,15 @@ class ResourceSpans extends $pb.GeneratedMessage {
   /// The resource for the spans in this message.
   /// If this field is not set then no resource info is known.
   @$pb.TagNumber(1)
-  $1.Resource get resource => $_getN(0);
+  $2.Resource get resource => $_getN(0);
   @$pb.TagNumber(1)
-  set resource($1.Resource v) { setField(1, v); }
+  set resource($2.Resource v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasResource() => $_has(0);
   @$pb.TagNumber(1)
   void clearResource() => clearField(1);
   @$pb.TagNumber(1)
-  $1.Resource ensureResource() => $_ensure(0);
+  $2.Resource ensureResource() => $_ensure(0);
 
   /// A list of ScopeSpans that originate from a resource.
   @$pb.TagNumber(2)
@@ -168,7 +168,7 @@ class ResourceSpans extends $pb.GeneratedMessage {
 /// A collection of Spans produced by an InstrumentationScope.
 class ScopeSpans extends $pb.GeneratedMessage {
   factory ScopeSpans({
-    $0.InstrumentationScope? scope,
+    $1.InstrumentationScope? scope,
     $core.Iterable<Span>? spans,
     $core.String? schemaUrl,
   }) {
@@ -189,7 +189,7 @@ class ScopeSpans extends $pb.GeneratedMessage {
   factory ScopeSpans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ScopeSpans', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..aOM<$0.InstrumentationScope>(1, _omitFieldNames ? '' : 'scope', subBuilder: $0.InstrumentationScope.create)
+    ..aOM<$1.InstrumentationScope>(1, _omitFieldNames ? '' : 'scope', subBuilder: $1.InstrumentationScope.create)
     ..pc<Span>(2, _omitFieldNames ? '' : 'spans', $pb.PbFieldType.PM, subBuilder: Span.create)
     ..aOS(3, _omitFieldNames ? '' : 'schemaUrl')
     ..hasRequiredFields = false
@@ -220,15 +220,15 @@ class ScopeSpans extends $pb.GeneratedMessage {
   /// Semantically when InstrumentationScope isn't set, it is equivalent with
   /// an empty instrumentation scope name (unknown).
   @$pb.TagNumber(1)
-  $0.InstrumentationScope get scope => $_getN(0);
+  $1.InstrumentationScope get scope => $_getN(0);
   @$pb.TagNumber(1)
-  set scope($0.InstrumentationScope v) { setField(1, v); }
+  set scope($1.InstrumentationScope v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasScope() => $_has(0);
   @$pb.TagNumber(1)
   void clearScope() => clearField(1);
   @$pb.TagNumber(1)
-  $0.InstrumentationScope ensureScope() => $_ensure(0);
+  $1.InstrumentationScope ensureScope() => $_ensure(0);
 
   /// A list of Spans that originate from an instrumentation scope.
   @$pb.TagNumber(2)
@@ -254,7 +254,7 @@ class Span_Event extends $pb.GeneratedMessage {
   factory Span_Event({
     $fixnum.Int64? timeUnixNano,
     $core.String? name,
-    $core.Iterable<$0.KeyValue>? attributes,
+    $core.Iterable<$1.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
   }) {
     final $result = create();
@@ -279,7 +279,7 @@ class Span_Event extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Span.Event', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
     ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'timeUnixNano', $pb.PbFieldType.OF6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..pc<$0.KeyValue>(3, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
+    ..pc<$1.KeyValue>(3, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $1.KeyValue.create)
     ..a<$core.int>(4, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
@@ -330,7 +330,7 @@ class Span_Event extends $pb.GeneratedMessage {
   /// Attribute keys MUST be unique (it is not allowed to have more than one
   /// attribute with the same key).
   @$pb.TagNumber(3)
-  $core.List<$0.KeyValue> get attributes => $_getList(2);
+  $core.List<$1.KeyValue> get attributes => $_getList(2);
 
   /// dropped_attributes_count is the number of dropped attributes. If the value is 0,
   /// then no attributes were dropped.
@@ -353,7 +353,7 @@ class Span_Link extends $pb.GeneratedMessage {
     $core.List<$core.int>? traceId,
     $core.List<$core.int>? spanId,
     $core.String? traceState,
-    $core.Iterable<$0.KeyValue>? attributes,
+    $core.Iterable<$1.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
     $core.int? flags,
   }) {
@@ -386,7 +386,7 @@ class Span_Link extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'traceId', $pb.PbFieldType.OY)
     ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'spanId', $pb.PbFieldType.OY)
     ..aOS(3, _omitFieldNames ? '' : 'traceState')
-    ..pc<$0.KeyValue>(4, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
+    ..pc<$1.KeyValue>(4, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $1.KeyValue.create)
     ..a<$core.int>(5, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
     ..a<$core.int>(6, _omitFieldNames ? '' : 'flags', $pb.PbFieldType.OF3)
     ..hasRequiredFields = false
@@ -448,7 +448,7 @@ class Span_Link extends $pb.GeneratedMessage {
   /// Attribute keys MUST be unique (it is not allowed to have more than one
   /// attribute with the same key).
   @$pb.TagNumber(4)
-  $core.List<$0.KeyValue> get attributes => $_getList(3);
+  $core.List<$1.KeyValue> get attributes => $_getList(3);
 
   /// dropped_attributes_count is the number of dropped attributes. If the value is 0,
   /// then no attributes were dropped.
@@ -492,7 +492,7 @@ class Span extends $pb.GeneratedMessage {
     Span_SpanKind? kind,
     $fixnum.Int64? startTimeUnixNano,
     $fixnum.Int64? endTimeUnixNano,
-    $core.Iterable<$0.KeyValue>? attributes,
+    $core.Iterable<$1.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
     $core.Iterable<Span_Event>? events,
     $core.int? droppedEventsCount,
@@ -565,7 +565,7 @@ class Span extends $pb.GeneratedMessage {
     ..e<Span_SpanKind>(6, _omitFieldNames ? '' : 'kind', $pb.PbFieldType.OE, defaultOrMaker: Span_SpanKind.SPAN_KIND_UNSPECIFIED, valueOf: Span_SpanKind.valueOf, enumValues: Span_SpanKind.values)
     ..a<$fixnum.Int64>(7, _omitFieldNames ? '' : 'startTimeUnixNano', $pb.PbFieldType.OF6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(8, _omitFieldNames ? '' : 'endTimeUnixNano', $pb.PbFieldType.OF6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..pc<$0.KeyValue>(9, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
+    ..pc<$1.KeyValue>(9, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $1.KeyValue.create)
     ..a<$core.int>(10, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
     ..pc<Span_Event>(11, _omitFieldNames ? '' : 'events', $pb.PbFieldType.PM, subBuilder: Span_Event.create)
     ..a<$core.int>(12, _omitFieldNames ? '' : 'droppedEventsCount', $pb.PbFieldType.OU3)
@@ -725,7 +725,7 @@ class Span extends $pb.GeneratedMessage {
   ///  Attribute keys MUST be unique (it is not allowed to have more than one
   ///  attribute with the same key).
   @$pb.TagNumber(9)
-  $core.List<$0.KeyValue> get attributes => $_getList(8);
+  $core.List<$1.KeyValue> get attributes => $_getList(8);
 
   /// dropped_attributes_count is the number of attributes that were discarded. Attributes
   /// can be discarded because their keys are too long or because there are too many

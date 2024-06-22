@@ -9,7 +9,8 @@ export 'src/sdk/time_providers/datetime_time_provider.dart'
     show DateTimeTimeProvider;
 export 'src/sdk/time_providers/time_provider.dart' show TimeProvider;
 export 'src/sdk/trace/exporters/span_exporter.dart' show SpanExporter;
-export 'src/sdk/trace/exporters/collector_exporter.dart' show CollectorExporter;
+export 'src/sdk/trace/exporters/collector_exporter.dart'
+    show CollectorExporter, CollectorExporterProtocol;
 export 'src/sdk/trace/exporters/console_exporter.dart' show ConsoleExporter;
 export 'src/sdk/trace/id_generator.dart' show IdGenerator;
 export 'src/sdk/trace/sampling/always_off_sampler.dart' show AlwaysOffSampler;

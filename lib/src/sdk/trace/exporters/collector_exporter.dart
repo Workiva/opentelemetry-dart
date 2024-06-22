@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
+import 'package:grpc/grpc.dart';
 
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
@@ -15,18 +16,36 @@ import '../../proto/opentelemetry/proto/common/v1/common.pb.dart' as pb_common;
 import '../../proto/opentelemetry/proto/resource/v1/resource.pb.dart'
     as pb_resource;
 import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
+import '../../proto/opentelemetry/proto/collector/trace/v1/trace_service.pbgrpc.dart'
+    as pb_trace_service_grpc;
+
+enum CollectorExporterProtocol { httpProtobuf, gRPC }
 
 class CollectorExporter implements sdk.SpanExporter {
   final Logger _log = Logger('opentelemetry.CollectorExporter');
 
+  final CollectorExporterProtocol protocol;
   final Uri uri;
   final http.Client client;
   final Map<String, String> headers;
   var _isShutdown = false;
+  late pb_trace_service_grpc.TraceServiceClient _clientStub;
 
-  CollectorExporter(this.uri,
-      {http.Client? httpClient, this.headers = const {}})
-      : client = httpClient ?? http.Client();
+  CollectorExporter(
+    this.uri, {
+    http.Client? httpClient,
+    this.headers = const {},
+    this.protocol = CollectorExporterProtocol.httpProtobuf,
+  }) : client = httpClient ?? http.Client() {
+    if (protocol == CollectorExporterProtocol.gRPC) {
+      _clientStub = pb_trace_service_grpc.TraceServiceClient(
+        ClientChannel(
+          uri.host,
+          port: uri.port,
+        ),
+      );
+    }
+  }
 
   @override
   void export(List<sdk.ReadOnlySpan> spans) {
@@ -48,10 +67,24 @@ class CollectorExporter implements sdk.SpanExporter {
     try {
       final body = pb_trace_service.ExportTraceServiceRequest(
           resourceSpans: _spansToProtobuf(spans));
-      final headers = {'Content-Type': 'application/x-protobuf'}
-        ..addAll(this.headers);
 
-      await client.post(uri, body: body.writeToBuffer(), headers: headers);
+      switch (protocol) {
+        case CollectorExporterProtocol.gRPC:
+          await _clientStub.export(
+            body,
+            options: CallOptions(
+              metadata: headers,
+            ),
+          );
+          break;
+
+        case CollectorExporterProtocol.httpProtobuf:
+          final headers = {'Content-Type': 'application/x-protobuf'}
+            ..addAll(this.headers);
+
+          await client.post(uri, body: body.writeToBuffer(), headers: headers);
+          break;
+      }
     } catch (e) {
       _log.warning('Failed to export ${spans.length} spans.', e);
     }
