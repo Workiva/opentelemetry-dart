@@ -78,7 +78,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     context = api.contextWithSpanContext(context, api.SpanContext.invalid());
   }
 
-  final span = tracer.startSpan(name, context: context);
+  final span = tracer.startSpan(name, context: context, kind: spanKind);
   context = api.contextWithSpan(context, span);
   try {
     // TODO: remove this check once `run` exists on context interface
@@ -140,7 +140,7 @@ R traceContextSync<R>(String name, R Function(api.Context) fn,
     context = api.contextWithSpanContext(context, api.SpanContext.invalid());
   }
 
-  final span = tracer.startSpan(name, context: context);
+  final span = tracer.startSpan(name, context: context, kind: spanKind);
   context = api.contextWithSpan(context, span);
   try {
     var r;
