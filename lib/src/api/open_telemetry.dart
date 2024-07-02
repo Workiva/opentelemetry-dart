@@ -69,7 +69,8 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     {api.Context? context,
     api.Tracer? tracer,
     bool newRoot = false,
-    api.SpanKind spanKind = api.SpanKind.internal}) async {
+    api.SpanKind spanKind = api.SpanKind.internal,
+    List<api.SpanLink> spanLinks = const []}) async {
   context ??= globalContextManager.active;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
@@ -78,7 +79,8 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     context = api.contextWithSpanContext(context, api.SpanContext.invalid());
   }
 
-  final span = tracer.startSpan(name, context: context, kind: spanKind);
+  final span = tracer.startSpan(name,
+      context: context, kind: spanKind, links: spanLinks);
   context = api.contextWithSpan(context, span);
   try {
     // TODO: remove this check once `run` exists on context interface
@@ -131,7 +133,8 @@ R traceContextSync<R>(String name, R Function(api.Context) fn,
     {api.Context? context,
     api.Tracer? tracer,
     bool newRoot = false,
-    api.SpanKind spanKind = api.SpanKind.internal}) {
+    api.SpanKind spanKind = api.SpanKind.internal,
+    List<api.SpanLink> spanLinks = const []}) {
   context ??= globalContextManager.active;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
@@ -140,7 +143,8 @@ R traceContextSync<R>(String name, R Function(api.Context) fn,
     context = api.contextWithSpanContext(context, api.SpanContext.invalid());
   }
 
-  final span = tracer.startSpan(name, context: context, kind: spanKind);
+  final span = tracer.startSpan(name,
+      context: context, kind: spanKind, links: spanLinks);
   context = api.contextWithSpan(context, span);
   try {
     var r;
