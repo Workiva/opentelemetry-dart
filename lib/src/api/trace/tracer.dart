@@ -12,8 +12,10 @@ import '../../../api.dart' as api;
 ///
 /// Warning: methods may be added to this interface in minor releases.
 abstract class Tracer {
-  /// Starts a new [api.Span] without setting it as the current span in this
-  /// tracer's context.
+  /// Starts a [api.Span].
+  ///
+  /// The [api.Span] is created with the provided name and as a child of any
+  /// existing span context found in the passed context.
   api.Span startSpan(String name,
       {api.Context context,
       api.SpanKind kind,

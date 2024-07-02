@@ -3,7 +3,6 @@
 
 @TestOn('chrome')
 import 'package:mocktail/mocktail.dart';
-import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
 import 'package:opentelemetry/src/sdk/platforms/web/trace/web_tracer_provider.dart';
@@ -61,7 +60,7 @@ void main() {
       () async {
     final span = WebTracerProvider(processors: [MockSpanProcessor()])
         .getTracer('testTracer')
-        .startSpan('testSpan', context: Context.root) as Span
+        .startSpan('testSpan') as Span
       ..end();
 
     expect(span.endTime, isNotNull);

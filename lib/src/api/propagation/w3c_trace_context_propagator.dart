@@ -59,13 +59,15 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
         ? api.TraceState.fromString(traceStateHeader)
         : api.TraceState.empty();
 
-    return context.withSpan(NonRecordingSpan(
-        api.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
+    return api.contextWithSpan(
+        context,
+        NonRecordingSpan(
+            api.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
   }
 
   @override
   void inject(api.Context context, dynamic carrier, api.TextMapSetter setter) {
-    final spanContext = context.spanContext;
+    final spanContext = api.spanContextFromContext(context);
 
     setter
       ..set(

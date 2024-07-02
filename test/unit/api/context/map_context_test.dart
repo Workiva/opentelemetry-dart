@@ -1,5 +1,6 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart';
@@ -44,7 +45,7 @@ void main() {
       final context = MapContext();
       final newContext = context.withSpan(testSpan);
       expect(newContext, isNot(same(context)));
-      expect(newContext.span, equals(testSpan));
+      expect(api.spanFromContext(newContext), equals(testSpan));
     });
 
     test('execute runs the given function', () {
@@ -60,7 +61,7 @@ void main() {
       final context = MapContext();
       expect(context.span, isA<NonRecordingSpan>());
       final newContext = context.withSpan(testSpan);
-      expect(newContext.span, equals(testSpan));
+      expect(api.spanFromContext(newContext), equals(testSpan));
     });
   });
 }

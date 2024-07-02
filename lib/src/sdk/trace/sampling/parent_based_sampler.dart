@@ -32,7 +32,7 @@ class ParentBasedSampler implements sdk.Sampler {
       api.SpanKind spanKind,
       List<api.Attribute> spanAttributes,
       List<api.SpanLink> spanLinks) {
-    final parentSpanContext = context.spanContext;
+    final parentSpanContext = api.spanContextFromContext(context);
 
     if (!parentSpanContext.isValid) {
       return _root.shouldSample(
