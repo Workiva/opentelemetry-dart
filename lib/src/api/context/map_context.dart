@@ -5,11 +5,12 @@ import 'package:meta/meta.dart';
 
 import '../../../api.dart';
 
+MapContext createMapContext() => MapContext._();
+
 class MapContext implements Context {
   final Map<ContextKey, Object> _contextMap = {};
 
-  @protected
-  MapContext();
+  MapContext._();
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
@@ -23,7 +24,7 @@ class MapContext implements Context {
   /// of the context values will be inherited.
   @override
   MapContext setValue(ContextKey key, Object value) {
-    final newContext = MapContext();
+    final newContext = createMapContext();
     newContext._contextMap.addAll(_contextMap);
     newContext._contextMap[key] = value;
     return newContext;

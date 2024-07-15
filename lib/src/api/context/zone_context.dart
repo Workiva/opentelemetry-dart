@@ -24,17 +24,18 @@
 /// directly. Other users should usually not interact with Context at all and
 /// should instead manipulate it through cross-cutting concerns APIs provided by
 /// OpenTelemetry SDKs.
-import 'dart:async';
+import 'dart:async' show Zone;
 
 import 'package:meta/meta.dart';
 
 import '../../../api.dart';
 
+ZoneContext createZoneContext(Zone zone) => ZoneContext._(zone);
+
 class ZoneContext implements Context {
   final Zone _zone;
 
-  @protected
-  ZoneContext(this._zone);
+  ZoneContext._(this._zone);
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
@@ -48,7 +49,7 @@ class ZoneContext implements Context {
   /// of the context values will be inherited.
   @override
   Context setValue(ContextKey key, Object value) =>
-      ZoneContext(_zone.fork(zoneValues: {key: value}));
+      createZoneContext(_zone.fork(zoneValues: {key: value}));
 
   /// Returns a new [ZoneContext] created from this one with the given [Span]
   /// set.

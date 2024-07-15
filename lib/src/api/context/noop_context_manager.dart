@@ -3,14 +3,14 @@
 
 import '../../../api.dart' show Context;
 import '../../experimental_api.dart' show ContextManager;
-import 'map_context.dart' show MapContext;
+import 'map_context.dart' show createMapContext;
 
-final MapContext _rootContext = MapContext();
+final _root = createMapContext();
 
 class NoopContextManager implements ContextManager {
   @override
-  Context get root => _rootContext;
+  Context get root => _root;
 
   @override
-  Context get active => _rootContext;
+  Context get active => _root;
 }

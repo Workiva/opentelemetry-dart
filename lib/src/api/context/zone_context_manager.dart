@@ -5,12 +5,12 @@ import 'dart:async';
 
 import '../../../api.dart' show Context;
 import '../../experimental_api.dart' show ContextManager;
-import 'zone_context.dart' show ZoneContext;
+import 'zone_context.dart' show createZoneContext;
 
 class ZoneContextManager implements ContextManager {
   @override
-  Context get root => ZoneContext(Zone.root);
+  Context get root => createZoneContext(Zone.root);
 
   @override
-  Context get active => ZoneContext(Zone.current);
+  Context get active => createZoneContext(Zone.current);
 }
