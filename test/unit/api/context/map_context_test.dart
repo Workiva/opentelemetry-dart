@@ -26,13 +26,13 @@ void main() {
       sdk.DateTimeTimeProvider().now);
   group('MapContext', () {
     test('getValue returns null if key is not set', () {
-      final context = MapContext();
+      final context = createMapContext();
       final key = api.ContextKey();
       expect(context.getValue(key), isNull);
     });
 
     test('setValue returns a new context with the value set', () {
-      final context = MapContext();
+      final context = createMapContext();
       final key = api.ContextKey();
       const value = 'testValue';
       final newContext = context.setValue(key, value);
@@ -42,14 +42,14 @@ void main() {
     });
 
     test('withSpan returns a new context with the span set', () {
-      final context = MapContext();
+      final context = createMapContext();
       final newContext = context.withSpan(testSpan);
       expect(newContext, isNot(same(context)));
       expect(api.spanFromContext(newContext), equals(testSpan));
     });
 
     test('execute runs the given function', () {
-      final context = MapContext();
+      final context = createMapContext();
       var ran = false;
       context.execute(() {
         ran = true;
@@ -58,7 +58,7 @@ void main() {
     });
 
     test('span returns the span if set, or an invalid span if not', () {
-      final context = MapContext();
+      final context = createMapContext();
       expect(context.span, isA<NonRecordingSpan>());
       final newContext = context.withSpan(testSpan);
       expect(api.spanFromContext(newContext), equals(testSpan));
