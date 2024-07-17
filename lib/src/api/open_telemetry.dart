@@ -8,7 +8,6 @@ import 'package:meta/meta.dart';
 import '../../api.dart' as api;
 import 'propagation/noop_text_map_propagator.dart';
 import 'trace/noop_tracer_provider.dart';
-import 'context/context_manager.dart';
 import 'context/zone_context.dart';
 
 final api.TracerProvider _noopTracerProvider = NoopTracerProvider();
@@ -46,7 +45,7 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
     'This method will be removed in 0.19.0. Use [traceContext] instead.')
 Future<T> trace<T>(String name, Future<T> Function() fn,
     {api.Context? context, api.Tracer? tracer}) async {
-  context ??= globalContextManager.active;
+  context ??= api.globalContextManager.active;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);
@@ -71,7 +70,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     bool newRoot = false,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) async {
-  context ??= globalContextManager.active;
+  context ??= api.globalContextManager.active;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   // TODO: use start span option `newRoot` instead
@@ -103,7 +102,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     'This method will be removed in 0.19.0. Use [traceContextSync] instead.')
 R traceSync<R>(String name, R Function() fn,
     {api.Context? context, api.Tracer? tracer}) {
-  context ??= globalContextManager.active;
+  context ??= api.globalContextManager.active;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   final span = tracer.startSpan(name, context: context);
@@ -135,7 +134,7 @@ R traceContextSync<R>(String name, R Function(api.Context) fn,
     bool newRoot = false,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) {
-  context ??= globalContextManager.active;
+  context ??= api.globalContextManager.active;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   // TODO: use start span option `newRoot` instead

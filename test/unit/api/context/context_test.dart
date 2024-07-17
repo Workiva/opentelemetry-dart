@@ -28,14 +28,14 @@ void main() {
   group('spanFromContext', () {
     test('returns Span when exists', () {
       final context =
-          api.contextWithSpan(globalContextManager.active, testSpan);
+          api.contextWithSpan(api.globalContextManager.active, testSpan);
 
       expect(api.spanFromContext(context), same(testSpan));
     });
 
     test('returns an invalid Span when a Span does not exist in the Context',
         () {
-      final context = globalContextManager.active;
+      final context = api.globalContextManager.active;
 
       expect(api.spanFromContext(context), isA<NonRecordingSpan>());
       expect(api.spanContextFromContext(context).isValid, isFalse);
@@ -45,7 +45,7 @@ void main() {
   group('spanContextFromContext', () {
     test('returns SpanContext when Span exists', () {
       final testContext =
-          api.contextWithSpan(globalContextManager.active, testSpan);
+          api.contextWithSpan(api.globalContextManager.active, testSpan);
 
       expect(api.spanContextFromContext(testContext), same(testSpanContext));
     });
@@ -53,7 +53,8 @@ void main() {
     test(
         'returns an invalid SpanContext when a Span does not exist in the Context',
         () {
-      expect(api.spanContextFromContext(globalContextManager.active).isValid,
+      expect(
+          api.spanContextFromContext(api.globalContextManager.active).isValid,
           isFalse);
     });
   });

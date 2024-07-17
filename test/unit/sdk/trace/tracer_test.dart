@@ -1,7 +1,6 @@
 @TestOn('vm')
 
 import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/src/experimental_api.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer.dart';
 import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
 import 'package:test/test.dart';
@@ -12,7 +11,8 @@ void main() {
 
     test('with newRoot true', () {
       final parent = tracer.startSpan('parent');
-      final context = api.contextWithSpan(globalContextManager.active, parent);
+      final context =
+          api.contextWithSpan(api.globalContextManager.active, parent);
       final span =
           (tracer as Tracer).startSpan('', newRoot: true, context: context);
       expect(span.parentSpanId.isValid, isFalse);
@@ -23,7 +23,8 @@ void main() {
 
     test('with newRoot false', () {
       final parent = tracer.startSpan('parent');
-      final context = api.contextWithSpan(globalContextManager.active, parent);
+      final context =
+          api.contextWithSpan(api.globalContextManager.active, parent);
       final span =
           (tracer as Tracer).startSpan('', newRoot: false, context: context);
       expect(span.parentSpanId.isValid, isTrue);

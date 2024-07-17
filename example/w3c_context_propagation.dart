@@ -2,7 +2,7 @@ import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart'
     show ConsoleExporter, SimpleSpanProcessor, TracerProviderBase;
 import 'package:opentelemetry/src/experimental_api.dart'
-    show globalContextManager, NoopContextManager, registerGlobalContextManager;
+    show NoopContextManager, registerGlobalContextManager;
 
 class MapSetter implements TextMapSetter<Map> {
   @override

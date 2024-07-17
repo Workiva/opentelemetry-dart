@@ -4,7 +4,6 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
@@ -50,7 +49,7 @@ void main() {
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = <String, String>{};
     final testContext =
-        api.contextWithSpan(globalContextManager.active, testSpan);
+        api.contextWithSpan(api.globalContextManager.active, testSpan);
 
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = api.spanFromContext(
@@ -89,7 +88,7 @@ void main() {
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = <String, String>{};
     final testContext =
-        api.contextWithSpan(globalContextManager.active, testSpan);
+        api.contextWithSpan(api.globalContextManager.active, testSpan);
 
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final resultSpan = api.spanFromContext(
@@ -133,7 +132,7 @@ void main() {
     // Inject and extract a test Span from a Context, as when an outbound
     // call is made and received by another service.
     final testContext =
-        api.contextWithSpan(globalContextManager.active, testSpan);
+        api.contextWithSpan(api.globalContextManager.active, testSpan);
     testPropagator.inject(testContext, testCarrier, TestingInjector());
     final parentSpan = api.spanFromContext(
         testPropagator.extract(testContext, testCarrier, TestingExtractor()));
@@ -142,7 +141,7 @@ void main() {
 
     // Use the transmitted Span as a receiver.
     final resultSpan = tracer.startSpan('doWork',
-        context: api.contextWithSpan(globalContextManager.active, testSpan))
+        context: api.contextWithSpan(api.globalContextManager.active, testSpan))
       ..end();
 
     // Verify that data from the original Span propagates to the child.

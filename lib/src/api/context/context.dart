@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import '../../../api.dart';
-import '../../experimental_api.dart' show globalContextManager;
 import '../trace/nonrecording_span.dart' show NonRecordingSpan;
 
 class ContextKey {}

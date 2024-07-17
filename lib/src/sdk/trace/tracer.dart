@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
-import '../../experimental_api.dart' show globalContextManager;
 import '../common/limits.dart' show applyLinkLimits;
 import 'span.dart';
 
@@ -38,7 +37,7 @@ class Tracer implements api.Tracer {
       List<api.SpanLink> links = const [],
       Int64? startTime,
       bool newRoot = false}) {
-    context ??= globalContextManager.active;
+    context ??= api.globalContextManager.active;
     startTime ??= _timeProvider.now;
 
     // If a valid, active Span is present in the context, use it as this Span's

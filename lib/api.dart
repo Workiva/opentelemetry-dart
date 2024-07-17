@@ -12,6 +12,7 @@ export 'src/api/context/context.dart'
         contextWithSpanContext,
         spanContextFromContext,
         spanFromContext;
+export 'src/api/context/context_manager.dart' show globalContextManager;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/open_telemetry.dart'
