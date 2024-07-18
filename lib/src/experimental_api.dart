@@ -6,9 +6,11 @@ library experimental_api;
 
 import 'package:meta/meta.dart';
 
-export 'api/context/context_manager.dart' show ContextManager;
 export 'api/context/context_manager.dart'
-    show registerGlobalContextManager, globalContextManager;
+    show ContextManager, registerGlobalContextManager;
+export 'api/context/noop_context_manager.dart' show NoopContextManager;
+export 'api/context/zone_context.dart' show ZoneContext;
+export 'api/context/zone_context_manager.dart' show ZoneContextManager;
 export 'api/metrics/counter.dart' show Counter;
 export 'api/metrics/meter_provider.dart' show MeterProvider;
 export 'api/metrics/meter.dart' show Meter;

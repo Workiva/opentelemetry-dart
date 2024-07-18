@@ -14,6 +14,7 @@ init:
 			opentelemetry-proto/opentelemetry/proto/collector/trace/v1/trace_service.proto \
 			opentelemetry-proto/opentelemetry/proto/trace/v1/trace.proto \
 			opentelemetry-proto/opentelemetry/proto/resource/v1/resource.proto
+	./scripts/attach_copyright.sh
 
 analyze:
 	@dart analyze

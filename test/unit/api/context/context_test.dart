@@ -25,35 +25,37 @@ void main() {
       sdk.SpanLimits(),
       sdk.DateTimeTimeProvider().now);
 
-  group('get Span', () {
+  group('spanFromContext', () {
     test('returns Span when exists', () {
-      final childContext = api.Context.current.withSpan(testSpan);
+      final context =
+          api.contextWithSpan(api.globalContextManager.active, testSpan);
 
-      expect(childContext.span, same(testSpan));
+      expect(api.spanFromContext(context), same(testSpan));
     });
 
     test('returns an invalid Span when a Span does not exist in the Context',
         () {
-      final context = api.Context.current;
+      final context = api.globalContextManager.active;
 
-      expect(context.span, isA<NonRecordingSpan>());
-      expect(context.span.spanContext.isValid, isFalse);
+      expect(api.spanFromContext(context), isA<NonRecordingSpan>());
+      expect(api.spanContextFromContext(context).isValid, isFalse);
     });
   });
 
-  group('get SpanContext', () {
+  group('spanContextFromContext', () {
     test('returns SpanContext when Span exists', () {
-      final testContext = api.Context.current.withSpan(testSpan);
+      final testContext =
+          api.contextWithSpan(api.globalContextManager.active, testSpan);
 
-      expect(testContext.spanContext, same(testSpanContext));
+      expect(api.spanContextFromContext(testContext), same(testSpanContext));
     });
 
     test(
         'returns an invalid SpanContext when a Span does not exist in the Context',
         () {
-      final testContext = api.Context.current;
-
-      expect(testContext.spanContext.isValid, isFalse);
+      expect(
+          api.spanContextFromContext(api.globalContextManager.active).isValid,
+          isFalse);
     });
   });
 }

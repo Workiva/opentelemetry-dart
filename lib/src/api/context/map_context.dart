@@ -1,13 +1,16 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import '../../../api.dart';
-import '../../experimental_api.dart';
+import 'package:meta/meta.dart';
 
-final ContextKey spanKey = ContextKey();
+import '../../../api.dart';
+
+MapContext createMapContext() => MapContext._();
 
 class MapContext implements Context {
   final Map<ContextKey, Object> _contextMap = {};
+
+  MapContext._();
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
@@ -21,7 +24,7 @@ class MapContext implements Context {
   /// of the context values will be inherited.
   @override
   MapContext setValue(ContextKey key, Object value) {
-    final newContext = MapContext();
+    final newContext = createMapContext();
     newContext._contextMap.addAll(_contextMap);
     newContext._contextMap[key] = value;
     return newContext;
@@ -30,7 +33,7 @@ class MapContext implements Context {
   /// Returns a new [MapContext] created from this one with the given [Span]
   /// set.
   @override
-  MapContext withSpan(Span span) => setValue(spanKey, span);
+  Context withSpan(Span span) => contextWithSpan(this, span);
 
   /// Execute a function, this is a no-op for [MapContext].
   @override
@@ -39,10 +42,14 @@ class MapContext implements Context {
   /// Get the [Span] attached to this [MapContext], or an invalid, [Span] if no such
   /// [Span] exists.
   @override
-  Span get span => getValue(spanKey) ?? NonRecordingSpan(SpanContext.invalid());
+  Span get span => spanFromContext(this);
+
+  /// Call [fn] with this [MapContext] and return its result.
+  @experimental
+  R run<R>(R Function(Context context) fn) => fn(this);
 
   /// Get the [SpanContext] from this [MapContext], or an invalid [SpanContext] if no such
   /// [SpanContext] exists.
   @override
-  SpanContext get spanContext => span.spanContext;
+  SpanContext get spanContext => spanContextFromContext(this);
 }

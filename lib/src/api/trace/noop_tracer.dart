@@ -3,19 +3,22 @@
 
 import 'package:fixnum/fixnum.dart';
 
-import '../../../api.dart' as api;
-import '../../experimental_api.dart';
+import '../../../api.dart';
+import '../../experimental_api.dart' show NonRecordingSpan;
 
-/// A [api.Tracer] class which yields [NonRecordingSpan]s and no-ops for most
+/// A [Tracer] class which yields [NonRecordingSpan]s and no-ops for most
 /// operations.
-class NoopTracer implements api.Tracer {
+class NoopTracer implements Tracer {
   @override
-  api.Span startSpan(String name,
-      {api.Context? context,
-      api.SpanKind? kind,
-      List<api.Attribute>? attributes,
-      List<api.SpanLink>? links,
-      Int64? startTime}) {
-    return NonRecordingSpan(context?.spanContext ?? api.SpanContext.invalid());
+  Span startSpan(String name,
+      {Context? context,
+      SpanKind? kind,
+      List<Attribute>? attributes,
+      List<SpanLink>? links,
+      Int64? startTime,
+      bool newRoot = false}) {
+    return NonRecordingSpan(context != null
+        ? spanContextFromContext(context)
+        : SpanContext.invalid());
   }
 }

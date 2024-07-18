@@ -4,7 +4,15 @@
 export 'src/api/common/attribute.dart' show Attribute;
 export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
-export 'src/api/context/context.dart' show Context, ContextKey;
+export 'src/api/context/context.dart'
+    show
+        Context,
+        ContextKey,
+        contextWithSpan,
+        contextWithSpanContext,
+        spanContextFromContext,
+        spanFromContext;
+export 'src/api/context/context_manager.dart' show globalContextManager;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/open_telemetry.dart'
@@ -14,7 +22,9 @@ export 'src/api/open_telemetry.dart'
         registerGlobalTextMapPropagator,
         registerGlobalTracerProvider,
         trace,
-        traceSync;
+        traceContext,
+        traceSync,
+        traceContextSync;
 export 'src/api/propagation/extractors/text_map_getter.dart' show TextMapGetter;
 export 'src/api/propagation/injectors/text_map_setter.dart' show TextMapSetter;
 export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;

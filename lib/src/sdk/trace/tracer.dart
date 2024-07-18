@@ -35,35 +35,34 @@ class Tracer implements api.Tracer {
       api.SpanKind kind = api.SpanKind.internal,
       List<api.Attribute> attributes = const [],
       List<api.SpanLink> links = const [],
-      Int64? startTime}) {
-    context ??= api.Context.current;
+      Int64? startTime,
+      bool newRoot = false}) {
+    context ??= api.globalContextManager.active;
     startTime ??= _timeProvider.now;
 
     // If a valid, active Span is present in the context, use it as this Span's
-    // parent.  If the Context does not contain an active parent Span, create
+    // parent. If the Context does not contain an active parent Span, create
     // a root Span with a new Trace ID and default state.
     // See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#determining-the-parent-span-from-a-context
-    final spanId = api.SpanId.fromIdGenerator(_idGenerator);
-    final traceState = context.spanContext.traceState;
-    final traceId = context.spanContext.isValid
-        ? context.spanContext.traceId
+    final psc = newRoot
+        ? api.SpanContext.invalid()
+        : api.spanContextFromContext(context);
+    final traceId = psc.traceId.isValid
+        ? psc.traceId
         : api.TraceId.fromIdGenerator(_idGenerator);
-    final parentSpanId = context.spanContext.isValid
-        ? context.spanContext.spanId
-        : api.SpanId.root();
-
+    final spanId = api.SpanId.fromIdGenerator(_idGenerator);
     final samplerResult =
         _sampler.shouldSample(context, traceId, name, kind, attributes, links);
     final traceFlags = (samplerResult.decision == sdk.Decision.recordAndSample)
         ? api.TraceFlags.sampled
         : api.TraceFlags.none;
     final spanContext =
-        api.SpanContext(traceId, spanId, traceFlags, traceState);
+        api.SpanContext(traceId, spanId, traceFlags, psc.traceState);
 
     final span = Span(
         name,
         spanContext,
-        parentSpanId,
+        psc.spanId,
         _processors,
         _timeProvider,
         _resource,

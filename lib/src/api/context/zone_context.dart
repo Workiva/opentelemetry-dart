@@ -24,30 +24,18 @@
 /// directly. Other users should usually not interact with Context at all and
 /// should instead manipulate it through cross-cutting concerns APIs provided by
 /// OpenTelemetry SDKs.
-import 'dart:async';
+import 'dart:async' show Zone;
+
+import 'package:meta/meta.dart';
 
 import '../../../api.dart';
-import '../../experimental_api.dart';
 
-/// [ContextKey] used to store spans in a [ZoneContext].
-final ContextKey spanKey = ContextKey();
+ZoneContext createZoneContext(Zone zone) => ZoneContext._(zone);
 
 class ZoneContext implements Context {
   final Zone _zone;
 
   ZoneContext._(this._zone);
-
-  /// The active context.
-  static ZoneContext get current => ZoneContext._(Zone.current);
-
-  /// The root context which all other contexts are derived from.
-  ///
-  /// It should generally not be required to use the root [ZoneContext] directly -
-  /// instead, use [ZoneContext.current] to operate on the current [ZoneContext].
-  /// Only use this context if you are certain you need to disregard the
-  /// current [ZoneContext].  For example, when instrumenting an asynchronous
-  /// event handler which may fire while an unrelated [ZoneContext] is "current".
-  static ZoneContext get root => ZoneContext._(Zone.root);
 
   /// Returns the value from this context identified by [key], or null if no
   /// such value is set.
@@ -60,25 +48,29 @@ class ZoneContext implements Context {
   /// If [key] was already set in this context, it will be overridden. The rest
   /// of the context values will be inherited.
   @override
-  ZoneContext setValue(ContextKey key, Object value) =>
-      ZoneContext._(_zone.fork(zoneValues: {key: value}));
+  Context setValue(ContextKey key, Object value) =>
+      createZoneContext(_zone.fork(zoneValues: {key: value}));
 
   /// Returns a new [ZoneContext] created from this one with the given [Span]
   /// set.
   @override
-  ZoneContext withSpan(Span span) => setValue(spanKey, span);
+  Context withSpan(Span span) => contextWithSpan(this, span);
 
   /// Execute a function [fn] within this [ZoneContext] and return its result.
   @override
   R execute<R>(R Function() fn) => _zone.run(() => fn());
 
+  /// Call [fn] in this [ZoneContext]'s [Zone] and return its result.
+  @experimental
+  R run<R>(R Function(Context context) fn) => _zone.run(() => fn(this));
+
   /// Get the [Span] attached to this [ZoneContext], or an invalid, [Span] if no such
   /// [Span] exists.
   @override
-  Span get span => getValue(spanKey) ?? NonRecordingSpan(SpanContext.invalid());
+  Span get span => spanFromContext(this);
 
   /// Get the [SpanContext] from this [ZoneContext], or an invalid [SpanContext] if no such
   /// [SpanContext] exists.
   @override
-  SpanContext get spanContext => span.spanContext;
+  SpanContext get spanContext => spanContextFromContext(this);
 }
