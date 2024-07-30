@@ -27,12 +27,11 @@ final Int64 timeOrigin = msToNs(
     window.performance.timeOrigin ?? window.performance.timing.navigationStart,
     fractionDigits: 1);
 
-/// The time elapsed since the time origin, in nanoseconds.
+/// Converts a high-resolution timestamp from the browser performance API to an
+/// Int64 representing nanoseconds since Unix Epoch.
 @experimental
-Int64 now() => _now();
-
-Int64 _now() {
-  return msToNs(window.performance.now());
+Int64 fromDOMHighResTimeStamp(num ts) {
+  return timeOrigin + msToNs(ts);
 }
 
 /// BrowserTimeProvider retrieves high-resolution timestamps utilizing the
@@ -51,5 +50,5 @@ class WebTimeProvider implements TimeProvider {
   /// for sleep.  See https://github.com/open-telemetry/opentelemetry-js/issues/852
   /// for more information.
   @override
-  Int64 get now => timeOrigin + _now();
+  Int64 get now => fromDOMHighResTimeStamp(window.performance.now());
 }
