@@ -8,25 +8,31 @@ import 'package:meta/meta.dart';
 
 import '../../../time_providers/time_provider.dart';
 
-int _msToNs(num n) {
-  const nanosecondsPerMillisecond = 1000 * 1000;
-  final whole = n.floor();
-  final frac = ((n - whole) * nanosecondsPerMillisecond).toInt();
-  return whole * nanosecondsPerMillisecond + frac;
+Int64 msToNs(num n, {int? fractionDigits}) {
+  const nsPerMs = 1000 * 1000;
+  final whole = n.truncate();
+  if (fractionDigits == null) {
+    final frac = ((n - whole) * nsPerMs).round();
+    return Int64(whole * nsPerMs + frac);
+  }
+  final frac =
+      double.parse((n - whole).toStringAsFixed(fractionDigits)) * nsPerMs;
+  return Int64(whole) * nsPerMs + Int64(frac.round());
 }
 
 /// Time when navigation started or the service worker was started in
 /// nanoseconds.
 @experimental
-final Int64 timeOrigin = Int64(_msToNs(window.performance.timeOrigin ??
-    window.performance.timing.navigationStart));
+final Int64 timeOrigin = msToNs(
+    window.performance.timeOrigin ?? window.performance.timing.navigationStart,
+    fractionDigits: 1);
 
 /// The time elapsed since the time origin, in nanoseconds.
 @experimental
 Int64 now() => _now();
 
 Int64 _now() {
-  return Int64(_msToNs(window.performance.now()));
+  return msToNs(window.performance.now());
 }
 
 /// BrowserTimeProvider retrieves high-resolution timestamps utilizing the
