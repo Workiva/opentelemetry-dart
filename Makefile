@@ -30,4 +30,11 @@ test:
 		--platform vm \
 		--platform chrome
 
+changelog:
+	# requires the ruby gem: gem install github_changelog_generator
+	# requires the env var CHANGELOG_GITHUB_TOKEN set to a GitHub token with repo scope
+	git fetch --tags
+	git checkout $(shell git describe --tags `git rev-list --tags --max-count=1`)
+	github_changelog_generator -u Workiva -p opentelemetry-dart
+
 .PHONY: init format analyze test
