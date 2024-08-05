@@ -25,7 +25,7 @@ import '../../mocks.dart';
 void main() {
   late MockHttpClient mockClient;
   final uri =
-      Uri.parse('https://h.wdesk.org/s/opentelemetry-collector/v1/traces');
+      Uri.parse('https://example.test/s/opentelemetry-collector/v1/traces');
 
   setUp(() {
     mockClient = MockHttpClient();
