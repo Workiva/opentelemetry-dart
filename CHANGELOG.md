@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.18.5](https://github.com/Workiva/opentelemetry-dart/tree/0.18.5) (2024-08-01)
+
+[Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.4...0.18.5)
+
+**Merged pull requests:**
+
+- PPI-165 : fix timestamp rounding issues and expose helpers for high res timestamps [\#179](https://github.com/Workiva/opentelemetry-dart/pull/179) ([blakeroberts-wk](https://github.com/blakeroberts-wk))
+- update changelog [\#178](https://github.com/Workiva/opentelemetry-dart/pull/178) ([blakeroberts-wk](https://github.com/blakeroberts-wk))
+
 ## [0.18.4](https://github.com/Workiva/opentelemetry-dart/tree/0.18.4) (2024-07-18)
 
 [Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.3...0.18.4)
