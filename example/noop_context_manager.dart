@@ -1,8 +1,7 @@
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart'
     show ConsoleExporter, SimpleSpanProcessor, TracerProviderBase;
-import 'package:opentelemetry/src/experimental_api.dart'
-    show NoopContextManager, registerGlobalContextManager;
+import 'package:opentelemetry/src/experimental_api.dart' show NoopContextManager;
 
 void main(List<String> args) async {
   final tp =
