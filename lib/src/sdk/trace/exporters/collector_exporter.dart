@@ -109,7 +109,9 @@ class CollectorExporter implements sdk.SpanExporter {
           traceId: link.context.traceId.get(),
           spanId: link.context.spanId.get(),
           traceState: link.context.traceState.toString(),
-          attributes: attrs));
+          attributes: attrs,
+          droppedAttributesCount: link.droppedAttributes,
+          flags: link.context.traceFlags));
     }
     return pbLinks;
   }
@@ -162,22 +164,28 @@ class CollectorExporter implements sdk.SpanExporter {
     }
 
     return pb_trace.Span(
-        traceId: span.spanContext.traceId.get(),
-        spanId: span.spanContext.spanId.get(),
-        parentSpanId: span.parentSpanId.get(),
-        name: span.name,
-        startTimeUnixNano: span.startTime,
-        endTimeUnixNano: span.endTime,
-        attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
-            key: key,
-            value: _attributeValueToProtobuf(span.attributes.get(key)!))),
-        events: _spanEventsToProtobuf(span.events),
-        droppedEventsCount:
-            span.events.isNotEmpty ? span.droppedEventsCount : null,
-        status:
-            pb_trace.Status(code: statusCode, message: span.status.description),
-        kind: spanKind,
-        links: _spanLinksToProtobuf(span.links));
+      traceId: span.spanContext.traceId.get(),
+      spanId: span.spanContext.spanId.get(),
+      traceState: span.spanContext.traceState.toString(),
+      parentSpanId: span.parentSpanId.get(),
+      name: span.name,
+      kind: spanKind,
+      startTimeUnixNano: span.startTime,
+      endTimeUnixNano: span.endTime,
+      attributes: span.attributes.keys.map((key) => pb_common.KeyValue(
+          key: key,
+          value: _attributeValueToProtobuf(span.attributes.get(key)!))),
+      droppedAttributesCount:
+          span.attributes.length > 0 ? span.droppedAttributes : null,
+      events: _spanEventsToProtobuf(span.events),
+      droppedEventsCount:
+          span.events.isNotEmpty ? span.droppedEventsCount : null,
+      links: _spanLinksToProtobuf(span.links),
+      droppedLinksCount: span.links.isNotEmpty ? span.droppedLinksCount : null,
+      status:
+          pb_trace.Status(code: statusCode, message: span.status.description),
+      flags: span.spanContext.traceFlags,
+    );
   }
 
   pb_common.AnyValue _attributeValueToProtobuf(Object value) {

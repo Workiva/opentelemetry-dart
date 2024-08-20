@@ -46,7 +46,11 @@ abstract class ReadOnlySpan {
 
   List<api.SpanLink> get links;
 
+  int get droppedLinksCount;
+
   Attributes get attributes;
+
+  int get droppedAttributes;
 
   sdk.Resource get resource;
 }

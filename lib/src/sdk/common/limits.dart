@@ -23,31 +23,34 @@ List<api.SpanLink> applyLinkLimits(
     // make sure override duplicated attributes in the list
     final attributeMap = <String, int>{};
 
+    var droppedAttributes = 0;
     for (final attr in link.attributes) {
       // if attributes num is already greater than maxNumAttributesPerLink
       // and this key doesn't exist in the list, drop it.
       if (attributeMap.length >= limits.maxNumAttributesPerLink &&
           !attributeMap.containsKey(attr.key)) {
+        droppedAttributes++;
         continue;
       }
 
       // apply maxNumAttributeLength limit.
-      final trimedAttr = applyAttributeLimits(attr, limits);
+      final trimmedAttr = applyAttributeLimits(attr, limits);
 
       // if this key has been added before, find its index,
       // and replace it with new value.
       final idx = attributeMap[attr.key];
       if (idx != null) {
-        linkAttributes[idx] = trimedAttr;
+        linkAttributes[idx] = trimmedAttr;
       } else {
         // record this new key's index with linkAttributes length,
         // and add this new attr in linkAttributes.
         attributeMap[attr.key] = linkAttributes.length;
-        linkAttributes.add(trimedAttr);
+        linkAttributes.add(trimmedAttr);
       }
     }
 
-    spanLink.add(api.SpanLink(link.context, attributes: linkAttributes));
+    spanLink.add(api.SpanLink(link.context,
+        attributes: linkAttributes, droppedAttributes: droppedAttributes));
   }
   return spanLink;
 }

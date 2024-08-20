@@ -6,6 +6,8 @@ import '../../../api.dart' as api;
 class SpanLink {
   final api.SpanContext context;
   final List<api.Attribute> attributes;
+  final int droppedAttributes;
 
-  SpanLink(this.context, {this.attributes = const []});
+  SpanLink(this.context,
+      {this.attributes = const [], this.droppedAttributes = 0});
 }
