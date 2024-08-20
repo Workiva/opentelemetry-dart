@@ -55,7 +55,7 @@ class Span implements sdk.ReadWriteSpan {
       this._resource,
       this._instrumentationScope,
       this._kind,
-      links,
+      List<SpanLink> links,
       this._limits,
       this._startTime)
       : _links = applyLinkLimits(links, _limits) {
