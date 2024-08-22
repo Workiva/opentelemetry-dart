@@ -96,8 +96,10 @@ void main() {
                   pb.Span(
                       traceId: [1, 2, 3],
                       spanId: [7, 8, 9],
+                      traceState: '',
                       parentSpanId: [4, 5, 6],
                       name: 'foo',
+                      kind: pb.Span_SpanKind.SPAN_KIND_CLIENT,
                       startTimeUnixNano: span1.startTime,
                       endTimeUnixNano: span1.endTime,
                       attributes: [
@@ -105,15 +107,18 @@ void main() {
                             key: 'foo',
                             value: pb_common.AnyValue(stringValue: 'bar'))
                       ],
+                      droppedAttributesCount: 0,
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
                           message: ''),
-                      kind: pb.Span_SpanKind.SPAN_KIND_CLIENT),
+                      flags: 0),
                   pb.Span(
                       traceId: [1, 2, 3],
                       spanId: [10, 11, 12],
+                      traceState: '',
                       parentSpanId: [4, 5, 6],
                       name: 'baz',
+                      kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL,
                       startTimeUnixNano: span2.startTime,
                       endTimeUnixNano: span2.endTime,
                       attributes: [
@@ -121,6 +126,7 @@ void main() {
                             key: 'bool',
                             value: pb_common.AnyValue(boolValue: true))
                       ],
+                      droppedAttributesCount: 0,
                       events: [
                         pb.Span_Event(
                           timeUnixNano: span2.events.first.timestamp,
@@ -137,7 +143,6 @@ void main() {
                       status: pb.Status(
                           code: pb.Status_StatusCode.STATUS_CODE_UNSET,
                           message: ''),
-                      kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL,
                       links: [
                         pb.Span_Link(
                             traceId: [1, 2, 3],
@@ -148,8 +153,12 @@ void main() {
                                   key: 'longKey',
                                   value:
                                       pb_common.AnyValue(stringValue: 'I am '))
-                            ])
-                      ])
+                            ],
+                            droppedAttributesCount: 0,
+                            flags: 0)
+                      ],
+                      droppedLinksCount: 0,
+                      flags: 0)
                 ],
                 scope: pb_common.InstrumentationScope(
                     name: 'library_name', version: 'library_version'))

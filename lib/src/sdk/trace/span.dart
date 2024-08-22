@@ -8,7 +8,7 @@ import 'package:opentelemetry/api.dart';
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
 import '../common/attributes.dart';
-import '../common/limits.dart' show applyAttributeLimits;
+import '../common/limits.dart' show applyAttributeLimits, applyLinkLimits;
 
 /// A representation of a single operation within a trace.
 @protected
@@ -26,6 +26,7 @@ class Span implements sdk.ReadWriteSpan {
   final Int64 _startTime;
   final Attributes _attributes = Attributes.empty();
   final List<api.SpanEvent> _events = [];
+  late final int _droppedSpanLinks;
 
   String _name;
   int _droppedSpanAttributes = 0;
@@ -54,9 +55,12 @@ class Span implements sdk.ReadWriteSpan {
       this._resource,
       this._instrumentationScope,
       this._kind,
-      this._links,
+      List<SpanLink> links,
       this._limits,
-      this._startTime);
+      this._startTime)
+      : _links = applyLinkLimits(links, _limits) {
+    _droppedSpanLinks = links.length - _links.length;
+  }
 
   @override
   api.SpanContext get spanContext => _spanContext;
@@ -199,8 +203,12 @@ class Span implements sdk.ReadWriteSpan {
   List<api.SpanLink> get links => List.unmodifiable(_links);
 
   @override
+  int get droppedLinksCount => _droppedSpanLinks;
+
+  @override
   Attributes get attributes => _attributes;
 
+  @override
   int get droppedAttributes => _droppedSpanAttributes;
 
   @override
