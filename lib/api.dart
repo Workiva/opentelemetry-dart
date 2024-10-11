@@ -6,16 +6,19 @@ export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
 export 'src/api/context/context.dart'
     show
+        active,
+        attach,
         Context,
         ContextKey,
         contextWithSpan,
         contextWithSpanContext,
+        detach,
+        root,
         spanContextFromContext,
-        spanFromContext;
-export 'src/api/context/context_manager.dart' 
-    show
-        globalContextManager,
-        registerGlobalContextManager;
+        spanFromContext,
+        zoneWithContext;
+export 'src/api/context/context_manager.dart'
+    show globalContextManager, registerGlobalContextManager;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/open_telemetry.dart'

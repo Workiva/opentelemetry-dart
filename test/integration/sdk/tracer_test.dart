@@ -40,8 +40,7 @@ void main() {
         sdk.SpanLimits());
 
     final parentSpan = tracer.startSpan('foo');
-    final context =
-        api.contextWithSpan(api.globalContextManager.active, parentSpan);
+    final context = api.contextWithSpan(api.active, parentSpan);
 
     final childSpan = tracer.startSpan('bar', context: context) as Span;
 
