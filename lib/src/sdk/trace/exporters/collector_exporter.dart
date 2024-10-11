@@ -47,11 +47,12 @@ class CollectorExporter implements sdk.SpanExporter {
   ) async {
     try {
       final body = pb_trace_service.ExportTraceServiceRequest(
-          resourceSpans: _spansToProtobuf(spans));
+              resourceSpans: _spansToProtobuf(spans))
+          .writeToBuffer();
       final headers = {'Content-Type': 'application/x-protobuf'}
         ..addAll(this.headers);
 
-      await client.post(uri, body: body.writeToBuffer(), headers: headers);
+      await client.post(uri, body: body, headers: headers);
     } catch (e) {
       _log.warning('Failed to export ${spans.length} spans.', e);
     }
