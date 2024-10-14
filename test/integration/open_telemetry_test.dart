@@ -114,13 +114,15 @@ void main() {
         sdk.InstrumentationScope('name', 'version', 'url://schema', []),
         sdk.SpanLimits());
     final spans = <Span>[];
+    const expectedKey = 'myKey';
+    const expectedValue = 'myValue';
 
     for (var i = 0; i < 5; i++) {
       await api.traceContext('asyncTrace', (context) async {
         spans.add(api.spanFromContext(context) as Span);
-      }, tracer: tracer);
+      }, attributes: [api.Attribute.fromString(expectedKey,expectedValue)], tracer: tracer);
     }
-
+      expect(spans[0].attributes.get(expectedKey), expectedValue);
     for (var i = 1; i < spans.length; i++) {
       expect(spans[1].endTime, isNotNull);
       expect(spans[i].startTime, greaterThan(spans[i - 1].startTime));

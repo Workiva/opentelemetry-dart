@@ -69,7 +69,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     api.Tracer? tracer,
     bool newRoot = false,
     api.SpanKind spanKind = api.SpanKind.internal,
-    List<api.SpanLink> spanLinks = const []}) async {
+    List<api.SpanLink> spanLinks = const [], List<api.Attribute> attributes = const[]}) async {
   context ??= api.globalContextManager.active;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
@@ -81,6 +81,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
   final span = tracer.startSpan(name,
       context: context, kind: spanKind, links: spanLinks);
   context = api.contextWithSpan(context, span);
+  span.setAttributes(attributes);
   try {
     // TODO: remove this check once `run` exists on context interface
     if (context is ZoneContext) {
