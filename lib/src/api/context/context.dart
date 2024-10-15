@@ -48,6 +48,11 @@ Zone zoneWithContext(Context context) {
 }
 
 @experimental
+Context contextFromZone({Zone? zone}) {
+  return (zone ?? Zone.current)[contextKey] ?? _rootContext;
+}
+
+@experimental
 Context get root {
   return _rootContext;
 }

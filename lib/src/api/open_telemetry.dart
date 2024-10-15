@@ -40,7 +40,7 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
 
 /// Records a span of the given [name] for the given function with a given
 /// [api.Tracer] and marks the span as errored if an exception occurs.
-@Deprecated('Will be removed in v0.19.0. Use [trace] instead')
+// TODO: @Deprecated('Will be removed in v0.20.0. Use [trace] instead')
 @experimental
 Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     {api.Context? context,
@@ -57,7 +57,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
 }
 
 /// Use [traceContextSync] instead of [traceContext] when [fn] is not an async function.
-@Deprecated('Will be removed in v0.19.0. Use [traceSync] instead')
+// TODO: @Deprecated('Will be removed in v0.20.0. Use [traceSync] instead')
 @experimental
 T traceContextSync<T>(String name, T Function(api.Context) fn,
     {api.Context? context,
@@ -76,6 +76,7 @@ T traceContextSync<T>(String name, T Function(api.Context) fn,
 /// Records a span of the given [name] for the given function with a given
 /// [api.Tracer] and marks the span as errored if an exception occurs.
 @experimental
+@Deprecated('Will be removed in v0.19.0. Use [traceContext] instead.')
 Future<T> trace<T>(String name, Future<T> Function() fn,
     {api.Context? context,
     api.Tracer? tracer,
@@ -107,6 +108,7 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
 
 /// Use [traceSync] instead of [trace] when [fn] is not an async function.
 @experimental
+@Deprecated('Will be removed in v0.19.0. Use [traceContextSync] instead.')
 T traceSync<T>(String name, T Function() fn,
     {api.Context? context,
     api.Tracer? tracer,
