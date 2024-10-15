@@ -81,7 +81,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
   final span = tracer.startSpan(name,
       context: context, kind: spanKind, links: spanLinks);
   context = api.contextWithSpan(context, span);
-  span.setAttributes(attributes);
+  
   try {
     // TODO: remove this check once `run` exists on context interface
     if (context is ZoneContext) {
@@ -94,6 +94,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
       ..recordException(e, stackTrace: s);
     rethrow;
   } finally {
+    span.setAttributes(attributes);
     span.end();
   }
 }
