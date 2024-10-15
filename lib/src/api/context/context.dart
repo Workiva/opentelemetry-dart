@@ -47,7 +47,13 @@ SpanContext spanContextFromContext(Context context) {
 
 @experimental
 Zone zoneWithContext(Context context) {
-  return Zone.current.fork(zoneValues: {contextKey: context});
+  return Zone.current.fork(zoneValues: {
+    contextKey: context,
+    contextStackKey: [
+      ...(Zone.current[contextStackKey] as List<ContextStackEntry>?) ??
+          rootStack
+    ]
+  });
 }
 
 @experimental

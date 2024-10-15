@@ -10,6 +10,7 @@ export 'src/api/context/context.dart'
         attach,
         Context,
         ContextKey,
+        contextFromZone,
         contextWithSpan,
         contextWithSpanContext,
         detach,
