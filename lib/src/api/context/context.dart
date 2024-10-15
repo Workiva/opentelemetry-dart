@@ -3,10 +3,13 @@
 
 import 'dart:async';
 
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 import '../../../api.dart';
 import '../trace/nonrecording_span.dart' show NonRecordingSpan;
+
+final Logger _log = Logger('opentelemetry');
 
 typedef ContextKey = Object;
 
@@ -83,13 +86,20 @@ bool detach(ContextToken token) {
       Zone.current[contextStackKey] ?? rootStack;
 
   final index = stack.indexWhere((c) => c.token == token);
-  final success = index == stack.length - 1;
+
+  // the expected context to detach is the last one in the stack
+  final match = index == stack.length - 1;
+  if (!match) {
+    _log.warning('unexpected (mismatched) token given to detach');
+  }
+
+  // if the context associated with the given token exists, remove it regardless
+  // of mismatch
   if (index != -1) {
     stack.removeAt(index);
   }
 
-  // TODO: log attach/detach mismatch warning
-  return success;
+  return match;
 }
 
 class Context {
