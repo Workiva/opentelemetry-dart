@@ -95,7 +95,12 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
       context: context, kind: spanKind, links: spanLinks);
   context = api.contextWithSpan(context, span);
   try {
-    return await api.zoneWithContext(context).run(fn);
+    return await api.zoneWithContext(context).run(() async {
+      final token = api.attach(api.contextFromZone());
+      final ret = await fn();
+      api.detach(token);
+      return ret;
+    });
   } catch (e, s) {
     span
       ..setStatus(api.StatusCode.error, e.toString())
@@ -127,7 +132,12 @@ T traceSync<T>(String name, T Function() fn,
       context: context, kind: spanKind, links: spanLinks);
   context = api.contextWithSpan(context, span);
   try {
-    final r = api.zoneWithContext(context).run(fn);
+    final r = api.zoneWithContext(context).run(() {
+      final token = api.attach(api.contextFromZone());
+      final ret = fn();
+      api.detach(token);
+      return ret;
+    });
     if (r is Future) {
       throw ArgumentError.value(fn, 'fn',
           'Use traceSync to trace functions that do not return a [Future].');
