@@ -11,13 +11,15 @@ import '../trace/nonrecording_span.dart' show NonRecordingSpan;
 
 final Logger _log = Logger('opentelemetry');
 
-typedef ContextKey = Object;
+@sealed
+class ContextKey {}
 
 final ContextKey contextKey = ContextKey();
 final ContextKey contextStackKey = ContextKey();
 final ContextKey spanKey = ContextKey();
 
-typedef ContextToken = Object;
+@sealed
+class ContextToken {}
 
 class ContextStackEntry {
   final Context context;
@@ -49,10 +51,7 @@ SpanContext spanContextFromContext(Context context) {
 Zone zoneWithContext(Context context) {
   return Zone.current.fork(zoneValues: {
     contextKey: context,
-    contextStackKey: [
-      ...(Zone.current[contextStackKey] as List<ContextStackEntry>?) ??
-          rootStack
-    ]
+    contextStackKey: <ContextStackEntry>[],
   });
 }
 
@@ -71,9 +70,31 @@ Context get active {
   return _activeAttachedContext ?? _activeZoneContext ?? _rootContext;
 }
 
+// Returns the latest non-empty context stack, or the root stack if no context
+// stack is found.
+List<ContextStackEntry> get _activeAttachedContextStack {
+  var zone = Zone.current;
+  List<ContextStackEntry>? stack = zone[contextStackKey];
+
+  // no zone in the current hierarchy has a context stack, return the root stack
+  if (stack == null) {
+    return rootStack;
+  }
+
+  // walk up the zone tree to find the first non-empty context stack
+  while (stack!.isEmpty) {
+    if (zone.parent == null) {
+      return rootStack;
+    }
+
+    zone = zone.parent!;
+    stack = zone[contextStackKey];
+  }
+  return stack;
+}
+
 Context? get _activeAttachedContext {
-  final List<ContextStackEntry> stack =
-      Zone.current[contextStackKey] ?? rootStack;
+  final stack = _activeAttachedContextStack;
   return stack.isEmpty ? null : stack.last.context;
 }
 
@@ -94,7 +115,7 @@ bool detach(ContextToken token) {
   final index = stack.indexWhere((c) => c.token == token);
 
   // the expected context to detach is the last one in the stack
-  final match = index == stack.length - 1;
+  final match = index != -1 && index == stack.length - 1;
   if (!match) {
     _log.warning('unexpected (mismatched) token given to detach');
   }

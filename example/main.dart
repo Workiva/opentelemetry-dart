@@ -39,9 +39,9 @@ void main() async {
   // A new context can be created in order to propagate context manually.
   context = contextWithSpan(context, parentSpan);
 
-  // The [trace] and [traceSync] functions will automatically propagate
-  // context, capture errors, and end the span.
-  await trace('child-span', () {
+  // The [traceContext] and [traceContextSync] functions will automatically
+  // propagate context, capture errors, and end the span.
+  await traceContext('child-span', (_) {
     tracer.startSpan('grandchild-span').end();
     return Future.delayed(Duration(milliseconds: 100));
   }, context: context, tracer: tracer);
