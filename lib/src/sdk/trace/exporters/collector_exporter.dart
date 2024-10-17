@@ -29,7 +29,7 @@ class CollectorExporter implements sdk.SpanExporter {
       : client = httpClient ?? http.Client();
 
   @override
-  void export(List<sdk.ReadOnlySpan> spans) {
+  void export(List<sdk.ReadOnlySpan> spans) async {
     if (_isShutdown) {
       return;
     }
@@ -38,7 +38,7 @@ class CollectorExporter implements sdk.SpanExporter {
       return;
     }
 
-    unawaited(_send(uri, spans));
+    await _send(uri, spans);
   }
 
   Future<void> _send(
@@ -48,13 +48,14 @@ class CollectorExporter implements sdk.SpanExporter {
     const maxRetries = 3;
     const retryDelay = Duration(seconds: 1);
     var retries = 0;
-    while (retries < maxRetries) {
-      try {
-        final body = pb_trace_service.ExportTraceServiceRequest(
-            resourceSpans: _spansToProtobuf(spans));
-        final headers = {'Content-Type': 'application/x-protobuf'}
-          ..addAll(this.headers);
 
+    final body = pb_trace_service.ExportTraceServiceRequest(
+        resourceSpans: _spansToProtobuf(spans));
+    final headers = {'Content-Type': 'application/x-protobuf'}
+      ..addAll(this.headers);
+
+    while (retries++ < maxRetries) {
+      try {
         final response = await client.post(uri,
             body: body.writeToBuffer(), headers: headers);
         if (response.statusCode == 200) {
@@ -65,10 +66,7 @@ class CollectorExporter implements sdk.SpanExporter {
       } catch (e, statckTrace) {
         _log.warning('Failed to export ${spans.length} spans.', e, statckTrace);
       }
-      retries++;
-      if (retries < maxRetries) {
-        await Future.delayed(retryDelay);
-      }
+      await Future.delayed(retryDelay);
     }
     _log.severe(
         'Failed to export ${spans.length} spans after $maxRetries retries');
