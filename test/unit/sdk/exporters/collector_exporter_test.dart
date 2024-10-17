@@ -4,6 +4,7 @@
 @TestOn('vm')
 import 'dart:typed_data';
 
+import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/api.dart' as api;
@@ -24,6 +25,7 @@ import '../../mocks.dart';
 
 void main() {
   late MockHttpClient mockClient;
+
   final uri =
       Uri.parse('https://example.test/s/opentelemetry-collector/v1/traces');
 
@@ -205,10 +207,11 @@ void main() {
 
     verify(() => mockClient.post(uri,
         body: anything,
-        headers: {'Content-Type': 'application/x-protobuf'})).called(1);
+        headers: {'Content-Type': 'application/x-protobuf'})).called(3);
 
-    expect(records, hasLength(1));
+    expect(records, hasLength(4));
     expect(records[0].level, equals(Level.WARNING));
+    expect(records[3].level, equals(Level.SEVERE));
   });
 
   test('does not send spans when shutdown', () {
@@ -293,5 +296,34 @@ void main() {
 
     verify(() => mockClient.post(uri, body: anything, headers: expectedHeaders))
         .called(1);
+  });
+
+  test('client not return 200', () {
+    final span = Span(
+        'foo',
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+            api.TraceFlags.none, api.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource([]),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
+      ..end();
+
+    when(() => mockClient.post(uri,
+            body: any(named: 'body'),
+            headers: {'Content-Type': 'application/x-protobuf'}))
+        .thenAnswer((_) async => Response('Service unAvailable', 403));
+
+    final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
+    sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+
+    verify(() => mockClient.post(uri, body: anything, headers: expectedHeaders))
+        .called(3);
   });
 }

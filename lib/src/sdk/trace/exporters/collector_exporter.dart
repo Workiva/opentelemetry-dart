@@ -45,16 +45,33 @@ class CollectorExporter implements sdk.SpanExporter {
     Uri uri,
     List<sdk.ReadOnlySpan> spans,
   ) async {
-    try {
-      final body = pb_trace_service.ExportTraceServiceRequest(
-          resourceSpans: _spansToProtobuf(spans));
-      final headers = {'Content-Type': 'application/x-protobuf'}
-        ..addAll(this.headers);
+    const maxRetries = 3;
+    const retryDelay = Duration(seconds: 1);
+    var retries = 0;
+    while (retries < maxRetries) {
+      try {
+        final body = pb_trace_service.ExportTraceServiceRequest(
+            resourceSpans: _spansToProtobuf(spans));
+        final headers = {'Content-Type': 'application/x-protobuf'}
+          ..addAll(this.headers);
 
-      await client.post(uri, body: body.writeToBuffer(), headers: headers);
-    } catch (e) {
-      _log.warning('Failed to export ${spans.length} spans.', e);
+        final response = await client.post(uri,
+            body: body.writeToBuffer(), headers: headers);
+        if (response.statusCode == 200) {
+          return;
+        }
+        _log.warning('Failed to export ${spans.length} spans. '
+            'HTTP status code: ${response.statusCode}');
+      } catch (e, statckTrace) {
+        _log.warning('Failed to export ${spans.length} spans.', e, statckTrace);
+      }
+      retries++;
+      if (retries < maxRetries) {
+        await Future.delayed(retryDelay);
+      }
     }
+    _log.severe(
+        'Failed to export ${spans.length} spans after $maxRetries retries');
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
