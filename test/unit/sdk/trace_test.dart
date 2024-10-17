@@ -8,28 +8,30 @@ import 'package:test/test.dart';
 
 void main() {
   test('traceSync returns value', () {
-    final value = traceSync('foo', () => 'bar');
+    final value = traceContextSync('foo', (_) => 'bar');
     expect(value, 'bar');
   });
 
   test('traceSync throws exception', () {
     final bang = Exception('bang!');
-    expect(() => traceSync('foo', () => throw bang), throwsA(bang));
+    expect(() => traceContextSync('foo', (_) => throw bang), throwsA(bang));
   });
 
   test('traceSync wants you to use trace instead', () {
-    expect(() => traceSync('foo', () async => ''), throwsArgumentError);
-    expect(() => traceSync('foo', Future.value), throwsArgumentError);
+    expect(() => traceContextSync('foo', (_) async => ''), throwsArgumentError);
+    expect(() => traceContextSync('foo', Future.value), throwsArgumentError);
   });
 
   test('trace returns future value', () async {
-    await expectLater(trace('foo', () async => 'bar'), completion('bar'));
     await expectLater(
-        trace('foo', () => Future.value('baz')), completion('baz'));
+        traceContext('foo', (_) async => 'bar'), completion('bar'));
+    await expectLater(
+        traceContext('foo', (_) => Future.value('baz')), completion('baz'));
   });
 
   test('trace throws future error', () async {
     final bang = Exception('bang!');
-    await expectLater(trace('foo', () async => throw bang), throwsA(bang));
+    await expectLater(
+        traceContext('foo', (_) async => throw bang), throwsA(bang));
   });
 }

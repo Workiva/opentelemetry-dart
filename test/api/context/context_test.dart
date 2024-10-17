@@ -3,6 +3,8 @@
 
 @TestOn('vm')
 
+import 'dart:async';
+
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart';
@@ -72,14 +74,48 @@ void main() {
     });
 
     test('returns zone context', () {
-      final context = api.contextWithSpan(api.active, testSpan);
+      final context = api.root.setValue(api.ContextKey(), 'c');
       api.zoneWithContext(context).run(() => expect(api.active, same(context)));
     });
 
-    test('returns attached context', () {
-      final context = api.contextWithSpan(api.active, testSpan);
-      api.attach(context);
+    test('returns root stack attached context', () {
+      final context = api.root.setValue(api.ContextKey(), 'c');
+      final token = api.attach(context);
       expect(api.active, same(context));
+      api.detach(token);
+    });
+
+    test('returns non-root stack attached context', () {
+      final zone = api.root.setValue(api.ContextKey(), 'z');
+      api.zoneWithContext(zone).run(() {
+        final attached = api.root.setValue(api.ContextKey(), 'a');
+        final token = api.attach(attached);
+        expect(api.active, same(attached));
+        api.detach(token);
+      });
+    });
+
+    test('returns attached context over zone context', () {
+      final attached = api.root.setValue(api.ContextKey(), 'foo');
+      final token = api.attach(attached);
+
+      final zone = api.root.setValue(api.ContextKey(), 'bar');
+      api.zoneWithContext(zone).run(() {
+        expect(api.active, same(attached));
+      });
+
+      api.detach(token);
+    });
+
+    test('returns zone context after detach', () {
+      final attached = api.root.setValue(api.ContextKey(), 'foo');
+      final token = api.attach(attached);
+
+      final zone = api.root.setValue(api.ContextKey(), 'bar');
+      api.zoneWithContext(zone).run(() {
+        api.detach(token);
+        expect(api.active, same(zone));
+      });
     });
   });
 
@@ -90,9 +126,68 @@ void main() {
     });
 
     test('returns false on mismatch', () {
-      final token = api.attach(api.active);
-      api.attach(api.active);
-      expect(api.detach(token), isFalse);
+      final token1 = api.attach(api.active);
+      final token2 = api.attach(api.active);
+      expect(api.detach(token1), isFalse);
+      expect(api.detach(token2), isTrue);
+    });
+
+    test('returns true on match in zone', () {
+      final token1 = api.attach(api.active);
+      api.zoneWithContext(api.active).run(() {
+        expect(api.detach(token1), isTrue);
+      });
+
+      final token2 = api.attach(api.active);
+      Zone.current.fork().run(() {
+        expect(api.detach(token2), isTrue);
+      });
+    });
+
+    test('returns true on match in nested zone', () {
+      final token1 = api.attach(api.active);
+      api.zoneWithContext(api.active).run(() {
+        api.zoneWithContext(api.active).run(() {
+          expect(api.detach(token1), isTrue);
+        });
+      });
+
+      final token2 = api.attach(api.active);
+      api.zoneWithContext(api.active).run(() {
+        Zone.current.fork().run(() {
+          expect(api.detach(token2), isTrue);
+        });
+      });
+
+      final token3 = api.attach(api.active);
+      Zone.current.fork().run(() {
+        api.zoneWithContext(api.active).run(() {
+          expect(api.detach(token3), isTrue);
+        });
+      });
+
+      final token4 = api.attach(api.active);
+      Zone.current.fork().run(() {
+        Zone.current.fork().run(() {
+          expect(api.detach(token4), isTrue);
+        });
+      });
+    });
+
+    test('returns false on mismatch in zone', () {
+      final token1 = api.attach(api.active);
+      api.zoneWithContext(api.active).run(() {
+        final token2 = api.attach(api.active);
+        expect(api.detach(token1), isFalse);
+        expect(api.detach(token2), isTrue);
+      });
+
+      final token3 = api.attach(api.active);
+      Zone.current.fork().run(() {
+        final token4 = api.attach(api.active);
+        expect(api.detach(token3), isFalse);
+        expect(api.detach(token4), isTrue);
+      });
     });
   });
 }

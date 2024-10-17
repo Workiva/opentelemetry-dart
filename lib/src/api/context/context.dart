@@ -14,9 +14,9 @@ final Logger _log = Logger('opentelemetry');
 @sealed
 class ContextKey {}
 
-final ContextKey contextKey = ContextKey();
-final ContextKey contextStackKey = ContextKey();
-final ContextKey spanKey = ContextKey();
+final ContextKey _contextKey = ContextKey();
+final ContextKey _contextStackKey = ContextKey();
+final ContextKey _spanKey = ContextKey();
 
 @sealed
 class ContextToken {}
@@ -29,10 +29,10 @@ class ContextStackEntry {
 }
 
 final _rootContext = Context._empty();
-final rootStack = <ContextStackEntry>[];
+final _rootStack = <ContextStackEntry>[];
 
 Context contextWithSpan(Context parent, Span span) {
-  return parent.setValue(spanKey, span);
+  return parent.setValue(_spanKey, span);
 }
 
 Context contextWithSpanContext(Context parent, SpanContext spanContext) {
@@ -40,7 +40,7 @@ Context contextWithSpanContext(Context parent, SpanContext spanContext) {
 }
 
 Span spanFromContext(Context context) {
-  return context.getValue(spanKey) ?? NonRecordingSpan(SpanContext.invalid());
+  return context.getValue(_spanKey) ?? NonRecordingSpan(SpanContext.invalid());
 }
 
 SpanContext spanContextFromContext(Context context) {
@@ -50,47 +50,52 @@ SpanContext spanContextFromContext(Context context) {
 @experimental
 Zone zoneWithContext(Context context) {
   return Zone.current.fork(zoneValues: {
-    contextKey: context,
-    contextStackKey: <ContextStackEntry>[],
+    _contextKey: context,
+    _contextStackKey: <ContextStackEntry>[],
   });
 }
 
 @experimental
 Context contextFromZone({Zone? zone}) {
-  return (zone ?? Zone.current)[contextKey] ?? _rootContext;
+  return (zone ?? Zone.current)[_contextKey] ?? _rootContext;
 }
 
+/// The root context which all other contexts are derived from.
+///
+/// Generally, the root [Context] should not be used directly. Instead, use
+/// [active] to operate on the current [Context].
 @experimental
 Context get root {
   return _rootContext;
 }
 
+/// The active context.
+///
+/// The active context is the latest attached context, if one exists, otherwise
+/// the latest zone context, if one exists, otherwise the root context.
 @experimental
 Context get active {
   return _activeAttachedContext ?? _activeZoneContext ?? _rootContext;
 }
 
-// Returns the latest non-empty context stack, or the root stack if no context
-// stack is found.
+/// Returns the latest non-empty context stack, or the root stack if no context
+/// stack is found.
 List<ContextStackEntry> get _activeAttachedContextStack {
   var zone = Zone.current;
-  List<ContextStackEntry>? stack = zone[contextStackKey];
-
-  // no zone in the current hierarchy has a context stack, return the root stack
-  if (stack == null) {
-    return rootStack;
-  }
+  List<ContextStackEntry>? stack = zone[_contextStackKey];
 
   // walk up the zone tree to find the first non-empty context stack
-  while (stack!.isEmpty) {
+  while (stack != null && stack.isEmpty) {
     if (zone.parent == null) {
-      return rootStack;
+      return _rootStack;
     }
 
     zone = zone.parent!;
-    stack = zone[contextStackKey];
+    stack = zone[_contextStackKey];
   }
-  return stack;
+
+  // return the stack if found, else return the root stack
+  return stack ?? _rootStack;
 }
 
 Context? get _activeAttachedContext {
@@ -99,34 +104,73 @@ Context? get _activeAttachedContext {
 }
 
 Context? get _activeZoneContext {
-  return Zone.current[contextKey];
+  return Zone.current[_contextKey];
 }
 
+/// Attaches the given [Context] making it the active [Context] for the current
+/// [Zone] and all child [Zone]s and returns a [ContextToken] that must be used
+/// to detach the [Context].
+///
+/// When a [Context] is attached, it becomes active and overrides any [Context]
+/// that may otherwise be visible within a [Zone]. For example, if a [Context]
+/// is attached while [active] is called within a [Zone] created by
+/// [zoneWithContext], [active] will return the attached [Context] and not the
+/// [Context] given to [zoneWithContext]. Once the attached [Context] is
+/// detached, [active] will return the [Context] given to [zoneWithContext].
+@experimental
 ContextToken attach(Context context) {
   final entry = ContextStackEntry(context);
-  (Zone.current[contextStackKey] ?? rootStack).add(entry);
+  (Zone.current[_contextStackKey] ?? _rootStack).add(entry);
   return entry.token;
 }
 
+/// Detaches the [Context] associated with the given [ContextToken] from their
+/// associated [Zone].
+///
+/// Returns `true` if the given [ContextToken] is associated with the latest,
+/// expected, attached [Context], `false` otherwise.
+///
+/// If the [ContextToken] is not found in the latest stack, detach will walk up
+/// the [Zone] tree attempting to find and detach the associated [Context].
+///
+/// Regardless of whether the [Context] is found, if the given [ContextToken] is
+/// not expected, a warning will be logged.
+@experimental
 bool detach(ContextToken token) {
-  final List<ContextStackEntry> stack =
-      Zone.current[contextStackKey] ?? rootStack;
+  final stack = _activeAttachedContextStack;
 
   final index = stack.indexWhere((c) => c.token == token);
 
-  // the expected context to detach is the last one in the stack
+  // the expected context to detach is the latest entry of the latest stack
   final match = index != -1 && index == stack.length - 1;
   if (!match) {
     _log.warning('unexpected (mismatched) token given to detach');
   }
 
-  // if the context associated with the given token exists, remove it regardless
-  // of mismatch
   if (index != -1) {
+    // context found in the latest stack, possibly the latest entry
     stack.removeAt(index);
+    return match;
   }
 
-  return match;
+  // at this point, the token was not in the latest stack, but it might be in a
+  // stack held by a parent zone
+
+  // walk up the zone tree checking for the token in each zone's context stack
+  Zone? zone = Zone.current;
+  do {
+    final stack = zone?[_contextStackKey] as List<ContextStackEntry>?;
+    final index = stack?.indexWhere((c) => c.token == token);
+    if (index != null && index != -1) {
+      // token found, remove it, but return false since it wasn't expected
+      stack!.removeAt(index);
+      return false;
+    }
+    zone = zone?.parent;
+  } while (zone != null);
+
+  // the token was nowhere to be found, a context was not detached
+  return false;
 }
 
 class Context {

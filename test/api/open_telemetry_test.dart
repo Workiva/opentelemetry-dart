@@ -12,8 +12,8 @@ import 'package:opentelemetry/api.dart'
         active,
         contextWithSpan,
         spanFromContext,
-        trace,
-        traceSync;
+        traceContext,
+        traceContextSync;
 import 'package:opentelemetry/sdk.dart'
     show
         AlwaysOnSampler,
@@ -36,7 +36,7 @@ void main() {
       SpanLimits());
 
   test('trace starts and ends span', () async {
-    final span = await trace('span', () async {
+    final span = await traceContext('span', (_) async {
       return spanFromContext(active) as Span;
     }, tracer: tracer);
 
@@ -45,7 +45,7 @@ void main() {
   });
 
   test('traceSync starts and ends span', () {
-    final span = traceSync('span', () {
+    final span = traceContextSync('span', (_) {
       return spanFromContext(active) as Span;
     }, tracer: tracer);
 
@@ -56,7 +56,7 @@ void main() {
   test('trace propagates context', () {
     final parent = tracer.startSpan('parent')..end();
 
-    trace('child', () async {
+    traceContext('child', (_) async {
       final child = spanFromContext(active);
 
       expect(child.parentSpanId.toString(),
@@ -67,7 +67,7 @@ void main() {
   test('traceSync propagates context', () {
     final parent = tracer.startSpan('parent')..end();
 
-    traceSync('child', () {
+    traceContextSync('span', (_) {
       final child = spanFromContext(active);
 
       expect(child.parentSpanId.toString(),
@@ -79,7 +79,7 @@ void main() {
     late Span span;
     var caught = false;
     try {
-      await trace('span', () async {
+      await traceContext('span', (_) async {
         span = spanFromContext(active) as Span;
         throw Exception('Bang!');
       }, tracer: tracer);
@@ -105,7 +105,7 @@ void main() {
     late Span span;
     var caught = false;
     try {
-      traceSync('span', () {
+      traceContextSync('span', (_) {
         span = spanFromContext(active) as Span;
         throw Exception('Bang!');
       }, tracer: tracer);
