@@ -29,7 +29,7 @@ class CollectorExporter implements sdk.SpanExporter {
       : client = httpClient ?? http.Client();
 
   @override
-  void export(List<sdk.ReadOnlySpan> spans) {
+  void export(List<sdk.ReadOnlySpan> spans) async {
     if (_isShutdown) {
       return;
     }
@@ -38,23 +38,38 @@ class CollectorExporter implements sdk.SpanExporter {
       return;
     }
 
-    unawaited(_send(uri, spans));
+    await _send(uri, spans);
   }
 
   Future<void> _send(
     Uri uri,
     List<sdk.ReadOnlySpan> spans,
   ) async {
-    try {
-      final body = pb_trace_service.ExportTraceServiceRequest(
-          resourceSpans: _spansToProtobuf(spans));
-      final headers = {'Content-Type': 'application/x-protobuf'}
-        ..addAll(this.headers);
+    const maxRetries = 3;
+    const retryDelay = Duration(seconds: 1);
+    var retries = 0;
 
-      await client.post(uri, body: body.writeToBuffer(), headers: headers);
-    } catch (e) {
-      _log.warning('Failed to export ${spans.length} spans.', e);
+    final body = pb_trace_service.ExportTraceServiceRequest(
+        resourceSpans: _spansToProtobuf(spans));
+    final headers = {'Content-Type': 'application/x-protobuf'}
+      ..addAll(this.headers);
+
+    while (retries++ < maxRetries) {
+      try {
+        final response = await client.post(uri,
+            body: body.writeToBuffer(), headers: headers);
+        if (response.statusCode == 200) {
+          return;
+        }
+        _log.warning('Failed to export ${spans.length} spans. '
+            'HTTP status code: ${response.statusCode}');
+      } catch (e, statckTrace) {
+        _log.warning('Failed to export ${spans.length} spans.', e, statckTrace);
+      }
+      await Future.delayed(retryDelay);
     }
+    _log.severe(
+        'Failed to export ${spans.length} spans after $maxRetries retries');
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
