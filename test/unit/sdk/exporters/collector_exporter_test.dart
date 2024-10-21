@@ -321,7 +321,7 @@ void main() {
       expect(records[3].level, equals(Level.SEVERE));
     });
 
-    test('client not return 200', () async {
+    test('client not return 200, retryable', () async {
       final span = Span(
           'foo',
           api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
@@ -341,7 +341,7 @@ void main() {
       when(() => mockClient.post(uri,
               body: any(named: 'body'),
               headers: {'Content-Type': 'application/x-protobuf'}))
-          .thenAnswer((_) async => Response('Service unAvailable', 403));
+          .thenAnswer((_) async => Response('Service unAvailable', 503));
 
       final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
       await sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
@@ -349,6 +349,36 @@ void main() {
       verify(() =>
               mockClient.post(uri, body: anything, headers: expectedHeaders))
           .called(3);
+    });
+
+    test('client not return 200, nonRetryable', () async {
+      final span = Span(
+          'foo',
+          api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
+              api.TraceFlags.none, api.TraceState.empty()),
+          api.SpanId([4, 5, 6]),
+          [],
+          sdk.DateTimeTimeProvider(),
+          sdk.Resource([]),
+          sdk.InstrumentationScope(
+              'library_name', 'library_version', 'url://schema', []),
+          api.SpanKind.internal,
+          [],
+          sdk.SpanLimits(),
+          sdk.DateTimeTimeProvider().now)
+        ..end();
+
+      when(() => mockClient.post(uri,
+              body: any(named: 'body'),
+              headers: {'Content-Type': 'application/x-protobuf'}))
+          .thenAnswer((_) async => Response('Service unAvailable', 400));
+
+      final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
+      await sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+
+      verify(() =>
+              mockClient.post(uri, body: anything, headers: expectedHeaders))
+          .called(1);
     });
   });
 }

@@ -30,7 +30,6 @@ class CollectorExporter implements sdk.SpanExporter {
 
   @override
   Future<void> export(List<sdk.ReadOnlySpan> spans) async {
-    print('export func => _isShutdown: $_isShutdown');
     if (_isShutdown) {
       return;
     }
@@ -48,6 +47,7 @@ class CollectorExporter implements sdk.SpanExporter {
   ) async {
     const maxRetries = 3;
     var retries = 0;
+    const valid_retry_codes = [429, 408, 500, 502, 503, 504];
 
     final body = pb_trace_service.ExportTraceServiceRequest(
         resourceSpans: _spansToProtobuf(spans));
@@ -61,12 +61,17 @@ class CollectorExporter implements sdk.SpanExporter {
         if (response.statusCode == 200) {
           return;
         }
+        // If the response is not 200, log a warning
         _log.warning('Failed to export ${spans.length} spans. '
             'HTTP status code: ${response.statusCode}');
+        // If the response is not a valid retry code, do not retry
+        if (!valid_retry_codes.contains(response.statusCode)) {
+          return;
+        }
       } catch (e) {
         _log.warning('Failed to export ${spans.length} spans. $e');
       }
-      //await Future.delayed(Duration(seconds: retries));
+      await Future.delayed(Duration(seconds: retries));
     }
     _log.severe(
         'Failed to export ${spans.length} spans after $maxRetries retries');
@@ -260,6 +265,5 @@ class CollectorExporter implements sdk.SpanExporter {
   void shutdown() {
     _isShutdown = true;
     client.close();
-    print('shutdown() func => _isShutdown: $_isShutdown');
   }
 }
