@@ -40,7 +40,7 @@ void main() {
       reset(mockClient);
     });
 
-    test('sends spans', () async {
+    test('sends spans', () {
       final resource =
           sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
       final instrumentationLibrary = sdk.InstrumentationScope(
@@ -85,8 +85,7 @@ void main() {
             attributes: [api.Attribute.fromString('foo', 'bar')])
         ..end();
 
-      await sdk.CollectorExporter(uri, httpClient: mockClient)
-          .export([span1, span2]);
+      sdk.CollectorExporter(uri, httpClient: mockClient).export([span1, span2]);
 
       final expectedBody =
           pb_trace_service.ExportTraceServiceRequest(resourceSpans: [
@@ -199,10 +198,9 @@ void main() {
           sdk.SpanLimits(),
           sdk.DateTimeTimeProvider().now)
         ..end();
-      final exporter = sdk.CollectorExporter(uri, httpClient: mockClient);
-      // ignore: cascade_invocations
-      exporter.shutdown();
-      await exporter.export([span]);
+      sdk.CollectorExporter(uri, httpClient: mockClient)
+        ..shutdown()
+        ..export([span]);
 
       verify(() => mockClient.close()).called(1);
       verifyNever(() => mockClient.post(uri,
@@ -235,7 +233,7 @@ void main() {
         ...suppliedHeaders,
       };
 
-      await sdk.CollectorExporter(uri,
+      sdk.CollectorExporter(uri,
               httpClient: mockClient, headers: suppliedHeaders)
           .export([span]);
 
@@ -263,7 +261,7 @@ void main() {
 
       final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
 
-      await sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+      sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
 
       verify(() =>
               mockClient.post(uri, body: anything, headers: expectedHeaders))
@@ -273,6 +271,7 @@ void main() {
 
   group('Send spans with failure - ', () {
     late MockHttpClient mockClient;
+    final waitSeconds = Duration(seconds: 10);
     setUp(() {
       mockClient = MockHttpClient();
       when(() => mockClient.post(uri,
@@ -283,7 +282,7 @@ void main() {
     tearDown(() {
       reset(mockClient);
     });
-    test('shows a warning log when export failed', () async {
+    test('shows a warning log when export has exceptions', () async {
       final span = Span(
           'foo',
           api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([7, 8, 9]),
@@ -307,18 +306,15 @@ void main() {
 
       final records = <LogRecord>[];
       final sub = Logger.root.onRecord.listen(records.add);
-      await sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+      sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+      await Future.delayed(Duration(seconds: 5));
       await sub.cancel();
-
       verify(() => mockClient.post(uri,
           body: anything,
-          headers: {'Content-Type': 'application/x-protobuf'})).called(3);
+          headers: {'Content-Type': 'application/x-protobuf'})).called(1);
 
-      expect(records, hasLength(4));
+      expect(records, hasLength(1));
       expect(records[0].level, equals(Level.WARNING));
-      expect(records[1].level, equals(Level.WARNING));
-      expect(records[2].level, equals(Level.WARNING));
-      expect(records[3].level, equals(Level.SEVERE));
     });
 
     test('client not return 200, retryable', () async {
@@ -344,7 +340,8 @@ void main() {
           .thenAnswer((_) async => Response('Service unAvailable', 503));
 
       final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
-      await sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+      sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+      await Future.delayed(waitSeconds);
 
       verify(() =>
               mockClient.post(uri, body: anything, headers: expectedHeaders))
@@ -374,7 +371,8 @@ void main() {
           .thenAnswer((_) async => Response('Service unAvailable', 400));
 
       final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
-      await sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+      sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
+      await Future.delayed(waitSeconds);
 
       verify(() =>
               mockClient.post(uri, body: anything, headers: expectedHeaders))

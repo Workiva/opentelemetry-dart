@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,7 @@ class CollectorExporter implements sdk.SpanExporter {
       : client = httpClient ?? http.Client();
 
   @override
-  Future<void> export(List<sdk.ReadOnlySpan> spans) async {
+  void export(List<sdk.ReadOnlySpan> spans) {
     if (_isShutdown) {
       return;
     }
@@ -38,7 +39,7 @@ class CollectorExporter implements sdk.SpanExporter {
       return;
     }
 
-    await _send(uri, spans);
+    unawaited(_send(uri, spans));
   }
 
   Future<void> _send(
@@ -47,7 +48,8 @@ class CollectorExporter implements sdk.SpanExporter {
   ) async {
     const maxRetries = 3;
     var retries = 0;
-    const valid_retry_codes = [429, 408, 500, 502, 503, 504];
+    // Retryable status from the spec: https://opentelemetry.io/docs/specs/otlp/#failures-1
+    const valid_retry_codes = [429, 502, 503, 504];
 
     final body = pb_trace_service.ExportTraceServiceRequest(
         resourceSpans: _spansToProtobuf(spans));
@@ -70,11 +72,21 @@ class CollectorExporter implements sdk.SpanExporter {
         }
       } catch (e) {
         _log.warning('Failed to export ${spans.length} spans. $e');
+        return;
       }
-      await Future.delayed(Duration(seconds: retries));
+      // Exponential backoff with jitter
+      final delay = calculateJitteredDelay(retries, Duration(seconds: 1));
+      await Future.delayed(delay);
     }
     _log.severe(
         'Failed to export ${spans.length} spans after $maxRetries retries');
+  }
+
+  Duration calculateJitteredDelay(int retries, Duration baseDelay) {
+    final random = Random();
+    final jitter = random.nextDouble() * baseDelay.inMilliseconds;
+    return Duration(
+        milliseconds: baseDelay.inMilliseconds + jitter.toInt() * retries);
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
