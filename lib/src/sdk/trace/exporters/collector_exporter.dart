@@ -56,7 +56,7 @@ class CollectorExporter implements sdk.SpanExporter {
     final headers = {'Content-Type': 'application/x-protobuf'}
       ..addAll(this.headers);
 
-    while (retries++ < maxRetries) {
+    while (retries < maxRetries) {
       try {
         final response = await client.post(uri,
             body: body.writeToBuffer(), headers: headers);
@@ -75,7 +75,8 @@ class CollectorExporter implements sdk.SpanExporter {
         return;
       }
       // Exponential backoff with jitter
-      final delay = calculateJitteredDelay(retries, Duration(seconds: 1));
+      final delay =
+          calculateJitteredDelay(retries++, Duration(milliseconds: 100));
       await Future.delayed(delay);
     }
     _log.severe(
@@ -83,10 +84,9 @@ class CollectorExporter implements sdk.SpanExporter {
   }
 
   Duration calculateJitteredDelay(int retries, Duration baseDelay) {
-    final random = Random();
-    final jitter = random.nextDouble() * baseDelay.inMilliseconds;
-    return Duration(
-        milliseconds: baseDelay.inMilliseconds + jitter.toInt() * retries);
+    final delay = baseDelay.inMilliseconds * pow(2, retries);
+    final jitter = Random().nextDouble() * delay;
+    return Duration(milliseconds: (delay + jitter).toInt());
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.

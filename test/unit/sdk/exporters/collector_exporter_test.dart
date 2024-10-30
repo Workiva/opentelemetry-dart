@@ -271,7 +271,7 @@ void main() {
 
   group('Send spans with failure - ', () {
     late MockHttpClient mockClient;
-    final waitSeconds = Duration(seconds: 10);
+    final waitSeconds = Duration(seconds: 2);
     setUp(() {
       mockClient = MockHttpClient();
       when(() => mockClient.post(uri,
@@ -307,7 +307,7 @@ void main() {
       final records = <LogRecord>[];
       final sub = Logger.root.onRecord.listen(records.add);
       sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(waitSeconds);
       await sub.cancel();
       verify(() => mockClient.post(uri,
           body: anything,
