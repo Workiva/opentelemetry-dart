@@ -6,15 +6,11 @@ export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
 export 'src/api/context/context.dart'
     show
-        active,
-        attach,
         Context,
         ContextKey,
         contextFromZone,
         contextWithSpan,
         contextWithSpanContext,
-        detach,
-        root,
         spanContextFromContext,
         spanFromContext,
         zoneWithContext;

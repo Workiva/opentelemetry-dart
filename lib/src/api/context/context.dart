@@ -11,7 +11,11 @@ import '../trace/nonrecording_span.dart' show NonRecordingSpan;
 
 final Logger _log = Logger('opentelemetry');
 
-@sealed
+/// A key used to set and get values from a [Context].
+///
+/// Note: This class is not intended to be extended or implemented. The class
+/// will be marked as sealed in 0.19.0.
+// TODO: @sealed
 class ContextKey {}
 
 final ContextKey _contextKey = ContextKey();
