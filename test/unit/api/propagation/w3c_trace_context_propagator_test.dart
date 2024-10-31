@@ -38,8 +38,8 @@ void main() {
           '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01')
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
-    final resultContext =
-        testPropagator.extract(api.active, testCarrier, TestingExtractor());
+    final resultContext = testPropagator.extract(
+        api.Context.current, testCarrier, TestingExtractor());
     final resultSpan = api.spanFromContext(resultContext);
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
@@ -63,8 +63,8 @@ void main() {
           '00-00000000000000000000000000000000-0000000000000000-ff')
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
-    final resultContext =
-        testPropagator.extract(api.active, testCarrier, TestingExtractor());
+    final resultContext = testPropagator.extract(
+        api.Context.current, testCarrier, TestingExtractor());
     final resultSpan = api.spanFromContext(resultContext);
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
@@ -83,8 +83,8 @@ void main() {
     final testPropagator = api.W3CTraceContextPropagator();
     final testCarrier = <String, String>{};
 
-    final resultContext =
-        testPropagator.extract(api.active, testCarrier, TestingExtractor());
+    final resultContext = testPropagator.extract(
+        api.Context.current, testCarrier, TestingExtractor());
     final resultSpan = api.spanFromContext(resultContext);
 
     expect(resultSpan, isA<NonRecordingSpan>());
@@ -100,8 +100,8 @@ void main() {
           '00-4bf92^3577b34da6q3ce929d0e0e4736-00f@67aa0bak02b7-01')
       ..set(
           testCarrier, 'tracestate', 'rojo=00f067aa0ba902b7,congo=t61rcWkgMzE');
-    final resultContext =
-        testPropagator.extract(api.active, testCarrier, TestingExtractor());
+    final resultContext = testPropagator.extract(
+        api.Context.current, testCarrier, TestingExtractor());
     final resultSpan = api.spanFromContext(resultContext);
 
     // Extract should not allow a Span with malformed IDs to be attached to
@@ -119,8 +119,8 @@ void main() {
           '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01')
       ..set(testCarrier, 'tracestate',
           'rojo=00f067aa,0ba902b7,con@go=t61rcWk=gMzE');
-    final resultSpan = api.spanFromContext(
-        testPropagator.extract(api.active, testCarrier, TestingExtractor()));
+    final resultSpan = api.spanFromContext(testPropagator.extract(
+        api.Context.current, testCarrier, TestingExtractor()));
 
     expect(resultSpan.parentSpanId.toString(), equals('0000000000000000'));
     expect(resultSpan.spanContext.isValid, isTrue);
@@ -154,7 +154,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testCarrier = <String, String>{};
-    final testContext = api.contextWithSpan(api.active, testSpan);
+    final testContext = api.contextWithSpan(api.Context.current, testSpan);
 
     api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());
@@ -185,7 +185,7 @@ void main() {
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
     final testCarrier = <String, String>{};
-    final testContext = api.contextWithSpan(api.active, testSpan);
+    final testContext = api.contextWithSpan(api.Context.current, testSpan);
 
     api.W3CTraceContextPropagator()
         .inject(testContext, testCarrier, TestingInjector());

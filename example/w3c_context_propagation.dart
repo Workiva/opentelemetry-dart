@@ -34,7 +34,7 @@ void main(List<String> args) async {
 
   final span = tp.getTracer('instrumentation-name').startSpan('test-span-0');
   final carrier = <String, String>{};
-  tmp.inject(contextWithSpan(active, span), carrier, MapSetter());
+  tmp.inject(contextWithSpan(Context.current, span), carrier, MapSetter());
   await test(carrier);
   span.end();
 }
@@ -43,7 +43,7 @@ Future test(Map<String, String> carrier) async {
   globalTracerProvider
       .getTracer('instrumentation-name')
       .startSpan('test-span-1',
-          context:
-              globalTextMapPropagator.extract(active, carrier, MapGetter()))
+          context: globalTextMapPropagator.extract(
+              Context.current, carrier, MapGetter()))
       .end();
 }

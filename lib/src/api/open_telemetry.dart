@@ -83,7 +83,7 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
     bool newRoot = false,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) async {
-  context ??= api.active;
+  context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   // TODO: use start span option `newRoot` instead
@@ -96,9 +96,9 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
   context = api.contextWithSpan(context, span);
   try {
     return await api.zoneWithContext(context).run(() async {
-      final token = api.attach(api.contextFromZone());
+      final token = api.Context.attach(api.contextFromZone());
       final ret = await fn();
-      api.detach(token);
+      api.Context.detach(token);
       return ret;
     });
   } catch (e, s) {
@@ -120,7 +120,7 @@ T traceSync<T>(String name, T Function() fn,
     bool newRoot = false,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) {
-  context ??= api.active;
+  context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
   // TODO: use start span option `newRoot` instead
@@ -133,9 +133,9 @@ T traceSync<T>(String name, T Function() fn,
   context = api.contextWithSpan(context, span);
   try {
     final r = api.zoneWithContext(context).run(() {
-      final token = api.attach(api.contextFromZone());
+      final token = api.Context.attach(api.contextFromZone());
       final ret = fn();
-      api.detach(token);
+      api.Context.detach(token);
       return ret;
     });
     if (r is Future) {

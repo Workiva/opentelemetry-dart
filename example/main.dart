@@ -30,8 +30,8 @@ final tracer = provider.getTracer('instrumentation-name');
 
 /// Demonstrates creating a trace with a parent and child span.
 void main() async {
-  // The current active context is available via the global getter, [active].
-  var context = active;
+  // The current active context is available via a static getter.
+  var context = Context.current;
 
   // A trace starts with a root span which has no parent.
   final parentSpan = tracer.startSpan('parent-span');

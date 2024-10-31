@@ -3,42 +3,25 @@
 
 @TestOn('vm')
 
-import 'package:opentelemetry/api.dart'
-    show
-        Attribute,
-        SemanticAttributes,
-        SpanEvent,
-        StatusCode,
-        active,
-        contextWithSpan,
-        spanFromContext,
-        traceContext,
-        traceContextSync;
-import 'package:opentelemetry/sdk.dart'
-    show
-        AlwaysOnSampler,
-        DateTimeTimeProvider,
-        IdGenerator,
-        InstrumentationScope,
-        Resource,
-        SpanLimits;
-import 'package:opentelemetry/src/sdk/trace/span.dart' show Span;
-import 'package:opentelemetry/src/sdk/trace/tracer.dart' show Tracer;
+import 'package:opentelemetry/api.dart';
+import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/trace/span.dart' as sdk show Span;
+import 'package:opentelemetry/src/sdk/trace/tracer.dart' as sdk show Tracer;
 import 'package:test/test.dart';
 
 void main() {
-  final tracer = Tracer([],
-      Resource([]),
-      AlwaysOnSampler(),
-      DateTimeTimeProvider(),
-      IdGenerator(),
-      InstrumentationScope('name', 'version', 'url://schema', []),
-      SpanLimits());
+  final tracer = sdk.Tracer([],
+      sdk.Resource([]),
+      sdk.AlwaysOnSampler(),
+      sdk.DateTimeTimeProvider(),
+      sdk.IdGenerator(),
+      sdk.InstrumentationScope('name', 'version', 'url://schema', []),
+      sdk.SpanLimits());
 
   test('trace starts and ends span', () async {
     final span = await traceContext('span', (_) async {
-      return spanFromContext(active) as Span;
-    }, tracer: tracer);
+      return spanFromContext(Context.current);
+    }, tracer: tracer) as sdk.Span;
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNotNull);
@@ -46,8 +29,8 @@ void main() {
 
   test('traceSync starts and ends span', () {
     final span = traceContextSync('span', (_) {
-      return spanFromContext(active) as Span;
-    }, tracer: tracer);
+      return spanFromContext(Context.current);
+    }, tracer: tracer) as sdk.Span;
 
     expect(span.startTime, isNotNull);
     expect(span.endTime, isNotNull);
@@ -57,30 +40,30 @@ void main() {
     final parent = tracer.startSpan('parent')..end();
 
     traceContext('child', (_) async {
-      final child = spanFromContext(active);
+      final child = spanFromContext(Context.current);
 
       expect(child.parentSpanId.toString(),
           equals(parent.spanContext.spanId.toString()));
-    }, tracer: tracer, context: contextWithSpan(active, parent));
+    }, tracer: tracer, context: contextWithSpan(Context.current, parent));
   });
 
   test('traceSync propagates context', () {
     final parent = tracer.startSpan('parent')..end();
 
     traceContextSync('span', (_) {
-      final child = spanFromContext(active);
+      final child = spanFromContext(Context.current);
 
       expect(child.parentSpanId.toString(),
           equals(parent.spanContext.spanId.toString()));
-    }, tracer: tracer, context: contextWithSpan(active, parent));
+    }, tracer: tracer, context: contextWithSpan(Context.current, parent));
   });
 
   test('trace catches, records, and rethrows exception', () async {
-    late Span span;
+    late sdk.Span span;
     var caught = false;
     try {
       await traceContext('span', (_) async {
-        span = spanFromContext(active) as Span;
+        span = spanFromContext(Context.current) as sdk.Span;
         throw Exception('Bang!');
       }, tracer: tracer);
     } catch (e) {
@@ -102,11 +85,11 @@ void main() {
   });
 
   test('traceSync catches, records, and rethrows exception', () async {
-    late Span span;
+    late sdk.Span span;
     var caught = false;
     try {
       traceContextSync('span', (_) {
-        span = spanFromContext(active) as Span;
+        span = spanFromContext(Context.current) as sdk.Span;
         throw Exception('Bang!');
       }, tracer: tracer);
     } catch (e) {

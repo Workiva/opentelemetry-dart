@@ -8,7 +8,7 @@ import 'package:opentelemetry/sdk.dart'
     show ConsoleExporter, SimpleSpanProcessor, TracerProviderBase;
 
 mixin EventContext {
-  final Context context = active;
+  final Context context = Context.current;
 }
 
 class MyEvent with EventContext {

@@ -25,7 +25,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.contextWithSpan(api.active, testSpan);
+    final testContext = api.contextWithSpan(api.Context.current, testSpan);
 
     final result = sdk.AlwaysOffSampler().shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -56,8 +56,8 @@ void main() {
         sdk.DateTimeTimeProvider().now)
       ..setAttributes(attributesList);
 
-    final result = sdk.AlwaysOffSampler().shouldSample(api.active, traceId,
-        testSpan.name, api.SpanKind.internal, attributesList, []);
+    final result = sdk.AlwaysOffSampler().shouldSample(api.Context.current,
+        traceId, testSpan.name, api.SpanKind.internal, attributesList, []);
 
     expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, attributesList);
