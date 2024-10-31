@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
@@ -45,16 +46,47 @@ class CollectorExporter implements sdk.SpanExporter {
     Uri uri,
     List<sdk.ReadOnlySpan> spans,
   ) async {
-    try {
-      final body = pb_trace_service.ExportTraceServiceRequest(
-          resourceSpans: _spansToProtobuf(spans));
-      final headers = {'Content-Type': 'application/x-protobuf'}
-        ..addAll(this.headers);
+    const maxRetries = 3;
+    var retries = 0;
+    // Retryable status from the spec: https://opentelemetry.io/docs/specs/otlp/#failures-1
+    const valid_retry_codes = [429, 502, 503, 504];
 
-      await client.post(uri, body: body.writeToBuffer(), headers: headers);
-    } catch (e) {
-      _log.warning('Failed to export ${spans.length} spans.', e);
+    final body = pb_trace_service.ExportTraceServiceRequest(
+        resourceSpans: _spansToProtobuf(spans));
+    final headers = {'Content-Type': 'application/x-protobuf'}
+      ..addAll(this.headers);
+
+    while (retries < maxRetries) {
+      try {
+        final response = await client.post(uri,
+            body: body.writeToBuffer(), headers: headers);
+        if (response.statusCode == 200) {
+          return;
+        }
+        // If the response is not 200, log a warning
+        _log.warning('Failed to export ${spans.length} spans. '
+            'HTTP status code: ${response.statusCode}');
+        // If the response is not a valid retry code, do not retry
+        if (!valid_retry_codes.contains(response.statusCode)) {
+          return;
+        }
+      } catch (e) {
+        _log.warning('Failed to export ${spans.length} spans. $e');
+        return;
+      }
+      // Exponential backoff with jitter
+      final delay =
+          calculateJitteredDelay(retries++, Duration(milliseconds: 100));
+      await Future.delayed(delay);
     }
+    _log.severe(
+        'Failed to export ${spans.length} spans after $maxRetries retries');
+  }
+
+  Duration calculateJitteredDelay(int retries, Duration baseDelay) {
+    final delay = baseDelay.inMilliseconds * pow(2, retries);
+    final jitter = Random().nextDouble() * delay;
+    return Duration(milliseconds: (delay + jitter).toInt());
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
