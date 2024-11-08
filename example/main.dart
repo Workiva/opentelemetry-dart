@@ -1,6 +1,8 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'dart:async';
+
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart';
 
@@ -28,8 +30,8 @@ final tracer = provider.getTracer('instrumentation-name');
 
 /// Demonstrates creating a trace with a parent and child span.
 void main() async {
-  // The current active span is available via the global context manager.
-  var context = globalContextManager.active;
+  // The current active context is available via a static getter.
+  var context = Context.current;
 
   // A trace starts with a root span which has no parent.
   final parentSpan = tracer.startSpan('parent-span');
@@ -37,11 +39,12 @@ void main() async {
   // A new context can be created in order to propagate context manually.
   context = contextWithSpan(context, parentSpan);
 
-  // The traceContext and traceContextSync functions will automatically
+  // The [traceContext] and [traceContextSync] functions will automatically
   // propagate context, capture errors, and end the span.
-  await traceContext(
-      'child-span', (_context) => Future.delayed(Duration(milliseconds: 100)),
-      context: context);
+  await traceContext('child-span', (_) {
+    tracer.startSpan('grandchild-span').end();
+    return Future.delayed(Duration(milliseconds: 100));
+  }, context: context, tracer: tracer);
 
   // Spans must be ended or they will not be exported.
   parentSpan.end();

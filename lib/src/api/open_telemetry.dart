@@ -8,7 +8,6 @@ import 'package:meta/meta.dart';
 import '../../api.dart' as api;
 import 'propagation/noop_text_map_propagator.dart';
 import 'trace/noop_tracer_provider.dart';
-import 'context/zone_context.dart';
 
 final api.TracerProvider _noopTracerProvider = NoopTracerProvider();
 final api.TextMapPropagator _noopTextMapPropagator = NoopTextMapPropagator();
@@ -41,28 +40,7 @@ void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
 
 /// Records a span of the given [name] for the given function with a given
 /// [api.Tracer] and marks the span as errored if an exception occurs.
-@Deprecated(
-    'This method will be removed in 0.19.0. Use [traceContext] instead.')
-Future<T> trace<T>(String name, Future<T> Function() fn,
-    {api.Context? context, api.Tracer? tracer}) async {
-  context ??= api.globalContextManager.active;
-  tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
-
-  final span = tracer.startSpan(name, context: context);
-  try {
-    return await api.contextWithSpan(context, span).execute(fn);
-  } catch (e, s) {
-    span
-      ..setStatus(api.StatusCode.error, e.toString())
-      ..recordException(e, stackTrace: s);
-    rethrow;
-  } finally {
-    span.end();
-  }
-}
-
-/// Records a span of the given [name] for the given function with a given
-/// [api.Tracer] and marks the span as errored if an exception occurs.
+@Deprecated('Will be removed in v0.19.0. Use [trace] instead')
 @experimental
 Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     {api.Context? context,
@@ -70,23 +48,58 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     bool newRoot = false,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) async {
-  context ??= api.globalContextManager.active;
+  return trace(name, () => fn(api.Context.current),
+      context: context,
+      tracer: tracer,
+      newRoot: newRoot,
+      spanKind: spanKind,
+      spanLinks: spanLinks);
+}
+
+/// Use [traceContextSync] instead of [traceContext] when [fn] is not an async
+/// function.
+@Deprecated('Will be removed in v0.19.0. Use [traceSync] instead')
+@experimental
+T traceContextSync<T>(String name, T Function(api.Context) fn,
+    {api.Context? context,
+    api.Tracer? tracer,
+    bool newRoot = false,
+    api.SpanKind spanKind = api.SpanKind.internal,
+    List<api.SpanLink> spanLinks = const []}) {
+  return traceSync(name, () => fn(api.Context.current),
+      context: context,
+      tracer: tracer,
+      newRoot: newRoot,
+      spanKind: spanKind,
+      spanLinks: spanLinks);
+}
+
+/// Records a span of the given [name] for the given function with a given
+/// [api.Tracer] and marks the span as errored if an exception occurs.
+@experimental
+Future<T> trace<T>(String name, Future<T> Function() fn,
+    {api.Context? context,
+    api.Tracer? tracer,
+    bool newRoot = false,
+    api.SpanKind spanKind = api.SpanKind.internal,
+    List<api.SpanLink> spanLinks = const []}) async {
+  context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
-  // TODO: use start span option `newRoot` instead
-  if (newRoot) {
-    context = api.contextWithSpanContext(context, api.SpanContext.invalid());
-  }
-
   final span = tracer.startSpan(name,
-      context: context, kind: spanKind, links: spanLinks);
-  context = api.contextWithSpan(context, span);
+      // TODO: use start span option `newRoot` instead
+      context: newRoot ? api.Context.root : context,
+      kind: spanKind,
+      links: spanLinks);
   try {
-    // TODO: remove this check once `run` exists on context interface
-    if (context is ZoneContext) {
-      return await context.run((context) => fn(context));
-    }
-    return await fn(context);
+    return await Zone.current.fork().run(() {
+      final token = api.Context.attach(api.contextWithSpan(context!, span));
+      return fn().whenComplete(() {
+        if (!api.Context.detach(token)) {
+          span.addEvent('unexpected (mismatched) token given to detach');
+        }
+      });
+    });
   } catch (e, s) {
     span
       ..setStatus(api.StatusCode.error, e.toString())
@@ -98,68 +111,37 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
 }
 
 /// Use [traceSync] instead of [trace] when [fn] is not an async function.
-@Deprecated(
-    'This method will be removed in 0.19.0. Use [traceContextSync] instead.')
-R traceSync<R>(String name, R Function() fn,
-    {api.Context? context, api.Tracer? tracer}) {
-  context ??= api.globalContextManager.active;
-  tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
-
-  final span = tracer.startSpan(name, context: context);
-
-  try {
-    final r = api.contextWithSpan(context, span).execute(fn);
-
-    if (r is Future) {
-      throw ArgumentError.value(fn, 'fn',
-          'Use traceSync to trace functions that do not return a [Future].');
-    }
-
-    return r;
-  } catch (e, s) {
-    span
-      ..setStatus(api.StatusCode.error, e.toString())
-      ..recordException(e, stackTrace: s);
-    rethrow;
-  } finally {
-    span.end();
-  }
-}
-
-/// Use [traceContextSync] instead of [traceContext] when [fn] is not an async function.
 @experimental
-R traceContextSync<R>(String name, R Function(api.Context) fn,
+T traceSync<T>(String name, T Function() fn,
     {api.Context? context,
     api.Tracer? tracer,
     bool newRoot = false,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) {
-  context ??= api.globalContextManager.active;
+  context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
-  // TODO: use start span option `newRoot` instead
-  if (newRoot) {
-    context = api.contextWithSpanContext(context, api.SpanContext.invalid());
-  }
-
   final span = tracer.startSpan(name,
-      context: context, kind: spanKind, links: spanLinks);
-  context = api.contextWithSpan(context, span);
+      // TODO: use start span option `newRoot` instead
+      context: newRoot ? api.Context.root : context,
+      kind: spanKind,
+      links: spanLinks);
   try {
-    var r;
-    // TODO: remove this check once `run` exists on context interface
-    if (context is ZoneContext) {
-      r = context.run((context) => fn(context));
-    } else {
-      r = fn(context);
-    }
+    return Zone.current.fork().run(() {
+      final token = api.Context.attach(api.contextWithSpan(context!, span));
 
-    if (r is Future) {
-      throw ArgumentError.value(fn, 'fn',
-          'Use traceContextSync to trace functions that do not return a [Future].');
-    }
+      final r = fn();
 
-    return r;
+      if (!api.Context.detach(token)) {
+        span.addEvent('unexpected (mismatched) token given to detach');
+      }
+
+      if (r is Future) {
+        throw ArgumentError.value(fn, 'fn',
+            'Use traceSync to trace functions that do not return a [Future].');
+      }
+      return r;
+    });
   } catch (e, s) {
     span
       ..setStatus(api.StatusCode.error, e.toString())

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.18.6](https://github.com/Workiva/opentelemetry-dart/tree/0.18.6) (2024-08-15)
+
+[Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.5...0.18.6)
+
+**Merged pull requests:**
+
+- Make registerGlobalContextManager public API [\#183](https://github.com/Workiva/opentelemetry-dart/pull/183) ([jonathancampbell-wk](https://github.com/jonathancampbell-wk))
+- O11Y-4831: Use test URL in test [\#181](https://github.com/Workiva/opentelemetry-dart/pull/181) ([kennytrytek-wf](https://github.com/kennytrytek-wf))
+
 ## [0.18.5](https://github.com/Workiva/opentelemetry-dart/tree/0.18.5) (2024-08-01)
 
 [Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.4...0.18.5)

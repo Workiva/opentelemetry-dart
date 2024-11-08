@@ -4,7 +4,6 @@
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart'
     show ConsoleExporter, SimpleSpanProcessor, TracerProviderBase;
-import 'package:opentelemetry/src/experimental_api.dart' show NoopContextManager;
 
 class MapSetter implements TextMapSetter<Map> {
   @override
@@ -30,15 +29,12 @@ void main(List<String> args) async {
       TracerProviderBase(processors: [SimpleSpanProcessor(ConsoleExporter())]);
   registerGlobalTracerProvider(tp);
 
-  final cm = NoopContextManager();
-  registerGlobalContextManager(cm);
-
   final tmp = W3CTraceContextPropagator();
   registerGlobalTextMapPropagator(tmp);
 
   final span = tp.getTracer('instrumentation-name').startSpan('test-span-0');
   final carrier = <String, String>{};
-  tmp.inject(contextWithSpan(cm.active, span), carrier, MapSetter());
+  tmp.inject(contextWithSpan(Context.current, span), carrier, MapSetter());
   await test(carrier);
   span.end();
 }
@@ -48,6 +44,6 @@ Future test(Map<String, String> carrier) async {
       .getTracer('instrumentation-name')
       .startSpan('test-span-1',
           context: globalTextMapPropagator.extract(
-              globalContextManager.active, carrier, MapGetter()))
+              Context.current, carrier, MapGetter()))
       .end();
 }
