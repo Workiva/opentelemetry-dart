@@ -53,10 +53,6 @@ SpanContext spanContextFromContext(Context context) {
   return spanFromContext(context).spanContext;
 }
 
-@experimental
-@Deprecated('This method will be removed in 0.19.0. Use [zone] instead.')
-Zone zoneWithContext(Context context) => zone(context);
-
 /// Returns a new [Zone] such that the given context will be automatically
 /// attached and detached for any function that runs within the zone.
 @experimental
