@@ -4,13 +4,10 @@
 @TestOn('vm')
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart';
 import 'package:opentelemetry/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final cm = NoopContextManager();
-
   test('Context contains a Span', () {
     final traceId = api.TraceId([1, 2, 3]);
     final traceState = api.TraceState.fromString('test=one,two');
@@ -28,7 +25,7 @@ void main() {
         [],
         sdk.SpanLimits(),
         sdk.DateTimeTimeProvider().now);
-    final testContext = api.contextWithSpan(cm.active, testSpan);
+    final testContext = api.contextWithSpan(api.Context.current, testSpan);
 
     final result = sdk.AlwaysOffSampler().shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -59,8 +56,8 @@ void main() {
         sdk.DateTimeTimeProvider().now)
       ..setAttributes(attributesList);
 
-    final result = sdk.AlwaysOffSampler().shouldSample(cm.active, traceId,
-        testSpan.name, api.SpanKind.internal, attributesList, []);
+    final result = sdk.AlwaysOffSampler().shouldSample(api.Context.current,
+        traceId, testSpan.name, api.SpanKind.internal, attributesList, []);
 
     expect(result.decision, equals(sdk.Decision.drop));
     expect(result.spanAttributes, attributesList);

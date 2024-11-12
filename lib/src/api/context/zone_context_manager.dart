@@ -3,10 +3,11 @@
 
 import 'dart:async';
 
-import '../../../api.dart' show Context;
-import '../../experimental_api.dart' show ContextManager;
+import 'context.dart' show Context;
+import 'context_manager.dart' show ContextManager;
 import 'zone_context.dart' show createZoneContext;
 
+@Deprecated('This class will be removed in 0.19.0 without replacement.')
 class ZoneContextManager implements ContextManager {
   @override
   Context get root => createZoneContext(Zone.root);

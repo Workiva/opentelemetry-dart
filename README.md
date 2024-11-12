@@ -68,7 +68,7 @@ void main(List<String> args) {
 
 In order to parent spans, context must be propagated. Propagation can be achieved by manually passing an instance of `Context` or by using Dart [`Zones`](https://dart.dev/libraries/async/zones).
 
-See the [noop context manager example](./example/noop_context_manager.dart) and [zone context manager example](./example/zone_context_manager.dart) for more information.
+See the [attach detach context example](./example/attach_detach_context)for more information.
 
 ### Inter-process
 
