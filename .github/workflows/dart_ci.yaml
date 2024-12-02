@@ -1,13 +1,13 @@
 name: Dart CI
-
 on:
+  workflow_dispatch:
   push:
     branches:
-      - 'master'
-      - 'test_consume_*'
+      - "master"
+      - "test_consume_**"
   pull_request:
     branches:
-      - '*'
+      - "**"
 concurrency:
   group: opentelemetry-coverage-${{ github.ref }}-1
   cancel-in-progress: true
