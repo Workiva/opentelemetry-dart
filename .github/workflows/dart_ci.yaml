@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - "master"
-      - "_integration/**/*"
-      - "experiments/**/*"
       - "test_consume_**"
   pull_request:
     branches:
