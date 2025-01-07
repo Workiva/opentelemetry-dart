@@ -33,6 +33,8 @@ class ConsoleExporter implements sdk.SpanExporter {
     _printSpans(spans);
   }
 
+  @Deprecated(
+      'This method will be removed in 0.19.0. Use [SpanProcessor] instead.')
   @override
   void forceFlush() {
     return;

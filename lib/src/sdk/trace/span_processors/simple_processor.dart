@@ -1,35 +1,40 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import '../../../../api.dart' as api;
-import '../../../../sdk.dart' as sdk;
+import '../../../api/context/context.dart';
+import '../../../api/trace/trace_flags.dart';
+import '../exporters/span_exporter.dart';
+import '../read_only_span.dart';
+import '../read_write_span.dart';
+import 'span_processor.dart';
 
-class SimpleSpanProcessor implements sdk.SpanProcessor {
-  final sdk.SpanExporter _exporter;
+class SimpleSpanProcessor implements SpanProcessor {
+  final SpanExporter _exporter;
   bool _isShutdown = false;
 
   SimpleSpanProcessor(this._exporter);
 
   @override
-  void forceFlush() {
-    _exporter.forceFlush();
-  }
+  void forceFlush() {}
 
   @override
-  void onEnd(sdk.ReadOnlySpan span) {
+  void onEnd(ReadOnlySpan span) {
     if (_isShutdown) {
       return;
     }
 
-    _exporter.export([span]);
+    final isSampled =
+        span.spanContext.traceFlags & TraceFlags.sampled == TraceFlags.sampled;
+    if (isSampled) {
+      _exporter.export([span]);
+    }
   }
 
   @override
-  void onStart(sdk.ReadWriteSpan span, api.Context parentContext) {}
+  void onStart(ReadWriteSpan span, Context parentContext) {}
 
   @override
   void shutdown() {
-    forceFlush();
     _isShutdown = true;
     _exporter.shutdown();
   }

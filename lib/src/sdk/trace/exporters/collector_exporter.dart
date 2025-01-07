@@ -268,6 +268,8 @@ class CollectorExporter implements sdk.SpanExporter {
     return pb_common.AnyValue();
   }
 
+  @Deprecated(
+      'This method will be removed in 0.19.0. Use [SpanProcessor] instead.')
   @override
   void forceFlush() {
     return;
