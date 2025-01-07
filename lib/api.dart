@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 export 'src/api/common/attribute.dart' show Attribute;
+export 'src/api/common/export_result.dart' show ExportResultCode, ExportResult;
 export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
 export 'src/api/context/context.dart'

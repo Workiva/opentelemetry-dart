@@ -4,6 +4,8 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:opentelemetry/src/api/logs/noop/noop_logger_provider.dart';
+import 'package:opentelemetry/src/experimental_api.dart';
 
 import '../../api.dart' as api;
 import 'propagation/noop_text_map_propagator.dart';
@@ -11,6 +13,8 @@ import 'trace/noop_tracer_provider.dart';
 
 final api.TracerProvider _noopTracerProvider = NoopTracerProvider();
 final api.TextMapPropagator _noopTextMapPropagator = NoopTextMapPropagator();
+final LoggerProvider _noopLoggerProvider = NoopLoggerProvider();
+LoggerProvider _logProvider = _noopLoggerProvider;
 api.TracerProvider _tracerProvider = _noopTracerProvider;
 api.TextMapPropagator _textMapPropagator = _noopTextMapPropagator;
 
@@ -26,6 +30,16 @@ void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
   }
 
   _tracerProvider = tracerProvider;
+}
+
+void registerGlobalLogProvider(LoggerProvider logProvider) {
+  if (_logProvider != _noopLoggerProvider) {
+    throw StateError('A global LoggerProvider has already been created. '
+        'registerGlobalLoggerProvider must be called only once before any '
+        'calls to the getter globalLoggerProvider.');
+  }
+
+  _logProvider = logProvider;
 }
 
 void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {
