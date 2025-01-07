@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
+import '../../experimental_sdk.dart' as sdk;
 
 /// Applies given [sdk.SpanLimits] to a list of [api.SpanLink]s.
 @protected
@@ -71,6 +72,24 @@ api.Attribute applyAttributeLimits(api.Attribute attr, sdk.SpanLimits limits) {
     for (var j = 0; j < listString.length; j++) {
       listString[j] = applyAttributeLengthLimit(
           listString[j], limits.maxNumAttributeLength);
+    }
+    attr = api.Attribute.fromStringList(attr.key, listString);
+  }
+  return attr;
+}
+
+@protected
+api.Attribute applyAttributeLimitsForLog(api.Attribute attr, sdk.LogRecordLimits limits) {
+  // if maxNumAttributeLength is less than zero, then it has unlimited length.
+  if (limits.maxNumAttributeLength < 0) return attr;
+
+  if (attr.value is String) {
+    attr = api.Attribute.fromString(
+        attr.key, applyAttributeLengthLimit(attr.value as String, limits.maxNumAttributeLength));
+  } else if (attr.value is List<String>) {
+    final listString = attr.value as List<String>;
+    for (var j = 0; j < listString.length; j++) {
+      listString[j] = applyAttributeLengthLimit(listString[j], limits.maxNumAttributeLength);
     }
     attr = api.Attribute.fromStringList(attr.key, listString);
   }
