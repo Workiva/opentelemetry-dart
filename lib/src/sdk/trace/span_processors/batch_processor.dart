@@ -6,19 +6,23 @@ import 'dart:math';
 
 import 'package:logging/logging.dart';
 
-import '../../../../api.dart' as api;
-import '../../../../sdk.dart' as sdk;
+import '../../../api/context/context.dart';
+import '../../../api/trace/trace_flags.dart';
+import '../exporters/span_exporter.dart';
+import '../read_only_span.dart';
+import '../read_write_span.dart';
+import 'span_processor.dart';
 
-class BatchSpanProcessor implements sdk.SpanProcessor {
+class BatchSpanProcessor implements SpanProcessor {
   static const int _DEFAULT_MAXIMUM_BATCH_SIZE = 512;
   static const int _DEFAULT_MAXIMUM_QUEUE_SIZE = 2048;
   static const int _DEFAULT_EXPORT_DELAY = 5000;
 
-  final sdk.SpanExporter _exporter;
+  final SpanExporter _exporter;
   final Logger _log = Logger('opentelemetry.BatchSpanProcessor');
   final int _maxExportBatchSize;
   final int _maxQueueSize;
-  final List<sdk.ReadOnlySpan> _spanBuffer = [];
+  final List<ReadOnlySpan> _spanBuffer = [];
 
   late final Timer _timer;
 
@@ -41,11 +45,10 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
     while (_spanBuffer.isNotEmpty) {
       _exportBatch(_timer);
     }
-    _exporter.forceFlush();
   }
 
   @override
-  void onEnd(sdk.ReadOnlySpan span) {
+  void onEnd(ReadOnlySpan span) {
     if (_isShutdown) {
       return;
     }
@@ -53,7 +56,7 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
   }
 
   @override
-  void onStart(sdk.ReadWriteSpan span, api.Context parentContext) {}
+  void onStart(ReadWriteSpan span, Context parentContext) {}
 
   @override
   void shutdown() {
@@ -63,7 +66,7 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
     _exporter.shutdown();
   }
 
-  void _addToBuffer(sdk.ReadOnlySpan span) {
+  void _addToBuffer(ReadOnlySpan span) {
     if (_spanBuffer.length >= _maxQueueSize) {
       // Buffer is full, drop span.
       _log.warning(
@@ -71,7 +74,11 @@ class BatchSpanProcessor implements sdk.SpanProcessor {
       return;
     }
 
-    _spanBuffer.add(span);
+    final isSampled =
+        span.spanContext.traceFlags & TraceFlags.sampled == TraceFlags.sampled;
+    if (isSampled) {
+      _spanBuffer.add(span);
+    }
   }
 
   void _exportBatch(Timer timer) {

@@ -81,6 +81,7 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
     {api.Context? context,
     api.Tracer? tracer,
     bool newRoot = false,
+    List<api.Attribute> spanAttributes = const [],
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) async {
   context ??= api.Context.current;
@@ -89,6 +90,7 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
   final span = tracer.startSpan(name,
       // TODO: use start span option `newRoot` instead
       context: newRoot ? api.Context.root : context,
+      attributes: spanAttributes,
       kind: spanKind,
       links: spanLinks);
   try {
@@ -116,6 +118,7 @@ T traceSync<T>(String name, T Function() fn,
     {api.Context? context,
     api.Tracer? tracer,
     bool newRoot = false,
+    List<api.Attribute> spanAttributes = const [],
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) {
   context ??= api.Context.current;
@@ -124,6 +127,7 @@ T traceSync<T>(String name, T Function() fn,
   final span = tracer.startSpan(name,
       // TODO: use start span option `newRoot` instead
       context: newRoot ? api.Context.root : context,
+      attributes: spanAttributes,
       kind: spanKind,
       links: spanLinks);
   try {
