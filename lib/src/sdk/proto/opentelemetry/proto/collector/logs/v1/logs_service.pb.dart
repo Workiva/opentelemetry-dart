@@ -16,12 +16,13 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pbserver.dart' as $0;
 import 'package:protobuf/protobuf.dart' as $pb;
+
+import '../../../logs/v1/logs.pb.dart' as $4;
 
 class ExportLogsServiceRequest extends $pb.GeneratedMessage {
   factory ExportLogsServiceRequest({
-    $core.Iterable<$0.ResourceLogs>? resourceLogs,
+    $core.Iterable<$4.ResourceLogs>? resourceLogs,
   }) {
     final $result = create();
     if (resourceLogs != null) {
@@ -34,7 +35,7 @@ class ExportLogsServiceRequest extends $pb.GeneratedMessage {
   factory ExportLogsServiceRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ExportLogsServiceRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.collector.logs.v1'), createEmptyInstance: create)
-    ..pc<$0.ResourceLogs>(1, _omitFieldNames ? '' : 'resourceLogs', $pb.PbFieldType.PM, subBuilder: $0.ResourceLogs.create)
+    ..pc<$4.ResourceLogs>(1, _omitFieldNames ? '' : 'resourceLogs', $pb.PbFieldType.PM, subBuilder: $4.ResourceLogs.create)
     ..hasRequiredFields = false
   ;
 
@@ -65,7 +66,7 @@ class ExportLogsServiceRequest extends $pb.GeneratedMessage {
   /// data from multiple origins typically batch the data before forwarding further and
   /// in that case this array will contain multiple elements.
   @$pb.TagNumber(1)
-  $core.List<$0.ResourceLogs> get resourceLogs => $_getList(0);
+  $core.List<$4.ResourceLogs> get resourceLogs => $_getList(0);
 }
 
 class ExportLogsServiceResponse extends $pb.GeneratedMessage {

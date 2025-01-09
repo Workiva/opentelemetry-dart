@@ -18,24 +18,24 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'logs_service.pb.dart' as $3;
+import 'logs_service.pb.dart' as $5;
 import 'logs_service.pbjson.dart';
 
 export 'logs_service.pb.dart';
 
 abstract class LogsServiceBase extends $pb.GeneratedService {
-  $async.Future<$3.ExportLogsServiceResponse> export($pb.ServerContext ctx, $3.ExportLogsServiceRequest request);
+  $async.Future<$5.ExportLogsServiceResponse> export($pb.ServerContext ctx, $5.ExportLogsServiceRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'Export': return $3.ExportLogsServiceRequest();
+      case 'Export': return $5.ExportLogsServiceRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'Export': return this.export(ctx, request as $3.ExportLogsServiceRequest);
+      case 'Export': return this.export(ctx, request as $5.ExportLogsServiceRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }

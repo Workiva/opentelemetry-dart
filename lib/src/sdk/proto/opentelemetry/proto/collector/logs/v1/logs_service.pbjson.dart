@@ -16,8 +16,8 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-import '../../../common/v1/common.pbjson.dart' as $2;
-import '../../../logs/v1/logs.pbjson.dart' as $0;
+import '../../../common/v1/common.pbjson.dart' as $0;
+import '../../../logs/v1/logs.pbjson.dart' as $4;
 import '../../../resource/v1/resource.pbjson.dart' as $1;
 
 @$core.Deprecated('Use exportLogsServiceRequestDescriptor instead')
@@ -72,15 +72,15 @@ const $core.Map<$core.String, $core.dynamic> LogsServiceBase$json = {
 @$core.Deprecated('Use logsServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> LogsServiceBase$messageJson = {
   '.opentelemetry.proto.collector.logs.v1.ExportLogsServiceRequest': ExportLogsServiceRequest$json,
-  '.opentelemetry.proto.logs.v1.ResourceLogs': $0.ResourceLogs$json,
+  '.opentelemetry.proto.logs.v1.ResourceLogs': $4.ResourceLogs$json,
   '.opentelemetry.proto.resource.v1.Resource': $1.Resource$json,
-  '.opentelemetry.proto.common.v1.KeyValue': $2.KeyValue$json,
-  '.opentelemetry.proto.common.v1.AnyValue': $2.AnyValue$json,
-  '.opentelemetry.proto.common.v1.ArrayValue': $2.ArrayValue$json,
-  '.opentelemetry.proto.common.v1.KeyValueList': $2.KeyValueList$json,
-  '.opentelemetry.proto.logs.v1.ScopeLogs': $0.ScopeLogs$json,
-  '.opentelemetry.proto.common.v1.InstrumentationScope': $2.InstrumentationScope$json,
-  '.opentelemetry.proto.logs.v1.LogRecord': $0.LogRecord$json,
+  '.opentelemetry.proto.common.v1.KeyValue': $0.KeyValue$json,
+  '.opentelemetry.proto.common.v1.AnyValue': $0.AnyValue$json,
+  '.opentelemetry.proto.common.v1.ArrayValue': $0.ArrayValue$json,
+  '.opentelemetry.proto.common.v1.KeyValueList': $0.KeyValueList$json,
+  '.opentelemetry.proto.logs.v1.ScopeLogs': $4.ScopeLogs$json,
+  '.opentelemetry.proto.common.v1.InstrumentationScope': $0.InstrumentationScope$json,
+  '.opentelemetry.proto.logs.v1.LogRecord': $4.LogRecord$json,
   '.opentelemetry.proto.collector.logs.v1.ExportLogsServiceResponse': ExportLogsServiceResponse$json,
   '.opentelemetry.proto.collector.logs.v1.ExportLogsPartialSuccess': ExportLogsPartialSuccess$json,
 };
