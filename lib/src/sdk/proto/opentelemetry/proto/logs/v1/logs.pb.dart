@@ -15,11 +15,13 @@
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pbenum.dart';
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/common/v1/common.pb.dart' as $1;
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/resource/v1/resource.pb.dart' as $0;
+import '../../common/v1/common.pb.dart' as $0;
+import '../../resource/v1/resource.pb.dart' as $1;
+import 'logs.pbenum.dart';
+
+export 'logs.pbenum.dart';
 
 ///  LogsData represents the logs data that can be stored in a persistent storage,
 ///  OR can be embedded by other protocols that transfer OTLP logs data but do not
@@ -83,7 +85,7 @@ class LogsData extends $pb.GeneratedMessage {
 /// A collection of ScopeLogs from a Resource.
 class ResourceLogs extends $pb.GeneratedMessage {
   factory ResourceLogs({
-    $0.Resource? resource,
+    $1.Resource? resource,
     $core.Iterable<ScopeLogs>? scopeLogs,
     $core.String? schemaUrl,
   }) {
@@ -104,7 +106,7 @@ class ResourceLogs extends $pb.GeneratedMessage {
   factory ResourceLogs.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ResourceLogs', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.logs.v1'), createEmptyInstance: create)
-    ..aOM<$0.Resource>(1, _omitFieldNames ? '' : 'resource', subBuilder: $0.Resource.create)
+    ..aOM<$1.Resource>(1, _omitFieldNames ? '' : 'resource', subBuilder: $1.Resource.create)
     ..pc<ScopeLogs>(2, _omitFieldNames ? '' : 'scopeLogs', $pb.PbFieldType.PM, subBuilder: ScopeLogs.create)
     ..aOS(3, _omitFieldNames ? '' : 'schemaUrl')
     ..hasRequiredFields = false
@@ -134,15 +136,15 @@ class ResourceLogs extends $pb.GeneratedMessage {
   /// The resource for the logs in this message.
   /// If this field is not set then resource info is unknown.
   @$pb.TagNumber(1)
-  $0.Resource get resource => $_getN(0);
+  $1.Resource get resource => $_getN(0);
   @$pb.TagNumber(1)
-  set resource($0.Resource v) { setField(1, v); }
+  set resource($1.Resource v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasResource() => $_has(0);
   @$pb.TagNumber(1)
   void clearResource() => clearField(1);
   @$pb.TagNumber(1)
-  $0.Resource ensureResource() => $_ensure(0);
+  $1.Resource ensureResource() => $_ensure(0);
 
   /// A list of ScopeLogs that originate from a resource.
   @$pb.TagNumber(2)
@@ -166,7 +168,7 @@ class ResourceLogs extends $pb.GeneratedMessage {
 /// A collection of Logs produced by a Scope.
 class ScopeLogs extends $pb.GeneratedMessage {
   factory ScopeLogs({
-    $1.InstrumentationScope? scope,
+    $0.InstrumentationScope? scope,
     $core.Iterable<LogRecord>? logRecords,
     $core.String? schemaUrl,
   }) {
@@ -187,7 +189,7 @@ class ScopeLogs extends $pb.GeneratedMessage {
   factory ScopeLogs.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ScopeLogs', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.logs.v1'), createEmptyInstance: create)
-    ..aOM<$1.InstrumentationScope>(1, _omitFieldNames ? '' : 'scope', subBuilder: $1.InstrumentationScope.create)
+    ..aOM<$0.InstrumentationScope>(1, _omitFieldNames ? '' : 'scope', subBuilder: $0.InstrumentationScope.create)
     ..pc<LogRecord>(2, _omitFieldNames ? '' : 'logRecords', $pb.PbFieldType.PM, subBuilder: LogRecord.create)
     ..aOS(3, _omitFieldNames ? '' : 'schemaUrl')
     ..hasRequiredFields = false
@@ -218,15 +220,15 @@ class ScopeLogs extends $pb.GeneratedMessage {
   /// Semantically when InstrumentationScope isn't set, it is equivalent with
   /// an empty instrumentation scope name (unknown).
   @$pb.TagNumber(1)
-  $1.InstrumentationScope get scope => $_getN(0);
+  $0.InstrumentationScope get scope => $_getN(0);
   @$pb.TagNumber(1)
-  set scope($1.InstrumentationScope v) { setField(1, v); }
+  set scope($0.InstrumentationScope v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasScope() => $_has(0);
   @$pb.TagNumber(1)
   void clearScope() => clearField(1);
   @$pb.TagNumber(1)
-  $1.InstrumentationScope ensureScope() => $_ensure(0);
+  $0.InstrumentationScope ensureScope() => $_ensure(0);
 
   /// A list of log records.
   @$pb.TagNumber(2)
@@ -253,8 +255,8 @@ class LogRecord extends $pb.GeneratedMessage {
     $fixnum.Int64? timeUnixNano,
     SeverityNumber? severityNumber,
     $core.String? severityText,
-    $1.AnyValue? body,
-    $core.Iterable<$1.KeyValue>? attributes,
+    $0.AnyValue? body,
+    $core.Iterable<$0.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
     $core.int? flags,
     $core.List<$core.int>? traceId,
@@ -302,8 +304,8 @@ class LogRecord extends $pb.GeneratedMessage {
     ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'timeUnixNano', $pb.PbFieldType.OF6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..e<SeverityNumber>(2, _omitFieldNames ? '' : 'severityNumber', $pb.PbFieldType.OE, defaultOrMaker: SeverityNumber.SEVERITY_NUMBER_UNSPECIFIED, valueOf: SeverityNumber.valueOf, enumValues: SeverityNumber.values)
     ..aOS(3, _omitFieldNames ? '' : 'severityText')
-    ..aOM<$1.AnyValue>(5, _omitFieldNames ? '' : 'body', subBuilder: $1.AnyValue.create)
-    ..pc<$1.KeyValue>(6, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $1.KeyValue.create)
+    ..aOM<$0.AnyValue>(5, _omitFieldNames ? '' : 'body', subBuilder: $0.AnyValue.create)
+    ..pc<$0.KeyValue>(6, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
     ..a<$core.int>(7, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
     ..a<$core.int>(8, _omitFieldNames ? '' : 'flags', $pb.PbFieldType.OF3)
     ..a<$core.List<$core.int>>(9, _omitFieldNames ? '' : 'traceId', $pb.PbFieldType.OY)
@@ -371,21 +373,21 @@ class LogRecord extends $pb.GeneratedMessage {
   /// string message (including multi-line) describing the event in a free form or it can
   /// be a structured data composed of arrays and maps of other values. [Optional].
   @$pb.TagNumber(5)
-  $1.AnyValue get body => $_getN(3);
+  $0.AnyValue get body => $_getN(3);
   @$pb.TagNumber(5)
-  set body($1.AnyValue v) { setField(5, v); }
+  set body($0.AnyValue v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasBody() => $_has(3);
   @$pb.TagNumber(5)
   void clearBody() => clearField(5);
   @$pb.TagNumber(5)
-  $1.AnyValue ensureBody() => $_ensure(3);
+  $0.AnyValue ensureBody() => $_ensure(3);
 
   /// Additional attributes that describe the specific event occurrence. [Optional].
   /// Attribute keys MUST be unique (it is not allowed to have more than one
   /// attribute with the same key).
   @$pb.TagNumber(6)
-  $core.List<$1.KeyValue> get attributes => $_getList(4);
+  $core.List<$0.KeyValue> get attributes => $_getList(4);
 
   @$pb.TagNumber(7)
   $core.int get droppedAttributesCount => $_getIZ(5);
