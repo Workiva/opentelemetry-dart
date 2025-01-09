@@ -126,7 +126,10 @@ class OTLPLogExporter implements sdk.LogRecordExporter {
     }
     return pb_logs.LogRecord(
         timeUnixNano: log.hrTime,
-        severityNumber: pg_logs_enum.SeverityNumber.valueOf(log.severityNumber!.index),
+        severityNumber:
+            log.severityNumber != null ? pg_logs_enum.SeverityNumber.valueOf(log.severityNumber!.index) : null,
+        severityText: log.severityText,
+        droppedAttributesCount: log.droppedAttributesCount,
         body: _attributeONEValueToProtobuf(log.body),
         attributes: (log.attributes?.keys ?? [])
             .map((key) => pb_common.KeyValue(key: key, value: _attributeValueToProtobuf(log.attributes!.get(key)!))),
