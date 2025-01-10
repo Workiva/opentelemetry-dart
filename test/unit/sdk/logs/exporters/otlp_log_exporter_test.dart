@@ -119,6 +119,7 @@ void main() {
                   spanId: parent.spanContext.spanId.get(),
                   body: pb_common.AnyValue(stringValue: 'test log'),
                   observedTimeUnixNano: Int64(123),
+                  droppedAttributesCount: 0,
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
@@ -151,6 +152,7 @@ void main() {
                   spanId: parent.spanContext.spanId.get(),
                   body: pb_common.AnyValue(intValue: Int64(2)),
                   observedTimeUnixNano: Int64(123),
+                  droppedAttributesCount: 0,
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
@@ -160,6 +162,7 @@ void main() {
                   spanId: parent.spanContext.spanId.get(),
                   body: pb_common.AnyValue(doubleValue: 2.2),
                   observedTimeUnixNano: Int64(123),
+                  droppedAttributesCount: 0,
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
@@ -169,6 +172,7 @@ void main() {
                   spanId: parent.spanContext.spanId.get(),
                   body: pb_common.AnyValue(boolValue: true),
                   observedTimeUnixNano: Int64(123),
+                  droppedAttributesCount: 0,
                 ),
               ],
               scope: pb_common.InstrumentationScope(name: 'library_name', version: 'library_version'),
