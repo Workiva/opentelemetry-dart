@@ -7,9 +7,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/trace/span.dart';
+import 'package:opentelemetry/src/experimental_sdk.dart';
 import 'package:opentelemetry/src/sdk/trace/read_only_span.dart';
 import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
 class MockContext extends Mock implements Context {}
 
@@ -20,6 +20,10 @@ class MockSpan extends Mock implements Span {}
 class MockReadOnlySpan extends Mock implements ReadOnlySpan {}
 
 class MockSpanProcessor extends Mock implements SpanProcessor {}
+
+class MockLogRecordProcessor extends Mock implements LogRecordProcessor {}
+
+class MockLogRecordExporter extends Mock implements LogRecordExporter {}
 
 class FakeTimeProvider extends Mock implements sdk.TimeProvider {
   FakeTimeProvider({required Int64 now}) : _now = now;
