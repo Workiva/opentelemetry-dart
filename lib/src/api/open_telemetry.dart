@@ -4,10 +4,9 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:opentelemetry/src/api/logs/noop/noop_logger_provider.dart';
-import 'package:opentelemetry/src/experimental_api.dart';
 
 import '../../api.dart' as api;
+import '../experimental_api.dart';
 import 'propagation/noop_text_map_propagator.dart';
 import 'trace/noop_tracer_provider.dart';
 
@@ -63,11 +62,7 @@ Future<T> traceContext<T>(String name, Future<T> Function(api.Context) fn,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) async {
   return trace(name, () => fn(api.Context.current),
-      context: context,
-      tracer: tracer,
-      newRoot: newRoot,
-      spanKind: spanKind,
-      spanLinks: spanLinks);
+      context: context, tracer: tracer, newRoot: newRoot, spanKind: spanKind, spanLinks: spanLinks);
 }
 
 /// Use [traceContextSync] instead of [traceContext] when [fn] is not an async
@@ -81,11 +76,7 @@ T traceContextSync<T>(String name, T Function(api.Context) fn,
     api.SpanKind spanKind = api.SpanKind.internal,
     List<api.SpanLink> spanLinks = const []}) {
   return traceSync(name, () => fn(api.Context.current),
-      context: context,
-      tracer: tracer,
-      newRoot: newRoot,
-      spanKind: spanKind,
-      spanLinks: spanLinks);
+      context: context, tracer: tracer, newRoot: newRoot, spanKind: spanKind, spanLinks: spanLinks);
 }
 
 /// Records a span of the given [name] for the given function with a given
@@ -155,8 +146,7 @@ T traceSync<T>(String name, T Function() fn,
       }
 
       if (r is Future) {
-        throw ArgumentError.value(fn, 'fn',
-            'Use traceSync to trace functions that do not return a [Future].');
+        throw ArgumentError.value(fn, 'fn', 'Use traceSync to trace functions that do not return a [Future].');
       }
       return r;
     });
