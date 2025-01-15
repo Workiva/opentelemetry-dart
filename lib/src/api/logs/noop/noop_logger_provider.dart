@@ -13,7 +13,6 @@ class NoopLoggerProvider implements LoggerProvider {
     String version = '',
     String schemaUrl = '',
     List<Attribute> attributes = const [],
-    bool? includeTraceContext,
   }) =>
       const NoopLogger();
 }

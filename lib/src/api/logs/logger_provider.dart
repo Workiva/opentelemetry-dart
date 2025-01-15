@@ -20,6 +20,5 @@ abstract class LoggerProvider {
     String version = '',
     String schemaUrl = '',
     List<Attribute> attributes = const [],
-    bool? includeTraceContext,
   });
 }
