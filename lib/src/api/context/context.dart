@@ -19,7 +19,6 @@ final Logger _log = Logger('opentelemetry');
 // TODO: @sealed
 class ContextKey {}
 
-final ContextKey _contextStackKey = ContextKey();
 final ContextKey _spanKey = ContextKey();
 
 @sealed
