@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
@@ -21,13 +22,24 @@ class Logger extends api.Logger {
   });
 
   @override
-  void emit(api.LogRecord logRecord) {
+  void emit({
+    sdk.Attributes? attributes,
+    Context? context,
+    dynamic body,
+    DateTime? observedTimestamp,
+    api.Severity? severityNumber,
+    String? severityText,
+    DateTime? timeStamp,
+  }) {
     final log = sdk.LogRecord(
       logRecordLimits: logRecordLimits,
       resource: resource,
       instrumentationScope: instrumentationScope,
-      logRecord: logRecord,
-      context: logRecord.context,
+      context: context,
+      severityText: severityText,
+      severityNumber: severityNumber,
+      attributes: attributes,
+      body: body,
       timeProvider: timeProvider,
     );
     onLogEmit?.call(log);

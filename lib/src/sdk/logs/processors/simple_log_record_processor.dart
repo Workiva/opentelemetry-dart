@@ -26,7 +26,7 @@ class SimpleLogRecordProcessor implements sdk.LogRecordProcessor {
     final completer = Completer();
     exportsCompletion.add(completer);
     exporter.export([logRecord]).then((result) {
-      if (result.code != api.ExportResultCode.success) {
+      if (result.code != sdk.ExportResultCode.success) {
         logger.shout('SimpleLogRecordProcessor: log record export failed', result.error, result.stackTrace);
       }
     }).whenComplete(() {

@@ -17,11 +17,12 @@ class LogRecord implements sdk.ReadableLogRecord {
   @override
   final sdk.Resource? resource;
 
-  final api.LogRecord logRecord;
   final sdk.TimeProvider _timeProvider;
   final api.Context? context;
   final api.SpanContext? _spanContext;
   final sdk.LogRecordLimits logRecordLimits;
+  final DateTime? timeStamp;
+  final DateTime? observedTimestamp;
 
   bool _isReadonly = false;
   String? _severityText;
@@ -33,18 +34,23 @@ class LogRecord implements sdk.ReadableLogRecord {
 
   LogRecord({
     required this.instrumentationScope,
-    required this.logRecord,
     required this.logRecordLimits,
+    api.Severity? severityNumber,
+    String? severityText,
+    sdk.Attributes? attributes,
+    dynamic body,
     this.resource,
     this.context,
+    this.timeStamp,
+    this.observedTimestamp,
     sdk.TimeProvider? timeProvider,
-  })  : _severityText = logRecord.severityText,
-        _body = logRecord.body,
+  })  : _severityText = severityText,
+        _body = body,
         _attributes = sdk.Attributes.empty(),
-        _severityNumber = logRecord.severityNumber,
-        _spanContext = context != null ? api.spanContextFromContext(context) : null,
+        _severityNumber = severityNumber,
+        _spanContext = api.spanContextFromContext(context ?? api.Context.current),
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider() {
-    setAttributes(logRecord.attributes);
+    if (attributes != null) setAttributes(attributes);
   }
 
   @override
@@ -66,13 +72,11 @@ class LogRecord implements sdk.ReadableLogRecord {
   int get droppedAttributesCount => _totalAttributesCount - (attributes?.length ?? 0);
 
   @override
-  Int64? get hrTime =>
-      logRecord.timeStamp != null ? Int64(logRecord.timeStamp!.microsecondsSinceEpoch) * 1000 : _timeProvider.now;
+  Int64? get hrTime => timeStamp != null ? Int64(timeStamp!.microsecondsSinceEpoch) * 1000 : _timeProvider.now;
 
   @override
-  Int64? get hrTimeObserved => logRecord.observedTimestamp != null
-      ? Int64(logRecord.observedTimestamp!.microsecondsSinceEpoch) * 1000
-      : _timeProvider.now;
+  Int64? get hrTimeObserved =>
+      observedTimestamp != null ? Int64(observedTimestamp!.microsecondsSinceEpoch) * 1000 : _timeProvider.now;
 
   @override
   api.Severity? get severityNumber => _severityNumber;

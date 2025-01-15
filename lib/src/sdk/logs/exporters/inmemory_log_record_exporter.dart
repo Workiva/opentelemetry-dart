@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:meta/meta.dart';
-import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
 /// This class can be used for testing purposes. It stores the exported LogRecords
@@ -17,17 +16,17 @@ class InMemoryLogRecordExporter implements sdk.LogRecordExporter {
   bool _stopped = false;
 
   @override
-  Future<api.ExportResult> export(List<sdk.ReadableLogRecord> logs) async {
+  Future<sdk.ExportResult> export(List<sdk.ReadableLogRecord> logs) async {
     if (_stopped) {
-      return api.ExportResult(
-        code: api.ExportResultCode.failed,
+      return sdk.ExportResult(
+        code: sdk.ExportResultCode.failed,
         error: Exception('Exporter has been stopped'),
         stackTrace: StackTrace.current,
       );
     }
     _finishedLogRecords.addAll(logs);
 
-    return api.ExportResult(code: api.ExportResultCode.success);
+    return sdk.ExportResult(code: sdk.ExportResultCode.success);
   }
 
   @override

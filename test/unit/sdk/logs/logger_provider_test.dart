@@ -15,7 +15,6 @@ void main() {
   setUpAll(() {
     registerFallbackValue(sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(),
       logRecordLimits: sdk.LogRecordLimits(),
     ));
   });
@@ -43,7 +42,7 @@ void main() {
     final mockTimeProvider = FakeTimeProvider(now: Int64(123));
     final mockProcessor1 = MockLogRecordProcessor();
     final provider = sdk.LoggerProvider(timeProvider: mockTimeProvider, processors: [mockProcessor1]);
-    provider.get('foo').emit(api.LogRecord());
+    provider.get('foo').emit();
     verify(() => mockProcessor1.onEmit(any(
           that: predicate((a) {
             if (a is! sdk.LogRecord) return false;

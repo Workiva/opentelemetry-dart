@@ -7,7 +7,6 @@ import 'dart:async';
 import 'package:fixnum/fixnum.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:test/test.dart';
 
@@ -25,13 +24,10 @@ void main() {
     final context = api.contextWithSpan(api.Context.current, parent);
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(),
       context: context,
       logRecordLimits: sdk.LogRecordLimits(),
       timeProvider: FakeTimeProvider(now: Int64(123)),
-      resource: sdk.Resource([
-        api.Attribute.fromString('resource.name', 'test')
-      ])
+      resource: sdk.Resource([api.Attribute.fromString('resource.name', 'test')]),
     )
       ..makeReadonly()
       ..body = 'Log Message';

@@ -32,26 +32,26 @@ class OTLPLogExporter implements sdk.LogRecordExporter {
   }) : client = httpClient ?? http.Client();
 
   @override
-  Future<api.ExportResult> export(List<sdk.ReadableLogRecord> logRecords) async {
+  Future<sdk.ExportResult> export(List<sdk.ReadableLogRecord> logRecords) async {
     if (_isShutdown) {
-      return api.ExportResult(
-        code: api.ExportResultCode.failed,
+      return sdk.ExportResult(
+        code: sdk.ExportResultCode.failed,
       );
     }
 
     if (logRecords.isEmpty) {
-      return api.ExportResult(
-        code: api.ExportResultCode.success,
+      return sdk.ExportResult(
+        code: sdk.ExportResultCode.success,
       );
     }
 
     return _send(uri, logRecords).then((_) {
-      return api.ExportResult(
-        code: api.ExportResultCode.success,
+      return sdk.ExportResult(
+        code: sdk.ExportResultCode.success,
       );
     }).catchError((e, st) {
-      return api.ExportResult(
-        code: api.ExportResultCode.failed,
+      return sdk.ExportResult(
+        code: sdk.ExportResultCode.failed,
         error: e,
         stackTrace: st,
       );

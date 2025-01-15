@@ -8,8 +8,6 @@ import 'package:fixnum/fixnum.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/api/common/export_result.dart';
-import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/logs/processors/simple_log_record_processor.dart';
 import 'package:test/test.dart';
@@ -23,14 +21,13 @@ void main() {
   setUp(() {
     exporter = MockLogRecordExporter();
     processor = SimpleLogRecordProcessor(exporter: exporter);
-    when(() => exporter.export(any())).thenAnswer((_) async => ExportResult(code: ExportResultCode.success));
+    when(() => exporter.export(any())).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.success));
     when(() => exporter.shutdown()).thenAnswer((_) => Future.value());
   });
 
   test('executes export', () {
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(),
       logRecordLimits: sdk.LogRecordLimits(),
     );
 
@@ -46,11 +43,10 @@ void main() {
     });
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(),
       logRecordLimits: sdk.LogRecordLimits(),
     );
 
-    when(() => exporter.export(any())).thenAnswer((_) async => ExportResult(code: ExportResultCode.failed));
+    when(() => exporter.export(any())).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.failed));
 
     processor.onEmit(logRecord);
 
@@ -68,14 +64,13 @@ void main() {
   test('forceFlush waits for all pending exports to complete', () async {
     when(() => exporter.export(any())).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 1));
-      return ExportResult(code: ExportResultCode.success);
+      return sdk.ExportResult(code: sdk.ExportResultCode.success);
     });
 
     // Emit two log records, creating two pending exports.
     processor.onEmit(
       sdk.LogRecord(
           instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-          logRecord: api.LogRecord(),
           logRecordLimits: sdk.LogRecordLimits(),
           timeProvider: FakeTimeProvider(now: Int64(123))),
     );
@@ -83,7 +78,6 @@ void main() {
     processor.onEmit(
       sdk.LogRecord(
           instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-          logRecord: api.LogRecord(),
           logRecordLimits: sdk.LogRecordLimits(),
           timeProvider: FakeTimeProvider(now: Int64(123))),
     );

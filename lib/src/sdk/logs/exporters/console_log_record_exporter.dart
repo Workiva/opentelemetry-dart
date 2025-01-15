@@ -10,7 +10,7 @@ import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 /// NOTE: This [sdk.LogRecordExporter] is intended for diagnostics use only, output rendered to the console may change at any time.
 class ConsoleLogRecordExporter implements sdk.LogRecordExporter {
   @override
-  Future<api.ExportResult> export(List<sdk.ReadableLogRecord> logs) async {
+  Future<sdk.ExportResult> export(List<sdk.ReadableLogRecord> logs) async {
     return _sendLogRecords(logs);
   }
 
@@ -19,11 +19,11 @@ class ConsoleLogRecordExporter implements sdk.LogRecordExporter {
   Future<void> shutdown() async {}
 
   /// Showing logs  in console
-  api.ExportResult _sendLogRecords(List<sdk.ReadableLogRecord> logs) {
+  sdk.ExportResult _sendLogRecords(List<sdk.ReadableLogRecord> logs) {
     for (final log in logs) {
       print(_makeObject(log));
     }
-    return api.ExportResult(code: api.ExportResultCode.success);
+    return sdk.ExportResult(code: sdk.ExportResultCode.success);
   }
 
   /// converts logRecord info into more readable format

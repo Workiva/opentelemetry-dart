@@ -14,7 +14,7 @@ void main() async {
   );
   registerGlobalLogProvider(provider);
 
-  globalLogProvider.get('test logger').emit(api.LogRecord(body: 'test otel log', severityNumber: api.Severity.error));
+  globalLogProvider.get('test logger').emit(body: 'test otel log', severityNumber: api.Severity.error);
 
   await Future.delayed(const Duration(seconds: 10));
 }

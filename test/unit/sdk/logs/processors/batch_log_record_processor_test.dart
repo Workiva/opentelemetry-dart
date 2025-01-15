@@ -6,7 +6,6 @@ import 'package:fixnum/fixnum.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/api/common/export_result.dart';
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:test/test.dart';
@@ -16,7 +15,7 @@ import '../../../mocks.dart';
 void main() {
   test('test processor', () async {
     final exporter = MockLogRecordExporter();
-    when(() => exporter.export(any())).thenAnswer((_) async => ExportResult(code: ExportResultCode.success));
+    when(() => exporter.export(any())).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.success));
     final processor = sdk.BatchLogRecordProcessor(
       exporter: exporter,
       scheduledDelayMillis: Duration.zero.inMilliseconds,
@@ -27,7 +26,6 @@ void main() {
     final context = api.contextWithSpan(api.Context.current, parent);
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecord: api.LogRecord(),
         logRecordLimits: sdk.LogRecordLimits(),
         context: context,
         timeProvider: FakeTimeProvider(now: Int64(123)));
@@ -49,7 +47,7 @@ void main() {
 
   test('processor shut down', () async {
     final exporter = MockLogRecordExporter();
-    when(exporter.shutdown).thenAnswer((_) async => ExportResult(code: ExportResultCode.success));
+    when(exporter.shutdown).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.success));
 
     final processor = sdk.BatchLogRecordProcessor(
       exporter: exporter,
@@ -63,7 +61,7 @@ void main() {
 
   test('processor shut down will not emit log', () async {
     final exporter = MockLogRecordExporter();
-    when(exporter.shutdown).thenAnswer((_) async => ExportResult(code: ExportResultCode.success));
+    when(exporter.shutdown).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.success));
 
     final processor = sdk.BatchLogRecordProcessor(
       exporter: exporter,
@@ -73,7 +71,6 @@ void main() {
     await processor.shutdown();
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecord: api.LogRecord(),
         logRecordLimits: sdk.LogRecordLimits());
     final logRecordA = logRecord
       ..body = 'test log'
@@ -87,7 +84,7 @@ void main() {
 
   test('processor force flush', () async {
     final exporter = MockLogRecordExporter();
-    when(() => exporter.export(any())).thenAnswer((_) async => ExportResult(code: ExportResultCode.success));
+    when(() => exporter.export(any())).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.success));
 
     final processor = sdk.BatchLogRecordProcessor(
       exporter: exporter,
@@ -96,7 +93,6 @@ void main() {
 
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecord: api.LogRecord(),
         logRecordLimits: sdk.LogRecordLimits());
     final logRecordA = logRecord
       ..body = 'test log'

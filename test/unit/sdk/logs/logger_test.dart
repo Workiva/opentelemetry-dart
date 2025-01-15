@@ -4,7 +4,6 @@
 @TestOn('vm')
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:test/test.dart';
 
@@ -20,7 +19,6 @@ void main() {
   setUpAll(() {
     registerFallbackValue(sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(),
       logRecordLimits: sdk.LogRecordLimits(),
     ));
   });
@@ -37,7 +35,7 @@ void main() {
       ),
       resource: sdk.Resource([]),
       onLogEmit: callBack,
-    ).emit(api.LogRecord(body: 'TEST!'));
+    ).emit(body: 'TEST!');
 
     verify(() => callBack.call(any<sdk.LogRecord>(that: predicate<sdk.LogRecord>((it) {
           return it.attributes?.keys.isEmpty == true &&

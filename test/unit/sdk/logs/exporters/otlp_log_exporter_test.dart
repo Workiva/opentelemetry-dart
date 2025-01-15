@@ -44,61 +44,49 @@ void main() {
     final log1 = sdk.LogRecord(
         resource: resource,
         instrumentationScope: instrumentationLibrary,
-        logRecord: api.LogRecord(
-          context: context,
-          body: 'test log',
-          severityNumber: api.Severity.fatal3,
-        ),
+        body: 'test log',
+        severityNumber: api.Severity.fatal3,
         logRecordLimits: logLimit,
         context: context,
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..setAttribute('key', 'value');
 
     final log2 = sdk.LogRecord(
-        resource: resource,
-        instrumentationScope: instrumentationLibrary,
-        logRecord: api.LogRecord(
-          context: context,
-          body: 2,
-          severityNumber: api.Severity.fatal3,
-          attributes: sdk.Attributes.empty()
-            ..addAll([
-              api.Attribute.fromBoolean('fromBoolean', false),
-              api.Attribute.fromDouble('fromDouble', 1.1),
-              api.Attribute.fromInt('fromInt', 1),
-              api.Attribute.fromBooleanList('fromBooleanList', [false]),
-              api.Attribute.fromDoubleList('fromDoubleList', [1.1]),
-              api.Attribute.fromIntList('fromIntList', [1]),
-            ]),
-        ),
-        logRecordLimits: logLimit,
-        context: context,
-        timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..setAttribute('key', 'value');
+      resource: resource,
+      instrumentationScope: instrumentationLibrary,
+      context: context,
+      body: 2,
+      severityNumber: api.Severity.fatal3,
+      attributes: sdk.Attributes.empty()
+        ..addAll([
+          api.Attribute.fromBoolean('fromBoolean', false),
+          api.Attribute.fromDouble('fromDouble', 1.1),
+          api.Attribute.fromInt('fromInt', 1),
+          api.Attribute.fromBooleanList('fromBooleanList', [false]),
+          api.Attribute.fromDoubleList('fromDoubleList', [1.1]),
+          api.Attribute.fromIntList('fromIntList', [1]),
+        ]),
+      logRecordLimits: logLimit,
+      timeProvider: FakeTimeProvider(now: Int64(123)),
+    )..setAttribute('key', 'value');
 
     final log3 = sdk.LogRecord(
         resource: resource,
         instrumentationScope: instrumentationLibrary,
-        logRecord: api.LogRecord(
-          context: context,
-          body: 2.2,
-          severityNumber: api.Severity.fatal3,
-        ),
-        logRecordLimits: logLimit,
         context: context,
+        body: 2.2,
+        severityNumber: api.Severity.fatal3,
+        logRecordLimits: logLimit,
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..setAttribute('key', 'value');
 
     final log4 = sdk.LogRecord(
         resource: resource,
         instrumentationScope: instrumentationLibrary,
-        logRecord: api.LogRecord(
-          context: context,
-          body: true,
-          severityNumber: api.Severity.fatal3,
-        ),
-        logRecordLimits: logLimit,
         context: context,
+        body: true,
+        severityNumber: api.Severity.fatal3,
+        logRecordLimits: logLimit,
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..setAttribute('key', 'value');
 
@@ -198,13 +186,10 @@ void main() {
 
     final log1 = sdk.LogRecord(
         instrumentationScope: instrumentationLibrary,
-        logRecord: api.LogRecord(
-          context: context,
-          body: 'test log',
-          severityNumber: api.Severity.fatal3,
-        ),
-        logRecordLimits: logLimit,
         context: context,
+        body: 'test log',
+        severityNumber: api.Severity.fatal3,
+        logRecordLimits: logLimit,
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..setAttribute('key', 'value');
 
@@ -226,11 +211,8 @@ void main() {
 
     final log1 = sdk.LogRecord(
         instrumentationScope: instrumentationLibrary,
-        logRecord: api.LogRecord(
-          context: context,
-          body: 'test log',
-          severityNumber: api.Severity.fatal3,
-        ),
+        body: 'test log',
+        severityNumber: api.Severity.fatal3,
         logRecordLimits: logLimit,
         context: context,
         timeProvider: FakeTimeProvider(now: Int64(123)))

@@ -15,7 +15,6 @@ void main() {
   test('set readonly will block values from being set', () {
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecord: api.LogRecord(),
         logRecordLimits: sdk.LogRecordLimits(),
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..makeReadonly()
@@ -37,7 +36,6 @@ void main() {
   test('logRecord call setter', () {
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecord: api.LogRecord(),
         logRecordLimits: sdk.LogRecordLimits(),
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..body = 'Log Message'
@@ -58,7 +56,6 @@ void main() {
   test('logRecord update same attribute will create attributesCount diff', () {
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(),
       logRecordLimits: sdk.LogRecordLimits(),
     )
       ..setAttributes(sdk.Attributes.empty()..add(api.Attribute.fromString('key2', 'value')))
@@ -71,10 +68,8 @@ void main() {
     final now = DateTime.now();
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(
-        timeStamp: now,
-        observedTimestamp: now,
-      ),
+      timeStamp: now,
+      observedTimestamp: now,
       logRecordLimits: sdk.LogRecordLimits(),
     )
       ..setAttributes(sdk.Attributes.empty()..add(api.Attribute.fromString('key2', 'value')))
@@ -88,10 +83,8 @@ void main() {
     final now = DateTime.now();
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(
-        timeStamp: now,
-        observedTimestamp: now,
-      ),
+      timeStamp: now,
+      observedTimestamp: now,
       logRecordLimits: sdk.LogRecordLimits(maxNumAttributeLength: 2),
     )
       ..setAttribute('key', 'value')
@@ -112,10 +105,8 @@ void main() {
     final now = DateTime.now();
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecord: api.LogRecord(
-        timeStamp: now,
-        observedTimestamp: now,
-      ),
+      timeStamp: now,
+      observedTimestamp: now,
       logRecordLimits: sdk.LogRecordLimits(maxNumAttributeLength: 2),
     )
       ..setAttribute('key', 'value')
