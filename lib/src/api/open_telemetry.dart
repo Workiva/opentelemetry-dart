@@ -19,6 +19,8 @@ api.TextMapPropagator _textMapPropagator = _noopTextMapPropagator;
 
 api.TracerProvider get globalTracerProvider => _tracerProvider;
 
+LoggerProvider get globalLogProvider => _logProvider;
+
 api.TextMapPropagator get globalTextMapPropagator => _textMapPropagator;
 
 void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
