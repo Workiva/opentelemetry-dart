@@ -7,6 +7,7 @@ import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
+import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
 import 'package:test/test.dart';
 
 import '../trace_provider_test.dart';
@@ -15,7 +16,7 @@ void main() {
   test('set readonly will block values from being set', () {
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecordLimits: sdk.LogRecordLimits(),
+        logRecordLimits: LogRecordLimitsImpl(),
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..makeReadonly()
       ..body = 'Log Message'
@@ -36,7 +37,7 @@ void main() {
   test('logRecord call setter', () {
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecordLimits: sdk.LogRecordLimits(),
+        logRecordLimits: LogRecordLimitsImpl(),
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..body = 'Log Message'
       ..severityNumber = api.Severity.debug
@@ -56,7 +57,7 @@ void main() {
   test('logRecord update same attribute will create attributesCount diff', () {
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecordLimits: sdk.LogRecordLimits(),
+      logRecordLimits: LogRecordLimitsImpl(),
     )
       ..setAttributes(sdk.Attributes.empty()..add(api.Attribute.fromString('key2', 'value')))
       ..setAttribute('key2', 'value2');
@@ -70,7 +71,7 @@ void main() {
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
       timeStamp: now,
       observedTimestamp: now,
-      logRecordLimits: sdk.LogRecordLimits(),
+      logRecordLimits: LogRecordLimitsImpl(),
     )
       ..setAttributes(sdk.Attributes.empty()..add(api.Attribute.fromString('key2', 'value')))
       ..setAttribute('key2', 'value2');
@@ -85,7 +86,7 @@ void main() {
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
       timeStamp: now,
       observedTimestamp: now,
-      logRecordLimits: sdk.LogRecordLimits(attributeValueLengthLimit: 2),
+      logRecordLimits: LogRecordLimitsImpl(attributeValueLengthLimit: 2),
     )
       ..setAttribute('key', 'value')
       ..setAttribute('key2', true)
@@ -107,7 +108,7 @@ void main() {
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
       timeStamp: now,
       observedTimestamp: now,
-      logRecordLimits: sdk.LogRecordLimits(attributeValueLengthLimit: 2),
+      logRecordLimits: LogRecordLimitsImpl(attributeValueLengthLimit: 2),
     )
       ..setAttribute('key', 'value')
       ..setAttribute('key2', ['value2']);
