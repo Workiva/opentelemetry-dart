@@ -6,7 +6,9 @@ library experimental_sdk;
 
 import 'package:meta/meta.dart';
 
+export 'sdk/logs/log_record.dart' show ReadableLogRecord, ReadWriteLogRecord, LogRecord;
+export 'sdk/logs/log_record_limit.dart' show LogRecordLimits;
 export 'sdk/metrics/counter.dart' show Counter;
-export 'sdk/metrics/meter_provider.dart' show MeterProvider;
 export 'sdk/metrics/meter.dart' show Meter;
+export 'sdk/metrics/meter_provider.dart' show MeterProvider;
 export 'sdk/resource/resource.dart' show Resource;
