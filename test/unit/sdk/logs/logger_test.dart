@@ -18,7 +18,7 @@ class CallbackMock extends Mock implements Callback {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(sdk.Logger(
+    registerFallbackValue(sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
       logRecordLimits: LogRecordLimitsImpl(),
     ));
