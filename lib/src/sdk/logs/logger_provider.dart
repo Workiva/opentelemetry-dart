@@ -30,9 +30,10 @@ class LoggerProvider implements api.LoggerProvider {
     this.resource,
     this.config = const LoggerConfig(),
     this.logRecordLimits = const LogRecordLimitsImpl(),
-    this.processors = const <sdk.LogRecordProcessor>[],
+    List<sdk.LogRecordProcessor>? processors,
     sdk.TimeProvider? timeProvider,
-  }) : _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider();
+  })  : processors = processors ?? <sdk.LogRecordProcessor>[],
+        _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider();
 
   @override
   api.Logger get(
