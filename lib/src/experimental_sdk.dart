@@ -17,6 +17,7 @@ export 'sdk/logs/processors/log_record_processor.dart' show LogRecordProcessor;
 export 'sdk/logs/processors/noop_log_processor.dart' show NoopLogRecordProcessor;
 export 'sdk/logs/processors/batch_log_record_processor.dart' show BatchLogRecordProcessor;
 export 'sdk/logs/exporters/console_log_record_exporter.dart' show ConsoleLogRecordExporter;
+export 'sdk/logs/exporters/inmemory_log_record_exporter.dart' show InMemoryLogRecordExporter;
 export 'sdk/logs/exporters/log_record_exporter.dart' show LogRecordExporter;
 export 'sdk/logs/log_record_limit.dart' show LogRecordLimits;
 export 'sdk/metrics/counter.dart' show Counter;
