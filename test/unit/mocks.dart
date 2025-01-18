@@ -21,6 +21,8 @@ class MockSpanProcessor extends Mock implements SpanProcessor {}
 
 class MockLogRecordProcessor extends Mock implements LogRecordProcessor {}
 
+class MockLogRecordExporter extends Mock implements LogRecordExporter {}
+
 class FakeTimeProvider extends Mock implements TimeProvider {
   FakeTimeProvider({required Int64 now}) : _now = now;
   final Int64 _now;
