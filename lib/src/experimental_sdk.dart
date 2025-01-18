@@ -10,6 +10,7 @@ export 'sdk/logs/log_record.dart' show ReadableLogRecord, ReadWriteLogRecord, Lo
 export 'sdk/logs/log_record_limit.dart' show LogRecordLimits;
 export 'sdk/logs/logger.dart' show Logger;
 export 'sdk/logs/logger_provider.dart' show LoggerProvider;
+export 'sdk/logs/export_result.dart' show ExportResult, ExportResultCode;
 export 'sdk/logs/processors/log_record_processor.dart' show LogRecordProcessor;
 export 'sdk/logs/processors/noop_log_processor.dart' show NoopLogRecordProcessor;
 export 'sdk/metrics/counter.dart' show Counter;
