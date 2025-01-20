@@ -5,7 +5,6 @@
 import 'package:fixnum/src/int64.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
 import 'package:test/test.dart';
 
