@@ -16,8 +16,10 @@ export 'src/api/logs/noop/noop_logger.dart' show NoopLogger;
 export 'src/api/logs/noop/noop_logger_provider.dart' show NoopLoggerProvider;
 export 'src/api/open_telemetry.dart'
     show
+        globalLogProvider,
         globalTextMapPropagator,
         globalTracerProvider,
+        registerGlobalLogProvider,
         registerGlobalTextMapPropagator,
         registerGlobalTracerProvider,
         trace,
