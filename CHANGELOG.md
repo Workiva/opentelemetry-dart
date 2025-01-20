@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.18.8](https://github.com/Workiva/opentelemetry-dart/tree/0.18.8) (2025-01-08)
+
+[Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.7...0.18.8)
+
+**Merged pull requests:**
+
+- add sampling support to span processors [\#200](https://github.com/Workiva/opentelemetry-dart/pull/200) ([blakeroberts-wk](https://github.com/blakeroberts-wk))
+- O11Y-5307: Run CI Once [\#197](https://github.com/Workiva/opentelemetry-dart/pull/197) ([kennytrytek-wf](https://github.com/kennytrytek-wf))
+
+## [0.18.7](https://github.com/Workiva/opentelemetry-dart/tree/0.18.7) (2024-11-12)
+
+[Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.6...0.18.7)
+
+**Closed issues:**
+
+- Trace Context API Consolidation [\#185](https://github.com/Workiva/opentelemetry-dart/issues/185)
+- Usage examples for async would be really valuable [\#174](https://github.com/Workiva/opentelemetry-dart/issues/174)
+- Context.current.span doesn't find the current span  [\#166](https://github.com/Workiva/opentelemetry-dart/issues/166)
+- OTLPResourceNoServiceName - ResourceAttributes missing [\#153](https://github.com/Workiva/opentelemetry-dart/issues/153)
+- Deprecate InstrumentationLibrary usages and use InstrumentationScope instead [\#98](https://github.com/Workiva/opentelemetry-dart/issues/98)
+
+**Merged pull requests:**
+
+- PPI-203 : deprecate context manager and implement attach/detach APIs [\#196](https://github.com/Workiva/opentelemetry-dart/pull/196) ([blakeroberts-wk](https://github.com/blakeroberts-wk))
+- Raise the meta dependency min to v1.16.0 [\#195](https://github.com/Workiva/opentelemetry-dart/pull/195) ([sourcegraph-wk](https://github.com/sourcegraph-wk))
+- O11Y-5250: Add retry [\#194](https://github.com/Workiva/opentelemetry-dart/pull/194) ([changliu-wk](https://github.com/changliu-wk))
+- Update trace exporter to include trace state and drop counts [\#184](https://github.com/Workiva/opentelemetry-dart/pull/184) ([blakeroberts-wk](https://github.com/blakeroberts-wk))
+- update changelog [\#180](https://github.com/Workiva/opentelemetry-dart/pull/180) ([blakeroberts-wk](https://github.com/blakeroberts-wk))
+
 ## [0.18.6](https://github.com/Workiva/opentelemetry-dart/tree/0.18.6) (2024-08-15)
 
 [Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.5...0.18.6)
