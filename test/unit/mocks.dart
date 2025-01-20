@@ -9,7 +9,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/trace/span.dart';
-import 'package:opentelemetry/src/experimental_sdk.dart';
 
 class MockContext extends Mock implements Context {}
 
