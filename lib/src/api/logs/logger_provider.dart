@@ -7,7 +7,7 @@ import 'package:opentelemetry/src/api/logs/logger.dart';
 abstract class LoggerProvider {
   /// Gets or creates a [Logger] instance.
   ///
-  /// The meter is identified by the combination of [name], [version],
+  /// The logger is identified by the combination of [name], [version],
   /// [schemaUrl] and [attributes]. The [name] SHOULD uniquely identify the
   /// instrumentation scope, such as the instrumentation library
   /// (e.g. io.opentelemetry.contrib.mongodb), package, module or class name.
