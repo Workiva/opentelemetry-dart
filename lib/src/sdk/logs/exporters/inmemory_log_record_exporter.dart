@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:meta/meta.dart';
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
+import 'package:opentelemetry/sdk.dart' as sdk;
 
 /// This class can be used for testing purposes. It stores the exported LogRecords
 /// in a list in memory that can be retrieved using the `getFinishedLogRecords()`

@@ -4,7 +4,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
+import 'package:opentelemetry/sdk.dart' as sdk;
 
 class BatchLogRecordProcessor extends sdk.LogRecordProcessor {
   static const OTEL_BLRP_MAX_EXPORT_BATCH_SIZE = 512;

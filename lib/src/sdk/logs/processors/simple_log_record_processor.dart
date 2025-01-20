@@ -5,7 +5,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart' as logging;
 import 'package:meta/meta.dart';
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
+import 'package:opentelemetry/sdk.dart' as sdk;
 
 class SimpleLogRecordProcessor implements sdk.LogRecordProcessor {
   final logger = logging.Logger('opentelemetry.sdk.logs.simplelogrecordprocessor');

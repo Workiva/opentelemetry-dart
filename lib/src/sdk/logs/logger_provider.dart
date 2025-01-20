@@ -3,8 +3,6 @@
 
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart' as api;
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
 import 'package:opentelemetry/src/sdk/logs/logger_config.dart';
 import 'package:quiver/core.dart';

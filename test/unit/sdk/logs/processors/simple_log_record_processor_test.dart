@@ -8,9 +8,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
-import 'package:opentelemetry/src/sdk/logs/processors/simple_log_record_processor.dart';
 import 'package:test/test.dart';
 
 import '../../../mocks.dart';
@@ -21,7 +19,7 @@ void main() {
 
   setUp(() {
     exporter = MockLogRecordExporter();
-    processor = SimpleLogRecordProcessor(exporter: exporter);
+    processor = sdk.SimpleLogRecordProcessor(exporter: exporter);
     when(() => exporter.export(any())).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.success));
     when(() => exporter.shutdown()).thenAnswer((_) => Future.value());
   });
@@ -82,7 +80,7 @@ void main() {
           logRecordLimits: LogRecordLimits(),
           timeProvider: FakeTimeProvider(now: Int64(123))),
     );
-    expect((processor as SimpleLogRecordProcessor).exportsCompletion.length, 2);
+    expect((processor as sdk.SimpleLogRecordProcessor).exportsCompletion.length, 2);
     // Ensure the exports are pending.
     final flushFuture = processor.forceFlush();
     expect(flushFuture, completes);
