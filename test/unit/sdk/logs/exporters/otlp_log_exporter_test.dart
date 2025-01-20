@@ -8,8 +8,6 @@ import 'package:fixnum/fixnum.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart' as api;
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/collector/logs/v1/logs_service.pb.dart'
     as pb_log_service;
