@@ -5,8 +5,6 @@ import 'package:fixnum/fixnum.dart';
 import 'package:meta/meta.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart' as api;
-import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
 import '../common/limits.dart';
 
@@ -40,7 +38,6 @@ abstract class ReadWriteLogRecord extends ReadableLogRecord {
 
   set severityNumber(api.Severity? severity);
 }
-
 
 class LogRecord implements ReadWriteLogRecord {
   @override
@@ -186,4 +183,3 @@ class LogRecord implements ReadWriteLogRecord {
     _isReadonly = true;
   }
 }
-
