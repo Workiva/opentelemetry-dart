@@ -8,12 +8,13 @@ This repository is the Dart implementation of the [OpenTelemetry project](https:
 | - | - |
 | Traces | Beta |
 | Metrics | Alpha |
-| Logs | Unimplemented |
+| Logs | Beta |
 
 ## Getting Started
 
 This section will show you how to initialize the OpenTelemetry SDK, capture a span, and propagate context.
 
+### Tacers
 ### Initialize the OpenTelemetry SDK
 
 ```dart
@@ -61,6 +62,45 @@ void main(List<String> args) {
   }
 }
 ```
+
+### Logs
+#### Initialize the OpenTelemetry SDK
+
+```dart
+import 'package:opentelemetry/sdk.dart'
+    show
+    BatchLogRecordProcessor,
+        OTLPLogExporter,
+        ConsoleExporter,
+        SimpleLogRecordProcessor,
+        TracerProviderBase;
+import 'package:opentelemetry/api.dart'
+    show registerGlobalLogProvider, globalLogProvider;
+
+void main(List<String> args) {
+  final logProvider = TracerProviderBase(processors: [
+    BatchLogRecordProcessor(
+        OTLPLogExporter(Uri.parse('https://my-collector.com/v1/traces'))),
+    SimpleLogRecordProcessor(ConsoleLogRecordExporter())
+  ]);
+
+  registerGlobalLogProvider(logProvider);
+  final tracer = globalLogProvider.get('logger-name');
+}
+```
+
+### Capture a Log 
+```dart
+import 'package:opentelemetry/api.dart' show StatusCode, globalLogProvider;
+
+void main(List<String> args) {
+  final logger = globalLogProvider.get('logger-name');
+
+  logger.emit(body: "Hello World!");
+}
+```
+
+
 
 ### Propagate Context
 
