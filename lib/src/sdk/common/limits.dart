@@ -1,10 +1,11 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
-import '../logs/log_record_limit.dart';
+import '../../experimental_sdk.dart' as sdk;
 
 /// Applies given [sdk.SpanLimits] to a list of [api.SpanLink]s.
 @protected
@@ -79,19 +80,31 @@ api.Attribute applyAttributeLimits(api.Attribute attr, sdk.SpanLimits limits) {
 }
 
 @protected
-api.Attribute applyAttributeLimitsForLog(api.Attribute attr, LogRecordLimits limits) {
+api.Attribute applyAttributeLimitsForLog(
+  api.Attribute attr,
+  sdk.LogRecordLimits limits,
+) {
   // if maxNumAttributeLength is less than zero, then it has unlimited length.
   if (limits.attributeValueLengthLimit < 0) return attr;
 
   if (attr.value is String) {
-    attr = api.Attribute.fromString(
-        attr.key, applyAttributeLengthLimit(attr.value as String, limits.attributeValueLengthLimit));
+    final truncatedValue = applyAttributeLengthLimit(
+        attr.value as String, limits.attributeValueLengthLimit);
+
+    if (truncatedValue == attr.value) return attr;
+
+    return api.Attribute.fromString(attr.key, truncatedValue);
   } else if (attr.value is List<String>) {
     final listString = attr.value as List<String>;
-    for (var j = 0; j < listString.length; j++) {
-      listString[j] = applyAttributeLengthLimit(listString[j], limits.attributeValueLengthLimit);
-    }
-    attr = api.Attribute.fromStringList(attr.key, listString);
+    final truncatedValues = listString
+        .map((e) =>
+            applyAttributeLengthLimit(e, limits.attributeValueLengthLimit))
+        .toList();
+
+    final equal = const ListEquality().equals(listString, truncatedValues);
+    if (equal) return attr;
+
+    return api.Attribute.fromStringList(attr.key, truncatedValues);
   }
   return attr;
 }
