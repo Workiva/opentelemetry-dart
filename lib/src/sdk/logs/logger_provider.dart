@@ -41,7 +41,6 @@ class LoggerProvider implements api.LoggerProvider {
     String version = '',
     String schemaUrl = '',
     List<api.Attribute> attributes = const [],
-    bool? includeTraceContext,
   }) {
     final loggerName = name.isNotEmpty ? name : defaultLoggerName;
     final key = hash3(loggerName, version, schemaUrl);
