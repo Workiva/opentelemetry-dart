@@ -7,8 +7,7 @@ import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
-
-import '../common/limits.dart';
+import 'package:opentelemetry/src/sdk/common/limits.dart';
 
 /// https://opentelemetry.io/docs/specs/otel/logs/sdk/#readwritelogrecord
 abstract class ReadableLogRecord {
@@ -67,7 +66,7 @@ class LogRecord implements ReadWriteLogRecord {
     required this.logRecordLimits,
     api.Severity? severityNumber,
     String? severityText,
-    sdk.Attributes? attributes,
+    List<api.Attribute> attributes = const <api.Attribute>[],
     DateTime? timeStamp,
     DateTime? observedTimestamp,
     api.Context? context,
@@ -82,7 +81,7 @@ class LogRecord implements ReadWriteLogRecord {
         _timeStamp = timeStamp,
         _observedTimestamp = observedTimestamp,
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider() {
-    if (attributes != null) setAttributes(attributes);
+    if (attributes.isNotEmpty) setAttributes(attributes);
   }
 
   @override
@@ -132,55 +131,16 @@ class LogRecord implements ReadWriteLogRecord {
     _severityText = severity;
   }
 
-  void setAttributes(sdk.Attributes attributes) {
-    for (final key in attributes.keys) {
-      setAttribute(key, attributes.get(key));
-    }
+  void setAttributes(List<api.Attribute> attributes) {
+    attributes.forEach(setAttribute);
   }
 
-  void setAttribute(String key, Object? value) {
-    if (value == null) return;
+  void setAttribute(api.Attribute attribute) {
     if (_isReadonly) return;
-    if (key.isEmpty) return;
+    if (attribute.key.isEmpty) return;
     if (logRecordLimits.attributeCountLimit == 0) return;
     _totalAttributesCount += 1;
-    if (value is String) {
-      _attributes.add(
-        applyAttributeLimitsForLog(
-            api.Attribute.fromString(key, value), logRecordLimits),
-      );
-    }
-
-    if (value is bool) {
-      _attributes.add(api.Attribute.fromBoolean(key, value));
-    }
-
-    if (value is double) {
-      _attributes.add(api.Attribute.fromDouble(key, value));
-    }
-
-    if (value is int) {
-      _attributes.add(api.Attribute.fromInt(key, value));
-    }
-
-    if (value is List<String>) {
-      _attributes.add(
-        applyAttributeLimitsForLog(
-            api.Attribute.fromStringList(key, value), logRecordLimits),
-      );
-    }
-
-    if (value is List<bool>) {
-      _attributes.add(api.Attribute.fromBooleanList(key, value));
-    }
-
-    if (value is List<double>) {
-      _attributes.add(api.Attribute.fromDoubleList(key, value));
-    }
-
-    if (value is List<int>) {
-      _attributes.add(api.Attribute.fromIntList(key, value));
-    }
+    _attributes.add(applyAttributeLimitsForLog(attribute, logRecordLimits));
   }
 
   /// A LogRecordProcessor may freely modify logRecord for the duration of the OnEmit call.
