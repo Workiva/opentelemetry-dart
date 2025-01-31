@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart' as api;
@@ -15,25 +14,28 @@ const defaultLoggerName = 'opentelemetry';
 
 // https://opentelemetry.io/docs/specs/otel/logs/sdk/#loggerprovider
 class LoggerProvider implements api.LoggerProvider {
-  @protected
-  final Map<int, api.Logger> loggers = {};
+  final Map<int, api.Logger> _loggers = {};
 
-  final LoggerConfig config;
+  final LoggerConfig _config;
 
   final List<sdk.LogRecordProcessor> _processors;
 
-  final sdk.Resource? resource;
-  final sdk.LogRecordLimits logRecordLimits;
+  final sdk.Resource _resource;
+
+  final sdk.LogRecordLimits _logRecordLimits;
 
   final sdk.TimeProvider _timeProvider;
 
   LoggerProvider({
-    this.resource,
-    this.config = const LoggerConfig(),
-    this.logRecordLimits = const LogRecordLimitsImpl(),
+    LoggerConfig config = const LoggerConfig(),
+    sdk.LogRecordLimits logRecordLimits = const LogRecordLimitsImpl(),
+    sdk.Resource? resource,
     List<sdk.LogRecordProcessor>? processors,
     sdk.TimeProvider? timeProvider,
-  })  : _processors = processors ?? <sdk.LogRecordProcessor>[],
+  })  : _processors = processors ?? const <sdk.LogRecordProcessor>[],
+        _config = config,
+        _logRecordLimits = logRecordLimits,
+        _resource = resource ?? sdk.Resource([]),
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider();
 
   UnmodifiableListView<sdk.LogRecordProcessor> get processors =>
@@ -48,14 +50,14 @@ class LoggerProvider implements api.LoggerProvider {
   }) {
     final loggerName = name.isNotEmpty ? name : defaultLoggerName;
     final key = hash3(loggerName, version, schemaUrl);
-    if (config.disabled) {
+    if (_config.disabled) {
       return api.NoopLogger();
     }
-    return loggers.putIfAbsent(
+    return _loggers.putIfAbsent(
       key,
       () => sdk.Logger(
-        logRecordLimits: logRecordLimits,
-        resource: resource,
+        logRecordLimits: _logRecordLimits,
+        resource: _resource,
         instrumentationScope: sdk.InstrumentationScope(
             loggerName, version, schemaUrl, attributes),
         timeProvider: _timeProvider,
