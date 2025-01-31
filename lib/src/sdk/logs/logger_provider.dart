@@ -1,6 +1,7 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
@@ -19,7 +20,7 @@ class LoggerProvider implements api.LoggerProvider {
 
   final LoggerConfig config;
 
-  final List<sdk.LogRecordProcessor> processors;
+  final List<sdk.LogRecordProcessor> _processors;
 
   final sdk.Resource? resource;
   final sdk.LogRecordLimits logRecordLimits;
@@ -32,8 +33,11 @@ class LoggerProvider implements api.LoggerProvider {
     this.logRecordLimits = const LogRecordLimitsImpl(),
     List<sdk.LogRecordProcessor>? processors,
     sdk.TimeProvider? timeProvider,
-  })  : processors = processors ?? <sdk.LogRecordProcessor>[],
+  })  : _processors = processors ?? <sdk.LogRecordProcessor>[],
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider();
+
+  UnmodifiableListView<sdk.LogRecordProcessor> get processors =>
+      UnmodifiableListView(_processors);
 
   @override
   api.Logger get(
@@ -52,7 +56,8 @@ class LoggerProvider implements api.LoggerProvider {
       () => sdk.Logger(
         logRecordLimits: logRecordLimits,
         resource: resource,
-        instrumentationScope: sdk.InstrumentationScope(loggerName, version, schemaUrl, attributes),
+        instrumentationScope: sdk.InstrumentationScope(
+            loggerName, version, schemaUrl, attributes),
         timeProvider: _timeProvider,
         onLogEmit: (log) {
           for (final processor in processors) {
@@ -61,10 +66,6 @@ class LoggerProvider implements api.LoggerProvider {
         },
       ),
     );
-  }
-
-  void addLogRecordProcessor(sdk.LogRecordProcessor processor) {
-    processors.add(processor);
   }
 
   Future<void> forceFlush() async {
