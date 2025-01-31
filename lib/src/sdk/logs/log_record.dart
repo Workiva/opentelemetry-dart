@@ -41,7 +41,6 @@ abstract class ReadWriteLogRecord extends ReadableLogRecord {
   set severityNumber(api.Severity? severity);
 }
 
-
 class LogRecord implements ReadWriteLogRecord {
   @override
   final sdk.InstrumentationScope instrumentationScope;
@@ -50,8 +49,7 @@ class LogRecord implements ReadWriteLogRecord {
   final sdk.Resource? resource;
 
   final sdk.TimeProvider _timeProvider;
-  final api.Context? context;
-  final api.SpanContext? _spanContext;
+  final api.Context _context;
   final sdk.LogRecordLimits logRecordLimits;
   final DateTime? _timeStamp;
   final DateTime? _observedTimestamp;
@@ -72,15 +70,15 @@ class LogRecord implements ReadWriteLogRecord {
     sdk.Attributes? attributes,
     DateTime? timeStamp,
     DateTime? observedTimestamp,
+    api.Context? context,
     dynamic body,
     this.resource,
-    this.context,
     sdk.TimeProvider? timeProvider,
   })  : _severityText = severityText,
+        _context = context ?? api.Context.current,
         _body = body,
         _attributes = sdk.Attributes.empty(),
         _severityNumber = severityNumber,
-        _spanContext = api.spanContextFromContext(context ?? api.Context.current),
         _timeStamp = timeStamp,
         _observedTimestamp = observedTimestamp,
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider() {
@@ -100,17 +98,21 @@ class LogRecord implements ReadWriteLogRecord {
   }
 
   @override
-  api.SpanContext? get spanContext => _spanContext;
+  api.SpanContext? get spanContext => api.spanContextFromContext(_context);
 
   @override
-  int get droppedAttributesCount => _totalAttributesCount - (attributes?.length ?? 0);
+  int get droppedAttributesCount =>
+      _totalAttributesCount - (attributes?.length ?? 0);
 
   @override
-  Int64? get timeStamp => _timeStamp != null ? Int64(_timeStamp!.microsecondsSinceEpoch) * 1000 : _timeProvider.now;
+  Int64? get timeStamp => _timeStamp != null
+      ? Int64(_timeStamp!.microsecondsSinceEpoch) * 1000
+      : _timeProvider.now;
 
   @override
-  Int64? get observedTimestamp =>
-      _observedTimestamp != null ? Int64(_observedTimestamp!.microsecondsSinceEpoch) * 1000 : _timeProvider.now;
+  Int64? get observedTimestamp => _observedTimestamp != null
+      ? Int64(_observedTimestamp!.microsecondsSinceEpoch) * 1000
+      : _timeProvider.now;
 
   @override
   api.Severity? get severityNumber => _severityNumber;
@@ -144,7 +146,8 @@ class LogRecord implements ReadWriteLogRecord {
     _totalAttributesCount += 1;
     if (value is String) {
       _attributes.add(
-        applyAttributeLimitsForLog(api.Attribute.fromString(key, value), logRecordLimits),
+        applyAttributeLimitsForLog(
+            api.Attribute.fromString(key, value), logRecordLimits),
       );
     }
 
@@ -162,7 +165,8 @@ class LogRecord implements ReadWriteLogRecord {
 
     if (value is List<String>) {
       _attributes.add(
-        applyAttributeLimitsForLog(api.Attribute.fromStringList(key, value), logRecordLimits),
+        applyAttributeLimitsForLog(
+            api.Attribute.fromStringList(key, value), logRecordLimits),
       );
     }
 
@@ -186,4 +190,3 @@ class LogRecord implements ReadWriteLogRecord {
     _isReadonly = true;
   }
 }
-
