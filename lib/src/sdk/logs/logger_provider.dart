@@ -10,7 +10,7 @@ import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
 import 'package:opentelemetry/src/sdk/logs/logger_config.dart';
 import 'package:quiver/core.dart';
 
-const defaultLoggerName = 'unknown';
+const defaultLoggerName = 'opentelemetry';
 
 // https://opentelemetry.io/docs/specs/otel/logs/sdk/#loggerprovider
 class LoggerProvider implements api.LoggerProvider {
