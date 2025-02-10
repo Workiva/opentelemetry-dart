@@ -55,7 +55,7 @@ void main() {
     verify(() => mockProcessor1.onEmit(any(
           that: predicate((a) {
             if (a is! sdk.ReadWriteLogRecord) return false;
-            return a.timeStamp == 123 && a.observedTimestamp == 123;
+            return a.timeStamp == DateTime.fromMicrosecondsSinceEpoch(123 ~/ 1000) && a.observedTimestamp == DateTime.fromMicrosecondsSinceEpoch(123 ~/ 1000);
           }),
         ))).called(1);
   });
