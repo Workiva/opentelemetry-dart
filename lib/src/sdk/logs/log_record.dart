@@ -1,7 +1,6 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import 'package:fixnum/fixnum.dart';
 import 'package:meta/meta.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
@@ -11,9 +10,9 @@ import 'package:opentelemetry/src/sdk/common/limits.dart';
 
 /// https://opentelemetry.io/docs/specs/otel/logs/sdk/#readwritelogrecord
 abstract class ReadableLogRecord {
-  Int64? get timeStamp;
+  DateTime? get timeStamp;
 
-  Int64? get observedTimestamp;
+  DateTime? get observedTimestamp;
 
   String? get severityText;
 
@@ -78,7 +77,7 @@ class LogRecord implements ReadWriteLogRecord {
         _body = body,
         _attributes = sdk.Attributes.empty(),
         _severityNumber = severityNumber,
-        _timeStamp = timeStamp,
+        _timeStamp = timeStamp ?? DateTime.now(),
         _observedTimestamp = observedTimestamp,
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider() {
     if (attributes.isNotEmpty) setAttributes(attributes);
@@ -104,14 +103,10 @@ class LogRecord implements ReadWriteLogRecord {
       _totalAttributesCount - (attributes?.length ?? 0);
 
   @override
-  Int64? get timeStamp => _timeStamp != null
-      ? Int64(_timeStamp!.microsecondsSinceEpoch) * 1000
-      : _timeProvider.now;
+  DateTime? get timeStamp => _timeStamp ?? DateTime.fromMicrosecondsSinceEpoch((_timeProvider.now ~/ 1000).toInt());
 
   @override
-  Int64? get observedTimestamp => _observedTimestamp != null
-      ? Int64(_observedTimestamp!.microsecondsSinceEpoch) * 1000
-      : _timeProvider.now;
+  DateTime? get observedTimestamp => _observedTimestamp ?? DateTime.fromMicrosecondsSinceEpoch((_timeProvider.now ~/ 1000).toInt());
 
   @override
   api.Severity? get severityNumber => _severityNumber;
