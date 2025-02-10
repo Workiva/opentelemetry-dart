@@ -32,9 +32,9 @@ void main() {
     expect(logRecord.attributes?.keys, const <String>[]);
     expect(logRecord.droppedAttributesCount, 0);
     expect(logRecord.timeStamp,
-        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt()));
+        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
     expect(logRecord.observedTimestamp,
-        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt()));
+        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
   });
 
   test('logRecord call setter', () {
@@ -55,9 +55,9 @@ void main() {
     expect(logRecord.attributes?.keys, const <String>['key', 'key2']);
     expect(logRecord.droppedAttributesCount, 0);
     expect(logRecord.timeStamp,
-        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt()));
+        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
     expect(logRecord.observedTimestamp,
-        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt()));
+        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
   });
 
   test('logRecord update same attribute will create attributesCount diff', () {
