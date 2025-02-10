@@ -77,7 +77,7 @@ class LogRecord implements ReadWriteLogRecord {
         _body = body,
         _attributes = sdk.Attributes.empty(),
         _severityNumber = severityNumber,
-        _timeStamp = timeStamp ?? DateTime.now(),
+        _timeStamp = timeStamp,
         _observedTimestamp = observedTimestamp,
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider() {
     if (attributes.isNotEmpty) setAttributes(attributes);
