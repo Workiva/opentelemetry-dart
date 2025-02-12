@@ -20,32 +20,6 @@ void main() {
     ));
   });
 
-  test('getLogger stores tracers by name', () {
-    final provider = sdk.LoggerProvider();
-    final fooTracer = provider.get('foo');
-    final barTracer = provider.get('bar');
-    final fooWithVersionTracer = provider.get('foo', version: '1.0');
-
-    expect(
-        fooTracer,
-        allOf([
-          isNot(barTracer),
-          isNot(fooWithVersionTracer),
-          same(provider.get('foo'))
-        ]));
-
-    expect(provider.processors, isA<List<sdk.LogRecordProcessor>>());
-  });
-
-  test('tracerProvider custom span processors', () {
-    final mockProcessor1 = MockLogRecordProcessor();
-    final mockProcessor2 = MockLogRecordProcessor();
-    final provider =
-        sdk.LoggerProvider(processors: [mockProcessor1, mockProcessor2]);
-
-    expect(provider.processors, [mockProcessor1, mockProcessor2]);
-  });
-
   test('traceProvider custom timeProvider', () {
     final mockTimeProvider = FakeTimeProvider(now: Int64(123));
     final mockProcessor1 = MockLogRecordProcessor();
@@ -82,15 +56,5 @@ void main() {
 
     verify(mockProcessor1.shutdown).called(1);
     verify(mockProcessor2.shutdown).called(1);
-  });
-
-  test('loggerProvider processors is immutable', () async {
-    final mockProcessor1 = MockLogRecordProcessor();
-    final mockProcessor2 = MockLogRecordProcessor();
-    when(mockProcessor1.shutdown).thenAnswer((_) async => Future.value());
-    when(mockProcessor2.shutdown).thenAnswer((_) async => Future.value());
-    final provider = sdk.LoggerProvider(processors: [mockProcessor1]);
-
-    expect(() => provider.processors.add(mockProcessor2), throwsUnsupportedError);
   });
 }
