@@ -67,11 +67,11 @@ class LoggerProvider implements api.LoggerProvider {
     );
   }
 
-  Future<void> forceFlush() async {
-    await Future.forEach(_processors, (e) => e.forceFlush());
+  Future<void> forceFlush() {
+    return Future.forEach(_processors, (e) => e.forceFlush());
   }
 
-  Future<void> shutdown() async {
-    await Future.forEach(_processors, (e) => e.shutdown());
+  Future<void> shutdown() {
+    return Future.forEach(_processors, (e) => e.shutdown());
   }
 }
