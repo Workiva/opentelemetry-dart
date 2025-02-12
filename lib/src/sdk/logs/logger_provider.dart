@@ -38,9 +38,6 @@ class LoggerProvider implements api.LoggerProvider {
         _resource = resource ?? sdk.Resource([]),
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider();
 
-  UnmodifiableListView<sdk.LogRecordProcessor> get processors =>
-      UnmodifiableListView(_processors);
-
   @override
   api.Logger get(
     String name, {
@@ -62,7 +59,7 @@ class LoggerProvider implements api.LoggerProvider {
             loggerName, version, schemaUrl, attributes),
         timeProvider: _timeProvider,
         onLogEmit: (log) {
-          for (final processor in processors) {
+          for (final processor in _processors) {
             processor.onEmit(log);
           }
         },
@@ -71,10 +68,10 @@ class LoggerProvider implements api.LoggerProvider {
   }
 
   Future<void> forceFlush() async {
-    await Future.forEach(processors, (e) => e.forceFlush());
+    await Future.forEach(_processors, (e) => e.forceFlush());
   }
 
   Future<void> shutdown() async {
-    await Future.forEach(processors, (e) => e.shutdown());
+    await Future.forEach(_processors, (e) => e.shutdown());
   }
 }
