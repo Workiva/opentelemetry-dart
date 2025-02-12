@@ -1,7 +1,8 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import 'package:collection/collection.dart';
+import 'dart:async';
+
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart' as api;
@@ -67,11 +68,11 @@ class LoggerProvider implements api.LoggerProvider {
     );
   }
 
-  Future<void> forceFlush() {
+  FutureOr<void> forceFlush() {
     return Future.forEach(_processors, (e) => e.forceFlush());
   }
 
-  Future<void> shutdown() {
+  FutureOr<void> shutdown() {
     return Future.forEach(_processors, (e) => e.shutdown());
   }
 }
