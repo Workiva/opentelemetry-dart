@@ -1,8 +1,6 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import 'dart:async';
-
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart' as api;
@@ -56,8 +54,7 @@ class LoggerProvider implements api.LoggerProvider {
       () => sdk.Logger(
         logRecordLimits: _logRecordLimits,
         resource: _resource,
-        instrumentationScope: sdk.InstrumentationScope(
-            loggerName, version, schemaUrl, attributes),
+        instrumentationScope: sdk.InstrumentationScope(loggerName, version, schemaUrl, attributes),
         timeProvider: _timeProvider,
         onLogEmit: (log) {
           for (final processor in _processors) {
@@ -68,11 +65,11 @@ class LoggerProvider implements api.LoggerProvider {
     );
   }
 
-  FutureOr<void> forceFlush() {
-    return Future.forEach(_processors, (e) => e.forceFlush());
+  void forceFlush() {
+    return _processors.forEach((e) => e.forceFlush());
   }
 
-  FutureOr<void> shutdown() {
-    return Future.forEach(_processors, (e) => e.shutdown());
+  void shutdown() {
+    return _processors.forEach((e) => e.shutdown());
   }
 }
