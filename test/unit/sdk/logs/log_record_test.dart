@@ -27,9 +27,9 @@ void main() {
       ..setAttribute(api.Attribute.fromString('key2', 'value2'));
 
     expect(logRecord.body, null);
-    expect(logRecord.severityNumber, null);
-    expect(logRecord.severityText, null);
-    expect(logRecord.attributes?.keys, const <String>[]);
+    expect(logRecord.severityNumber, api.Severity.unspecified);
+    expect(logRecord.severityText, api.Severity.unspecified.name);
+    expect(logRecord.attributes.keys, const <String>[]);
     expect(logRecord.droppedAttributesCount, 0);
     expect(logRecord.timeStamp,
         DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
@@ -52,7 +52,7 @@ void main() {
     expect(logRecord.body, 'Log Message');
     expect(logRecord.severityNumber, api.Severity.debug);
     expect(logRecord.severityText, 'DEBUG');
-    expect(logRecord.attributes?.keys, const <String>['key', 'key2']);
+    expect(logRecord.attributes.keys, const <String>['key', 'key2']);
     expect(logRecord.droppedAttributesCount, 0);
     expect(logRecord.timeStamp,
         DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
@@ -108,10 +108,10 @@ void main() {
 
     expect(logRecord.droppedAttributesCount, 0);
     expect(
-      logRecord.attributes?.keys,
+      logRecord.attributes.keys,
       const ['key', 'key2', 'key3', 'key4', 'key5', 'key6', 'key7', 'key8'],
     );
-    expect(logRecord.attributes?.get('key'), 'va');
+    expect(logRecord.attributes.get('key'), 'va');
   });
 
   test('logRecord set attribute with limit', () {
@@ -126,7 +126,7 @@ void main() {
       ..setAttribute(api.Attribute.fromString('key', 'value'))
       ..setAttribute(api.Attribute.fromStringList('key2', ['value2']));
 
-    expect(logRecord.attributes?.get('key'), 'va');
-    expect(logRecord.attributes?.get('key2'), const ['va']);
+    expect(logRecord.attributes.get('key'), 'va');
+    expect(logRecord.attributes.get('key2'), const ['va']);
   });
 }
