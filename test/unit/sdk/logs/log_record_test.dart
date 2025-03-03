@@ -17,7 +17,7 @@ void main() {
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
-        logRecordLimits: LogRecordLimitsImpl(),
+        logRecordLimits: LogRecordLimits(),
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..makeReadonly()
       ..body = 'Log Message'
@@ -41,7 +41,7 @@ void main() {
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope(
             'library_name', 'library_version', 'url://schema', []),
-        logRecordLimits: LogRecordLimitsImpl(),
+        logRecordLimits: LogRecordLimits(),
         timeProvider: FakeTimeProvider(now: Int64(123)))
       ..body = 'Log Message'
       ..severityNumber = api.Severity.debug
@@ -64,7 +64,7 @@ void main() {
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope(
           'library_name', 'library_version', 'url://schema', []),
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
     )
       ..setAttributes([api.Attribute.fromString('key2', 'value')])
       ..setAttribute(api.Attribute.fromString('key2', 'value2'));
@@ -79,7 +79,7 @@ void main() {
           'library_name', 'library_version', 'url://schema', []),
       timeStamp: now,
       observedTimestamp: now,
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
     )
       ..setAttributes([api.Attribute.fromString('key2', 'value')])
       ..setAttribute(api.Attribute.fromString('key2', 'value2'));
@@ -95,7 +95,7 @@ void main() {
           'library_name', 'library_version', 'url://schema', []),
       timeStamp: now,
       observedTimestamp: now,
-      logRecordLimits: LogRecordLimitsImpl(attributeValueLengthLimit: 2),
+      logRecordLimits: LogRecordLimits(attributeValueLengthLimit: 2),
     )
       ..setAttribute(api.Attribute.fromString('key', 'value'))
       ..setAttribute(api.Attribute.fromBoolean('key2', true))
@@ -121,7 +121,7 @@ void main() {
           'library_name', 'library_version', 'url://schema', []),
       timeStamp: now,
       observedTimestamp: now,
-      logRecordLimits: LogRecordLimitsImpl(attributeValueLengthLimit: 2),
+      logRecordLimits: LogRecordLimits(attributeValueLengthLimit: 2),
     )
       ..setAttribute(api.Attribute.fromString('key', 'value'))
       ..setAttribute(api.Attribute.fromStringList('key2', ['value2']));
