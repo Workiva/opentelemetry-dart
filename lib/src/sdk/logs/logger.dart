@@ -14,6 +14,7 @@ class Logger extends api.Logger {
   final sdk.LogRecordLimits logRecordLimits;
   final sdk.TimeProvider? timeProvider;
 
+  @protected
   Logger({
     required this.instrumentationScope,
     required this.logRecordLimits,

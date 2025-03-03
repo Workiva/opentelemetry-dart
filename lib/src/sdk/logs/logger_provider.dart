@@ -56,11 +56,7 @@ class LoggerProvider implements api.LoggerProvider {
         resource: _resource,
         instrumentationScope: sdk.InstrumentationScope(loggerName, version, schemaUrl, attributes),
         timeProvider: _timeProvider,
-        onLogEmit: (log) {
-          for (final processor in _processors) {
-            processor.onEmit(log);
-          }
-        },
+        processors: _processors
       ),
     );
   }

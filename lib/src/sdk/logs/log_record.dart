@@ -59,6 +59,7 @@ class LogRecord implements ReadWriteLogRecord {
 
   final sdk.Attributes _attributes;
 
+  @protected
   LogRecord({
     required this.instrumentationScope,
     required this.logRecordLimits,
