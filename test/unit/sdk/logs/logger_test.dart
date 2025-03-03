@@ -20,14 +20,14 @@ void main() {
   setUpAll(() {
     registerFallbackValue(sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
     ));
   });
 
   test('emit new log', () {
     final callBack = CallbackMock();
     sdk.Logger(
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
       instrumentationScope: sdk.InstrumentationScope(
         'library_name',
         'library_version',

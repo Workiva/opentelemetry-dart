@@ -10,7 +10,7 @@ void main() {
   test('test log record limit', () {
     final logLimit = applyAttributeLimitsForLog(
       api.Attribute.fromString('key', 'value'),
-      LogRecordLimitsImpl(attributeValueLengthLimit: 2),
+      LogRecordLimits(attributeValueLengthLimit: 2),
     );
 
     expect(logLimit.value, 'va');
@@ -19,7 +19,7 @@ void main() {
   test('test log record limit list', () {
     final logLimit = applyAttributeLimitsForLog(
       api.Attribute.fromStringList('key', ['value1', 'value2']),
-      LogRecordLimitsImpl(attributeValueLengthLimit: 2),
+      LogRecordLimits(attributeValueLengthLimit: 2),
     );
 
     expect(logLimit.value, ['va', 'va']);

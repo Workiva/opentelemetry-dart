@@ -27,7 +27,7 @@ class LoggerProvider implements api.LoggerProvider {
 
   LoggerProvider({
     LoggerConfig config = const LoggerConfig(),
-    sdk.LogRecordLimits logRecordLimits = const LogRecordLimitsImpl(),
+    sdk.LogRecordLimits logRecordLimits = const LogRecordLimits(),
     sdk.Resource? resource,
     List<sdk.LogRecordProcessor>? processors,
     sdk.TimeProvider? timeProvider,
