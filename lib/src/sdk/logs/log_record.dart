@@ -10,23 +10,23 @@ import 'package:opentelemetry/src/sdk/common/limits.dart';
 
 /// https://opentelemetry.io/docs/specs/otel/logs/sdk/#readwritelogrecord
 abstract class ReadableLogRecord {
-  DateTime? get timeStamp;
+  DateTime get timeStamp;
 
-  DateTime? get observedTimestamp;
+  DateTime get observedTimestamp;
 
-  String? get severityText;
+  String get severityText;
 
-  api.Severity? get severityNumber;
+  api.Severity get severityNumber;
 
   dynamic get body;
 
-  sdk.Attributes? get attributes;
+  sdk.Attributes get attributes;
 
-  api.SpanContext? get spanContext;
+  api.SpanContext get spanContext;
 
-  sdk.Resource? get resource;
+  sdk.Resource get resource;
 
-  sdk.InstrumentationScope? get instrumentationScope;
+  sdk.InstrumentationScope get instrumentationScope;
 
   int get droppedAttributesCount;
 }
@@ -34,17 +34,16 @@ abstract class ReadableLogRecord {
 abstract class ReadWriteLogRecord extends ReadableLogRecord {
   set body(dynamic severity);
 
-  set severityText(String? severity);
+  set severityText(String severity);
 
-  set severityNumber(api.Severity? severity);
+  set severityNumber(api.Severity severity);
 }
 
 class LogRecord implements ReadWriteLogRecord {
   @override
   final sdk.InstrumentationScope instrumentationScope;
 
-  @override
-  final sdk.Resource? resource;
+  final sdk.Resource _resource;
 
   final sdk.TimeProvider _timeProvider;
   final api.Context _context;
@@ -53,8 +52,8 @@ class LogRecord implements ReadWriteLogRecord {
   final DateTime? _observedTimestamp;
 
   bool _isReadonly = false;
-  String? _severityText;
-  api.Severity? _severityNumber;
+  String _severityText;
+  api.Severity _severityNumber;
   dynamic _body;
   int _totalAttributesCount = 0;
 
@@ -70,21 +69,26 @@ class LogRecord implements ReadWriteLogRecord {
     DateTime? observedTimestamp,
     api.Context? context,
     dynamic body,
-    this.resource,
+    sdk.Resource? resource,
     sdk.TimeProvider? timeProvider,
-  })  : _severityText = severityText,
+  })  : _severityText = severityText ?? api.Severity.unspecified.name,
+        _resource = resource ?? sdk.Resource([]),
         _context = context ?? api.Context.current,
         _body = body,
         _attributes = sdk.Attributes.empty(),
-        _severityNumber = severityNumber,
+        _severityNumber = severityNumber ?? api.Severity.unspecified,
         _timeStamp = timeStamp,
         _observedTimestamp = observedTimestamp,
         _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider() {
     if (attributes.isNotEmpty) setAttributes(attributes);
   }
 
+
   @override
-  sdk.Attributes? get attributes => _attributes;
+  sdk.Resource get resource => _resource;
+
+  @override
+  sdk.Attributes get attributes => _attributes;
 
   @override
   dynamic get body => _body;
@@ -96,32 +100,32 @@ class LogRecord implements ReadWriteLogRecord {
   }
 
   @override
-  api.SpanContext? get spanContext => api.spanContextFromContext(_context);
+  api.SpanContext get spanContext => api.spanContextFromContext(_context);
 
   @override
-  int get droppedAttributesCount =>
-      _totalAttributesCount - (attributes?.length ?? 0);
+  int get droppedAttributesCount => _totalAttributesCount - attributes.length;
 
   @override
-  DateTime? get timeStamp => _timeStamp ?? DateTime.fromMicrosecondsSinceEpoch((_timeProvider.now ~/ 1000).toInt());
+  DateTime get timeStamp => _timeStamp ?? DateTime.fromMicrosecondsSinceEpoch((_timeProvider.now ~/ 1000).toInt());
 
   @override
-  DateTime? get observedTimestamp => _observedTimestamp ?? DateTime.fromMicrosecondsSinceEpoch((_timeProvider.now ~/ 1000).toInt());
+  DateTime get observedTimestamp =>
+      _observedTimestamp ?? DateTime.fromMicrosecondsSinceEpoch((_timeProvider.now ~/ 1000).toInt());
 
   @override
-  api.Severity? get severityNumber => _severityNumber;
+  api.Severity get severityNumber => _severityNumber;
 
   @override
-  set severityNumber(api.Severity? severity) {
+  set severityNumber(api.Severity severity) {
     if (_isReadonly) return;
     _severityNumber = severity;
   }
 
   @override
-  String? get severityText => _severityText;
+  String get severityText => _severityText;
 
   @override
-  set severityText(String? severity) {
+  set severityText(String severity) {
     if (_isReadonly) return;
     _severityText = severity;
   }
