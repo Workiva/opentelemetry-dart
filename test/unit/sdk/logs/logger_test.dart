@@ -2,19 +2,16 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
+import 'package:fixnum/fixnum.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
 import 'package:test/test.dart';
 
-class Callback {
-  const Callback();
+import '../../mocks.dart';
 
-  void call(sdk.ReadWriteLogRecord logRecord) {}
-}
-
-class CallbackMock extends Mock implements Callback {}
+class MockLockRecordProcessor extends Mock implements sdk.LogRecordProcessor {}
 
 void main() {
   setUpAll(() {
@@ -25,7 +22,7 @@ void main() {
   });
 
   test('emit new log', () {
-    final callBack = CallbackMock();
+    final processor = MockLockRecordProcessor();
     sdk.Logger(
       logRecordLimits: LogRecordLimits(),
       instrumentationScope: sdk.InstrumentationScope(
@@ -35,15 +32,16 @@ void main() {
         [],
       ),
       resource: sdk.Resource([]),
-      onLogEmit: callBack,
+      processors: [processor],
+      timeProvider: FakeTimeProvider(now: Int64(60)),
     ).emit(body: 'TEST!');
 
-    verify(() => callBack.call(any<sdk.LogRecord>(that: predicate<sdk.LogRecord>((it) {
-          return it.attributes?.keys.isEmpty == true &&
+    verify(() => processor.onEmit(any<sdk.LogRecord>(that: predicate<sdk.LogRecord>((it) {
+          return it.attributes.keys.isEmpty == true &&
               it.instrumentationScope.name == 'library_name' &&
               it.instrumentationScope.version == 'library_version' &&
               it.instrumentationScope.schemaUrl == 'url://schema' &&
-              it.resource?.attributes.keys.isEmpty == true;
+              it.resource.attributes.keys.isEmpty == true;
         })))).called(1);
   });
 }
