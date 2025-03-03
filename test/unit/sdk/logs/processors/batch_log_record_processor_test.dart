@@ -27,7 +27,7 @@ void main() {
     final context = api.contextWithSpan(api.Context.current, parent);
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-        logRecordLimits: LogRecordLimitsImpl(),
+        logRecordLimits: LogRecordLimits(),
         context: context,
         timeProvider: FakeTimeProvider(now: Int64(123)));
     final logRecordA = logRecord
@@ -40,7 +40,7 @@ void main() {
           that: predicate<List<sdk.ReadableLogRecord>>((a) {
             final first = a.first;
             return first.body == 'test log' &&
-                first.spanContext?.spanId == parent.spanContext.spanId &&
+                first.spanContext.spanId == parent.spanContext.spanId &&
                 first.severityNumber == api.Severity.fatal3;
           }),
         ))).called(1);
@@ -72,7 +72,7 @@ void main() {
     await processor.shutdown();
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
     );
     final logRecordA = logRecord
       ..body = 'test log'
@@ -95,7 +95,7 @@ void main() {
 
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
     );
     final logRecordA = logRecord
       ..body = 'test log'
