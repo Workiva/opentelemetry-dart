@@ -1,27 +1,28 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import 'package:opentelemetry/sdk.dart' as sdk;
+import 'package:meta/meta.dart';
 import 'package:opentelemetry/api.dart' as api;
+import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
 class Logger extends api.Logger {
   final sdk.InstrumentationScope instrumentationScope;
-  final sdk.Resource? resource;
-  final Function(sdk.ReadWriteLogRecord)? onLogEmit;
+  final sdk.Resource _resource;
   final sdk.LogRecordLimits logRecordLimits;
-  final sdk.TimeProvider? timeProvider;
+  final sdk.TimeProvider timeProvider;
+  final List<sdk.LogRecordProcessor> processors;
 
   @protected
   Logger({
     required this.instrumentationScope,
     required this.logRecordLimits,
-    this.onLogEmit,
-    this.resource,
-    this.timeProvider,
-  });
+    required this.timeProvider,
+    this.processors = const <sdk.LogRecordProcessor>[],
+    sdk.Resource? resource,
+  }) : _resource = resource ?? sdk.Resource([]);
 
   @override
   void emit({
@@ -35,7 +36,7 @@ class Logger extends api.Logger {
   }) {
     final log = sdk.LogRecord(
       logRecordLimits: logRecordLimits,
-      resource: resource,
+      resource: _resource,
       instrumentationScope: instrumentationScope,
       context: context,
       severityText: severityText,
@@ -44,7 +45,9 @@ class Logger extends api.Logger {
       body: body,
       timeProvider: timeProvider,
     );
-    onLogEmit?.call(log);
+    for (final processor in processors) {
+      processor.onEmit(log);
+    }
     log.makeReadonly();
   }
 }
