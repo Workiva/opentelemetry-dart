@@ -41,16 +41,17 @@ void main() {
     final tracer = sdk.TracerProviderBase().getTracer('test');
     final parent = tracer.startSpan('parent');
     final context = api.contextWithSpan(api.Context.current, parent);
+    final timeProvider = FakeTimeProvider(now: Int64(123000));
 
     final log1 = sdk.LogRecord(
-        resource: resource,
-        instrumentationScope: instrumentationLibrary,
-        body: 'test log',
-        severityNumber: api.Severity.fatal3,
-        logRecordLimits: logLimit,
-        context: context,
-        timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..setAttribute(api.Attribute.fromString('key', 'value'));
+      resource: resource,
+      instrumentationScope: instrumentationLibrary,
+      body: 'test log',
+      severityNumber: api.Severity.fatal3,
+      logRecordLimits: logLimit,
+      context: context,
+      timeProvider: timeProvider,
+    )..setAttribute(api.Attribute.fromString('key', 'value'));
 
     final log2 = sdk.LogRecord(
       resource: resource,
@@ -67,7 +68,7 @@ void main() {
         api.Attribute.fromIntList('fromIntList', [1]),
       ],
       logRecordLimits: logLimit,
-      timeProvider: FakeTimeProvider(now: Int64(123)),
+      timeProvider: timeProvider,
     )..setAttribute(api.Attribute.fromString('key', 'value'));
 
     final log3 = sdk.LogRecord(
@@ -77,7 +78,7 @@ void main() {
         body: 2.2,
         severityNumber: api.Severity.fatal3,
         logRecordLimits: logLimit,
-        timeProvider: FakeTimeProvider(now: Int64(123)))
+        timeProvider: timeProvider)
       ..setAttribute(api.Attribute.fromString('key', 'value'));
 
     final log4 = sdk.LogRecord(
@@ -87,7 +88,7 @@ void main() {
         body: true,
         severityNumber: api.Severity.fatal3,
         logRecordLimits: logLimit,
-        timeProvider: FakeTimeProvider(now: Int64(123)))
+        timeProvider: timeProvider)
       ..setAttribute(api.Attribute.fromString('key', 'value'));
 
     sdk.OTLPLogExporter(uri, httpClient: mockClient).export([log1, log2, log3, log4]);
@@ -102,6 +103,7 @@ void main() {
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
                   severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber.index),
+                  severityText: log1.severityText,
                   attributes: [pb_common.KeyValue(key: 'key', value: pb_common.AnyValue(stringValue: 'value'))],
                   traceId: parent.spanContext.traceId.get(),
                   spanId: parent.spanContext.spanId.get(),
@@ -112,6 +114,7 @@ void main() {
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
                   severityNumber: pg_logs_enum.SeverityNumber.valueOf(log2.severityNumber.index),
+                  severityText: log2.severityText,
                   attributes: [
                     pb_common.KeyValue(key: 'fromBoolean', value: pb_common.AnyValue(boolValue: false)),
                     pb_common.KeyValue(key: 'fromDouble', value: pb_common.AnyValue(doubleValue: 1.1)),
@@ -144,7 +147,8 @@ void main() {
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
-                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber.index),
+                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log3.severityNumber.index),
+                  severityText: log3.severityText,
                   attributes: [pb_common.KeyValue(key: 'key', value: pb_common.AnyValue(stringValue: 'value'))],
                   traceId: parent.spanContext.traceId.get(),
                   spanId: parent.spanContext.spanId.get(),
@@ -154,7 +158,8 @@ void main() {
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
-                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber.index),
+                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log4.severityNumber.index),
+                  severityText: log4.severityText,
                   attributes: [pb_common.KeyValue(key: 'key', value: pb_common.AnyValue(stringValue: 'value'))],
                   traceId: parent.spanContext.traceId.get(),
                   spanId: parent.spanContext.spanId.get(),
