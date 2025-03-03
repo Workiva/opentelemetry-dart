@@ -29,7 +29,7 @@ void main() {
           final logRecord = sdk.LogRecord(
             instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
             context: context,
-            logRecordLimits: LogRecordLimitsImpl(),
+            logRecordLimits: LogRecordLimits(),
             timeProvider: FakeTimeProvider(now: Int64(123)),
             resource: sdk.Resource([api.Attribute.fromString('resource.name', 'test')]),
           )
