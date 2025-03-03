@@ -29,7 +29,7 @@ void main() {
   test('executes export', () {
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
     );
 
     processor.onEmit(logRecord);
@@ -44,7 +44,7 @@ void main() {
     });
     final logRecord = sdk.LogRecord(
       instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-      logRecordLimits: LogRecordLimitsImpl(),
+      logRecordLimits: LogRecordLimits(),
     );
 
     when(() => exporter.export(any())).thenAnswer((_) async => sdk.ExportResult(code: sdk.ExportResultCode.failed));
@@ -72,14 +72,14 @@ void main() {
     processor.onEmit(
       sdk.LogRecord(
           instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-          logRecordLimits: LogRecordLimitsImpl(),
+          logRecordLimits: LogRecordLimits(),
           timeProvider: FakeTimeProvider(now: Int64(123))),
     );
     await Future.delayed(Duration(milliseconds: 50));
     processor.onEmit(
       sdk.LogRecord(
           instrumentationScope: sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []),
-          logRecordLimits: LogRecordLimitsImpl(),
+          logRecordLimits: LogRecordLimits(),
           timeProvider: FakeTimeProvider(now: Int64(123))),
     );
     expect((processor as SimpleLogRecordProcessor).exportsCompletion.length, 2);
