@@ -87,14 +87,9 @@ class OTLPLogExporter implements sdk.LogRecordExporter {
     final rsm = <sdk.Resource, Map<sdk.InstrumentationScope, List<pb_logs.LogRecord>>>{};
     for (final logRecord in logRecords) {
       final il = rsm[logRecord.resource] ?? <sdk.InstrumentationScope, List<pb_logs.LogRecord>>{};
-
-      if (logRecord.instrumentationScope != null) {
-        il[logRecord.instrumentationScope!] = il[logRecord.instrumentationScope] ?? <pb_logs.LogRecord>[]
-          ..add(_logToProtobuf(logRecord));
-      }
-      if (logRecord.resource != null) {
-        rsm[logRecord.resource!] = il;
-      }
+      il[logRecord.instrumentationScope] = il[logRecord.instrumentationScope] ?? <pb_logs.LogRecord>[]
+        ..add(_logToProtobuf(logRecord));
+      rsm[logRecord.resource] = il;
     }
 
     final rss = <pb_logs.ResourceLogs>[];
@@ -118,24 +113,18 @@ class OTLPLogExporter implements sdk.LogRecordExporter {
   }
 
   pb_logs.LogRecord _logToProtobuf(sdk.ReadableLogRecord log) {
-    var spanId = <int>[];
-    var traceId = <int>[];
-    if (log.spanContext != null) {
-      spanId = log.spanContext!.spanId.get();
-      traceId = log.spanContext!.traceId.get();
-    }
     return pb_logs.LogRecord(
-        timeUnixNano: log.timeStamp,
-        severityNumber:
-            log.severityNumber != null ? pg_logs_enum.SeverityNumber.valueOf(log.severityNumber!.index) : null,
-        severityText: log.severityText,
-        droppedAttributesCount: log.droppedAttributesCount,
-        body: _attributeONEValueToProtobuf(log.body),
-        attributes: (log.attributes?.keys ?? [])
-            .map((key) => pb_common.KeyValue(key: key, value: _attributeValueToProtobuf(log.attributes!.get(key)!))),
-        spanId: spanId,
-        traceId: traceId,
-        observedTimeUnixNano: log.observedTimestamp);
+      timeUnixNano: Int64(log.timeStamp.microsecondsSinceEpoch),
+      severityNumber: pg_logs_enum.SeverityNumber.valueOf(log.severityNumber.index),
+      severityText: log.severityText,
+      droppedAttributesCount: log.droppedAttributesCount,
+      body: _attributeONEValueToProtobuf(log.body),
+      attributes: log.attributes.keys
+          .map((key) => pb_common.KeyValue(key: key, value: _attributeValueToProtobuf(log.attributes.get(key)!))),
+      spanId: log.spanContext.spanId.get(),
+      traceId: log.spanContext.traceId.get(),
+      observedTimeUnixNano: Int64(log.observedTimestamp.microsecondsSinceEpoch),
+    );
   }
 
   pb_common.AnyValue _attributeONEValueToProtobuf(Object value) {

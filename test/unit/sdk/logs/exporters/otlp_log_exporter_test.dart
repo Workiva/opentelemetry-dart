@@ -12,7 +12,7 @@ import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 import 'package:opentelemetry/src/sdk/logs/log_record_limit.dart';
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/collector/logs/v1/logs_service.pb.dart'
-as pb_log_service;
+    as pb_log_service;
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/common/v1/common.pb.dart' as pb_common;
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pb.dart' as pb_logs;
 import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/logs/v1/logs.pbenum.dart' as pg_logs_enum;
@@ -36,7 +36,7 @@ void main() {
   test('sends logs', () {
     final resource = sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
     final instrumentationLibrary = sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []);
-    final logLimit = LogRecordLimitsImpl(attributeCountLimit: 10, attributeValueLengthLimit: 5);
+    final logLimit = LogRecordLimits(attributeCountLimit: 10, attributeValueLengthLimit: 5);
 
     final tracer = sdk.TracerProviderBase().getTracer('test');
     final parent = tracer.startSpan('parent');
@@ -50,7 +50,7 @@ void main() {
         logRecordLimits: logLimit,
         context: context,
         timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..setAttribute('key', 'value');
+      ..setAttribute(api.Attribute.fromString('key', 'value'));
 
     final log2 = sdk.LogRecord(
       resource: resource,
@@ -58,18 +58,17 @@ void main() {
       context: context,
       body: 2,
       severityNumber: api.Severity.fatal3,
-      attributes: sdk.Attributes.empty()
-        ..addAll([
-          api.Attribute.fromBoolean('fromBoolean', false),
-          api.Attribute.fromDouble('fromDouble', 1.1),
-          api.Attribute.fromInt('fromInt', 1),
-          api.Attribute.fromBooleanList('fromBooleanList', [false]),
-          api.Attribute.fromDoubleList('fromDoubleList', [1.1]),
-          api.Attribute.fromIntList('fromIntList', [1]),
-        ]),
+      attributes: [
+        api.Attribute.fromBoolean('fromBoolean', false),
+        api.Attribute.fromDouble('fromDouble', 1.1),
+        api.Attribute.fromInt('fromInt', 1),
+        api.Attribute.fromBooleanList('fromBooleanList', [false]),
+        api.Attribute.fromDoubleList('fromDoubleList', [1.1]),
+        api.Attribute.fromIntList('fromIntList', [1]),
+      ],
       logRecordLimits: logLimit,
       timeProvider: FakeTimeProvider(now: Int64(123)),
-    )..setAttribute('key', 'value');
+    )..setAttribute(api.Attribute.fromString('key', 'value'));
 
     final log3 = sdk.LogRecord(
         resource: resource,
@@ -79,7 +78,7 @@ void main() {
         severityNumber: api.Severity.fatal3,
         logRecordLimits: logLimit,
         timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..setAttribute('key', 'value');
+      ..setAttribute(api.Attribute.fromString('key', 'value'));
 
     final log4 = sdk.LogRecord(
         resource: resource,
@@ -89,7 +88,7 @@ void main() {
         severityNumber: api.Severity.fatal3,
         logRecordLimits: logLimit,
         timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..setAttribute('key', 'value');
+      ..setAttribute(api.Attribute.fromString('key', 'value'));
 
     sdk.OTLPLogExporter(uri, httpClient: mockClient).export([log1, log2, log3, log4]);
 
@@ -102,7 +101,7 @@ void main() {
               logRecords: [
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
-                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber!.index),
+                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber.index),
                   attributes: [pb_common.KeyValue(key: 'key', value: pb_common.AnyValue(stringValue: 'value'))],
                   traceId: parent.spanContext.traceId.get(),
                   spanId: parent.spanContext.spanId.get(),
@@ -112,7 +111,7 @@ void main() {
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
-                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log2.severityNumber!.index),
+                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log2.severityNumber.index),
                   attributes: [
                     pb_common.KeyValue(key: 'fromBoolean', value: pb_common.AnyValue(boolValue: false)),
                     pb_common.KeyValue(key: 'fromDouble', value: pb_common.AnyValue(doubleValue: 1.1)),
@@ -145,7 +144,7 @@ void main() {
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
-                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber!.index),
+                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber.index),
                   attributes: [pb_common.KeyValue(key: 'key', value: pb_common.AnyValue(stringValue: 'value'))],
                   traceId: parent.spanContext.traceId.get(),
                   spanId: parent.spanContext.spanId.get(),
@@ -155,7 +154,7 @@ void main() {
                 ),
                 pb_logs.LogRecord(
                   timeUnixNano: Int64(123),
-                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber!.index),
+                  severityNumber: pg_logs_enum.SeverityNumber.valueOf(log1.severityNumber.index),
                   attributes: [pb_common.KeyValue(key: 'key', value: pb_common.AnyValue(stringValue: 'value'))],
                   traceId: parent.spanContext.traceId.get(),
                   spanId: parent.spanContext.spanId.get(),
@@ -179,7 +178,7 @@ void main() {
 
   test('does not send log when shutdown', () {
     final instrumentationLibrary = sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []);
-    final logLimit = LogRecordLimitsImpl(attributeCountLimit: 10, attributeValueLengthLimit: 5);
+    final logLimit = LogRecordLimits(attributeCountLimit: 10, attributeValueLengthLimit: 5);
 
     final tracer = sdk.TracerProviderBase().getTracer('test');
     final parent = tracer.startSpan('parent');
@@ -192,7 +191,7 @@ void main() {
         severityNumber: api.Severity.fatal3,
         logRecordLimits: logLimit,
         timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..setAttribute('key', 'value');
+      ..setAttribute(api.Attribute.fromString('key', 'value'));
 
     sdk.OTLPLogExporter(uri, httpClient: mockClient)
       ..shutdown()
@@ -204,7 +203,7 @@ void main() {
 
   test('supplies HTTP headers', () {
     final instrumentationLibrary = sdk.InstrumentationScope('library_name', 'library_version', 'url://schema', []);
-    final logLimit = LogRecordLimitsImpl(attributeCountLimit: 10, attributeValueLengthLimit: 5);
+    final logLimit = LogRecordLimits(attributeCountLimit: 10, attributeValueLengthLimit: 5);
 
     final tracer = sdk.TracerProviderBase().getTracer('test');
     final parent = tracer.startSpan('parent');
@@ -217,7 +216,7 @@ void main() {
         logRecordLimits: logLimit,
         context: context,
         timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..setAttribute('key', 'value');
+      ..setAttribute(api.Attribute.fromString('key', 'value'));
 
     final suppliedHeaders = {
       'header-param-key-1': 'header-param-value-1',
