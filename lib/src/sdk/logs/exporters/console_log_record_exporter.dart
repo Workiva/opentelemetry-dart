@@ -1,7 +1,6 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
 /// This is implementation of [sdk.ReadWriteLogRecordExporter] that prints LogRecords to the
@@ -29,26 +28,24 @@ class ConsoleLogRecordExporter implements sdk.LogRecordExporter {
   /// converts logRecord info into more readable format
   Map<String, dynamic> _makeObject(sdk.ReadableLogRecord log) {
     final contextInfo = {};
-    if (log.spanContext != null) {
-      contextInfo.addAll({
-        'traceId': log.spanContext!.traceId,
-        'spanId': log.spanContext!.spanId,
-        'traceFlags': log.spanContext!.traceFlags,
-      });
-    }
+    contextInfo.addAll({
+      'traceId': log.spanContext.traceId,
+      'spanId': log.spanContext.spanId,
+      'traceFlags': log.spanContext.traceFlags,
+    });
     return {
       'resource': {
         'attributes': {
-          for (final attribute in log.resource?.attributes.keys ?? <String>[])
-            attribute: log.resource!.attributes.get(attribute),
+          for (final attribute in log.resource.attributes.keys)
+            attribute: log.resource.attributes.get(attribute),
         },
       },
       'instrumentationScope': {
-        'name': log.instrumentationScope?.name,
-        'version': log.instrumentationScope?.version,
-        'schemaUrl': log.instrumentationScope?.schemaUrl,
+        'name': log.instrumentationScope.name,
+        'version': log.instrumentationScope.version,
+        'schemaUrl': log.instrumentationScope.schemaUrl,
         'attributes': {
-          for (final attribute in log.instrumentationScope?.attributes ?? <api.Attribute>[]) attribute.key: attribute.value,
+          for (final attribute in log.instrumentationScope.attributes) attribute.key: attribute.value,
         }
       },
       'timestamp': log.timeStamp,
@@ -56,7 +53,7 @@ class ConsoleLogRecordExporter implements sdk.LogRecordExporter {
       'severityNumber': log.severityNumber,
       'body': log.body,
       'attributes': {
-        for (final attribute in log.attributes?.keys ?? <String>[]) attribute: log.resource!.attributes.get(attribute),
+        for (final attribute in log.attributes.keys) attribute: log.resource.attributes.get(attribute),
       },
       ...contextInfo,
     };

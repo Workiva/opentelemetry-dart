@@ -26,7 +26,7 @@ void main() {
     await exporter.export([logRecord]);
 
     expect(exporter.finishedLogRecords.length, 1);
-    expect(exporter.finishedLogRecords.first.instrumentationScope?.name, 'library_name');
+    expect(exporter.finishedLogRecords.first.instrumentationScope.name, 'library_name');
 
     await exporter.shutdown();
 
