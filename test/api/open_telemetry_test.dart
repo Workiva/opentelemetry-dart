@@ -58,6 +58,32 @@ void main() {
     }, tracer: tracer, context: contextWithSpan(Context.current, parent));
   });
 
+  test('trace creates a root span', () async {
+    final parent = tracer.startSpan('parent')..end();
+    final context = contextWithSpan(Context.current, parent);
+    final token = Context.attach(context);
+
+    await trace('child', () async {
+      final child = spanFromContext(Context.current);
+      expect(child.parentSpanId.isValid, isFalse);
+    }, tracer: tracer, context: context, newRoot: true);
+
+    Context.detach(token);
+  });
+
+  test('traceSync creates a root span', () {
+    final parent = tracer.startSpan('parent')..end();
+    final context = contextWithSpan(Context.current, parent);
+    final token = Context.attach(context);
+
+    traceSync('child', () {
+      final child = spanFromContext(Context.current);
+      expect(child.parentSpanId.isValid, isFalse);
+    }, tracer: tracer, context: context, newRoot: true);
+
+    Context.detach(token);
+  });
+
   test('trace catches, records, and rethrows exception', () async {
     late sdk.Span span;
     var caught = false;

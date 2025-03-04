@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 
 import '../../api.dart' as api;
+import '../../src/sdk/trace/tracer.dart' as sdk show Tracer;
 import '../experimental_api.dart';
 import 'propagation/noop_text_map_propagator.dart';
 import 'trace/noop_tracer_provider.dart';
@@ -102,12 +103,23 @@ Future<T> trace<T>(String name, Future<T> Function() fn,
   context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
-  final span = tracer.startSpan(name,
-      // TODO: use start span option `newRoot` instead
-      context: newRoot ? api.Context.root : context,
-      attributes: spanAttributes,
-      kind: spanKind,
-      links: spanLinks);
+  // TODO: use start span option `newRoot` instead
+  var span;
+  if (tracer is sdk.Tracer) {
+    span = tracer.startSpan(name,
+        context: context,
+        attributes: spanAttributes,
+        kind: spanKind,
+        links: spanLinks,
+        newRoot: newRoot);
+  } else {
+    span = tracer.startSpan(name,
+        context: newRoot ? api.Context.root : context,
+        attributes: spanAttributes,
+        kind: spanKind,
+        links: spanLinks);
+  }
+
   try {
     return await Zone.current.fork().run(() {
       final token = api.Context.attach(api.contextWithSpan(context!, span));
@@ -139,12 +151,23 @@ T traceSync<T>(String name, T Function() fn,
   context ??= api.Context.current;
   tracer ??= _tracerProvider.getTracer('opentelemetry-dart');
 
-  final span = tracer.startSpan(name,
-      // TODO: use start span option `newRoot` instead
-      context: newRoot ? api.Context.root : context,
-      attributes: spanAttributes,
-      kind: spanKind,
-      links: spanLinks);
+  // TODO: use start span option `newRoot` instead
+  var span;
+  if (tracer is sdk.Tracer) {
+    span = tracer.startSpan(name,
+        context: context,
+        attributes: spanAttributes,
+        kind: spanKind,
+        links: spanLinks,
+        newRoot: newRoot);
+  } else {
+    span = tracer.startSpan(name,
+        context: newRoot ? api.Context.root : context,
+        attributes: spanAttributes,
+        kind: spanKind,
+        links: spanLinks);
+  }
+
   try {
     return Zone.current.fork().run(() {
       final token = api.Context.attach(api.contextWithSpan(context!, span));
