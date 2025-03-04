@@ -11,7 +11,6 @@ export 'sdk/logs/log_record_limit.dart' show LogRecordLimits;
 export 'sdk/logs/logger.dart' show Logger;
 export 'sdk/logs/logger_provider.dart' show LoggerProvider;
 export 'sdk/logs/processors/log_record_processor.dart' show LogRecordProcessor;
-export 'sdk/logs/processors/noop_log_processor.dart' show NoopLogRecordProcessor;
 export 'sdk/metrics/counter.dart' show Counter;
 export 'sdk/metrics/meter.dart' show Meter;
 export 'sdk/metrics/meter_provider.dart' show MeterProvider;
