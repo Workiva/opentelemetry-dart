@@ -1,6 +1,5 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
@@ -86,14 +85,18 @@ api.Attribute applyAttributeLimitsForLog(
         ? api.Attribute.fromString(attr.key, (attr.value as String).substring(0, limits.attributeValueLengthLimit))
         : attr;
   } else if (attr.value is List<String>) {
-    final listString = attr.value as List<String>;
-    final truncatedValues =
-        listString.map((e) => applyAttributeLengthLimit(e, limits.attributeValueLengthLimit)).toList();
-
-    final equal = const ListEquality().equals(listString, truncatedValues);
-    if (equal) return attr;
-
-    return api.Attribute.fromStringList(attr.key, truncatedValues);
+    final list = (attr.value as List<String>);
+    List<String>? truncated;
+    for (int i = 0; i < list.length; i++) {
+      final s = list[i];
+      if (s.length > limits.attributeValueLengthLimit) {
+        truncated ??= List<String>.from(list, growable: false);
+        truncated[i] = s.substring(0, limits.attributeValueLengthLimit);
+      }
+    }
+    if (truncated != null) {
+      return api.Attribute.fromStringList(attr.key, truncated);
+    }
   }
   return attr;
 }
