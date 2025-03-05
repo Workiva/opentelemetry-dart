@@ -5,7 +5,7 @@ import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
 /// https://opentelemetry.io/docs/specs/otel/logs/sdk/#logrecordprocessor
 abstract class LogRecordProcessor {
-  void onEmit(sdk.ReadableLogRecord logRecord);
+  void onEmit(sdk.ReadWriteLogRecord logRecord);
 
   Future<void> forceFlush();
 
