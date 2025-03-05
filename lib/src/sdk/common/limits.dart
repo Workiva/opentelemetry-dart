@@ -1,9 +1,11 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
+import '../../experimental_sdk.dart' as sdk;
 
 /// Applies given [sdk.SpanLimits] to a list of [api.SpanLink]s.
 @protected
@@ -73,6 +75,36 @@ api.Attribute applyAttributeLimits(api.Attribute attr, sdk.SpanLimits limits) {
           listString[j], limits.maxNumAttributeLength);
     }
     attr = api.Attribute.fromStringList(attr.key, listString);
+  }
+  return attr;
+}
+
+@protected
+api.Attribute applyAttributeLimitsForLog(
+  api.Attribute attr,
+  sdk.LogRecordLimits limits,
+) {
+  // if maxNumAttributeLength is less than zero, then it has unlimited length.
+  if (limits.attributeValueLengthLimit < 0) return attr;
+
+  if (attr.value is String) {
+    final truncatedValue = applyAttributeLengthLimit(
+        attr.value as String, limits.attributeValueLengthLimit);
+
+    if (truncatedValue == attr.value) return attr;
+
+    return api.Attribute.fromString(attr.key, truncatedValue);
+  } else if (attr.value is List<String>) {
+    final listString = attr.value as List<String>;
+    final truncatedValues = listString
+        .map((e) =>
+            applyAttributeLengthLimit(e, limits.attributeValueLengthLimit))
+        .toList();
+
+    final equal = const ListEquality().equals(listString, truncatedValues);
+    if (equal) return attr;
+
+    return api.Attribute.fromStringList(attr.key, truncatedValues);
   }
   return attr;
 }
