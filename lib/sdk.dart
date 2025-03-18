@@ -15,7 +15,6 @@ export 'src/sdk/logs/logger.dart' show Logger;
 export 'src/sdk/logs/logger_provider.dart' show LoggerProvider;
 export 'src/sdk/logs/processors/batch_log_record_processor.dart' show BatchLogRecordProcessor;
 export 'src/sdk/logs/processors/log_record_processor.dart' show LogRecordProcessor;
-export 'src/sdk/logs/processors/noop_log_processor.dart' show NoopLogRecordProcessor;
 export 'src/sdk/logs/processors/simple_log_record_processor.dart' show SimpleLogRecordProcessor;
 export 'src/sdk/resource/resource.dart' show Resource;
 export 'src/sdk/time_providers/datetime_time_provider.dart' show DateTimeTimeProvider;
