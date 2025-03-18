@@ -15,5 +15,8 @@ abstract class TimeProvider {
   static const int nanosecondsPerMillisecond = 1000000;
 
   /// The current time, in nanoseconds since Unix Epoch.
+  @Deprecated('This getter will be removed in future without replacement.')
   Int64 get now;
+
+  double get nowNanoseconds;
 }

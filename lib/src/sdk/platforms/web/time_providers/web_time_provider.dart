@@ -51,4 +51,7 @@ class WebTimeProvider implements TimeProvider {
   /// for more information.
   @override
   Int64 get now => fromDOMHighResTimeStamp(window.performance.now());
+
+  @override
+  double get nowNanoseconds => window.performance.now();
 }

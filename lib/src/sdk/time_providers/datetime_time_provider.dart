@@ -8,4 +8,7 @@ import 'time_provider.dart';
 class DateTimeTimeProvider implements TimeProvider {
   @override
   Int64 get now => Int64(DateTime.now().microsecondsSinceEpoch) * 1000;
+
+  @override
+  double get nowNanoseconds => DateTime.now().microsecondsSinceEpoch * 1000.0;
 }
