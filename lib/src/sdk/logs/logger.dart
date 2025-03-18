@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/api.dart' as api;
 
 class Logger extends api.Logger {
   final sdk.InstrumentationScope _instrumentationScope;

@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
-import '../../experimental_sdk.dart' as sdk;
 
 /// Applies given [sdk.SpanLimits] to a list of [api.SpanLink]s.
 @protected

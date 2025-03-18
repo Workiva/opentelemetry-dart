@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 
 import '../../api.dart' as api;
 import '../../src/sdk/trace/tracer.dart' as sdk show Tracer;
-import '../experimental_api.dart';
 import 'propagation/noop_text_map_propagator.dart';
 import 'trace/noop_tracer_provider.dart';
 
