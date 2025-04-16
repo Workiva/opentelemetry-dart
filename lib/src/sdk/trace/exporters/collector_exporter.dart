@@ -23,12 +23,15 @@ class CollectorExporter implements sdk.SpanExporter {
   final Uri uri;
   final http.Client client;
   final Map<String, String> headers;
-  final Duration? timeout;
+  final Duration timeout;
   var _isShutdown = false;
 
-  CollectorExporter(this.uri,
-      {http.Client? httpClient, this.headers = const {}, this.timeout})
-      : client = httpClient ?? http.Client();
+  CollectorExporter(
+    this.uri, {
+    http.Client? httpClient,
+    this.headers = const {},
+    this.timeout = const Duration(seconds: 10),
+  }) : client = httpClient ?? http.Client();
 
   @override
   void export(List<sdk.ReadOnlySpan> spans) {
@@ -59,10 +62,9 @@ class CollectorExporter implements sdk.SpanExporter {
 
     while (retries < maxRetries) {
       try {
-        final request =
-            client.post(uri, body: body.writeToBuffer(), headers: headers);
-        final response =
-            await (timeout != null ? request.timeout(timeout!) : request);
+        final response = await client
+            .post(uri, body: body.writeToBuffer(), headers: headers)
+            .timeout(timeout);
         if (response.statusCode == 200) {
           return;
         }
