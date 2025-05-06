@@ -51,7 +51,6 @@ class LogRecord implements ReadWriteLogRecord {
   final DateTime? _timeStamp;
   final DateTime? _observedTimestamp;
 
-  bool _isReadonly = false;
   String _severityText;
   api.Severity _severityNumber;
   dynamic _body;
@@ -96,7 +95,6 @@ class LogRecord implements ReadWriteLogRecord {
 
   @override
   set body(dynamic body) {
-    if (_isReadonly) return;
     _body = body;
   }
 
@@ -118,7 +116,6 @@ class LogRecord implements ReadWriteLogRecord {
 
   @override
   set severityNumber(api.Severity severity) {
-    if (_isReadonly) return;
     _severityNumber = severity;
   }
 
@@ -127,7 +124,6 @@ class LogRecord implements ReadWriteLogRecord {
 
   @override
   set severityText(String severity) {
-    if (_isReadonly) return;
     _severityText = severity;
   }
 
@@ -136,17 +132,9 @@ class LogRecord implements ReadWriteLogRecord {
   }
 
   void setAttribute(api.Attribute attribute) {
-    if (_isReadonly) return;
     if (attribute.key.isEmpty) return;
     if (logRecordLimits.attributeCountLimit == 0) return;
     _totalAttributesCount += 1;
     _attributes.add(applyAttributeLimitsForLog(attribute, logRecordLimits));
-  }
-
-  /// A LogRecordProcessor may freely modify logRecord for the duration of the OnEmit call.
-  /// If logRecord is needed after OnEmit returns (i.e. for asynchronous processing) only reads are permitted.
-  @internal
-  void makeReadonly() {
-    _isReadonly = true;
   }
 }

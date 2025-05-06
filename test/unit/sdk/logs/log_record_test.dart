@@ -13,30 +13,6 @@ import 'package:test/test.dart';
 import '../trace_provider_test.dart';
 
 void main() {
-  test('set readonly will block values from being set', () {
-    final logRecord = sdk.LogRecord(
-        instrumentationScope: sdk.InstrumentationScope(
-            'library_name', 'library_version', 'url://schema', []),
-        logRecordLimits: LogRecordLimits(),
-        timeProvider: FakeTimeProvider(now: Int64(123)))
-      ..makeReadonly()
-      ..body = 'Log Message'
-      ..severityNumber = api.Severity.debug
-      ..severityText = 'DEBUG'
-      ..setAttributes([api.Attribute.fromString('key', 'value')])
-      ..setAttribute(api.Attribute.fromString('key2', 'value2'));
-
-    expect(logRecord.body, null);
-    expect(logRecord.severityNumber, api.Severity.unspecified);
-    expect(logRecord.severityText, api.Severity.unspecified.name);
-    expect(logRecord.attributes.keys, const <String>[]);
-    expect(logRecord.droppedAttributesCount, 0);
-    expect(logRecord.timeStamp,
-        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
-    expect(logRecord.observedTimestamp,
-        DateTime.fromMicrosecondsSinceEpoch(Int64(123).toInt() ~/ 1000));
-  });
-
   test('logRecord call setter', () {
     final logRecord = sdk.LogRecord(
         instrumentationScope: sdk.InstrumentationScope(

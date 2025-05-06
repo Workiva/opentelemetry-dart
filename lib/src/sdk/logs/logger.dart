@@ -48,6 +48,5 @@ class Logger extends api.Logger {
     for (final processor in _processors) {
       processor.onEmit(log);
     }
-    log.makeReadonly();
   }
 }
