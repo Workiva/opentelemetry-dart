@@ -9,20 +9,20 @@ import 'package:opentelemetry/src/experimental_api.dart' as api;
 import 'package:opentelemetry/src/experimental_sdk.dart' as sdk;
 
 class Logger extends api.Logger {
-  final sdk.InstrumentationScope instrumentationScope;
+  final sdk.InstrumentationScope _instrumentationScope;
   final sdk.Resource _resource;
-  final sdk.LogRecordLimits logRecordLimits;
-  final sdk.TimeProvider timeProvider;
-  final List<sdk.LogRecordProcessor> processors;
+  final sdk.LogRecordLimits _logRecordLimits;
+  final sdk.TimeProvider _timeProvider;
+  final List<sdk.LogRecordProcessor> _processors;
 
   @protected
-  Logger({
-    required this.instrumentationScope,
-    required this.logRecordLimits,
-    required this.timeProvider,
-    this.processors = const <sdk.LogRecordProcessor>[],
-    sdk.Resource? resource,
-  }) : _resource = resource ?? sdk.Resource([]);
+  Logger(
+    this._instrumentationScope,
+    this._logRecordLimits,
+    this._timeProvider,
+    this._processors,
+    this._resource,
+  );
 
   @override
   void emit({
@@ -35,17 +35,17 @@ class Logger extends api.Logger {
     DateTime? timeStamp,
   }) {
     final log = sdk.LogRecord(
-      logRecordLimits: logRecordLimits,
+      logRecordLimits: _logRecordLimits,
       resource: _resource,
-      instrumentationScope: instrumentationScope,
+      instrumentationScope: _instrumentationScope,
       context: context,
       severityText: severityText,
       severityNumber: severityNumber,
       attributes: attributes,
       body: body,
-      timeProvider: timeProvider,
+      timeProvider: _timeProvider,
     );
-    for (final processor in processors) {
+    for (final processor in _processors) {
       processor.onEmit(log);
     }
     log.makeReadonly();

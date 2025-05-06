@@ -52,11 +52,11 @@ class LoggerProvider implements api.LoggerProvider {
     return _loggers.putIfAbsent(
       key,
       () => sdk.Logger(
-        logRecordLimits: _logRecordLimits,
-        resource: _resource,
-        instrumentationScope: sdk.InstrumentationScope(loggerName, version, schemaUrl, attributes),
-        timeProvider: _timeProvider,
-        processors: _processors
+        sdk.InstrumentationScope(loggerName, version, schemaUrl, attributes),
+        _logRecordLimits,
+        _timeProvider,
+        _processors,
+        _resource,
       ),
     );
   }

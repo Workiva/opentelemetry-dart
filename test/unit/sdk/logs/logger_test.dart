@@ -24,16 +24,16 @@ void main() {
   test('emit new log', () {
     final processor = MockLockRecordProcessor();
     sdk.Logger(
-      logRecordLimits: LogRecordLimits(),
-      instrumentationScope: sdk.InstrumentationScope(
+      sdk.InstrumentationScope(
         'library_name',
         'library_version',
         'url://schema',
         [],
       ),
-      resource: sdk.Resource([]),
-      processors: [processor],
-      timeProvider: FakeTimeProvider(now: Int64(60)),
+      LogRecordLimits(),
+      FakeTimeProvider(now: Int64(60)),
+      [processor],
+      sdk.Resource([]),
     ).emit(body: 'TEST!');
 
     verify(() => processor.onEmit(any<sdk.LogRecord>(that: predicate<sdk.LogRecord>((it) {
