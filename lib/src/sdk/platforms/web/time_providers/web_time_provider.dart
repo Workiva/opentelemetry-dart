@@ -15,17 +15,15 @@ Int64 msToNs(num n, {int? fractionDigits}) {
     final frac = ((n - whole) * nsPerMs).round();
     return Int64(whole * nsPerMs + frac);
   }
-  final frac =
-      double.parse((n - whole).toStringAsFixed(fractionDigits)) * nsPerMs;
+  final frac = double.parse((n - whole).toStringAsFixed(fractionDigits)) * nsPerMs;
   return Int64(whole) * nsPerMs + Int64(frac.round());
 }
 
 /// Time when navigation started or the service worker was started in
 /// nanoseconds.
 @experimental
-final Int64 timeOrigin = msToNs(
-    window.performance.timeOrigin ?? window.performance.timing.navigationStart,
-    fractionDigits: 1);
+final Int64 timeOrigin =
+    msToNs(window.performance.timeOrigin ?? window.performance.timing.navigationStart, fractionDigits: 1);
 
 /// Converts a high-resolution timestamp from the browser performance API to an
 /// Int64 representing nanoseconds since Unix Epoch.
@@ -44,6 +42,10 @@ Int64 fromDOMHighResTimeStamp(num ts) {
 /// for sleep.  See https://github.com/open-telemetry/opentelemetry-js/issues/852
 /// for more information.
 class WebTimeProvider implements TimeProvider {
+  static final Duration timeOrigin = Duration(
+    milliseconds: (window.performance.timeOrigin ?? window.performance.timing.navigationStart).round(),
+  );
+
   /// The current time, in nanoseconds since Unix Epoch.
   ///
   /// Note that this time may be inaccurate if the executing system is suspended
@@ -53,5 +55,6 @@ class WebTimeProvider implements TimeProvider {
   Int64 get now => fromDOMHighResTimeStamp(window.performance.now());
 
   @override
-  double get nowNanoseconds => window.performance.now();
+  Duration get nowDuration =>
+      WebTimeProvider.timeOrigin + Duration(microseconds: (window.performance.now() * 1000).round());
 }
