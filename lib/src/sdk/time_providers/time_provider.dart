@@ -14,6 +14,19 @@ abstract class TimeProvider {
   @Deprecated('This constant will be removed in 0.19.0 without replacement.')
   static const int nanosecondsPerMillisecond = 1000000;
 
-  /// The current time, in nanoseconds since Unix Epoch.
+  /// The current time in nanoseconds since Unix Epoch.
+  ///
+  /// **Warning:** Return type will change to `Duration` in 0.19.0.
+  /// Use [nowDuration] instead.
+  @Deprecated(
+      'Return type will change to `Duration` in 0.19.0. '
+          'Use `nowDuration` for now, and migrate back to `now` after 0.19.0.'
+  )
   Int64 get now;
+
+  /// The current time as a [Duration] since Unix Epoch.
+  ///
+  /// **Warning:** Temporary API, will be removed in 0.20.0.
+  /// Use this for intermediate migration of `now` prior to 0.19.0.
+  Duration get nowDuration;
 }
