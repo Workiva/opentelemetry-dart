@@ -128,6 +128,10 @@ class TraceState {
     return state;
   }
 
+  Map<String, String> toJson() {
+    return _state;
+  }
+
   bool get isEmpty => _state.isEmpty;
 
   int get size => _state.length;

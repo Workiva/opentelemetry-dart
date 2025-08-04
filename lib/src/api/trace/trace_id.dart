@@ -33,4 +33,8 @@ class TraceId {
   @override
   String toString() =>
       _id.map((x) => x.toRadixString(16).padLeft(2, '0')).join();
+
+  List<int> get id {
+    return _id;
+  }
 }
