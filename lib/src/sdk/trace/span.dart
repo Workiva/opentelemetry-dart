@@ -3,7 +3,7 @@
 
 import 'package:fixnum/fixnum.dart';
 import 'package:meta/meta.dart';
-import 'package:opentelemetry/api.dart';
+
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
