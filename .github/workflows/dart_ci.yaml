@@ -20,7 +20,7 @@ jobs:
   test-dartv2:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: true
       - uses: dart-lang/setup-dart@v1
@@ -44,7 +44,7 @@ jobs:
   test-dartv3:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: true
       - uses: dart-lang/setup-dart@v1
