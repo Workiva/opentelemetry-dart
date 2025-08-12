@@ -4,11 +4,11 @@ import 'package:meta/meta.dart';
 
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
+import '../../experimental_sdk.dart' as sdk;
 
 /// Applies given [sdk.SpanLimits] to a list of [api.SpanLink]s.
 @protected
-List<api.SpanLink> applyLinkLimits(
-    List<api.SpanLink> links, sdk.SpanLimits limits) {
+List<api.SpanLink> applyLinkLimits(List<api.SpanLink> links, sdk.SpanLimits limits) {
   final spanLink = <api.SpanLink>[];
 
   for (final link in links) {
@@ -27,8 +27,7 @@ List<api.SpanLink> applyLinkLimits(
     for (final attr in link.attributes) {
       // if attributes num is already greater than maxNumAttributesPerLink
       // and this key doesn't exist in the list, drop it.
-      if (attributeMap.length >= limits.maxNumAttributesPerLink &&
-          !attributeMap.containsKey(attr.key)) {
+      if (attributeMap.length >= limits.maxNumAttributesPerLink && !attributeMap.containsKey(attr.key)) {
         droppedAttributes++;
         continue;
       }
@@ -49,8 +48,7 @@ List<api.SpanLink> applyLinkLimits(
       }
     }
 
-    spanLink.add(api.SpanLink(link.context,
-        attributes: linkAttributes, droppedAttributes: droppedAttributes));
+    spanLink.add(api.SpanLink(link.context, attributes: linkAttributes, droppedAttributes: droppedAttributes));
   }
   return spanLink;
 }
@@ -63,16 +61,42 @@ api.Attribute applyAttributeLimits(api.Attribute attr, sdk.SpanLimits limits) {
 
   if (attr.value is String) {
     attr = api.Attribute.fromString(
-        attr.key,
-        applyAttributeLengthLimit(
-            attr.value as String, limits.maxNumAttributeLength));
+        attr.key, applyAttributeLengthLimit(attr.value as String, limits.maxNumAttributeLength));
   } else if (attr.value is List<String>) {
     final listString = attr.value as List<String>;
     for (var j = 0; j < listString.length; j++) {
-      listString[j] = applyAttributeLengthLimit(
-          listString[j], limits.maxNumAttributeLength);
+      listString[j] = applyAttributeLengthLimit(listString[j], limits.maxNumAttributeLength);
     }
     attr = api.Attribute.fromStringList(attr.key, listString);
+  }
+  return attr;
+}
+
+@protected
+api.Attribute applyAttributeLimitsForLog(
+  api.Attribute attr,
+  sdk.LogRecordLimits limits,
+) {
+  // if maxNumAttributeLength is less than zero, then it has unlimited length.
+  if (limits.attributeValueLengthLimit < 0) return attr;
+
+  if (attr.value is String) {
+    return (attr.value as String).length > limits.attributeValueLengthLimit
+        ? api.Attribute.fromString(attr.key, (attr.value as String).substring(0, limits.attributeValueLengthLimit))
+        : attr;
+  } else if (attr.value is List<String>) {
+    final list = (attr.value as List<String>);
+    List<String>? truncated;
+    for (int i = 0; i < list.length; i++) {
+      final s = list[i];
+      if (s.length > limits.attributeValueLengthLimit) {
+        truncated ??= List<String>.from(list, growable: false);
+        truncated[i] = s.substring(0, limits.attributeValueLengthLimit);
+      }
+    }
+    if (truncated != null) {
+      return api.Attribute.fromStringList(attr.key, truncated);
+    }
   }
   return attr;
 }
