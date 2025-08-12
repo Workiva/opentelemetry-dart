@@ -3,7 +3,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:quiver/core.dart';
-import 'package:opentelemetry/api.dart';
+
 
 /// A class that acts as a unique key for a given Meter configuration.
 class MeterKey {
