@@ -7,7 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
-import '../../../api.dart';
+import '../../../api.dart' hide Logger;
 import '../trace/nonrecording_span.dart' show NonRecordingSpan;
 
 final Logger _log = Logger('opentelemetry');
