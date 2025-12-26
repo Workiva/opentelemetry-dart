@@ -1,14 +1,12 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
-import '../../../api/trace/span.dart';
+import '../../../../sdk.dart' as sdk;
 
-import '../../../api/exporters/span_exporter.dart';
-
-class ConsoleExporter implements SpanExporter {
+class ConsoleExporter implements sdk.SpanExporter {
   var _isShutdown = false;
 
-  void _printSpans(List<Span> spans) {
+  void _printSpans(List<sdk.ReadOnlySpan> spans) {
     for (var i = 0; i < spans.length; i++) {
       final span = spans[i];
       print({
@@ -17,7 +15,7 @@ class ConsoleExporter implements SpanExporter {
         'name': span.name,
         'id': '${span.spanContext.spanId}',
         'timestamp': span.startTime,
-        'duration': span.endTime - span.startTime,
+        'duration': span.endTime! - span.startTime,
         'flags':
             '${span.spanContext.traceFlags.toRadixString(16).padLeft(2, '0')}',
         'state': '${span.spanContext.traceState}',
@@ -27,7 +25,7 @@ class ConsoleExporter implements SpanExporter {
   }
 
   @override
-  void export(List<Span> spans) {
+  void export(List<sdk.ReadOnlySpan> spans) {
     if (_isShutdown) {
       return;
     }
@@ -35,6 +33,8 @@ class ConsoleExporter implements SpanExporter {
     _printSpans(spans);
   }
 
+  @Deprecated(
+      'This method will be removed in 0.19.0. Use [SpanProcessor] instead.')
   @override
   void forceFlush() {
     return;

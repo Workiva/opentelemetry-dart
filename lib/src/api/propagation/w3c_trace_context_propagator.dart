@@ -1,7 +1,7 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import '../../../api.dart' as api;
+import '../../experimental_api.dart';
 
 class W3CTraceContextPropagator implements api.TextMapPropagator {
   static const String _traceVersion = '00';
@@ -28,40 +28,46 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
       // Carrier did not contain a trace header.  Do nothing.
       return context;
     }
-    if (!traceParentHeaderRegEx.hasMatch(traceParentHeader)) {
+
+    final parentHeaderMatch =
+        traceParentHeaderRegEx.firstMatch(traceParentHeader);
+
+    if (parentHeaderMatch == null) {
       // Encountered a malformed or unknown trace header.  Do nothing.
       return context;
     }
 
-    final parentHeaderMatch =
-        traceParentHeaderRegEx.firstMatch(traceParentHeader);
     final parentHeaderFields = Map<String, String>.fromIterable(
         parentHeaderMatch.groupNames,
         key: (element) => element.toString(),
-        value: (element) => parentHeaderMatch.namedGroup(element));
+        value: (element) => parentHeaderMatch.namedGroup(element)!);
 
-    final traceId =
-        api.TraceId.fromString(parentHeaderFields[_traceIdFieldKey]) ??
-            api.TraceId.invalid();
-    final parentId =
-        api.SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
-            api.SpanId.invalid();
-    final traceFlags =
-        int.parse(parentHeaderFields[_traceFlagsFieldKey], radix: 16) ??
-            api.TraceFlags.none;
-
+    final traceIdHeader = parentHeaderFields[_traceIdFieldKey];
+    final traceId = (traceIdHeader != null)
+        ? api.TraceId.fromString(traceIdHeader)
+        : api.TraceId.invalid();
+    final parentIdHeader = parentHeaderFields[_parentIdFieldKey];
+    final parentId = (parentIdHeader != null)
+        ? api.SpanId.fromString(parentIdHeader)
+        : api.SpanId.invalid();
+    final traceFlagsHeader = parentHeaderFields[_traceFlagsFieldKey];
+    final traceFlags = (traceFlagsHeader != null)
+        ? int.parse(traceFlagsHeader, radix: 16)
+        : api.TraceFlags.none;
     final traceStateHeader = getter.get(carrier, _traceStateHeaderKey);
     final traceState = (traceStateHeader != null)
         ? api.TraceState.fromString(traceStateHeader)
         : api.TraceState.empty();
 
-    return context.withSpan(api.NonRecordingSpan(
-        api.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
+    return api.contextWithSpan(
+        context,
+        NonRecordingSpan(
+            api.SpanContext.remote(traceId, parentId, traceFlags, traceState)));
   }
 
   @override
   void inject(api.Context context, dynamic carrier, api.TextMapSetter setter) {
-    final spanContext = context.spanContext;
+    final spanContext = api.spanContextFromContext(context);
 
     setter
       ..set(

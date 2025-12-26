@@ -5,39 +5,29 @@ import '../../../api.dart' as api;
 
 /// Representation of the context of an individual span.
 class SpanContext {
-  final api.SpanId _spanId;
-  final api.TraceId _traceId;
-  final int _traceFlags;
-  final api.TraceState _traceState;
-  final bool _isRemote;
-
-  api.TraceId get traceId => _traceId;
-
-  api.SpanId get spanId => _spanId;
-
-  int get traceFlags => _traceFlags;
-
-  api.TraceState get traceState => _traceState;
+  final api.TraceId traceId;
+  final api.SpanId spanId;
+  final int traceFlags;
+  final api.TraceState traceState;
+  final bool isRemote;
 
   bool get isValid => spanId.isValid && traceId.isValid;
 
   /// Construct a [SpanContext].
-  SpanContext(this._traceId, this._spanId, this._traceFlags, this._traceState)
-      : _isRemote = false;
+  SpanContext(this.traceId, this.spanId, this.traceFlags, this.traceState)
+      : isRemote = false;
 
-  /// Construct a [SpanContext] representing an operation which originated
-  /// from a remote source.
+  /// Construct a [SpanContext] representing an operation which originated from
+  /// a remote source.
   SpanContext.remote(
-      this._traceId, this._spanId, this._traceFlags, this._traceState)
-      : _isRemote = true;
+      this.traceId, this.spanId, this.traceFlags, this.traceState)
+      : isRemote = true;
 
   /// Construct an invalid [SpanContext].
   SpanContext.invalid()
-      : _spanId = api.SpanId.invalid(),
-        _traceId = api.TraceId.invalid(),
-        _traceFlags = api.TraceFlags.none,
-        _traceState = api.TraceState.empty(),
-        _isRemote = false;
-
-  bool get isRemote => _isRemote;
+      : spanId = api.SpanId.invalid(),
+        traceId = api.TraceId.invalid(),
+        traceFlags = api.TraceFlags.none,
+        traceState = api.TraceState.empty(),
+        isRemote = false;
 }

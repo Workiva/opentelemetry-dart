@@ -2,11 +2,37 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'dart:html';
-import 'dart:js';
 
 import 'package:fixnum/fixnum.dart';
+import 'package:meta/meta.dart';
 
-import '../../../../../sdk.dart' as sdk;
+import '../../../time_providers/time_provider.dart';
+
+Int64 msToNs(num n, {int? fractionDigits}) {
+  const nsPerMs = 1000 * 1000;
+  final whole = n.truncate();
+  if (fractionDigits == null) {
+    final frac = ((n - whole) * nsPerMs).round();
+    return Int64(whole * nsPerMs + frac);
+  }
+  final frac =
+      double.parse((n - whole).toStringAsFixed(fractionDigits)) * nsPerMs;
+  return Int64(whole) * nsPerMs + Int64(frac.round());
+}
+
+/// Time when navigation started or the service worker was started in
+/// nanoseconds.
+@experimental
+final Int64 timeOrigin = msToNs(
+    window.performance.timeOrigin ?? window.performance.timing.navigationStart,
+    fractionDigits: 1);
+
+/// Converts a high-resolution timestamp from the browser performance API to an
+/// Int64 representing nanoseconds since Unix Epoch.
+@experimental
+Int64 fromDOMHighResTimeStamp(num ts) {
+  return timeOrigin + msToNs(ts);
+}
 
 /// BrowserTimeProvider retrieves high-resolution timestamps utilizing the
 /// `window.performance` API.
@@ -17,23 +43,12 @@ import '../../../../../sdk.dart' as sdk;
 /// Note that this time may be inaccurate if the executing system is suspended
 /// for sleep.  See https://github.com/open-telemetry/opentelemetry-js/issues/852
 /// for more information.
-class WebTimeProvider implements sdk.TimeProvider {
-  static final Int64 _timeOrigin = _fromDouble(
-      JsObject.fromBrowserObject(window)['performance']['timeOrigin'] ??
-          // fallback for browsers that don't support timeOrigin, like Dartium
-          window.performance.timing.navigationStart.toDouble());
-
-  /// Derive a time, in nanoseconds, from a floating-point time, in milliseconds.
-  static Int64 _fromDouble(double time) =>
-      Int64((time * sdk.TimeProvider.nanosecondsPerMillisecond).round());
-
+class WebTimeProvider implements TimeProvider {
   /// The current time, in nanoseconds since Unix Epoch.
   ///
   /// Note that this time may be inaccurate if the executing system is suspended
   /// for sleep.  See https://github.com/open-telemetry/opentelemetry-js/issues/852
   /// for more information.
   @override
-  Int64 get now =>
-      // .now() returns an int in Dartium, requiring .toDouble()
-      _timeOrigin + _fromDouble(window.performance.now().toDouble());
+  Int64 get now => fromDOMHighResTimeStamp(window.performance.now());
 }

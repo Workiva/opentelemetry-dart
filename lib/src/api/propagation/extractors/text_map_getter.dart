@@ -9,5 +9,5 @@ abstract class TextMapGetter<C> {
   Iterable<String> keys(C carrier);
 
   /// Returns the first value of the given propagation [key] or returns null.
-  String get(C carrier, String key);
+  String? get(C carrier, String key);
 }

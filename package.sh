@@ -16,7 +16,7 @@ mkdir pub_temp
 
 # Generate the final publishable artifact
 cd pub_temp
-tar czf ../pub_package.pub.tgz $(ls -d CHANGELOG.md LICENSE NOTICE README.md analysis_options.yaml build.yaml pubspec.yaml lib/ 2>/dev/null)
+tar czf ../pub_package.pub.tgz .
 cd ../
 
 # Clean up

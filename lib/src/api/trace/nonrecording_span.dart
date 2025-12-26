@@ -10,10 +10,8 @@ import '../../../api.dart' as api;
 /// See https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#wrapping-a-spancontext-in-a-span
 /// for more information.
 ///
-/// This class should not be exposed to consumers and is used internally to wrap
-/// [api.SpanContext] being injected or extracted for external calls.
 class NonRecordingSpan implements api.Span {
-  final api.SpanStatus _status = api.SpanStatus()..code = api.StatusCode.ok;
+  final api.SpanId _parentSpanId = api.SpanId.invalid();
   final api.SpanContext _spanContext;
 
   NonRecordingSpan(this._spanContext);
@@ -25,45 +23,27 @@ class NonRecordingSpan implements api.Span {
   void setAttributes(List<api.Attribute> attributes) {}
 
   @override
-  void end({Int64 endTime}) {}
+  void end({Int64? endTime}) {}
 
   @override
-  Int64 get endTime => null;
+  void setName(String _name) {}
 
   @override
-  String get name => 'NON_RECORDING';
+  api.SpanId get parentSpanId => _parentSpanId;
 
   @override
-  set name(String _name) {}
-
-  @override
-  bool get isRecording => false;
-
-  @override
-  api.SpanId get parentSpanId => api.SpanId.invalid();
-
-  @override
-  void setStatus(api.StatusCode status, {String description}) {}
+  void setStatus(api.StatusCode status, [String? description]) {}
 
   @override
   api.SpanContext get spanContext => _spanContext;
 
   @override
-  Int64 get startTime => null;
+  void recordException(dynamic exception,
+      {bool escaped = false,
+      StackTrace? stackTrace,
+      List<api.Attribute>? attributes}) {}
 
   @override
-  api.SpanStatus get status => _status;
-
-  @override
-  api.InstrumentationLibrary get instrumentationLibrary => null;
-
-  @override
-  void recordException(dynamic exception, {StackTrace stackTrace}) {}
-
-  @override
-  void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute> attributes}) {}
-
-  @override
-  api.SpanKind get kind => api.SpanKind.internal;
+  void addEvent(String name,
+      {Int64? timestamp, List<api.Attribute>? attributes}) {}
 }

@@ -10,18 +10,22 @@ import 'package:test/test.dart';
 void main() {
   test('Context contains a Span', () {
     final traceId = api.TraceId([1, 2, 3]);
-    final traceState = sdk.TraceState.fromString('test=onetwo');
+    final traceState = api.TraceState.fromString('test=one,two');
     final testSpan = Span(
         'foo',
-        sdk.SpanContext(
+        api.SpanContext(
             traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none, traceState),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'always_off_sampler_test', 'sampler_test_version'));
-    final testContext = api.Context.current.withSpan(testSpan);
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now);
+    final testContext = api.contextWithSpan(api.Context.current, testSpan);
 
     final result = sdk.AlwaysOffSampler().shouldSample(
         testContext, traceId, testSpan.name, api.SpanKind.internal, [], []);
@@ -38,17 +42,21 @@ void main() {
     ];
     final testSpan = Span(
         'foo',
-        sdk.SpanContext(traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none,
-            sdk.TraceState.empty()),
+        api.SpanContext(traceId, api.SpanId([7, 8, 9]), api.TraceFlags.none,
+            api.TraceState.empty()),
         api.SpanId([4, 5, 6]),
         [],
         sdk.DateTimeTimeProvider(),
         sdk.Resource([]),
-        sdk.InstrumentationLibrary(
-            'always_off_sampler_test', 'sampler_test_version'),
-        attributes: attributesList);
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        api.SpanKind.internal,
+        [],
+        sdk.SpanLimits(),
+        sdk.DateTimeTimeProvider().now)
+      ..setAttributes(attributesList);
 
-    final result = sdk.AlwaysOffSampler().shouldSample(api.Context.root,
+    final result = sdk.AlwaysOffSampler().shouldSample(api.Context.current,
         traceId, testSpan.name, api.SpanKind.internal, attributesList, []);
 
     expect(result.decision, equals(sdk.Decision.drop));

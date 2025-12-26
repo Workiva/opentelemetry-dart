@@ -28,6 +28,8 @@ enum SpanKind {
 /// function calls to sub-components. A trace has a single, top-level "root"
 /// span that in turn may haze zero or more child Spans, which in turn may have
 /// children.
+///
+/// Warning: methods may be added to this interface in minor releases.
 abstract class Span {
   /// The context associated with this span.
   ///
@@ -36,24 +38,11 @@ abstract class Span {
   /// span ends.
   api.SpanContext get spanContext;
 
-  /// Get the time when the span was closed, or null if still open.
-  Int64 get endTime;
-
-  /// Get the time when the span was started.
-  Int64 get startTime;
-
   /// The parent span id.
   api.SpanId get parentSpanId;
 
-  /// The name of the span.
-  String name;
-
-  /// Whether this Span is recording information like events with the
-  /// addEvent operation, status with setStatus, etc.
-  bool get isRecording;
-
-  /// The kind of the span.
-  SpanKind get kind;
+  /// Sets the name of the [Span].
+  void setName(String name);
 
   /// Sets the status to the [Span].
   ///
@@ -62,26 +51,22 @@ abstract class Span {
   ///
   /// Only the value of the last call will be recorded, and implementations are
   /// free to ignore previous calls.
-  void setStatus(api.StatusCode status, {String description});
+  void setStatus(api.StatusCode status, [String description]);
 
-  /// Retrieve the status of the [Span].
-  api.SpanStatus get status;
-
-  /// set single attribute
+  /// Sets a single attribute.
   void setAttribute(api.Attribute attribute);
 
-  /// set multiple attributes
+  /// Sets multiple attributes.
   void setAttributes(List<api.Attribute> attributes);
 
-  /// Retrieve the instrumentation library on this span.
-  api.InstrumentationLibrary get instrumentationLibrary;
-
-  /// Record metadata about an event occurring during this span.
-  void addEvent(String name, Int64 timestamp, {List<api.Attribute> attributes});
+  /// Records a [api.SpanEvent].
+  void addEvent(String name,
+      {Int64? timestamp, List<api.Attribute> attributes});
 
   /// Marks the end of this span's execution.
   void end({Int64 endTime});
 
   /// Record metadata about an exception occurring during this span.
-  void recordException(dynamic exception, {StackTrace stackTrace});
+  void recordException(dynamic exception,
+      {bool escaped, StackTrace stackTrace, List<api.Attribute> attributes});
 }

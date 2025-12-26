@@ -2,19 +2,19 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 class SpanLimits {
-  final _DEFAULT_MAXNUM_ATTRIBUTES = 128;
-  final _DEFAULT_MAXNUM_EVENTS = 128;
-  final _DEFAULT_MAXNUM_LINKS = 128;
-  final _DEFAULT_MAXNUM_ATTRIBUTE_PER_EVENT = 128;
-  final _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK = 128;
-  final _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH = -1;
+  static const _DEFAULT_MAXNUM_ATTRIBUTES = 128;
+  static const _DEFAULT_MAXNUM_EVENTS = 128;
+  static const _DEFAULT_MAXNUM_LINKS = 128;
+  static const _DEFAULT_MAXNUM_ATTRIBUTES_PER_EVENT = 128;
+  static const _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK = 128;
+  static const _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH = -1;
 
-  int _maxNumAttributes;
-  int _maxNumEvents;
-  int _maxNumLink;
-  int _maxNumAttributesPerEvent;
-  int _maxNumAttributesPerLink;
-  int _maxNumAttributeLength;
+  final int _maxNumAttributes;
+  final int _maxNumEvents;
+  final int _maxNumLink;
+  final int _maxNumAttributesPerEvent;
+  final int _maxNumAttributesPerLink;
+  final int _maxNumAttributeLength;
 
   ///setters
   ///Set the max number of attributes per span
@@ -53,7 +53,7 @@ class SpanLimits {
   }
 
   ///return the maximum allowed attribute value length.
-  ///This limits only applies to string and string list attribute valuse.
+  ///This limits only applies to string and string list attribute values.
   ///Any string longer than this value will be truncated to this length.
   ///
   ///default is unlimited.
@@ -80,30 +80,23 @@ class SpanLimits {
   int get maxNumAttributesPerLink => _maxNumAttributesPerLink;
 
   ///return the maximum allowed attribute value length.
-  ///This limits only applies to string and string list attribute valuse.
+  ///This limits only applies to string and string list attribute values.
   ///Any string longer than this value will be truncated to this length.
   ///
   ///default is unlimited.
   int get maxNumAttributeLength => _maxNumAttributeLength;
 
-  ///constructor
-  ///https://docs.newrelic.com/docs/data-apis/manage-data/view-system-limits/
-  ///https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk/trace/src/main/java/io/opentelemetry/sdk/trace/SpanLimitsBuilder.java
-  SpanLimits(
-      {int maxNumAttributes,
-      int maxNumEvents,
-      int maxNumLink,
-      int maxNumAttributesPerEvent,
-      int maxNumAttributesPerLink,
-      int maxNumAttributeLength}) {
-    _maxNumAttributes = maxNumAttributes ?? _DEFAULT_MAXNUM_ATTRIBUTES;
-    _maxNumEvents = maxNumEvents ?? _DEFAULT_MAXNUM_EVENTS;
-    _maxNumLink = maxNumLink ?? _DEFAULT_MAXNUM_LINKS;
-    _maxNumAttributesPerEvent =
-        maxNumAttributesPerEvent ?? _DEFAULT_MAXNUM_ATTRIBUTE_PER_EVENT;
-    _maxNumAttributesPerLink =
-        maxNumAttributesPerLink ?? _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK;
-    _maxNumAttributeLength =
-        maxNumAttributeLength ?? _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH;
-  }
+  const SpanLimits(
+      {int maxNumAttributes = _DEFAULT_MAXNUM_ATTRIBUTES,
+      int maxNumEvents = _DEFAULT_MAXNUM_EVENTS,
+      int maxNumLink = _DEFAULT_MAXNUM_LINKS,
+      int maxNumAttributesPerEvent = _DEFAULT_MAXNUM_ATTRIBUTES_PER_EVENT,
+      int maxNumAttributesPerLink = _DEFAULT_MAXNUM_ATTRIBUTES_PER_LINK,
+      int maxNumAttributeLength = _DEFAULT_MAXNUM_ATTRIBUTES_LENGTH})
+      : _maxNumAttributes = maxNumAttributes,
+        _maxNumEvents = maxNumEvents,
+        _maxNumLink = maxNumLink,
+        _maxNumAttributesPerEvent = maxNumAttributesPerEvent,
+        _maxNumAttributesPerLink = maxNumAttributesPerLink,
+        _maxNumAttributeLength = maxNumAttributeLength;
 }

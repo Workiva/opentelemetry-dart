@@ -5,6 +5,8 @@ import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
 
 class AlwaysOffSampler implements sdk.Sampler {
+  const AlwaysOffSampler();
+
   @override
   String get description => 'AlwaysOffSampler';
 
@@ -17,6 +19,6 @@ class AlwaysOffSampler implements sdk.Sampler {
       List<api.Attribute> spanAttributes,
       List<api.SpanLink> links) {
     return sdk.SamplingResult(sdk.Decision.drop, spanAttributes,
-        context.spanContext?.traceState ?? sdk.TraceState.empty());
+        api.spanContextFromContext(context).traceState);
   }
 }

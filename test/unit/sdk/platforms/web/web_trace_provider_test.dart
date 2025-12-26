@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('chrome')
-import 'package:mockito/mockito.dart';
-import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/span_processors/span_processor.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:opentelemetry/src/sdk/trace/span.dart';
+import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
 import 'package:opentelemetry/src/sdk/platforms/web/trace/web_tracer_provider.dart';
 import 'package:test/test.dart';
 
@@ -43,8 +43,8 @@ void main() {
     WebTracerProvider(processors: [mockProcessor1, mockProcessor2])
         .forceFlush();
 
-    verify(mockProcessor1.forceFlush()).called(1);
-    verify(mockProcessor2.forceFlush()).called(1);
+    verify(mockProcessor1.forceFlush).called(1);
+    verify(mockProcessor2.forceFlush).called(1);
   });
 
   test('browserTracerProvider shuts down all processors', () {
@@ -52,17 +52,18 @@ void main() {
     final mockProcessor2 = MockSpanProcessor();
     WebTracerProvider(processors: [mockProcessor1, mockProcessor2]).shutdown();
 
-    verify(mockProcessor1.shutdown()).called(1);
-    verify(mockProcessor2.shutdown()).called(1);
+    verify(mockProcessor1.shutdown).called(1);
+    verify(mockProcessor2.shutdown).called(1);
   });
 
   test('browserTracerProvider creates a tracer which can create valid spans',
       () async {
     final span = WebTracerProvider(processors: [MockSpanProcessor()])
         .getTracer('testTracer')
-        .startSpan('testSpan', context: Context.root)
+        .startSpan('testSpan') as Span
       ..end();
 
-    expect(span.startTime, lessThanOrEqualTo(span.endTime));
+    expect(span.endTime, isNotNull);
+    expect(span.startTime, lessThanOrEqualTo(span.endTime!));
   });
 }

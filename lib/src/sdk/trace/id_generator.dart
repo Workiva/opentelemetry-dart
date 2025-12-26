@@ -17,6 +17,8 @@ class IdGenerator implements api.IdGenerator {
     return buffer.cast<int>();
   }
 
+  const IdGenerator();
+
   @override
   List<int> generateSpanId() => _generateId(8);
 

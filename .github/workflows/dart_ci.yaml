@@ -1,13 +1,13 @@
 name: Dart CI
-
 on:
+  workflow_dispatch:
   push:
     branches:
-      - 'master'
-      - 'test_consume_*'
+      - "master"
+      - "test_consume_**"
   pull_request:
     branches:
-      - '*'
+      - "**"
 concurrency:
   group: opentelemetry-coverage-${{ github.ref }}-1
   cancel-in-progress: true
@@ -15,27 +15,21 @@ permissions:
   contents: read
   issues: write
   pull-requests: write
-  
+
 jobs:
-  test:
+  test-dartv2:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           submodules: true
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: 2.18.7
-      - name: Install protobuf-compiler
-        run: sudo apt install -y protobuf-compiler
-      - name: Install Dart dependencies
-        run: dart pub get
-      - name: Initialize protobuf
-        run: make init
-      - name: Format, analyze, and run tests
-        run: make test
+          sdk: 2.19.6
+      - run: sudo apt install -y protobuf-compiler
+      - run: make init format analyze test
       - name: Generate Coverage
-        run: dart run test --coverage=./coverage
+        run: dart test --coverage=./coverage
       - name: Activate Coverage Package
         run: dart pub global activate coverage
       - name: Format Coverage
@@ -44,3 +38,17 @@ jobs:
         run: dart pub global activate remove_from_coverage
       - name: Ignore Files For Coverage
         run: dart pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
+      - name: Package Artifacts
+        run: ./package.sh
+
+  test-dartv3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.2.0
+      - run: sudo apt install -y protobuf-compiler
+      - run: make init format analyze test

@@ -3,6 +3,8 @@
 
 import '../../../api.dart' as api;
 
+@Deprecated(
+    'This class will be moved to the SDK package in 0.19.0. Use [SpanProcessor] from SDK instead.')
 abstract class SpanProcessor {
   void onStart(api.Span span, api.Context parentContext);
 

@@ -6,28 +6,35 @@ import 'dart:math';
 
 import 'package:logging/logging.dart';
 
-import '../../../../api.dart' as api;
+import '../../../api/context/context.dart';
+import '../../../api/trace/trace_flags.dart';
+import '../exporters/span_exporter.dart';
+import '../read_only_span.dart';
+import '../read_write_span.dart';
+import 'span_processor.dart';
 
-class BatchSpanProcessor implements api.SpanProcessor {
-  final _log = Logger('opentelemetry.BatchSpanProcessor');
+class BatchSpanProcessor implements SpanProcessor {
+  static const int _DEFAULT_MAXIMUM_BATCH_SIZE = 512;
+  static const int _DEFAULT_MAXIMUM_QUEUE_SIZE = 2048;
+  static const int _DEFAULT_EXPORT_DELAY = 5000;
 
-  final api.SpanExporter _exporter;
+  final SpanExporter _exporter;
+  final Logger _log = Logger('opentelemetry.BatchSpanProcessor');
+  final int _maxExportBatchSize;
+  final int _maxQueueSize;
+  final List<ReadOnlySpan> _spanBuffer = [];
+
+  late final Timer _timer;
+
   bool _isShutdown = false;
-  final List<api.Span> _spanBuffer = [];
-  Timer _timer;
-
-  int _maxExportBatchSize = 512;
-  final int _maxQueueSize = 2048;
-  int _scheduledDelayMillis = 5000;
 
   BatchSpanProcessor(this._exporter,
-      {int maxExportBatchSize, int scheduledDelayMillis}) {
-    if (maxExportBatchSize != null) {
-      _maxExportBatchSize = maxExportBatchSize;
-    }
-    if (scheduledDelayMillis != null) {
-      _scheduledDelayMillis = scheduledDelayMillis;
-    }
+      {int maxExportBatchSize = _DEFAULT_MAXIMUM_BATCH_SIZE,
+      int scheduledDelayMillis = _DEFAULT_EXPORT_DELAY})
+      : _maxExportBatchSize = maxExportBatchSize,
+        _maxQueueSize = _DEFAULT_MAXIMUM_QUEUE_SIZE {
+    _timer = Timer.periodic(
+        Duration(milliseconds: scheduledDelayMillis), _exportBatch);
   }
 
   @override
@@ -36,13 +43,12 @@ class BatchSpanProcessor implements api.SpanProcessor {
       return;
     }
     while (_spanBuffer.isNotEmpty) {
-      _flushBatch();
+      _exportBatch(_timer);
     }
-    _exporter.forceFlush();
   }
 
   @override
-  void onEnd(api.Span span) {
+  void onEnd(ReadOnlySpan span) {
     if (_isShutdown) {
       return;
     }
@@ -50,17 +56,17 @@ class BatchSpanProcessor implements api.SpanProcessor {
   }
 
   @override
-  void onStart(api.Span span, api.Context parentContext) {}
+  void onStart(ReadWriteSpan span, Context parentContext) {}
 
   @override
   void shutdown() {
     forceFlush();
     _isShutdown = true;
-    _clearTimer();
+    _timer.cancel();
     _exporter.shutdown();
   }
 
-  void _addToBuffer(api.Span span) {
+  void _addToBuffer(ReadOnlySpan span) {
     if (_spanBuffer.length >= _maxQueueSize) {
       // Buffer is full, drop span.
       _log.warning(
@@ -68,37 +74,14 @@ class BatchSpanProcessor implements api.SpanProcessor {
       return;
     }
 
-    _spanBuffer.add(span);
-    _startTimer();
-  }
-
-  void _startTimer() {
-    if (_timer != null) {
-      // _timer already defined.
-      return;
+    final isSampled =
+        span.spanContext.traceFlags & TraceFlags.sampled == TraceFlags.sampled;
+    if (isSampled) {
+      _spanBuffer.add(span);
     }
-
-    _timer = Timer(Duration(milliseconds: _scheduledDelayMillis), () {
-      _flushBatch();
-      if (_spanBuffer.isNotEmpty) {
-        _clearTimer();
-        _startTimer();
-      }
-    });
   }
 
-  void _clearTimer() {
-    if (_timer == null) {
-      // _timer not set.
-      return;
-    }
-
-    _timer.cancel();
-    _timer = null;
-  }
-
-  void _flushBatch() {
-    _clearTimer();
+  void _exportBatch(Timer timer) {
     if (_spanBuffer.isEmpty) {
       return;
     }

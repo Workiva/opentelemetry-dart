@@ -16,42 +16,38 @@ import '../../../trace/tracer.dart';
 /// See https://github.com/open-telemetry/opentelemetry-js/issues/852
 /// for more information.
 class WebTracerProvider extends sdk.TracerProviderBase {
-  final Map<String, api.Tracer> _tracers = {};
-  final List<api.SpanProcessor> _processors;
-  final sdk.Resource _resource;
-  final sdk.Sampler _sampler;
   final sdk.TimeProvider _timeProvider;
-  final api.IdGenerator _idGenerator;
-  final sdk.SpanLimits _spanLimits;
 
   WebTracerProvider(
-      {List<api.SpanProcessor> processors,
-      sdk.Resource resource,
-      sdk.Sampler sampler,
-      sdk.TimeProvider timeProvider,
-      api.IdGenerator idGenerator,
-      sdk.SpanLimits spanLimits})
-      :
-        // Default to a no-op TracerProvider.
-        _processors = processors ?? [],
-        _resource = resource ?? sdk.Resource([]),
-        _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
-        _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider(),
-        _idGenerator = idGenerator ?? sdk.IdGenerator(),
-        _spanLimits = spanLimits ?? sdk.SpanLimits(),
+      {List<sdk.SpanProcessor>? processors,
+      sdk.Resource? resource,
+      sdk.Sampler? sampler,
+      sdk.TimeProvider? timeProvider,
+      api.IdGenerator? idGenerator,
+      sdk.SpanLimits? spanLimits})
+      : _timeProvider = timeProvider ?? sdk.DateTimeTimeProvider(),
         super(
-            processors: processors,
-            resource: resource,
-            sampler: sampler,
-            idGenerator: idGenerator,
-            spanLimits: spanLimits);
+            processors: processors ??
+                [], // Default to a TracerProvider which does not emit traces.
+            resource: resource ?? sdk.Resource([]),
+            sampler: sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),
+            idGenerator: idGenerator ?? sdk.IdGenerator(),
+            spanLimits: spanLimits ?? sdk.SpanLimits());
 
   @override
-  api.Tracer getTracer(String name, {String version = ''}) {
-    return _tracers.putIfAbsent(
+  api.Tracer getTracer(String name,
+      {String version = '',
+      String schemaUrl = '',
+      List<api.Attribute> attributes = const []}) {
+    return tracers.putIfAbsent(
         '$name@$version',
-        () => Tracer(_processors, _resource, _sampler, _timeProvider,
-            _idGenerator, sdk.InstrumentationLibrary(name, version),
-            spanLimits: _spanLimits));
+        () => Tracer(
+            processors,
+            resource,
+            sampler,
+            _timeProvider,
+            idGenerator,
+            sdk.InstrumentationScope(name, version, schemaUrl, attributes),
+            spanLimits));
   }
 }
