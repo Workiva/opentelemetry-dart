@@ -43,7 +43,36 @@ Context contextWithSpanContext(Context parent, SpanContext spanContext) {
 }
 
 Span spanFromContext(Context context) {
+  // print('spanFromContext: ${context.getValue(_spanKey)}');
   return context.getValue(_spanKey) ?? NonRecordingSpan(SpanContext.invalid());
+}
+
+/// The total number of distinct [Context] entries reachable from [context]:
+/// the entries along its `_parent` chain plus the `_parent` chains of every
+/// other [Context] currently attached in this [Zone] or any parent [Zone].
+///
+/// Intended for diagnostic logging only.
+@experimental
+int contextDepth(Context context) {
+  final seen = Set<Context>.identity();
+  void walk(Context? c) {
+    while (c != null && seen.add(c)) {
+      c = c._parent;
+    }
+  }
+
+  walk(context);
+  Zone? zone = Zone.current;
+  while (zone != null) {
+    final stack = _stacks[zone];
+    if (stack != null) {
+      for (final entry in stack) {
+        walk(entry.context);
+      }
+    }
+    zone = zone.parent;
+  }
+  return seen.length;
 }
 
 SpanContext spanContextFromContext(Context context) {

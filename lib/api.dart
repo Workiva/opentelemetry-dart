@@ -8,6 +8,7 @@ export 'src/api/context/context.dart'
     show
         Context,
         ContextKey,
+        contextDepth,
         contextWithSpan,
         contextWithSpanContext,
         spanContextFromContext,
