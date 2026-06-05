@@ -10,6 +10,7 @@ export 'src/api/context/context.dart'
         ContextKey,
         contextWithSpan,
         contextWithSpanContext,
+        runInContext,
         spanContextFromContext,
         spanFromContext,
         zone;
