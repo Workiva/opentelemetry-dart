@@ -200,5 +200,19 @@ void main() {
         api.Context.detach(token);
       });
     });
+
+    test('nested zone() calls shadow outer context and restore on exit', () {
+      final myKey = api.ContextKey();
+      final outerCtx = api.Context.current.setValue(myKey, 'outer');
+      final innerCtx = api.Context.current.setValue(myKey, 'inner');
+      api.zone(outerCtx).run(() {
+        expect(api.Context.current.getValue<String>(myKey), 'outer');
+        api.zone(innerCtx).run(() {
+          expect(api.Context.current.getValue<String>(myKey), 'inner');
+        });
+        expect(api.Context.current.getValue<String>(myKey), 'outer');
+      });
+      expect(api.Context.current, same(api.Context.root));
+    });
   });
 }
