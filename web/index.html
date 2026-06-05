@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>opentelemetry-dart zone() detach-mismatch repro</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        margin: 2rem auto;
+        max-width: 760px;
+        line-height: 1.5;
+        color: #1a1a1a;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+      #result {
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        background: #f3f4f6;
+        margin: 1rem 0;
+      }
+      #result.reproduced {
+        background: #fde2e1;
+        color: #8a1c13;
+      }
+      #result.clean {
+        background: #def7e5;
+        color: #0f5132;
+      }
+      #log {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85rem;
+        white-space: pre-wrap;
+        background: #0d1117;
+        color: #d1d5db;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+      #log .warn {
+        color: #ffb454;
+      }
+    </style>
+    <script defer src="main.dart.js"></script>
+  </head>
+  <body>
+    <h1>opentelemetry-dart <code>zone()</code> propagation test bed</h1>
+    <p>
+      A branch-agnostic test bed for
+      <a href="https://github.com/Workiva/opentelemetry-dart/pull/234">PR #234</a>.
+      Pull this same page down on <code>master</code> and on the fix branch and
+      compare the verdict below. It runs
+      <code>zone(ctx).run(() async { ... })</code> with async traffic
+      (microtasks, timers, <code>Future.whenComplete</code>) inside it and
+      checks two things:
+    </p>
+    <ul>
+      <li>
+        <strong>PROPAGATION</strong> — at every async checkpoint inside the
+        zone, <code>Context.current</code> must still carry <code>ctx</code>
+        (both its value and its span context). This must be
+        <strong>PASS</strong> on both branches.
+      </li>
+      <li>
+        <strong>EXCESS ATTACHES</strong> — count of
+        <code>opentelemetry: unexpected (mismatched) token given to detach</code>
+        warnings (the over-attach symptom). <strong>DETECTED</strong> on the
+        legacy helper, <strong>NONE</strong> with PR #234.
+      </li>
+    </ul>
+    <div id="result">running…</div>
+    <div id="log"></div>
+  </body>
+</html>
