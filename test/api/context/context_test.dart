@@ -5,6 +5,7 @@
 
 import 'dart:async';
 
+import 'package:logging/logging.dart' as logging;
 import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/sdk.dart' as sdk;
 import 'package:opentelemetry/src/experimental_api.dart';
@@ -117,6 +118,86 @@ void main() {
           expect(api.Context.detach(token2), isTrue);
           expect(api.Context.detach(token1), isTrue);
         });
+      });
+    });
+  });
+
+  group('zoneValues-based propagation', () {
+    test('context propagated via zone() is visible to Context.current', () {
+      final myKey = api.ContextKey();
+      final ctx = api.Context.current.setValue(myKey, 'hello');
+      final observed = api
+          .zone(ctx)
+          .run(() => api.Context.current.getValue<String>(myKey));
+      expect(observed, 'hello');
+    });
+
+    test('runInContext makes the given context current', () {
+      final myKey = api.ContextKey();
+      final ctx = api.Context.current.setValue(myKey, 'world');
+      final observed = api.runInContext(
+        ctx,
+        () => api.Context.current.getValue<String>(myKey),
+      );
+      expect(observed, 'world');
+    });
+
+    test('zone().run does not leak per-microtask attaches', () async {
+      final myKey = api.ContextKey();
+      final ctx = api.Context.current.setValue(myKey, 'leak-check');
+      await api.zone(ctx).run(() async {
+        for (var i = 0; i < 50; i++) {
+          await Future.microtask(() {});
+          await Future<void>.delayed(Duration.zero);
+          expect(api.Context.current.getValue<String>(myKey), 'leak-check');
+        }
+      });
+      // After the zone exits, no stack-attached context should remain.
+      expect(api.Context.current, same(api.Context.root));
+    });
+
+    test(
+        'Future.whenComplete inside zone() does not trigger mismatched '
+        'detach warnings', () async {
+      final warnings = <String>[];
+      final sub = logging.Logger('opentelemetry')
+          .onRecord
+          .where((r) => r.level >= logging.Level.WARNING)
+          .listen((r) => warnings.add(r.message));
+      addTearDown(sub.cancel);
+
+      await api.zone(api.Context.root).run(() async {
+        await Future.microtask(() {});
+        await Future<void>.delayed(Duration.zero);
+        await Future.value(42).whenComplete(() async {
+          await Future.microtask(() {});
+        });
+      });
+      // Allow any deferred microtasks to flush.
+      await Future<void>.delayed(Duration.zero);
+      expect(warnings, isEmpty);
+    });
+
+    test('concurrent zone().run invocations do not interfere', () async {
+      final myKey = api.ContextKey();
+      final results = await Future.wait([
+        for (var i = 0; i < 100; i++)
+          api.zone(api.Context.current.setValue(myKey, i)).run(() async {
+            await Future<void>.delayed(const Duration(milliseconds: 1));
+            return api.Context.current.getValue<int>(myKey);
+          }),
+      ]);
+      expect(results, [for (var i = 0; i < 100; i++) i]);
+    });
+
+    test('zoneValues context wins over a same-zone attached context', () {
+      final myKey = api.ContextKey();
+      final zoneCtx = api.Context.current.setValue(myKey, 'zone');
+      api.runInContext(zoneCtx, () {
+        final attachedCtx = api.Context.current.setValue(myKey, 'attached');
+        final token = api.Context.attach(attachedCtx);
+        expect(api.Context.current.getValue<String>(myKey), 'zone');
+        api.Context.detach(token);
       });
     });
   });

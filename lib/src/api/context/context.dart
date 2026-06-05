@@ -36,6 +36,15 @@ final _stacks = <Zone, List<ContextStackEntry>>{
   Zone.root: [],
 };
 
+/// Zone value key used to propagate the active [Context] via the forked zone's
+/// `zoneValues` map.
+///
+/// This is an internal implementation detail of [zone] / [runInContext]. It
+/// avoids the global per-zone attach stack entirely, so it can't be disturbed
+/// by other concurrent attaches, misordered detaches, or zone-bound
+/// microtasks.
+final Object _contextZoneKey = Object();
+
 Context contextWithSpan(Context parent, Span span) {
   return parent.setValue(_spanKey, span);
 }
@@ -52,28 +61,23 @@ SpanContext spanContextFromContext(Context context) {
   return spanFromContext(context).spanContext;
 }
 
-/// Returns a new [Zone] such that the given context will be automatically
-/// attached and detached for any function that runs within the zone.
+/// Returns a new [Zone] such that the given context will be visible to
+/// [Context.current] for any function that runs within the zone.
+///
+/// The context is propagated via the forked zone's `zoneValues` map rather than
+/// via [Context.attach] / [Context.detach]. This avoids attaching a duplicate
+/// context on every internal `Zone.run` invocation (microtasks, timers,
+/// `Future.whenComplete`, etc.).
 @experimental
 Zone zone([Context? context]) => Zone.current.fork(
-        specification: ZoneSpecification(run: <R>(self, parent, zone, fn) {
-      // Only attach the context when delegating this zone's run, not any
-      // potential child. Otherwise, the child zone's current context would
-      // end up being the outermost zone attached context.
-      if (self == zone) {
-        final token = Context.attach(context ?? _currentContext(zone), zone);
-        final result = parent.run(zone, fn);
-        if (result is Future) {
-          result.whenComplete(() {
-            Context.detach(token, zone);
-          });
-        } else {
-          Context.detach(token, zone);
-        }
-        return result;
-      }
-      return parent.run(zone, fn);
-    }));
+  zoneValues: {_contextZoneKey: context ?? _currentContext()},
+);
+
+/// Runs [body] within a new [Zone] in which [Context.current] returns
+/// [context]. Returns whatever [body] returns.
+@experimental
+R runInContext<R>(Context context, R Function() body) =>
+    runZoned(body, zoneValues: {_contextZoneKey: context});
 
 /// Returns the latest non-empty context stack, or the root stack if no context
 /// stack is found.
@@ -91,9 +95,18 @@ List<ContextStackEntry> _currentContextStack(Zone zone) {
   return stack;
 }
 
-Context _currentContext([Zone? zone]) =>
-    _currentContextStack(zone ?? Zone.current).lastOrNull?.context ??
-    _rootContext;
+Context _currentContext([Zone? zone]) {
+  final effectiveZone = zone ?? Zone.current;
+  // Prefer a context propagated via `zoneValues` (see [_contextZoneKey]).
+  // Dart walks this lookup up the zone tree, so a context set in any ancestor
+  // zone is visible here.
+  final fromZone = effectiveZone[_contextZoneKey];
+  if (fromZone is Context) {
+    return fromZone;
+  }
+  return _currentContextStack(effectiveZone).lastOrNull?.context ??
+      _rootContext;
+}
 
 class Context {
   final Context? _parent;
