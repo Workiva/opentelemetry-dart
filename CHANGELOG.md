@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- **Fix:** `zone()` no longer attaches a duplicate context on every internal
+  `Zone.run` invocation (microtasks, timers, `Future.whenComplete`,
+  `bindCallback`, `runGuarded`). It now propagates the context via the forked
+  zone's `zoneValues` map, eliminating spurious
+  `unexpected (mismatched) token given to detach` warnings.
+- **New:** `runInContext` for `zoneValues`-based context propagation. Prefer
+  this (or `zone()`) over `Context.attach` / `Context.detach` when scoping a
+  `Context` to an asynchronous region.
+- **Behavior change (minor):** when both a `zoneValues` context and a
+  stack-attached context coexist in the same zone, the `zoneValues` context now
+  wins. Previously the stack-attached context won.
+
 ## [0.18.6](https://github.com/Workiva/opentelemetry-dart/tree/0.18.6) (2024-08-15)
 
 [Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.5...0.18.6)
