@@ -49,4 +49,4 @@ jobs:
         **/target/**
         **/.dart_tool/**
       skill-mappings: |
-        ** -> .claude/skills/ci-review/SKILL.md
+        ** -> .agent/skills/ci-review/SKILL.md
