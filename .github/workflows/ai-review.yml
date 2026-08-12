@@ -1,0 +1,53 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: ai-review-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  ai-review:
+    timeout-minutes: 15
+    if: >
+      (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request != null &&
+       contains(github.event.comment.body, '/ai-review-requested') &&
+       contains(fromJSON('["COLLABORATOR", "MEMBER", "OWNER"]'), github.event.comment.author_association))
+    uses: Workiva/gha-ai-code-review/.github/workflows/ai-code-review.yml@0.1.86
+    secrets:
+      ENG_OPS_JIRA_TOKEN: ${{ secrets.ENG_OPS_JIRA_TOKEN }}
+      AI_CODE_REVIEW_AWS_ACCESS_KEY: ${{ secrets.AI_CODE_REVIEW_AWS_ACCESS_KEY }}
+      AI_CODE_REVIEW_AWS_SECRET_KEY: ${{ secrets.AI_CODE_REVIEW_AWS_SECRET_KEY }}
+      AI_CODE_REVIEW_BEDROCK_MODEL_HAIKU: ${{ secrets.AI_CODE_REVIEW_BEDROCK_MODEL_HAIKU }}
+      AI_CODE_REVIEW_BEDROCK_MODEL_SONNET: ${{ secrets.AI_CODE_REVIEW_BEDROCK_MODEL_SONNET }}
+      AI_CODE_REVIEW_BEDROCK_MODEL_OPUS: ${{ secrets.AI_CODE_REVIEW_BEDROCK_MODEL_OPUS }}
+      BAYMAX_SLACK_BOT_TOKEN: ${{ secrets.BAYMAX_SLACK_BOT_TOKEN }}
+      SUPPORT_INFOSEC_CHANNEL_ID: ${{ secrets.SUPPORT_INFOSEC_CHANNEL_ID }}
+    with:
+      file-patterns: |
+        *.dart
+        *.yaml
+        *.yml
+        *.md
+        *.sh
+      excluded-patterns: |
+        **/vendor/**
+        **/node_modules/**
+        **/__pycache__/**
+        **/dist/**
+        **/build/**
+        **/target/**
+        **/.dart_tool/**
+      skill-mappings: |
+        ** -> .claude/skills/ci-review/SKILL.md
