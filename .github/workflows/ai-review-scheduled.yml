@@ -12,7 +12,6 @@ permissions:
 
 jobs:
   scheduled-review:
-    timeout-minutes: 30
     uses: Workiva/gha-ai-code-review/.github/workflows/ai-code-review-scheduled.yml@0.1.86
     secrets:
       ENG_OPS_JIRA_TOKEN: ${{ secrets.ENG_OPS_JIRA_TOKEN }}
