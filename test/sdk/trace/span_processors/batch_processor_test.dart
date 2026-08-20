@@ -91,6 +91,28 @@ void main() {
         ..forceFlush();
       expect(exporter.spans, isEmpty);
     });
+
+    test('drops spans only after custom maxQueueSize is exceeded', () {
+      final customExporter = TestSpanExporter();
+      final customProcessor = BatchSpanProcessor(
+        customExporter,
+        maxQueueSize: 3,
+        scheduledDelayMillis: 60 * 60 * 1000,
+      );
+
+      // Fill up to the custom limit — all should be buffered.
+      customProcessor.onEnd(sampledSpan);
+      customProcessor.onEnd(sampledSpan);
+      customProcessor.onEnd(sampledSpan);
+
+      // One more should be dropped.
+      customProcessor.onEnd(sampledSpan);
+
+      customProcessor.forceFlush();
+      expect(customExporter.spans.length, 3);
+
+      customProcessor.shutdown();
+    });
   });
 
   group('forceFlush', () {

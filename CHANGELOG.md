@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.18.10+1](https://github.com/Workiva/opentelemetry-dart/tree/0.18.10+1)
+
+- **New:** `BatchSpanProcessor` now accepts an optional `maxQueueSize` parameter (default: `2048`) so callers can raise the span buffer ceiling without forking the package. Compliant with the [OTel spec](https://opentelemetry.io/docs/specs/otel/trace/sdk/#batching-span-processor). See [O11Y-9260](https://jira.atl.workiva.net/browse/O11Y-9260).
+
+
 ## [0.18.6](https://github.com/Workiva/opentelemetry-dart/tree/0.18.6) (2024-08-15)
 
 [Full Changelog](https://github.com/Workiva/opentelemetry-dart/compare/0.18.5...0.18.6)
