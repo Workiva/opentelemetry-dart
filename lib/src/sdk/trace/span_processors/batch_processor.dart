@@ -31,9 +31,10 @@ class BatchSpanProcessor implements SpanProcessor {
   BatchSpanProcessor(
     this._exporter, {
     int maxExportBatchSize = _DEFAULT_MAXIMUM_BATCH_SIZE,
+    int maxQueueSize = _DEFAULT_MAXIMUM_QUEUE_SIZE,
     int scheduledDelayMillis = _DEFAULT_EXPORT_DELAY,
   }) : _maxExportBatchSize = maxExportBatchSize,
-       _maxQueueSize = _DEFAULT_MAXIMUM_QUEUE_SIZE {
+       _maxQueueSize = maxQueueSize {
     _timer = Timer.periodic(
       Duration(milliseconds: scheduledDelayMillis),
       _exportBatch,
