@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **New:** `BatchSpanProcessor` now accepts an optional `maxQueueSize` parameter (default: `2048`) so callers can raise the span buffer ceiling without forking the package. Compliant with the [OTel spec](https://opentelemetry.io/docs/specs/otel/trace/sdk/#batching-span-processor). See [O11Y-9260](https://jira.atl.workiva.net/browse/O11Y-9260).
+
 - **Fix:** `zone()` no longer attaches a duplicate context on every internal
   `Zone.run` invocation (microtasks, timers, `Future.whenComplete`,
   `bindCallback`, `runGuarded`). It now propagates the context via the forked
