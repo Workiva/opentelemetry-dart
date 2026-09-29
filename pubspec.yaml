@@ -3,7 +3,7 @@ version: 0.18.11
 description: A framework for collecting OpenTelemetry traces from applications.
 homepage: https://github.com/Workiva/opentelemetry-dart
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.13.0
 
 dependencies:
   async: ^2.10.0
