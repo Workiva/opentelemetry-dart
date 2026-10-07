@@ -3,8 +3,8 @@
 
 import 'dart:async';
 
-import 'package:opentelemetry/api.dart';
-import 'package:opentelemetry/sdk.dart'
+import 'package:opentelemetry_wk/api.dart';
+import 'package:opentelemetry_wk/sdk.dart'
     show ConsoleExporter, SimpleSpanProcessor, TracerProviderBase;
 
 mixin EventContext {

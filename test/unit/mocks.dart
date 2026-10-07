@@ -3,10 +3,10 @@
 
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/api/trace/span.dart';
-import 'package:opentelemetry/src/sdk/trace/read_only_span.dart';
-import 'package:opentelemetry/src/sdk/trace/span_processors/span_processor.dart';
+import 'package:opentelemetry_wk/src/api/context/context.dart';
+import 'package:opentelemetry_wk/src/api/trace/span.dart';
+import 'package:opentelemetry_wk/src/sdk/trace/read_only_span.dart';
+import 'package:opentelemetry_wk/src/sdk/trace/span_processors/span_processor.dart';
 
 class MockContext extends Mock implements Context {}
 

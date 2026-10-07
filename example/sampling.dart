@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'package:collection/collection.dart';
-import 'package:opentelemetry/api.dart'
+import 'package:opentelemetry_wk/api.dart'
     show
         Attribute,
         Context,
@@ -11,7 +11,7 @@ import 'package:opentelemetry/api.dart'
         TraceId,
         registerGlobalTracerProvider,
         spanContextFromContext;
-import 'package:opentelemetry/sdk.dart'
+import 'package:opentelemetry_wk/sdk.dart'
     show
         ConsoleExporter,
         Decision,

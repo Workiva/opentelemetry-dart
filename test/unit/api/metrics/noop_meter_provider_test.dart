@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
-import 'package:opentelemetry/api.dart' as api;
+import 'package:opentelemetry_wk/api.dart' as api;
 import 'package:test/test.dart';
-import 'package:opentelemetry/src/api/metrics/noop/noop_meter_provider.dart';
-import 'package:opentelemetry/src/experimental_api.dart' as api;
+import 'package:opentelemetry_wk/src/api/metrics/noop/noop_meter_provider.dart';
+import 'package:opentelemetry_wk/src/experimental_api.dart' as api;
 
 void main() {
   group('MeterProvider:', () {
