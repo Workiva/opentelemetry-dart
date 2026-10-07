@@ -1,4 +1,4 @@
-name: opentelemetry
+name: opentelemetry_wk
 version: 0.18.11
 description: A framework for collecting OpenTelemetry traces from applications.
 homepage: https://github.com/Workiva/opentelemetry-dart
