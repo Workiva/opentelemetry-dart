@@ -5,10 +5,10 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart' as logging;
-import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/experimental_api.dart';
-import 'package:opentelemetry/src/sdk/trace/span.dart';
+import 'package:opentelemetry_wk/api.dart' as api;
+import 'package:opentelemetry_wk/sdk.dart' as sdk;
+import 'package:opentelemetry_wk/src/experimental_api.dart';
+import 'package:opentelemetry_wk/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 void main() {

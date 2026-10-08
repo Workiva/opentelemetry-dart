@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
-import 'package:opentelemetry/api.dart'
+import 'package:opentelemetry_wk/api.dart'
     show SpanContext, SpanId, SpanKind, TraceFlags, TraceId, TraceState;
-import 'package:opentelemetry/sdk.dart';
-import 'package:opentelemetry/src/sdk/trace/span.dart';
+import 'package:opentelemetry_wk/sdk.dart';
+import 'package:opentelemetry_wk/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 class TestSpanExporter extends SpanExporter {

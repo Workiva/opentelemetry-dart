@@ -7,18 +7,18 @@ import 'dart:typed_data';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
-import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/sdk/common/limits.dart';
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
+import 'package:opentelemetry_wk/api.dart' as api;
+import 'package:opentelemetry_wk/sdk.dart' as sdk;
+import 'package:opentelemetry_wk/src/sdk/common/limits.dart';
+import 'package:opentelemetry_wk/src/sdk/proto/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
     as pb_trace_service;
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/common/v1/common.pb.dart'
+import 'package:opentelemetry_wk/src/sdk/proto/opentelemetry/proto/common/v1/common.pb.dart'
     as pb_common;
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/resource/v1/resource.pb.dart'
+import 'package:opentelemetry_wk/src/sdk/proto/opentelemetry/proto/resource/v1/resource.pb.dart'
     as pb_resource;
-import 'package:opentelemetry/src/sdk/proto/opentelemetry/proto/trace/v1/trace.pb.dart'
+import 'package:opentelemetry_wk/src/sdk/proto/opentelemetry/proto/trace/v1/trace.pb.dart'
     as pb;
-import 'package:opentelemetry/src/sdk/trace/span.dart';
+import 'package:opentelemetry_wk/src/sdk/trace/span.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';

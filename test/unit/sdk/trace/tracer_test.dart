@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
-import 'package:opentelemetry/api.dart' as api;
-import 'package:opentelemetry/src/sdk/trace/tracer.dart';
-import 'package:opentelemetry/src/sdk/trace/tracer_provider.dart';
+import 'package:opentelemetry_wk/api.dart' as api;
+import 'package:opentelemetry_wk/src/sdk/trace/tracer.dart';
+import 'package:opentelemetry_wk/src/sdk/trace/tracer_provider.dart';
 import 'package:test/test.dart';
 
 void main() {

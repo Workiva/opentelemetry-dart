@@ -3,7 +3,7 @@
 
 @TestOn('chrome')
 import 'package:fixnum/fixnum.dart';
-import 'package:opentelemetry/src/sdk/platforms/web/time_providers/web_time_provider.dart';
+import 'package:opentelemetry_wk/src/sdk/platforms/web/time_providers/web_time_provider.dart';
 import 'package:test/test.dart';
 
 void main() {

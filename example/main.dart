@@ -3,8 +3,8 @@
 
 import 'dart:async';
 
-import 'package:opentelemetry/api.dart';
-import 'package:opentelemetry/sdk.dart';
+import 'package:opentelemetry_wk/api.dart';
+import 'package:opentelemetry_wk/sdk.dart';
 
 /// Applications use a tracer to create sets of spans that constitute a trace.
 /// There are several components needed to get a tracer:
