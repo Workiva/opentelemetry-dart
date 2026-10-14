@@ -1,6 +1,14 @@
 # Changelog
 
-## Unreleased
+## 0.18.11+1
+
+- **Deprecated:** this package has been renamed to `opentelemetry_wk`. `opentelemetry` now re-exports
+  `opentelemetry_wk`, so both imports resolve to the same classes and global state. Migrate by switching the
+  dependency and `package:opentelemetry/` imports to `opentelemetry_wk`.
+- Supports Dart `>=2.19.0 <4.0.0`. Dart 2 and Dart < 3.9 resolve `opentelemetry_wk` 0.18.10; newer SDKs resolve the
+  latest `opentelemetry_wk` 0.18.x. Behavior follows the resolved `opentelemetry_wk` version.
+
+## Unreleased (opentelemetry_wk)
 
 - **New:** `BatchSpanProcessor` now accepts an optional `maxQueueSize` parameter (default: `2048`) so callers can raise the span buffer ceiling without forking the package. Compliant with the [OTel spec](https://opentelemetry.io/docs/specs/otel/trace/sdk/#batching-span-processor). See [O11Y-9260](https://jira.atl.workiva.net/browse/O11Y-9260).
 
