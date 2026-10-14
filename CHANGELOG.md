@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.18.12
+## 0.18.11+1
 
 - **Deprecated:** this package has been renamed to `opentelemetry_wk`. `opentelemetry` now re-exports
   `opentelemetry_wk`, so both imports resolve to the same classes and global state. Migrate by switching the

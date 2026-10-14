@@ -1,5 +1,5 @@
 name: opentelemetry
-version: 0.18.12
+version: 0.18.11+1
 description: Deprecated. Re-exports opentelemetry_wk; depend on opentelemetry_wk directly.
 homepage: https://github.com/Workiva/opentelemetry-dart
 environment:
