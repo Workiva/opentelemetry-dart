@@ -5,7 +5,8 @@
 - **Deprecated:** this package has been renamed to `opentelemetry_wk`. `opentelemetry` now re-exports
   `opentelemetry_wk`, so both imports resolve to the same classes and global state. Migrate by switching the
   dependency and `package:opentelemetry/` imports to `opentelemetry_wk`.
-- Behavior now follows the resolved `opentelemetry_wk` version (`^0.18.11`), including any changes released there.
+- Supports Dart `>=2.19.0 <4.0.0`. Dart 2 and Dart < 3.9 resolve `opentelemetry_wk` 0.18.10; newer SDKs resolve the
+  latest `opentelemetry_wk` 0.18.x. Behavior follows the resolved `opentelemetry_wk` version.
 
 ## Unreleased (opentelemetry_wk)
 
