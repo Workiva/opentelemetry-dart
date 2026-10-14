@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.18.12
+
+- **Deprecated:** this package has been renamed to `opentelemetry_wk`. `opentelemetry` now re-exports
+  `opentelemetry_wk`, so both imports resolve to the same classes and global state. Migrate by switching the
+  dependency and `package:opentelemetry/` imports to `opentelemetry_wk`.
+- Behavior now follows the resolved `opentelemetry_wk` version (`^0.18.11`), including any changes released there.
+
+## Unreleased (opentelemetry_wk)
 
 - **New:** `BatchSpanProcessor` now accepts an optional `maxQueueSize` parameter (default: `2048`) so callers can raise the span buffer ceiling without forking the package. Compliant with the [OTel spec](https://opentelemetry.io/docs/specs/otel/trace/sdk/#batching-span-processor). See [O11Y-9260](https://jira.atl.workiva.net/browse/O11Y-9260).
 

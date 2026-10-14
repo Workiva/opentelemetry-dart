@@ -1,26 +1,13 @@
-name: opentelemetry_wk
-version: 0.18.13
-description: A framework for collecting OpenTelemetry traces from applications.
+name: opentelemetry
+version: 0.18.12
+description: Deprecated. Re-exports opentelemetry_wk; depend on opentelemetry_wk directly.
 homepage: https://github.com/Workiva/opentelemetry-dart
 environment:
   sdk: ^3.9.0
 
 dependencies:
-  async: ^2.10.0
-  collection: ^1.17.0
-  fixnum: '>=1.1.0 <2.0.0'
-  http: '>=0.13.0 <2.0.0'
-  logging: ^1.0.0
-  meta: '>=1.9.1 <2.0.0'
-  protobuf: '>=5.0.0 <7.0.0'
-  quiver: '>=3.0.0 <4.0.0'
-  web: ^1.1.1
+  opentelemetry_wk: ^0.18.11
 
 dev_dependencies:
-  build_runner: ^2.3.3
-  build_test: ">=2.2.1 <4.0.0"
-  build_web_compilers: ^4.1.6
-  mocktail: ^1.0.3
-  remove_from_coverage: ^2.0.0
   test: ^1.24.2
   workiva_analysis_options: ^1.2.2

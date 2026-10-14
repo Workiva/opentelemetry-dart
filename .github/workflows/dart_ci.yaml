@@ -21,23 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: true
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: 3.9
-      - run: sudo apt-get update && sudo apt-get install -y --fix-missing protobuf-compiler
       - run: make init format analyze test
-      - name: Generate Coverage
-        run: dart test --coverage=./coverage
-      - name: Activate Coverage Package
-        run: dart pub global activate coverage
-      - name: Format Coverage
-        run: dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
-      - name: Activate RemoveFromCoverage Package
-        run: dart pub global activate remove_from_coverage
-      - name: Ignore Files For Coverage
-        run: dart pub global run remove_from_coverage:remove_from_coverage -f coverage/lcov.info -r 'lib\/src\/sdk\/proto\/opentelemetry\/proto\/.+'
       - name: Package Artifacts
         run: ./package.sh
 
@@ -45,10 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: true
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
-      - run: sudo apt-get update && sudo apt-get install -y --fix-missing protobuf-compiler
       - run: make init format analyze test
